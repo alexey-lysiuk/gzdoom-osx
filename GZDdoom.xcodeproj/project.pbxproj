@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
+		8AC81C411391321300F49DC3 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF278CA1390F0370095D9A0 /* libjpeg.a */; };
+		8AC81C421391321300F49DC3 /* liblzma.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF2795A1390F1200095D9A0 /* liblzma.a */; };
+		8AC81C431391321300F49DC3 /* libgme.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27A541390F4F40095D9A0 /* libgme.a */; };
+		8AC81C441391321300F49DC3 /* libdumb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27B251390F5DC0095D9A0 /* libdumb.a */; };
+		8AC81C451391321300F49DC3 /* libgdtoa.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27C1C1390F7E20095D9A0 /* libgdtoa.a */; };
 		8AF2792A1390F0880095D9A0 /* jcomapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 8AF2790B1390F0880095D9A0 /* jcomapi.c */; };
 		8AF2792C1390F0880095D9A0 /* jdapimin.c in Sources */ = {isa = PBXBuildFile; fileRef = 8AF2790D1390F0880095D9A0 /* jdapimin.c */; };
 		8AF2792D1390F0880095D9A0 /* jdapistd.c in Sources */ = {isa = PBXBuildFile; fileRef = 8AF2790E1390F0880095D9A0 /* jdapistd.c */; };
@@ -656,7 +661,6 @@
 		8AF281CD139126C10095D9A0 /* wi_stuff.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27FD1139126C00095D9A0 /* wi_stuff.cpp */; };
 		8AF281EF139126C10095D9A0 /* x86.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF28000139126C00095D9A0 /* x86.cpp */; };
 		8AF281F0139126C10095D9A0 /* parse_xlat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF28003139126C00095D9A0 /* parse_xlat.cpp */; };
-		8AF281F1139126C10095D9A0 /* xlat_parser.y in Sources */ = {isa = PBXBuildFile; fileRef = 8AF28005139126C00095D9A0 /* xlat_parser.y */; };
 		8AF281F2139126C10095D9A0 /* zstrformat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF28007139126C00095D9A0 /* zstrformat.cpp */; };
 		8AF281F3139126C10095D9A0 /* zstring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF28008139126C00095D9A0 /* zstring.cpp */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
@@ -664,6 +668,48 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		8AC81C35139131FE00F49DC3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8AF27C1B1390F7E20095D9A0 /* gdtoa */;
+			remoteInfo = gdtoa;
+		};
+		8AC81C37139131FE00F49DC3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8AF27B241390F5DC0095D9A0 /* dumb */;
+			remoteInfo = dumb;
+		};
+		8AC81C39139131FE00F49DC3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8AF27A531390F4F40095D9A0 /* gme */;
+			remoteInfo = gme;
+		};
+		8AC81C3B139131FE00F49DC3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8AF27A301390F41F0095D9A0 /* zipdir */;
+			remoteInfo = zipdir;
+		};
+		8AC81C3D139131FE00F49DC3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8AF27A091390F2B50095D9A0 /* re2c */;
+			remoteInfo = re2c;
+		};
+		8AC81C3F139131FE00F49DC3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8AF279BB1390F2540095D9A0 /* lemon */;
+			remoteInfo = lemon;
+		};
 		8AF278CD1390F0410095D9A0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
@@ -1801,6 +1847,11 @@
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				8AF2794A1390F0C20095D9A0 /* libbz2.dylib in Frameworks */,
 				8AF27A491390F4910095D9A0 /* libz.dylib in Frameworks */,
+				8AC81C411391321300F49DC3 /* libjpeg.a in Frameworks */,
+				8AC81C421391321300F49DC3 /* liblzma.a in Frameworks */,
+				8AC81C431391321300F49DC3 /* libgme.a in Frameworks */,
+				8AC81C441391321300F49DC3 /* libdumb.a in Frameworks */,
+				8AC81C451391321300F49DC3 /* libgdtoa.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3508,6 +3559,12 @@
 			dependencies = (
 				8AF278CE1390F0410095D9A0 /* PBXTargetDependency */,
 				8AF2795E1390F1370095D9A0 /* PBXTargetDependency */,
+				8AC81C40139131FE00F49DC3 /* PBXTargetDependency */,
+				8AC81C3E139131FE00F49DC3 /* PBXTargetDependency */,
+				8AC81C3C139131FE00F49DC3 /* PBXTargetDependency */,
+				8AC81C3A139131FE00F49DC3 /* PBXTargetDependency */,
+				8AC81C38139131FE00F49DC3 /* PBXTargetDependency */,
+				8AC81C36139131FE00F49DC3 /* PBXTargetDependency */,
 			);
 			name = GZDoom;
 			productInstallPath = "$(HOME)/Applications";
@@ -4263,7 +4320,6 @@
 				8AF281CD139126C10095D9A0 /* wi_stuff.cpp in Sources */,
 				8AF281EF139126C10095D9A0 /* x86.cpp in Sources */,
 				8AF281F0139126C10095D9A0 /* parse_xlat.cpp in Sources */,
-				8AF281F1139126C10095D9A0 /* xlat_parser.y in Sources */,
 				8AF281F2139126C10095D9A0 /* zstrformat.cpp in Sources */,
 				8AF281F3139126C10095D9A0 /* zstring.cpp in Sources */,
 			);
@@ -4272,6 +4328,36 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		8AC81C36139131FE00F49DC3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8AF27C1B1390F7E20095D9A0 /* gdtoa */;
+			targetProxy = 8AC81C35139131FE00F49DC3 /* PBXContainerItemProxy */;
+		};
+		8AC81C38139131FE00F49DC3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8AF27B241390F5DC0095D9A0 /* dumb */;
+			targetProxy = 8AC81C37139131FE00F49DC3 /* PBXContainerItemProxy */;
+		};
+		8AC81C3A139131FE00F49DC3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8AF27A531390F4F40095D9A0 /* gme */;
+			targetProxy = 8AC81C39139131FE00F49DC3 /* PBXContainerItemProxy */;
+		};
+		8AC81C3C139131FE00F49DC3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8AF27A301390F41F0095D9A0 /* zipdir */;
+			targetProxy = 8AC81C3B139131FE00F49DC3 /* PBXContainerItemProxy */;
+		};
+		8AC81C3E139131FE00F49DC3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8AF27A091390F2B50095D9A0 /* re2c */;
+			targetProxy = 8AC81C3D139131FE00F49DC3 /* PBXContainerItemProxy */;
+		};
+		8AC81C40139131FE00F49DC3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8AF279BB1390F2540095D9A0 /* lemon */;
+			targetProxy = 8AC81C3F139131FE00F49DC3 /* PBXContainerItemProxy */;
+		};
 		8AF278CE1390F0410095D9A0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 8AF278C91390F0370095D9A0 /* jpeg */;
@@ -4574,6 +4660,7 @@
 					NO_CLOCK_GETTIME,
 					DISABLE_SSE,
 				);
+				HEADER_SEARCH_PATHS = src;
 				INFOPLIST_FILE = "GZDoom-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = GZDoom;
@@ -4596,6 +4683,7 @@
 					NO_CLOCK_GETTIME,
 					DISABLE_SSE,
 				);
+				HEADER_SEARCH_PATHS = src;
 				INFOPLIST_FILE = "GZDoom-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = GZDoom;
@@ -4605,7 +4693,10 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = (
+					i386,
+					x86_64,
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -4613,18 +4704,23 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				SDKROOT = macosx10.5;
+				VALID_ARCHS = "i386 x86_64";
 			};
 			name = Debug;
 		};
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = (
+					i386,
+					x86_64,
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
 				SDKROOT = macosx10.5;
+				VALID_ARCHS = "i386 x86_64";
 			};
 			name = Release;
 		};
