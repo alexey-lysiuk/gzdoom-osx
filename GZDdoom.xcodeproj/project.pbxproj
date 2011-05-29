@@ -15,6 +15,7 @@
 		8A74F38F13925284001F54B0 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F38E13925284001F54B0 /* IOKit.framework */; };
 		8A74F451139252F9001F54B0 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F450139252F9001F54B0 /* AudioUnit.framework */; };
 		8A74F4671392532C001F54B0 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F4661392532C001F54B0 /* Carbon.framework */; };
+		8A74F56B139258D8001F54B0 /* libfmodex.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8A74F2B91392360F001F54B0 /* libfmodex.dylib */; };
 		8AC81C411391321300F49DC3 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF278CA1390F0370095D9A0 /* libjpeg.a */; };
 		8AC81C421391321300F49DC3 /* liblzma.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF2795A1390F1200095D9A0 /* liblzma.a */; };
 		8AC81C431391321300F49DC3 /* libgme.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27A541390F4F40095D9A0 /* libgme.a */; };
@@ -506,7 +507,6 @@
 		8AF28174139126C10095D9A0 /* i_system.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F38139126C00095D9A0 /* i_system.cpp */; };
 		8AF28175139126C10095D9A0 /* iwadpicker_cocoa.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3B139126C00095D9A0 /* iwadpicker_cocoa.mm */; };
 		8AF28176139126C10095D9A0 /* sdlglvideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3C139126C00095D9A0 /* sdlglvideo.cpp */; };
-		8AF28177139126C10095D9A0 /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3E139126C00095D9A0 /* SDLMain.m */; };
 		8AF28178139126C10095D9A0 /* sdlvideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3F139126C00095D9A0 /* sdlvideo.cpp */; };
 		8AF28179139126C10095D9A0 /* st_start.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F41139126C00095D9A0 /* st_start.cpp */; };
 		8AF2817B139126C10095D9A0 /* SFMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F51139126C00095D9A0 /* SFMT.cpp */; };
@@ -659,6 +659,19 @@
 			remoteInfo = lzma;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8A74F56E139258DB001F54B0 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 6;
+			files = (
+				8A74F56B139258D8001F54B0 /* libfmodex.dylib in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -3502,6 +3515,7 @@
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
+				8A74F56E139258DB001F54B0 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -3856,9 +3870,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8AF2800A139126C00095D9A0 /* am_map.cpp in Sources */,
 				8AF28012139126C00095D9A0 /* autostart.cpp in Sources */,
-				8AF28013139126C00095D9A0 /* autozend.cpp in Sources */,
+				8AF2800A139126C00095D9A0 /* am_map.cpp in Sources */,
 				8AF28014139126C00095D9A0 /* b_bot.cpp in Sources */,
 				8AF28015139126C00095D9A0 /* b_func.cpp in Sources */,
 				8AF28016139126C00095D9A0 /* b_game.cpp in Sources */,
@@ -4132,7 +4145,6 @@
 				8AF28174139126C10095D9A0 /* i_system.cpp in Sources */,
 				8AF28175139126C10095D9A0 /* iwadpicker_cocoa.mm in Sources */,
 				8AF28176139126C10095D9A0 /* sdlglvideo.cpp in Sources */,
-				8AF28177139126C10095D9A0 /* SDLMain.m in Sources */,
 				8AF28178139126C10095D9A0 /* sdlvideo.cpp in Sources */,
 				8AF28179139126C10095D9A0 /* st_start.cpp in Sources */,
 				8AF2817B139126C10095D9A0 /* SFMT.cpp in Sources */,
@@ -4216,6 +4228,7 @@
 				8AF281F0139126C10095D9A0 /* parse_xlat.cpp in Sources */,
 				8AF281F2139126C10095D9A0 /* zstrformat.cpp in Sources */,
 				8AF281F3139126C10095D9A0 /* zstring.cpp in Sources */,
+				8AF28013139126C00095D9A0 /* autozend.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4481,6 +4494,7 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = NEED_ITOA;
 				HEADER_SEARCH_PATHS = dumb/include;
 				INSTALL_PATH = /usr/local/lib;
 				PREBINDING = NO;
@@ -4497,6 +4511,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu89;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
+				GCC_PREPROCESSOR_DEFINITIONS = NEED_ITOA;
 				HEADER_SEARCH_PATHS = dumb/include;
 				INSTALL_PATH = /usr/local/lib;
 				PREBINDING = NO;
@@ -4553,6 +4568,7 @@
 					"__forceinline=inline",
 					NO_CLOCK_GETTIME,
 					DISABLE_SSE,
+					NOASM,
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4589,6 +4605,7 @@
 					"__forceinline=inline",
 					NO_CLOCK_GETTIME,
 					DISABLE_SSE,
+					NOASM,
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
