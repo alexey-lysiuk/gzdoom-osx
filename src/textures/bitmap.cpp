@@ -302,21 +302,21 @@ bool ClipCopyPixelRect(const FClipRect *cr, int &originx, int &originy,
 		step_y = pstep_y;
 		break;
 
-	case 1: // rotate 90° right
+	case 1: // rotate 90ï¾° right
 		pixxoffset = 0;
 		pixyoffset = srcheight - 1;
 		step_x = -pstep_y;
 		step_y = pstep_x;
 		break;
 
-	case 2:	// rotate 180°
+	case 2:	// rotate 180ï¾°
 		pixxoffset = srcwidth - 1;
 		pixyoffset = srcheight - 1;
 		step_x = -pstep_x;
 		step_y = -pstep_y;
 		break;
 
-	case 3: // rotate 90° left
+	case 3: // rotate 90ï¾° left
 		pixxoffset = srcwidth - 1;
 		pixyoffset = 0;
 		step_x = pstep_y;
@@ -330,7 +330,7 @@ bool ClipCopyPixelRect(const FClipRect *cr, int &originx, int &originy,
 		step_y = pstep_y;
 		break;
 
-	case 5:	// flip horizontally and rotate 90° right
+	case 5:	// flip horizontally and rotate 90ï¾° right
 		pixxoffset = srcwidth - 1;
 		pixyoffset = srcheight - 1;
 		step_x = -pstep_y;
@@ -344,7 +344,7 @@ bool ClipCopyPixelRect(const FClipRect *cr, int &originx, int &originy,
 		step_y = -pstep_y;
 		break;
 
-	case 7:	// flip horizontally and rotate 90° left
+	case 7:	// flip horizontally and rotate 90ï¾° left
 		pixxoffset = 0;
 		pixyoffset = 0;
 		step_x = pstep_y;
@@ -421,7 +421,7 @@ bool FClipRect::Intersect(int ix, int iy, int iw, int ih)
 	}
 	else
 	{
-		ih -= (x-ih);
+		ih -= (y-iy);
 	}
 	if (iw < width) width = iw;
 	if (ih < height) height = ih;
