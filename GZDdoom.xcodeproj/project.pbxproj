@@ -8,6 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
+		8A74F2A2139235E0001F54B0 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2A1139235E0001F54B0 /* OpenGL.framework */; };
+		8A74F2B7139235FD001F54B0 /* libSDL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2B5139235FD001F54B0 /* libSDL.a */; };
+		8A74F2B8139235FD001F54B0 /* libSDLmain.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2B6139235FD001F54B0 /* libSDLmain.a */; };
+		8A74F2BA1392360F001F54B0 /* libfmodex.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2B91392360F001F54B0 /* libfmodex.dylib */; };
+		8A74F38F13925284001F54B0 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F38E13925284001F54B0 /* IOKit.framework */; };
+		8A74F451139252F9001F54B0 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F450139252F9001F54B0 /* AudioUnit.framework */; };
+		8A74F4671392532C001F54B0 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F4661392532C001F54B0 /* Carbon.framework */; };
 		8AC81C411391321300F49DC3 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF278CA1390F0370095D9A0 /* libjpeg.a */; };
 		8AC81C421391321300F49DC3 /* liblzma.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF2795A1390F1200095D9A0 /* liblzma.a */; };
 		8AC81C431391321300F49DC3 /* libgme.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27A541390F4F40095D9A0 /* libgme.a */; };
@@ -271,66 +278,10 @@
 		8AF2803F139126C00095D9A0 /* t_script.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D5E139126C00095D9A0 /* t_script.cpp */; };
 		8AF28040139126C00095D9A0 /* t_spec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D60139126C00095D9A0 /* t_spec.cpp */; };
 		8AF28041139126C00095D9A0 /* t_variable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D61139126C00095D9A0 /* t_variable.cpp */; };
-		8AF28042139126C00095D9A0 /* a_arachnotron.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D63139126C00095D9A0 /* a_arachnotron.cpp */; };
-		8AF28043139126C00095D9A0 /* a_archvile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D64139126C00095D9A0 /* a_archvile.cpp */; };
-		8AF28044139126C00095D9A0 /* a_bossbrain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D65139126C00095D9A0 /* a_bossbrain.cpp */; };
-		8AF28045139126C00095D9A0 /* a_bruiser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D66139126C00095D9A0 /* a_bruiser.cpp */; };
-		8AF28046139126C00095D9A0 /* a_cacodemon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D67139126C00095D9A0 /* a_cacodemon.cpp */; };
-		8AF28047139126C00095D9A0 /* a_cyberdemon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D68139126C00095D9A0 /* a_cyberdemon.cpp */; };
-		8AF28048139126C00095D9A0 /* a_demon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D69139126C00095D9A0 /* a_demon.cpp */; };
-		8AF28049139126C00095D9A0 /* a_doomimp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D6B139126C00095D9A0 /* a_doomimp.cpp */; };
 		8AF2804A139126C00095D9A0 /* a_doommisc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D6C139126C00095D9A0 /* a_doommisc.cpp */; };
-		8AF2804B139126C00095D9A0 /* a_doomweaps.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D6D139126C00095D9A0 /* a_doomweaps.cpp */; };
-		8AF2804C139126C00095D9A0 /* a_fatso.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D6E139126C00095D9A0 /* a_fatso.cpp */; };
-		8AF2804D139126C00095D9A0 /* a_keen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D6F139126C00095D9A0 /* a_keen.cpp */; };
-		8AF2804E139126C00095D9A0 /* a_lostsoul.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D70139126C00095D9A0 /* a_lostsoul.cpp */; };
-		8AF2804F139126C00095D9A0 /* a_painelemental.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D71139126C00095D9A0 /* a_painelemental.cpp */; };
-		8AF28050139126C00095D9A0 /* a_possessed.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D72139126C00095D9A0 /* a_possessed.cpp */; };
-		8AF28051139126C00095D9A0 /* a_revenant.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D73139126C00095D9A0 /* a_revenant.cpp */; };
-		8AF28052139126C00095D9A0 /* a_scriptedmarine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D74139126C00095D9A0 /* a_scriptedmarine.cpp */; };
-		8AF28053139126C00095D9A0 /* a_spidermaster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D75139126C00095D9A0 /* a_spidermaster.cpp */; };
 		8AF28054139126C00095D9A0 /* g_game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D76139126C00095D9A0 /* g_game.cpp */; };
-		8AF28055139126C00095D9A0 /* a_chicken.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D79139126C00095D9A0 /* a_chicken.cpp */; };
-		8AF28056139126C00095D9A0 /* a_dsparil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D7A139126C00095D9A0 /* a_dsparil.cpp */; };
-		8AF28057139126C00095D9A0 /* a_hereticartifacts.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D7B139126C00095D9A0 /* a_hereticartifacts.cpp */; };
-		8AF28058139126C00095D9A0 /* a_hereticimp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D7C139126C00095D9A0 /* a_hereticimp.cpp */; };
 		8AF28059139126C00095D9A0 /* a_hereticmisc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D7D139126C00095D9A0 /* a_hereticmisc.cpp */; };
-		8AF2805A139126C00095D9A0 /* a_hereticweaps.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D7E139126C00095D9A0 /* a_hereticweaps.cpp */; };
-		8AF2805B139126C00095D9A0 /* a_ironlich.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D7F139126C00095D9A0 /* a_ironlich.cpp */; };
-		8AF2805C139126C00095D9A0 /* a_knight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D80139126C00095D9A0 /* a_knight.cpp */; };
-		8AF2805D139126C00095D9A0 /* a_wizard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D81139126C00095D9A0 /* a_wizard.cpp */; };
-		8AF2805E139126C00095D9A0 /* a_bats.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D83139126C00095D9A0 /* a_bats.cpp */; };
-		8AF2805F139126C00095D9A0 /* a_bishop.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D84139126C00095D9A0 /* a_bishop.cpp */; };
-		8AF28060139126C00095D9A0 /* a_blastradius.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D85139126C00095D9A0 /* a_blastradius.cpp */; };
-		8AF28061139126C00095D9A0 /* a_boostarmor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D86139126C00095D9A0 /* a_boostarmor.cpp */; };
-		8AF28062139126C00095D9A0 /* a_centaur.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D87139126C00095D9A0 /* a_centaur.cpp */; };
-		8AF28063139126C00095D9A0 /* a_clericflame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D88139126C00095D9A0 /* a_clericflame.cpp */; };
-		8AF28064139126C00095D9A0 /* a_clericholy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D89139126C00095D9A0 /* a_clericholy.cpp */; };
-		8AF28065139126C00095D9A0 /* a_clericmace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D8A139126C00095D9A0 /* a_clericmace.cpp */; };
-		8AF28066139126C00095D9A0 /* a_clericstaff.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D8B139126C00095D9A0 /* a_clericstaff.cpp */; };
-		8AF28067139126C00095D9A0 /* a_dragon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D8C139126C00095D9A0 /* a_dragon.cpp */; };
-		8AF28068139126C00095D9A0 /* a_fighteraxe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D8D139126C00095D9A0 /* a_fighteraxe.cpp */; };
-		8AF28069139126C00095D9A0 /* a_fighterhammer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D8E139126C00095D9A0 /* a_fighterhammer.cpp */; };
-		8AF2806A139126C00095D9A0 /* a_fighterplayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D8F139126C00095D9A0 /* a_fighterplayer.cpp */; };
-		8AF2806B139126C00095D9A0 /* a_fighterquietus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D90139126C00095D9A0 /* a_fighterquietus.cpp */; };
-		8AF2806C139126C00095D9A0 /* a_firedemon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D91139126C00095D9A0 /* a_firedemon.cpp */; };
-		8AF2806D139126C00095D9A0 /* a_flechette.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D92139126C00095D9A0 /* a_flechette.cpp */; };
-		8AF2806E139126C00095D9A0 /* a_fog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D93139126C00095D9A0 /* a_fog.cpp */; };
-		8AF2806F139126C00095D9A0 /* a_healingradius.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D94139126C00095D9A0 /* a_healingradius.cpp */; };
-		8AF28070139126C00095D9A0 /* a_heresiarch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D95139126C00095D9A0 /* a_heresiarch.cpp */; };
 		8AF28071139126C00095D9A0 /* a_hexenmisc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D97139126C00095D9A0 /* a_hexenmisc.cpp */; };
-		8AF28072139126C00095D9A0 /* a_hexenspecialdecs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D98139126C00095D9A0 /* a_hexenspecialdecs.cpp */; };
-		8AF28073139126C00095D9A0 /* a_iceguy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D99139126C00095D9A0 /* a_iceguy.cpp */; };
-		8AF28074139126C00095D9A0 /* a_korax.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D9A139126C00095D9A0 /* a_korax.cpp */; };
-		8AF28075139126C00095D9A0 /* a_magecone.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D9B139126C00095D9A0 /* a_magecone.cpp */; };
-		8AF28076139126C00095D9A0 /* a_magelightning.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D9C139126C00095D9A0 /* a_magelightning.cpp */; };
-		8AF28077139126C00095D9A0 /* a_magestaff.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D9D139126C00095D9A0 /* a_magestaff.cpp */; };
-		8AF28078139126C00095D9A0 /* a_pig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D9E139126C00095D9A0 /* a_pig.cpp */; };
-		8AF28079139126C00095D9A0 /* a_serpent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D9F139126C00095D9A0 /* a_serpent.cpp */; };
-		8AF2807A139126C00095D9A0 /* a_spike.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DA0139126C00095D9A0 /* a_spike.cpp */; };
-		8AF2807B139126C00095D9A0 /* a_summon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DA1139126C00095D9A0 /* a_summon.cpp */; };
-		8AF2807C139126C00095D9A0 /* a_teleportother.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DA2139126C00095D9A0 /* a_teleportother.cpp */; };
-		8AF2807D139126C00095D9A0 /* a_wraith.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DA3139126C00095D9A0 /* a_wraith.cpp */; };
 		8AF2807E139126C00095D9A0 /* g_hub.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DA4139126C00095D9A0 /* g_hub.cpp */; };
 		8AF2807F139126C00095D9A0 /* g_level.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DA6139126C00095D9A0 /* g_level.cpp */; };
 		8AF28080139126C00095D9A0 /* g_mapinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DA8139126C00095D9A0 /* g_mapinfo.cpp */; };
@@ -370,29 +321,10 @@
 		8AF280A2139126C00095D9A0 /* hudmessages.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DD6139126C00095D9A0 /* hudmessages.cpp */; };
 		8AF280A3139126C00095D9A0 /* sbar_mugshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DD8139126C00095D9A0 /* sbar_mugshot.cpp */; };
 		8AF280A4139126C00095D9A0 /* sbarinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DD9139126C00095D9A0 /* sbarinfo.cpp */; };
-		8AF280A5139126C00095D9A0 /* sbarinfo_commands.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DDB139126C00095D9A0 /* sbarinfo_commands.cpp */; };
 		8AF280A6139126C00095D9A0 /* shared_hud.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DDC139126C00095D9A0 /* shared_hud.cpp */; };
 		8AF280A7139126C00095D9A0 /* shared_sbar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DDD139126C00095D9A0 /* shared_sbar.cpp */; };
 		8AF280A8139126C00095D9A0 /* g_skill.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DDE139126C00095D9A0 /* g_skill.cpp */; };
-		8AF280A9139126C00095D9A0 /* a_acolyte.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DE0139126C00095D9A0 /* a_acolyte.cpp */; };
-		8AF280AA139126C00095D9A0 /* a_alienspectres.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DE1139126C00095D9A0 /* a_alienspectres.cpp */; };
-		8AF280AB139126C00095D9A0 /* a_coin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DE2139126C00095D9A0 /* a_coin.cpp */; };
-		8AF280AC139126C00095D9A0 /* a_crusader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DE3139126C00095D9A0 /* a_crusader.cpp */; };
-		8AF280AD139126C00095D9A0 /* a_entityboss.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DE4139126C00095D9A0 /* a_entityboss.cpp */; };
-		8AF280AE139126C00095D9A0 /* a_inquisitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DE5139126C00095D9A0 /* a_inquisitor.cpp */; };
-		8AF280AF139126C00095D9A0 /* a_loremaster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DE6139126C00095D9A0 /* a_loremaster.cpp */; };
-		8AF280B0139126C00095D9A0 /* a_oracle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DE7139126C00095D9A0 /* a_oracle.cpp */; };
-		8AF280B1139126C00095D9A0 /* a_programmer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DE8139126C00095D9A0 /* a_programmer.cpp */; };
-		8AF280B2139126C00095D9A0 /* a_reaver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DE9139126C00095D9A0 /* a_reaver.cpp */; };
-		8AF280B3139126C00095D9A0 /* a_rebels.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DEA139126C00095D9A0 /* a_rebels.cpp */; };
-		8AF280B4139126C00095D9A0 /* a_sentinel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DEB139126C00095D9A0 /* a_sentinel.cpp */; };
-		8AF280B5139126C00095D9A0 /* a_spectral.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DEC139126C00095D9A0 /* a_spectral.cpp */; };
-		8AF280B6139126C00095D9A0 /* a_stalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DED139126C00095D9A0 /* a_stalker.cpp */; };
-		8AF280B7139126C00095D9A0 /* a_strifeitems.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DEF139126C00095D9A0 /* a_strifeitems.cpp */; };
 		8AF280B8139126C00095D9A0 /* a_strifestuff.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DF0139126C00095D9A0 /* a_strifestuff.cpp */; };
-		8AF280B9139126C00095D9A0 /* a_strifeweapons.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DF1139126C00095D9A0 /* a_strifeweapons.cpp */; };
-		8AF280BA139126C00095D9A0 /* a_templar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DF2139126C00095D9A0 /* a_templar.cpp */; };
-		8AF280BB139126C00095D9A0 /* a_thingstoblowup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DF3139126C00095D9A0 /* a_thingstoblowup.cpp */; };
 		8AF280BC139126C00095D9A0 /* strife_sbar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DF4139126C00095D9A0 /* strife_sbar.cpp */; };
 		8AF280BD139126C00095D9A0 /* gameconfigfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DF5139126C00095D9A0 /* gameconfigfile.cpp */; };
 		8AF280BE139126C00095D9A0 /* gi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DF9139126C00095D9A0 /* gi.cpp */; };
@@ -406,11 +338,6 @@
 		8AF280C6139126C00095D9A0 /* gl_dynlight1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E09139126C00095D9A0 /* gl_dynlight1.cpp */; };
 		8AF280C7139126C00095D9A0 /* gl_glow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E0A139126C00095D9A0 /* gl_glow.cpp */; };
 		8AF280C8139126C00095D9A0 /* gl_lightbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E0C139126C00095D9A0 /* gl_lightbuffer.cpp */; };
-		8AF280C9139126C00095D9A0 /* gl_hqresize.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E10139126C00095D9A0 /* gl_hqresize.cpp */; };
-		8AF280CA139126C00095D9A0 /* hq2x.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E11139126C00095D9A0 /* hq2x.cpp */; };
-		8AF280CB139126C00095D9A0 /* hq3x.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E12139126C00095D9A0 /* hq3x.cpp */; };
-		8AF280CC139126C00095D9A0 /* hq4x.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E13139126C00095D9A0 /* hq4x.cpp */; };
-		8AF280CD139126C00095D9A0 /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E15139126C00095D9A0 /* Image.cpp */; };
 		8AF280CE139126C00095D9A0 /* gl_models.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E18139126C00095D9A0 /* gl_models.cpp */; };
 		8AF280CF139126C00095D9A0 /* gl_models_md2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E1A139126C00095D9A0 /* gl_models_md2.cpp */; };
 		8AF280D0139126C00095D9A0 /* gl_models_md3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E1B139126C00095D9A0 /* gl_models_md3.cpp */; };
@@ -672,42 +599,42 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 8AF27C1B1390F7E20095D9A0 /* gdtoa */;
+			remoteGlobalIDString = 8AF27C1B1390F7E20095D9A0;
 			remoteInfo = gdtoa;
 		};
 		8AC81C37139131FE00F49DC3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 8AF27B241390F5DC0095D9A0 /* dumb */;
+			remoteGlobalIDString = 8AF27B241390F5DC0095D9A0;
 			remoteInfo = dumb;
 		};
 		8AC81C39139131FE00F49DC3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 8AF27A531390F4F40095D9A0 /* gme */;
+			remoteGlobalIDString = 8AF27A531390F4F40095D9A0;
 			remoteInfo = gme;
 		};
 		8AC81C3B139131FE00F49DC3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 8AF27A301390F41F0095D9A0 /* zipdir */;
+			remoteGlobalIDString = 8AF27A301390F41F0095D9A0;
 			remoteInfo = zipdir;
 		};
 		8AC81C3D139131FE00F49DC3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 8AF27A091390F2B50095D9A0 /* re2c */;
+			remoteGlobalIDString = 8AF27A091390F2B50095D9A0;
 			remoteInfo = re2c;
 		};
 		8AC81C3F139131FE00F49DC3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 8AF279BB1390F2540095D9A0 /* lemon */;
+			remoteGlobalIDString = 8AF279BB1390F2540095D9A0;
 			remoteInfo = lemon;
 		};
 		8AF278CD1390F0410095D9A0 /* PBXContainerItemProxy */ = {
@@ -737,6 +664,13 @@
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		1DDD58150DA1D0A300B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		8A74F2A1139235E0001F54B0 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		8A74F2B5139235FD001F54B0 /* libSDL.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL.a; path = thirdparty/SDL/lib/libSDL.a; sourceTree = "<group>"; };
+		8A74F2B6139235FD001F54B0 /* libSDLmain.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDLmain.a; path = thirdparty/SDL/lib/libSDLmain.a; sourceTree = "<group>"; };
+		8A74F2B91392360F001F54B0 /* libfmodex.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfmodex.dylib; path = thirdparty/FMOD/lib/libfmodex.dylib; sourceTree = "<group>"; };
+		8A74F38E13925284001F54B0 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		8A74F450139252F9001F54B0 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
+		8A74F4661392532C001F54B0 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		8AF278CA1390F0370095D9A0 /* libjpeg.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libjpeg.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AF2790B1390F0880095D9A0 /* jcomapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = jcomapi.c; sourceTree = "<group>"; };
 		8AF2790C1390F0880095D9A0 /* jconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jconfig.h; sourceTree = "<group>"; };
@@ -1844,7 +1778,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A74F451139252F9001F54B0 /* AudioUnit.framework in Frameworks */,
+				8A74F4671392532C001F54B0 /* Carbon.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
+				8A74F38F13925284001F54B0 /* IOKit.framework in Frameworks */,
+				8A74F2A2139235E0001F54B0 /* OpenGL.framework in Frameworks */,
 				8AF2794A1390F0C20095D9A0 /* libbz2.dylib in Frameworks */,
 				8AF27A491390F4910095D9A0 /* libz.dylib in Frameworks */,
 				8AC81C411391321300F49DC3 /* libjpeg.a in Frameworks */,
@@ -1852,6 +1790,9 @@
 				8AC81C431391321300F49DC3 /* libgme.a in Frameworks */,
 				8AC81C441391321300F49DC3 /* libdumb.a in Frameworks */,
 				8AC81C451391321300F49DC3 /* libgdtoa.a in Frameworks */,
+				8A74F2BA1392360F001F54B0 /* libfmodex.dylib in Frameworks */,
+				8A74F2B7139235FD001F54B0 /* libSDL.a in Frameworks */,
+				8A74F2B8139235FD001F54B0 /* libSDLmain.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1912,9 +1853,16 @@
 		29B97323FDCFA39411CA2CEA /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
+				8A74F450139252F9001F54B0 /* AudioUnit.framework */,
+				8A74F4661392532C001F54B0 /* Carbon.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+				8A74F38E13925284001F54B0 /* IOKit.framework */,
+				8A74F2A1139235E0001F54B0 /* OpenGL.framework */,
 				8AF279491390F0C20095D9A0 /* libbz2.dylib */,
 				8AF27A461390F47C0095D9A0 /* libz.dylib */,
+				8A74F2B91392360F001F54B0 /* libfmodex.dylib */,
+				8A74F2B5139235FD001F54B0 /* libSDL.a */,
+				8A74F2B6139235FD001F54B0 /* libSDLmain.a */,
 			);
 			name = Dependencies;
 			sourceTree = "<group>";
@@ -3550,6 +3498,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "GZDoom" */;
 			buildPhases = (
+				8A74F33113924397001F54B0 /* Generate xlat_parser */,
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
@@ -3577,6 +3526,9 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "GZDdoom" */;
 			compatibilityVersion = "Xcode 3.1";
 			developmentRegion = English;
@@ -3615,6 +3567,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		8A74F33113924397001F54B0 /* Generate xlat_parser */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/src/xlat/xlat_parser.y",
+				"$(SRCROOT)/tools/lemon/lempar.c",
+			);
+			name = "Generate xlat_parser";
+			outputPaths = (
+				"$(SRCROOT)/src/xlat/xlat_parser.c",
+				"$(SRCROOT)/src/xlat/xlat_parser.h",
+				"$(CONFIGURATION_BUILD_DIR)/lempar.c",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo \"Generating xlat_parser.c and xlat_parser.h...\"\ncp -f ${SRCROOT}/tools/lemon/lempar.c ${CONFIGURATION_BUILD_DIR}/lempar.c\ncd ${SRCROOT}/src/xlat\n${CONFIGURATION_BUILD_DIR}/lemon xlat_parser.y\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8AF278C71390F0370095D9A0 /* Sources */ = {
@@ -3930,66 +3904,10 @@
 				8AF2803F139126C00095D9A0 /* t_script.cpp in Sources */,
 				8AF28040139126C00095D9A0 /* t_spec.cpp in Sources */,
 				8AF28041139126C00095D9A0 /* t_variable.cpp in Sources */,
-				8AF28042139126C00095D9A0 /* a_arachnotron.cpp in Sources */,
-				8AF28043139126C00095D9A0 /* a_archvile.cpp in Sources */,
-				8AF28044139126C00095D9A0 /* a_bossbrain.cpp in Sources */,
-				8AF28045139126C00095D9A0 /* a_bruiser.cpp in Sources */,
-				8AF28046139126C00095D9A0 /* a_cacodemon.cpp in Sources */,
-				8AF28047139126C00095D9A0 /* a_cyberdemon.cpp in Sources */,
-				8AF28048139126C00095D9A0 /* a_demon.cpp in Sources */,
-				8AF28049139126C00095D9A0 /* a_doomimp.cpp in Sources */,
 				8AF2804A139126C00095D9A0 /* a_doommisc.cpp in Sources */,
-				8AF2804B139126C00095D9A0 /* a_doomweaps.cpp in Sources */,
-				8AF2804C139126C00095D9A0 /* a_fatso.cpp in Sources */,
-				8AF2804D139126C00095D9A0 /* a_keen.cpp in Sources */,
-				8AF2804E139126C00095D9A0 /* a_lostsoul.cpp in Sources */,
-				8AF2804F139126C00095D9A0 /* a_painelemental.cpp in Sources */,
-				8AF28050139126C00095D9A0 /* a_possessed.cpp in Sources */,
-				8AF28051139126C00095D9A0 /* a_revenant.cpp in Sources */,
-				8AF28052139126C00095D9A0 /* a_scriptedmarine.cpp in Sources */,
-				8AF28053139126C00095D9A0 /* a_spidermaster.cpp in Sources */,
 				8AF28054139126C00095D9A0 /* g_game.cpp in Sources */,
-				8AF28055139126C00095D9A0 /* a_chicken.cpp in Sources */,
-				8AF28056139126C00095D9A0 /* a_dsparil.cpp in Sources */,
-				8AF28057139126C00095D9A0 /* a_hereticartifacts.cpp in Sources */,
-				8AF28058139126C00095D9A0 /* a_hereticimp.cpp in Sources */,
 				8AF28059139126C00095D9A0 /* a_hereticmisc.cpp in Sources */,
-				8AF2805A139126C00095D9A0 /* a_hereticweaps.cpp in Sources */,
-				8AF2805B139126C00095D9A0 /* a_ironlich.cpp in Sources */,
-				8AF2805C139126C00095D9A0 /* a_knight.cpp in Sources */,
-				8AF2805D139126C00095D9A0 /* a_wizard.cpp in Sources */,
-				8AF2805E139126C00095D9A0 /* a_bats.cpp in Sources */,
-				8AF2805F139126C00095D9A0 /* a_bishop.cpp in Sources */,
-				8AF28060139126C00095D9A0 /* a_blastradius.cpp in Sources */,
-				8AF28061139126C00095D9A0 /* a_boostarmor.cpp in Sources */,
-				8AF28062139126C00095D9A0 /* a_centaur.cpp in Sources */,
-				8AF28063139126C00095D9A0 /* a_clericflame.cpp in Sources */,
-				8AF28064139126C00095D9A0 /* a_clericholy.cpp in Sources */,
-				8AF28065139126C00095D9A0 /* a_clericmace.cpp in Sources */,
-				8AF28066139126C00095D9A0 /* a_clericstaff.cpp in Sources */,
-				8AF28067139126C00095D9A0 /* a_dragon.cpp in Sources */,
-				8AF28068139126C00095D9A0 /* a_fighteraxe.cpp in Sources */,
-				8AF28069139126C00095D9A0 /* a_fighterhammer.cpp in Sources */,
-				8AF2806A139126C00095D9A0 /* a_fighterplayer.cpp in Sources */,
-				8AF2806B139126C00095D9A0 /* a_fighterquietus.cpp in Sources */,
-				8AF2806C139126C00095D9A0 /* a_firedemon.cpp in Sources */,
-				8AF2806D139126C00095D9A0 /* a_flechette.cpp in Sources */,
-				8AF2806E139126C00095D9A0 /* a_fog.cpp in Sources */,
-				8AF2806F139126C00095D9A0 /* a_healingradius.cpp in Sources */,
-				8AF28070139126C00095D9A0 /* a_heresiarch.cpp in Sources */,
 				8AF28071139126C00095D9A0 /* a_hexenmisc.cpp in Sources */,
-				8AF28072139126C00095D9A0 /* a_hexenspecialdecs.cpp in Sources */,
-				8AF28073139126C00095D9A0 /* a_iceguy.cpp in Sources */,
-				8AF28074139126C00095D9A0 /* a_korax.cpp in Sources */,
-				8AF28075139126C00095D9A0 /* a_magecone.cpp in Sources */,
-				8AF28076139126C00095D9A0 /* a_magelightning.cpp in Sources */,
-				8AF28077139126C00095D9A0 /* a_magestaff.cpp in Sources */,
-				8AF28078139126C00095D9A0 /* a_pig.cpp in Sources */,
-				8AF28079139126C00095D9A0 /* a_serpent.cpp in Sources */,
-				8AF2807A139126C00095D9A0 /* a_spike.cpp in Sources */,
-				8AF2807B139126C00095D9A0 /* a_summon.cpp in Sources */,
-				8AF2807C139126C00095D9A0 /* a_teleportother.cpp in Sources */,
-				8AF2807D139126C00095D9A0 /* a_wraith.cpp in Sources */,
 				8AF2807E139126C00095D9A0 /* g_hub.cpp in Sources */,
 				8AF2807F139126C00095D9A0 /* g_level.cpp in Sources */,
 				8AF28080139126C00095D9A0 /* g_mapinfo.cpp in Sources */,
@@ -4029,29 +3947,10 @@
 				8AF280A2139126C00095D9A0 /* hudmessages.cpp in Sources */,
 				8AF280A3139126C00095D9A0 /* sbar_mugshot.cpp in Sources */,
 				8AF280A4139126C00095D9A0 /* sbarinfo.cpp in Sources */,
-				8AF280A5139126C00095D9A0 /* sbarinfo_commands.cpp in Sources */,
 				8AF280A6139126C00095D9A0 /* shared_hud.cpp in Sources */,
 				8AF280A7139126C00095D9A0 /* shared_sbar.cpp in Sources */,
 				8AF280A8139126C00095D9A0 /* g_skill.cpp in Sources */,
-				8AF280A9139126C00095D9A0 /* a_acolyte.cpp in Sources */,
-				8AF280AA139126C00095D9A0 /* a_alienspectres.cpp in Sources */,
-				8AF280AB139126C00095D9A0 /* a_coin.cpp in Sources */,
-				8AF280AC139126C00095D9A0 /* a_crusader.cpp in Sources */,
-				8AF280AD139126C00095D9A0 /* a_entityboss.cpp in Sources */,
-				8AF280AE139126C00095D9A0 /* a_inquisitor.cpp in Sources */,
-				8AF280AF139126C00095D9A0 /* a_loremaster.cpp in Sources */,
-				8AF280B0139126C00095D9A0 /* a_oracle.cpp in Sources */,
-				8AF280B1139126C00095D9A0 /* a_programmer.cpp in Sources */,
-				8AF280B2139126C00095D9A0 /* a_reaver.cpp in Sources */,
-				8AF280B3139126C00095D9A0 /* a_rebels.cpp in Sources */,
-				8AF280B4139126C00095D9A0 /* a_sentinel.cpp in Sources */,
-				8AF280B5139126C00095D9A0 /* a_spectral.cpp in Sources */,
-				8AF280B6139126C00095D9A0 /* a_stalker.cpp in Sources */,
-				8AF280B7139126C00095D9A0 /* a_strifeitems.cpp in Sources */,
 				8AF280B8139126C00095D9A0 /* a_strifestuff.cpp in Sources */,
-				8AF280B9139126C00095D9A0 /* a_strifeweapons.cpp in Sources */,
-				8AF280BA139126C00095D9A0 /* a_templar.cpp in Sources */,
-				8AF280BB139126C00095D9A0 /* a_thingstoblowup.cpp in Sources */,
 				8AF280BC139126C00095D9A0 /* strife_sbar.cpp in Sources */,
 				8AF280BD139126C00095D9A0 /* gameconfigfile.cpp in Sources */,
 				8AF280BE139126C00095D9A0 /* gi.cpp in Sources */,
@@ -4065,11 +3964,6 @@
 				8AF280C6139126C00095D9A0 /* gl_dynlight1.cpp in Sources */,
 				8AF280C7139126C00095D9A0 /* gl_glow.cpp in Sources */,
 				8AF280C8139126C00095D9A0 /* gl_lightbuffer.cpp in Sources */,
-				8AF280C9139126C00095D9A0 /* gl_hqresize.cpp in Sources */,
-				8AF280CA139126C00095D9A0 /* hq2x.cpp in Sources */,
-				8AF280CB139126C00095D9A0 /* hq3x.cpp in Sources */,
-				8AF280CC139126C00095D9A0 /* hq4x.cpp in Sources */,
-				8AF280CD139126C00095D9A0 /* Image.cpp in Sources */,
 				8AF280CE139126C00095D9A0 /* gl_models.cpp in Sources */,
 				8AF280CF139126C00095D9A0 /* gl_models_md2.cpp in Sources */,
 				8AF280D0139126C00095D9A0 /* gl_models_md3.cpp in Sources */,
@@ -4660,9 +4554,22 @@
 					NO_CLOCK_GETTIME,
 					DISABLE_SSE,
 				);
-				HEADER_SEARCH_PATHS = src;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					src,
+					lzma/C,
+					"jpeg-6b",
+					thirdparty/FMOD/inc,
+					thirdparty/SDL/include,
+					thirdparty/glew/include,
+				);
 				INFOPLIST_FILE = "GZDoom-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					thirdparty/FMOD/lib,
+					thirdparty/SDL/lib,
+				);
 				PRODUCT_NAME = GZDoom;
 			};
 			name = Debug;
@@ -4683,9 +4590,22 @@
 					NO_CLOCK_GETTIME,
 					DISABLE_SSE,
 				);
-				HEADER_SEARCH_PATHS = src;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					src,
+					lzma/C,
+					"jpeg-6b",
+					thirdparty/FMOD/inc,
+					thirdparty/SDL/include,
+					thirdparty/glew/include,
+				);
 				INFOPLIST_FILE = "GZDoom-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					thirdparty/FMOD/lib,
+					thirdparty/SDL/lib,
+				);
 				PRODUCT_NAME = GZDoom;
 			};
 			name = Release;

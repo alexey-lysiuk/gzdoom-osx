@@ -3,3 +3,6 @@ syntax: glob
 build/*
 *.mode1v3
 *.pbxuser
+src/xlat/xlat_parser\.c
+src/xlat/xlat_parser\.h
+src/xlat/xlat_parser\.out
