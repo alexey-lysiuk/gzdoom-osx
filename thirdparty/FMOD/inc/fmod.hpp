@@ -1,5 +1,5 @@
 /* ========================================================================================== */
-/* FMOD Ex - C++ header file. Copyright (c), Firelight Technologies Pty, Ltd. 2004-2009.      */
+/* FMOD Ex - C++ header file. Copyright (c), Firelight Technologies Pty, Ltd. 2004-2011.      */
 /*                                                                                            */
 /* Use this header in conjunction with fmod.h (which contains all the constants / callbacks)  */
 /* to develop using C++ classes.                                                              */
@@ -74,7 +74,7 @@ namespace FMOD
         FMOD_RESULT F_API getSoftwareFormat      (int *samplerate, FMOD_SOUND_FORMAT *format, int *numoutputchannels, int *maxinputchannels, FMOD_DSP_RESAMPLER *resamplemethod, int *bits);
         FMOD_RESULT F_API setDSPBufferSize       (unsigned int bufferlength, int numbuffers);
         FMOD_RESULT F_API getDSPBufferSize       (unsigned int *bufferlength, int *numbuffers);
-        FMOD_RESULT F_API setFileSystem          (FMOD_FILE_OPENCALLBACK useropen, FMOD_FILE_CLOSECALLBACK userclose, FMOD_FILE_READCALLBACK userread, FMOD_FILE_SEEKCALLBACK userseek, int blockalign);
+        FMOD_RESULT F_API setFileSystem          (FMOD_FILE_OPENCALLBACK useropen, FMOD_FILE_CLOSECALLBACK userclose, FMOD_FILE_READCALLBACK userread, FMOD_FILE_SEEKCALLBACK userseek, FMOD_FILE_ASYNCREADCALLBACK userasyncread, FMOD_FILE_ASYNCCANCELCALLBACK userasynccancel, int blockalign);
         FMOD_RESULT F_API attachFileSystem       (FMOD_FILE_OPENCALLBACK useropen, FMOD_FILE_CLOSECALLBACK userclose, FMOD_FILE_READCALLBACK userread, FMOD_FILE_SEEKCALLBACK userseek);
         FMOD_RESULT F_API setAdvancedSettings    (FMOD_ADVANCEDSETTINGS *settings);
         FMOD_RESULT F_API getAdvancedSettings    (FMOD_ADVANCEDSETTINGS *settings);
@@ -221,7 +221,7 @@ namespace FMOD
         FMOD_RESULT F_API getNumSubSounds        (int *numsubsounds);
         FMOD_RESULT F_API getNumTags             (int *numtags, int *numtagsupdated);
         FMOD_RESULT F_API getTag                 (const char *name, int index, FMOD_TAG *tag);
-        FMOD_RESULT F_API getOpenState           (FMOD_OPENSTATE *openstate, unsigned int *percentbuffered, bool *starving);
+        FMOD_RESULT F_API getOpenState           (FMOD_OPENSTATE *openstate, unsigned int *percentbuffered, bool *starving, bool *diskbusy);
         FMOD_RESULT F_API readData               (void *buffer, unsigned int lenbytes, unsigned int *read);
         FMOD_RESULT F_API seekData               (unsigned int pcm);
 
@@ -247,6 +247,8 @@ namespace FMOD
         FMOD_RESULT F_API getMusicNumChannels    (int *numchannels);
         FMOD_RESULT F_API setMusicChannelVolume  (int channel, float volume);
         FMOD_RESULT F_API getMusicChannelVolume  (int channel, float *volume);
+        FMOD_RESULT F_API setMusicSpeed          (float speed);
+        FMOD_RESULT F_API getMusicSpeed          (float *speed);
                             
         // Userdata set/get.
         FMOD_RESULT F_API setUserData            (void *userdata);

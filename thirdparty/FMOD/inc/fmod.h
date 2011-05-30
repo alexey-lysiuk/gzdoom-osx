@@ -1,7 +1,7 @@
 /*$ preserve start $*/
 
 /* ============================================================================================ */
-/* FMOD Ex - Main C/C++ header file. Copyright (c), Firelight Technologies Pty, Ltd. 2004-2009. */
+/* FMOD Ex - Main C/C++ header file. Copyright (c), Firelight Technologies Pty, Ltd. 2004-2011. */
 /*                                                                                              */
 /* This header is the base header for all other FMOD headers.  If you are programming in C      */
 /* use this exclusively, or if you are programming C++ use this in conjunction with FMOD.HPP    */
@@ -16,7 +16,7 @@
     0xaaaabbcc -> aaaa = major version number.  bb = minor version number.  cc = development version number.
 */
 
-#define FMOD_VERSION    0x00043020
+#define FMOD_VERSION    0x00043404
 
 /*
     Compiler specific settings.
@@ -32,7 +32,7 @@
     #define F_STDCALL _stdcall
     #define F_DECLSPEC __declspec
     #define F_DLLEXPORT ( dllexport )
-#elif defined(__MACH__)
+#elif defined(__MACH__) || defined (ANDROID)
     #define F_CDECL
     #define F_STDCALL
     #define F_DECLSPEC
@@ -45,7 +45,7 @@
 #endif
 
 #ifdef DLL_EXPORTS
-    #if defined(__MACH__)
+    #if defined(__MACH__) || defined(ANDROID)
         #define F_API __attribute__ ((visibility("default")))
     #else
         #define F_API __declspec(dllexport) F_STDCALL
@@ -79,71 +79,6 @@ typedef unsigned int              FMOD_CAPS;
 typedef unsigned int              FMOD_DEBUGLEVEL;
 typedef unsigned int              FMOD_MEMORY_TYPE;
 
-/*
-[STRUCTURE] 
-[
-    [DESCRIPTION]   
-    Structure describing a point in 3D space.
-
-    [REMARKS]
-    FMOD uses a left handed co-ordinate system by default.<br>
-    To use a right handed co-ordinate system specify FMOD_INIT_3D_RIGHTHANDED from FMOD_INITFLAGS in System::init.
-
-    [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
-
-    [SEE_ALSO]      
-    System::set3DListenerAttributes
-    System::get3DListenerAttributes
-    Channel::set3DAttributes
-    Channel::get3DAttributes
-    Channel::set3DCustomRolloff
-    Channel::get3DCustomRolloff
-    Sound::set3DCustomRolloff
-    Sound::get3DCustomRolloff
-    Geometry::addPolygon
-    Geometry::setPolygonVertex
-    Geometry::getPolygonVertex
-    Geometry::setRotation
-    Geometry::getRotation
-    Geometry::setPosition
-    Geometry::getPosition
-    Geometry::setScale
-    Geometry::getScale
-    FMOD_INITFLAGS
-]
-*/
-typedef struct
-{
-	float x;        /* X co-ordinate in 3D space. */
-    float y;        /* Y co-ordinate in 3D space. */
-    float z;        /* Z co-ordinate in 3D space. */
-} FMOD_VECTOR;
-
-/*
-[STRUCTURE] 
-[
-    [DESCRIPTION]   
-    Structure describing a globally unique identifier.
-
-    [REMARKS]
-
-    [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
-
-    [SEE_ALSO]      
-    System::getDriverInfo
-]
-*/
-typedef struct
-{
-    unsigned int   Data1;       /* Specifies the first 8 hexadecimal digits of the GUID */
-    unsigned short Data2;       /* Specifies the first group of 4 hexadecimal digits.   */
-    unsigned short Data3;       /* Specifies the second group of 4 hexadecimal digits.  */
-    unsigned char  Data4[8];    /* Array of 8 bytes. The first 2 bytes contain the third group of 4 hexadecimal digits. The remaining 6 bytes contain the final 12 hexadecimal digits. */
-} FMOD_GUID;
-
-
 /*$ fmod result start $*/
 /*
 [ENUM]
@@ -154,7 +89,7 @@ typedef struct
     [REMARKS]
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]      
 ]
@@ -238,7 +173,7 @@ typedef enum
     FMOD_ERR_SUBSOUND_ALLOCATED,    /* This subsound is already being used by another sound, you cannot have more than one parent to a sound.  Null out the other parent's entry first. */
     FMOD_ERR_SUBSOUND_CANTMOVE,     /* Shared subsounds cannot be replaced or moved from their parent stream, such as when the parent stream is an FSB file. */
     FMOD_ERR_SUBSOUND_MODE,         /* The subsound's mode bits do not match with the parent sound's mode bits.  See documentation for function that it was called with. */
-    FMOD_ERR_SUBSOUNDS,             /* The error occured because the sound referenced contains subsounds.  The operation cannot be performed on a parent sound, or a parent sound was played without setting up a sentence first. */
+    FMOD_ERR_SUBSOUNDS,             /* The error occured because the sound referenced contains subsounds when it shouldn't have, or it doesn't contain subsounds when it should have.  The operation may also not be able to be performed on a parent sound, or a parent sound was played without setting up a sentence first. */
     FMOD_ERR_TAGNOTFOUND,           /* The specified tag could not be found or there are no tags. */
     FMOD_ERR_TOOMANYCHANNELS,       /* The sound created exceeds the allowable input channel count.  This can be increased using the maxinputchannels parameter in System::setSoftwareFormat. */
     FMOD_ERR_UNIMPLEMENTED,         /* Something in FMOD hasn't been implemented when it should be! contact support! */
@@ -268,6 +203,112 @@ typedef enum
 
 
 /*
+[STRUCTURE] 
+[
+    [DESCRIPTION]   
+    Structure describing a point in 3D space.
+
+    [REMARKS]
+    FMOD uses a left handed co-ordinate system by default.<br>
+    To use a right handed co-ordinate system specify FMOD_INIT_3D_RIGHTHANDED from FMOD_INITFLAGS in System::init.
+
+    [PLATFORMS]
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
+
+    [SEE_ALSO]      
+    System::set3DListenerAttributes
+    System::get3DListenerAttributes
+    Channel::set3DAttributes
+    Channel::get3DAttributes
+    Channel::set3DCustomRolloff
+    Channel::get3DCustomRolloff
+    Sound::set3DCustomRolloff
+    Sound::get3DCustomRolloff
+    Geometry::addPolygon
+    Geometry::setPolygonVertex
+    Geometry::getPolygonVertex
+    Geometry::setRotation
+    Geometry::getRotation
+    Geometry::setPosition
+    Geometry::getPosition
+    Geometry::setScale
+    Geometry::getScale
+    FMOD_INITFLAGS
+]
+*/
+typedef struct
+{
+	float x;        /* X co-ordinate in 3D space. */
+    float y;        /* Y co-ordinate in 3D space. */
+    float z;        /* Z co-ordinate in 3D space. */
+} FMOD_VECTOR;
+
+/*
+[STRUCTURE] 
+[
+    [DESCRIPTION]   
+    Structure describing a globally unique identifier.
+
+    [REMARKS]
+
+    [PLATFORMS]
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
+
+    [SEE_ALSO]      
+    System::getDriverInfo
+]
+*/
+typedef struct
+{
+    unsigned int   Data1;       /* Specifies the first 8 hexadecimal digits of the GUID */
+    unsigned short Data2;       /* Specifies the first group of 4 hexadecimal digits.   */
+    unsigned short Data3;       /* Specifies the second group of 4 hexadecimal digits.  */
+    unsigned char  Data4[8];    /* Array of 8 bytes. The first 2 bytes contain the third group of 4 hexadecimal digits. The remaining 6 bytes contain the final 12 hexadecimal digits. */
+} FMOD_GUID;
+
+/*
+[STRUCTURE] 
+[
+    [DESCRIPTION]
+    Structure that is passed into FMOD_FILE_ASYNCREADCALLBACK.  Use the information in this structure to perform
+
+    [REMARKS]
+    Members marked with [r] mean the variable is modified by FMOD and is for reading purposes only.  Do not change this value.<br>
+    Members marked with [w] mean the variable can be written to.  The user can set the value.<br>
+    <br>
+    Instructions: write to 'buffer', and 'bytesread' <b>BEFORE</b> setting 'result'.<br>  
+    As soon as result is set, FMOD will asynchronously continue internally using the data provided in this structure.<br>
+    <br>
+    Set 'result' to the result expected from a normal file read callback.<br>
+    If the read was successful, set it to FMOD_OK.<br>
+    If it read some data but hit the end of the file, set it to FMOD_ERR_FILE_EOF.<br>
+    If a bad error occurred, return FMOD_ERR_FILE_BAD<br>
+    If a disk was ejected, return FMOD_ERR_FILE_DISKEJECTED.<br>
+
+    [PLATFORMS]
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
+
+    [SEE_ALSO]
+    FMOD_FILE_ASYNCREADCALLBACK
+    FMOD_FILE_ASYNCCANCELCALLBACK
+]
+*/
+typedef struct
+{
+    void           *handle;         /* [r] The file handle that was filled out in the open callback. */
+    unsigned int    offset;         /* [r] Seek position, make sure you read from this file offset. */
+    unsigned int    sizebytes;      /* [r] how many bytes requested for read. */
+    int             priority;       /* [r] 0 = low importance.  100 = extremely important (ie 'must read now or stuttering may occur') */
+
+    void           *buffer;         /* [w] Buffer to read file data into. */
+    unsigned int    bytesread;      /* [w] Fill this in before setting result code to tell FMOD how many bytes were read. */
+    FMOD_RESULT     result;         /* [r/w] Result code, FMOD_OK tells the system it is ready to consume the data.  Set this last!  Default value = FMOD_ERR_NOTREADY. */
+
+    void           *userdata;       /* [r] User data pointer. */
+} FMOD_ASYNCREADINFO;
+
+
+/*
 [ENUM]
 [
     [DESCRIPTION]   
@@ -294,7 +335,7 @@ typedef enum
     as it will lock the mixer and the streamer together in the same thread.
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]      
     System::setOutput
@@ -316,20 +357,22 @@ typedef enum
     FMOD_OUTPUTTYPE_NOSOUND_NRT,     /* All                   - Non-realtime version of FMOD_OUTPUTTYPE_NOSOUND.  User can drive mixer with System::update at whatever rate they want. */
     FMOD_OUTPUTTYPE_WAVWRITER_NRT,   /* All                   - Non-realtime version of FMOD_OUTPUTTYPE_WAVWRITER.  User can drive mixer with System::update at whatever rate they want. */
                                      
-    FMOD_OUTPUTTYPE_DSOUND,          /* Win32/Win64           - DirectSound output.  Use this to get hardware accelerated 3d audio and EAX Reverb support. (Default on Windows) */
-    FMOD_OUTPUTTYPE_WINMM,           /* Win32/Win64           - Windows Multimedia output. */
-    FMOD_OUTPUTTYPE_OPENAL,          /* Win32/Win64           - OpenAL 1.1 output. Use this for lower CPU overhead than FMOD_OUTPUTTYPE_DSOUND, and also Vista H/W support with Creative Labs cards. */
-    FMOD_OUTPUTTYPE_WASAPI,          /* Win32                 - Windows Audio Session API. (Default on Windows Vista) */
+    FMOD_OUTPUTTYPE_DSOUND,          /* Win32/Win64           - DirectSound output.  (Default on Windows OS earlier than Vista) */
+    FMOD_OUTPUTTYPE_WINMM,           /* Win32/Win64           - Windows Multimedia output. (Older audio interface, larger latency on output) */
+    FMOD_OUTPUTTYPE_WASAPI,          /* Win32                 - Windows Audio Session API. (Default on Windows Vista/Windows 7) */
     FMOD_OUTPUTTYPE_ASIO,            /* Win32                 - Low latency ASIO 2.0 driver. */
-    FMOD_OUTPUTTYPE_OSS,             /* Linux/Linux64/Solaris - Open Sound System output. (Default on Linux/Linux64/Solaris) */
+    FMOD_OUTPUTTYPE_OSS,             /* Linux/Linux64         - Open Sound System output. (Default on Linux/Linux64) */
     FMOD_OUTPUTTYPE_ALSA,            /* Linux/Linux64         - Advanced Linux Sound Architecture output. */
     FMOD_OUTPUTTYPE_ESD,             /* Linux/Linux64         - Enlightment Sound Daemon output. */
+    FMOD_OUTPUTTYPE_PULSEAUDIO,      /* Linux/Linux64         - PulseAudio output. */
     FMOD_OUTPUTTYPE_COREAUDIO,       /* Mac                   - Macintosh CoreAudio output.  (Default on Mac) */
     FMOD_OUTPUTTYPE_PS2,             /* PS2                   - Native hardware output. (Default on PS2) */
     FMOD_OUTPUTTYPE_PS3,             /* PS3                   - Native hardware output. (Default on PS3) */
     FMOD_OUTPUTTYPE_XBOX360,         /* Xbox 360              - Native hardware output. (Default on Xbox 360) */
     FMOD_OUTPUTTYPE_PSP,             /* PSP                   - Native hardware output. (Default on PSP) */
 	FMOD_OUTPUTTYPE_WII,			 /* Wii			          - Native hardware output. (Default on Wii) */
+    FMOD_OUTPUTTYPE_ANDROID,         /* Android               - Native android output. */
+    FMOD_OUTPUTTYPE_3DS,             /* 3DS                   - Native 3DS output */
 
     FMOD_OUTPUTTYPE_MAX,             /* Maximum number of output types supported. */
     FMOD_OUTPUTTYPE_FORCEINT = 65536 /* Makes sure this enum is signed 32bit. */
@@ -349,7 +392,7 @@ typedef enum
     It is important to check FMOD_CAPS_HARDWARE_EMULATED on windows machines, to then adjust System::setDSPBufferSize to (1024, 10) to compensate for the higher latency.
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]
     System::getDriverCaps
@@ -385,7 +428,7 @@ typedef enum
     [REMARKS]
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]
     Debug_SetLevel 
@@ -427,7 +470,7 @@ typedef enum
     Bits can be excluded if you want during Memory_Initialize so that you never get them.
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]
     FMOD_MEMORY_ALLOCCALLBACK
@@ -440,12 +483,12 @@ typedef enum
 #define FMOD_MEMORY_NORMAL             0x00000000       /* Standard memory. */
 #define FMOD_MEMORY_STREAM_FILE        0x00000001       /* Stream file buffer, size controllable with System::setStreamBufferSize. */
 #define FMOD_MEMORY_STREAM_DECODE      0x00000002       /* Stream decode buffer, size controllable with FMOD_CREATESOUNDEXINFO::decodebuffersize. */
+#define FMOD_MEMORY_SAMPLEDATA         0x00000004       /* Sample data buffer.  Raw audio data, usually PCM/MPEG/ADPCM/XMA data. */
+#define FMOD_MEMORY_DSP_OUTPUTBUFFER   0x00000008       /* DSP memory block allocated when more than 1 output exists on a DSP node. */
 #define FMOD_MEMORY_XBOX360_PHYSICAL   0x00100000       /* Requires XPhysicalAlloc / XPhysicalFree. */
 #define FMOD_MEMORY_PERSISTENT         0x00200000       /* Persistent memory. Memory will be freed when System::release is called. */
 #define FMOD_MEMORY_SECONDARY          0x00400000       /* Secondary memory. Allocation should be in secondary memory. For example RSX on the PS3. */
 #define FMOD_MEMORY_ALL                0xFFFFFFFF
-
-
 /* [DEFINE_END] */
 
 
@@ -542,7 +585,7 @@ typedef enum
     sound should be placed in.<br>
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]
     System::setSpeakerMode
@@ -585,7 +628,7 @@ typedef enum
     clearer what speaker is being addressed on that platform.
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]
     FMOD_SPEAKERMODE
@@ -625,7 +668,7 @@ typedef enum
     [REMARKS]
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]
     System::getNumPlugins
@@ -657,7 +700,7 @@ typedef enum
     Use System::setAdvancedSettings to adjust settings for some of the features that are enabled by these flags.
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]
     System::init
@@ -676,19 +719,16 @@ typedef enum
 #define FMOD_INIT_ENABLE_PROFILE             0x00000020 /* All platforms - Enable TCP/IP based host which allows FMOD Designer or FMOD Profiler to connect to it, and view memory, CPU and the DSP network graph in real-time. */
 #define FMOD_INIT_VOL0_BECOMES_VIRTUAL       0x00000080 /* All platforms - Any sounds that are 0 volume will go virtual and not be processed except for having their positions updated virtually.  Use System::setAdvancedSettings to adjust what volume besides zero to switch to virtual at. */
 #define FMOD_INIT_WASAPI_EXCLUSIVE           0x00000100 /* Win32 Vista only - for WASAPI output - Enable exclusive access to hardware, lower latency at the expense of excluding other applications from accessing the audio hardware. */
-#define FMOD_INIT_DSOUND_HRTFNONE            0x00000200 /* Win32 only - for DirectSound output - FMOD_HARDWARE | FMOD_3D buffers use simple stereo panning/doppler/attenuation when 3D hardware acceleration is not present. */
-#define FMOD_INIT_DSOUND_HRTFLIGHT           0x00000400 /* Win32 only - for DirectSound output - FMOD_HARDWARE | FMOD_3D buffers use a slightly higher quality algorithm when 3D hardware acceleration is not present. */
-#define FMOD_INIT_DSOUND_HRTFFULL            0x00000800 /* Win32 only - for DirectSound output - FMOD_HARDWARE | FMOD_3D buffers use full quality 3D playback when 3d hardware acceleration is not present. */
 #define FMOD_INIT_PS2_DISABLECORE0REVERB     0x00010000 /* PS2 only - Disable reverb on CORE 0 to regain 256k SRAM. */
 #define FMOD_INIT_PS2_DISABLECORE1REVERB     0x00020000 /* PS2 only - Disable reverb on CORE 1 to regain 256k SRAM. */
 #define FMOD_INIT_PS2_DONTUSESCRATCHPAD      0x00040000 /* PS2 only - Disable FMOD's usage of the scratchpad. */
 #define FMOD_INIT_PS2_SWAPDMACHANNELS        0x00080000 /* PS2 only - Changes FMOD from using SPU DMA channel 0 for software mixing, and 1 for sound data upload/file streaming, to 1 and 0 respectively. */
 #define FMOD_INIT_PS3_PREFERDTS              0x00800000 /* PS3 only - Prefer DTS over Dolby Digital if both are supported. Note: 8 and 6 channel LPCM is always preferred over both DTS and Dolby Digital. */
 #define FMOD_INIT_PS3_FORCE2CHLPCM           0x01000000 /* PS3 only - Force PS3 system output mode to 2 channel LPCM. */
-#define FMOD_INIT_WII_DISABLEDOLBY           0x00100000 /* Wii only - Disable Dolby Pro Logic surround. Speakermode will be set to STEREO even if user has selected surround in the Wii system settings. */
+#define FMOD_INIT_DISABLEDOLBY               0x00100000 /* Wii / 3DS - Disable Dolby Pro Logic surround. Speakermode will be set to STEREO even if user has selected surround in the system settings. */
 #define FMOD_INIT_SYSTEM_MUSICMUTENOTPAUSE   0x00200000 /* Xbox 360 / PS3 - The "music" channelgroup which by default pauses when custom 360 dashboard / PS3 BGM music is played, can be changed to mute (therefore continues playing) instead of pausing, by using this flag. */
 #define FMOD_INIT_SYNCMIXERWITHUPDATE        0x00400000 /* Win32/Wii/PS3/Xbox/Xbox 360 - FMOD Mixer thread is woken up to do a mix when System::update is called rather than waking periodically on its own timer. */
-#define FMOD_INIT_DTS_NEURALSURROUND         0x02000000 /* Win32/Mac/Linux/Solaris/PS3/Xbox360 - Use DTS Neural surround downmixing from 7.1 if speakermode set to FMOD_SPEAKERMODE_STEREO or FMOD_SPEAKERMODE_5POINT1. Always 7.1 -> 5.1 downmix for Xbox360 and PS3.  Internal DSP structure will be set to 7.1. */
+#define FMOD_INIT_DTS_NEURALSURROUND         0x02000000 /* Win32/Mac/Linux/PS3/Xbox360 - Use DTS Neural surround downmixing from 7.1 if speakermode set to FMOD_SPEAKERMODE_STEREO or FMOD_SPEAKERMODE_5POINT1. Always 7.1 -> 5.1 downmix for Xbox360 and PS3.  Internal DSP structure will be set to 7.1. */
 #define FMOD_INIT_GEOMETRY_USECLOSEST        0x04000000 /* All platforms - With the geometry engine, only process the closest polygon rather than accumulating all polygons the sound to listener line intersects. */
 #define FMOD_INIT_DISABLE_MYEARS             0x08000000 /* Win32 - Disables MyEars HRTF 7.1 downmixing.  MyEars will otherwise be disbaled if speakermode is not set to FMOD_SPEAKERMODE_STEREO or the data file is missing. */
 /* [DEFINE_END] */
@@ -703,7 +743,7 @@ typedef enum
     [REMARKS]
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]      
     Sound::getFormat
@@ -722,7 +762,7 @@ typedef enum
     FMOD_SOUND_TYPE_FSB,             /* FMOD Sample Bank. */
     FMOD_SOUND_TYPE_GCADPCM,         /* GameCube ADPCM */
     FMOD_SOUND_TYPE_IT,              /* Impulse Tracker. */
-    FMOD_SOUND_TYPE_MIDI,            /* MIDI. */
+    FMOD_SOUND_TYPE_MIDI,            /* MIDI. extracodecdata is a pointer to an FMOD_MIDI_EXTRACODECDATA structure. */
     FMOD_SOUND_TYPE_MOD,             /* Protracker / Fasttracker MOD. */
     FMOD_SOUND_TYPE_MPEG,            /* MP2/MP3 MPEG. */
     FMOD_SOUND_TYPE_OGGVORBIS,       /* Ogg vorbis. */
@@ -735,6 +775,9 @@ typedef enum
     FMOD_SOUND_TYPE_XM,              /* FastTracker 2 XM. */
     FMOD_SOUND_TYPE_XMA,             /* Xbox360 XMA */
     FMOD_SOUND_TYPE_VAG,             /* PlayStation 2 / PlayStation Portable adpcm VAG format. */
+    FMOD_SOUND_TYPE_AUDIOQUEUE,      /* iPhone hardware decoder, supports AAC, ALAC and MP3. extracodecdata is a pointer to an FMOD_AUDIOQUEUE_EXTRACODECDATA structure. */
+    FMOD_SOUND_TYPE_XWMA,            /* Xbox360 XWMA */
+    FMOD_SOUND_TYPE_BCWAV,           /* 3DS BCWAV container format for DSP ADPCM and PCM */
 
     FMOD_SOUND_TYPE_MAX,             /* Maximum number of sound types supported. */
     FMOD_SOUND_TYPE_FORCEINT = 65536 /* Makes sure this enum is signed 32bit. */
@@ -751,7 +794,7 @@ typedef enum
     This is the format the native hardware or software buffer will be or is created in.
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]
     System::createSound
@@ -810,7 +853,7 @@ typedef enum
     1. Sound::getName functionality is removed.  256 bytes per sound is saved.<br>
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]
     System::createSound
@@ -846,12 +889,11 @@ typedef enum
 #define FMOD_UNIQUE                    0x00020000  /* Unique sound, can only be played one at a time */
 #define FMOD_3D_HEADRELATIVE           0x00040000  /* Make the sound's position, velocity and orientation relative to the listener. */
 #define FMOD_3D_WORLDRELATIVE          0x00080000  /* Make the sound's position, velocity and orientation absolute (relative to the world). (DEFAULT) */
-#define FMOD_3D_LOGROLLOFF             0x00100000  /* This sound will follow the standard logarithmic rolloff model where mindistance = full volume, maxdistance = where sound stops attenuating, and rolloff is fixed according to the global rolloff factor.  (DEFAULT) */
+#define FMOD_3D_INVERSEROLLOFF         0x00100000  /* This sound will follow the inverse rolloff model where mindistance = full volume, maxdistance = where sound stops attenuating, and rolloff is fixed according to the global rolloff factor.  (DEFAULT) */
 #define FMOD_3D_LINEARROLLOFF          0x00200000  /* This sound will follow a linear rolloff model where mindistance = full volume, maxdistance = silence.  Rolloffscale is ignored. */
+#define FMOD_3D_LINEARSQUAREROLLOFF    0x00400000  /* This sound will follow a linear-square rolloff model where mindistance = full volume, maxdistance = silence.  Rolloffscale is ignored. */
 #define FMOD_3D_CUSTOMROLLOFF          0x04000000  /* This sound will follow a rolloff model defined by Sound::set3DCustomRolloff / Channel::set3DCustomRolloff.  */
 #define FMOD_3D_IGNOREGEOMETRY         0x40000000  /* Is not affect by geometry occlusion.  If not specified in Sound::setMode, or Channel::setMode, the flag is cleared and it is affected by geometry again. */
-#define FMOD_CDDA_FORCEASPI            0x00400000  /* For CDDA sounds only - use ASPI instead of NTSCSI to access the specified CD/DVD device. */
-#define FMOD_CDDA_JITTERCORRECT        0x00800000  /* For CDDA sounds only - perform jitter correction. Jitter correction helps produce a more accurate CDDA stream at the cost of more CPU time. */
 #define FMOD_UNICODE                   0x01000000  /* Filename is double-byte unicode. */
 #define FMOD_IGNORETAGS                0x02000000  /* Skips id3v2/asf/etc tag checks when opening a sound, to reduce seek/read overhead when opening files (helps with CD performance). */
 #define FMOD_LOWMEM                    0x08000000  /* Removes some features from samples to give a lower memory overhead, like Sound::getName.  See remarks. */
@@ -867,10 +909,12 @@ typedef enum
     [DESCRIPTION]   
     These values describe what state a sound is in after FMOD_NONBLOCKING has been used to open it.
 
-    [REMARKS]    
+    [REMARKS]
+    With streams, if you are using FMOD_NONBLOCKING, note that if the user calls Sound::getSubSound, a stream will go into FMOD_OPENSTATE_SEEKING state and sound related commands will return FMOD_ERR_NOTREADY.<br>
+    With streams, if you are using FMOD_NONBLOCKING, note that if the user calls Channel::getPosition, a stream will go into FMOD_OPENSTATE_SETPOSITION state and sound related commands will return FMOD_ERR_NOTREADY.<br>
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]
     Sound::getOpenState
@@ -885,7 +929,7 @@ typedef enum
     FMOD_OPENSTATE_CONNECTING,      /* Connecting to remote host (internet sounds only). */
     FMOD_OPENSTATE_BUFFERING,       /* Buffering data. */
     FMOD_OPENSTATE_SEEKING,         /* Seeking to subsound and re-flushing stream buffer. */
-    FMOD_OPENSTATE_STREAMING,       /* Ready and playing, but not possible to release at this time without stalling the main thread. */
+    FMOD_OPENSTATE_PLAYING,         /* Ready and playing, but not possible to release at this time without stalling the main thread. */
     FMOD_OPENSTATE_SETPOSITION,     /* Seeking within a stream to a different position. */
 
     FMOD_OPENSTATE_MAX,             /* Maximum number of open state types. */
@@ -905,7 +949,7 @@ typedef enum
     Instead, the time specified will be used to cross fade between the sounds that go silent and the ones that become audible.
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]      
     SoundGroup::setMaxAudibleBehavior
@@ -940,7 +984,7 @@ typedef enum
     <b>Note!</b>  Currently the user must call System::update for these callbacks to trigger!
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]      
     Channel::setCallback
@@ -973,7 +1017,7 @@ typedef enum
     <b>Note!</b> Using FMOD_SYSTEM_CALLBACKTYPE_DEVICELISTCHANGED (on Mac only) requires the application to be running an event loop which will allow external changes to device list to be detected by FMOD.
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]      
     System::setCallback
@@ -985,6 +1029,7 @@ typedef enum
 typedef enum
 {
     FMOD_SYSTEM_CALLBACKTYPE_DEVICELISTCHANGED,         /* Called from System::update when the enumerated list of devices has changed. */
+    FMOD_SYSTEM_CALLBACKTYPE_DEVICELOST,                /* Called from System::update when an output device has been lost due to control panel parameter changes and FMOD cannot automatically recover. */
     FMOD_SYSTEM_CALLBACKTYPE_MEMORYALLOCATIONFAILED,    /* Called directly when a memory allocation fails somewhere in FMOD. */
     FMOD_SYSTEM_CALLBACKTYPE_THREADCREATED,             /* Called directly when a thread is created. */
     FMOD_SYSTEM_CALLBACKTYPE_BADDSPCONNECTION,          /* Called when a bad connection was made with DSP::addInput. Usually called from mixer thread because that is where the connections are made.  */
@@ -1010,10 +1055,12 @@ typedef FMOD_RESULT (F_CALLBACK *FMOD_FILE_OPENCALLBACK)     (const char *name, 
 typedef FMOD_RESULT (F_CALLBACK *FMOD_FILE_CLOSECALLBACK)    (void *handle, void *userdata);
 typedef FMOD_RESULT (F_CALLBACK *FMOD_FILE_READCALLBACK)     (void *handle, void *buffer, unsigned int sizebytes, unsigned int *bytesread, void *userdata);
 typedef FMOD_RESULT (F_CALLBACK *FMOD_FILE_SEEKCALLBACK)     (void *handle, unsigned int pos, void *userdata);
+typedef FMOD_RESULT (F_CALLBACK *FMOD_FILE_ASYNCREADCALLBACK)(FMOD_ASYNCREADINFO *info, void *userdata);
+typedef FMOD_RESULT (F_CALLBACK *FMOD_FILE_ASYNCCANCELCALLBACK)(void *handle, void *userdata);
 
-typedef void *      (F_CALLBACK *FMOD_MEMORY_ALLOCCALLBACK)  (unsigned int size, FMOD_MEMORY_TYPE type);
-typedef void *      (F_CALLBACK *FMOD_MEMORY_REALLOCCALLBACK)(void *ptr, unsigned int size, FMOD_MEMORY_TYPE type);
-typedef void        (F_CALLBACK *FMOD_MEMORY_FREECALLBACK)   (void *ptr, FMOD_MEMORY_TYPE type);
+typedef void *      (F_CALLBACK *FMOD_MEMORY_ALLOCCALLBACK)  (unsigned int size, FMOD_MEMORY_TYPE type, const char *sourcestr);
+typedef void *      (F_CALLBACK *FMOD_MEMORY_REALLOCCALLBACK)(void *ptr, unsigned int size, FMOD_MEMORY_TYPE type, const char *sourcestr);
+typedef void        (F_CALLBACK *FMOD_MEMORY_FREECALLBACK)   (void *ptr, FMOD_MEMORY_TYPE type, const char *sourcestr);
 
 typedef float       (F_CALLBACK *FMOD_3D_ROLLOFFCALLBACK)    (FMOD_CHANNEL *channel, float distance);
 
@@ -1053,7 +1100,7 @@ typedef float       (F_CALLBACK *FMOD_3D_ROLLOFFCALLBACK)    (FMOD_CHANNEL *chan
     </exclude>
     
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]      
     System::getSpectrum
@@ -1085,7 +1132,7 @@ typedef enum
     Use System::setSoftwareFormat to tell FMOD the resampling quality you require for FMOD_SOFTWARE based sounds.
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]      
     System::setSoftwareFormat
@@ -1113,7 +1160,7 @@ typedef enum
     [REMARKS]
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]      
     Sound::getTag
@@ -1147,7 +1194,7 @@ typedef enum
     [REMARKS]
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]      
     Sound::getTag
@@ -1186,7 +1233,7 @@ typedef enum
     If FMOD_DELAYTYPE_END_MS is specified, the value is not treated as a 64 bit number, just the delayhi value is used and it is treated as milliseconds.
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]      
     Channel::setDelay
@@ -1217,11 +1264,11 @@ typedef enum
     Structure describing a piece of tag data.
 
     [REMARKS]
-    Members marked with [in] mean the user sets the value before passing it to the function.<br>
-    Members marked with [out] mean FMOD sets the value to be used after the function exits.<br>
+    Members marked with [r] mean the variable is modified by FMOD and is for reading purposes only.  Do not change this value.<br>
+    Members marked with [w] mean the variable can be written to.  The user can set the value.<br>
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]      
     Sound::getTag
@@ -1231,12 +1278,12 @@ typedef enum
 */
 typedef struct FMOD_TAG
 {
-    FMOD_TAGTYPE      type;         /* [out] The type of this tag. */
-    FMOD_TAGDATATYPE  datatype;     /* [out] The type of data that this tag contains */
-    char             *name;         /* [out] The name of this tag i.e. "TITLE", "ARTIST" etc. */
-    void             *data;         /* [out] Pointer to the tag data - its format is determined by the datatype member */
-    unsigned int      datalen;      /* [out] Length of the data contained in this tag */
-    FMOD_BOOL         updated;      /* [out] True if this tag has been updated since last being accessed with Sound::getTag */
+    FMOD_TAGTYPE      type;         /* [r] The type of this tag. */
+    FMOD_TAGDATATYPE  datatype;     /* [r] The type of data that this tag contains */
+    char             *name;         /* [r] The name of this tag i.e. "TITLE", "ARTIST" etc. */
+    void             *data;         /* [r] Pointer to the tag data - its format is determined by the datatype member */
+    unsigned int      datalen;      /* [r] Length of the data contained in this tag */
+    FMOD_BOOL         updated;      /* [r] True if this tag has been updated since last being accessed with Sound::getTag */
 } FMOD_TAG;
 
 
@@ -1247,11 +1294,11 @@ typedef struct FMOD_TAG
     Structure describing a CD/DVD table of contents
 
     [REMARKS]
-    Members marked with [in] mean the user sets the value before passing it to the function.<br>
-    Members marked with [out] mean FMOD sets the value to be used after the function exits.<br>
+    Members marked with [r] mean the variable is modified by FMOD and is for reading purposes only.  Do not change this value.<br>
+    Members marked with [w] mean the variable can be written to.  The user can set the value.<br>
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]      
     Sound::getTag
@@ -1259,10 +1306,10 @@ typedef struct FMOD_TAG
 */
 typedef struct FMOD_CDTOC
 {
-    int numtracks;                  /* [out] The number of tracks on the CD */
-    int min[100];                   /* [out] The start offset of each track in minutes */
-    int sec[100];                   /* [out] The start offset of each track in seconds */
-    int frame[100];                 /* [out] The start offset of each track in frames */
+    int numtracks;                  /* [r] The number of tracks on the CD */
+    int min[100];                   /* [r] The start offset of each track in minutes */
+    int sec[100];                   /* [r] The start offset of each track in seconds */
+    int frame[100];                 /* [r] The start offset of each track in frames */
 } FMOD_CDTOC;
 
 
@@ -1280,7 +1327,7 @@ typedef struct FMOD_CDTOC
     Do not combine flags except FMOD_TIMEUNIT_BUFFERED.
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]      
     Sound::getLength
@@ -1289,9 +1336,10 @@ typedef struct FMOD_CDTOC
 ]
 */
 #define FMOD_TIMEUNIT_MS                0x00000001  /* Milliseconds. */
-#define FMOD_TIMEUNIT_PCM               0x00000002  /* PCM Samples, related to milliseconds * samplerate / 1000. */
+#define FMOD_TIMEUNIT_PCM               0x00000002  /* PCM samples, related to milliseconds * samplerate / 1000. */
 #define FMOD_TIMEUNIT_PCMBYTES          0x00000004  /* Bytes, related to PCM samples * channels * datawidth (ie 16bit = 2 bytes). */
 #define FMOD_TIMEUNIT_RAWBYTES          0x00000008  /* Raw file bytes of (compressed) sound data (does not include headers).  Only used by Sound::getLength and Channel::getPosition. */
+#define FMOD_TIMEUNIT_PCMFRACTION       0x00000010  /* Fractions of 1 PCM sample.  Unsigned int range 0 to 0xFFFFFFFF.  Used for sub-sample granularity for DSP purposes. */
 #define FMOD_TIMEUNIT_MODORDER          0x00000100  /* MOD/S3M/XM/IT.  Order in a sequenced module format.  Use Sound::getFormat to determine the PCM format being decoded to. */
 #define FMOD_TIMEUNIT_MODROW            0x00000200  /* MOD/S3M/XM/IT.  Current row in a sequenced module format.  Sound::getLength will return the number of rows in the currently playing or seeked to pattern. */
 #define FMOD_TIMEUNIT_MODPATTERN        0x00000400  /* MOD/S3M/XM/IT.  Current pattern in a sequenced module format.  Sound::getLength will return the number of patterns in the song and Channel::getPosition will return the currently playing pattern. */
@@ -1317,7 +1365,7 @@ typedef struct FMOD_CDTOC
     For full flexibility of speaker assignments, use Channel::setSpeakerLevels.
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]
     FMOD_CREATESOUNDEXINFO
@@ -1350,9 +1398,6 @@ typedef enum
 
     [REMARKS]
     This structure is optional!  Specify 0 or NULL in System::createSound if you don't need it!<br>
-    <br>
-    Members marked with [in] mean the user sets the value before passing it to the function.<br>
-    Members marked with [out] mean FMOD sets the value to be used after the function exits.<br>
     <br>
     <u>Loading a file from memory.</u><br>
     <li>Create the sound using the FMOD_OPENMEMORY flag.<br>
@@ -1400,9 +1445,12 @@ typedef enum
     files where you only want to load 1 sound).  There will be no gaps, ie no null subsounds.  As an example, if there are 10,000 subsounds and there is an inclusionlist with only 1 entry, 
     and numsubsounds = 1, then subsound 0 will be that entry, and there will only be the memory allocated for 1 subsound.  Previously there would still be 10,000 subsound pointers and other
     associated codec entries allocated along with it multiplied by 10,000.<br>
+    <br>
+    Members marked with [r] mean the variable is modified by FMOD and is for reading purposes only.  Do not change this value.<br>
+    Members marked with [w] mean the variable can be written to.  The user can set the value.<br>
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]
     System::createSound
@@ -1415,34 +1463,39 @@ typedef enum
 */
 typedef struct FMOD_CREATESOUNDEXINFO
 {
-    int                            cbsize;             /* [in] Size of this structure.  This is used so the structure can be expanded in the future and still work on older versions of FMOD Ex. */
-    unsigned int                   length;             /* [in] Optional. Specify 0 to ignore. Size in bytes of file to load, or sound to create (in this case only if FMOD_OPENUSER is used).  Required if loading from memory.  If 0 is specified, then it will use the size of the file (unless loading from memory then an error will be returned). */
-    unsigned int                   fileoffset;         /* [in] Optional. Specify 0 to ignore. Offset from start of the file to start loading from.  This is useful for loading files from inside big data files. */
-    int                            numchannels;        /* [in] Optional. Specify 0 to ignore. Number of channels in a sound mandatory if FMOD_OPENUSER or FMOD_OPENRAW is used. */
-    int                            defaultfrequency;   /* [in] Optional. Specify 0 to ignore. Default frequency of sound in a sound mandatory if FMOD_OPENUSER or FMOD_OPENRAW is used.  Other formats use the frequency determined by the file format. */
-    FMOD_SOUND_FORMAT              format;             /* [in] Optional. Specify 0 or FMOD_SOUND_FORMAT_NONE to ignore. Format of the sound mandatory if FMOD_OPENUSER or FMOD_OPENRAW is used.  Other formats use the format determined by the file format.   */
-    unsigned int                   decodebuffersize;   /* [in] Optional. Specify 0 to ignore. For streams.  This determines the size of the double buffer (in PCM samples) that a stream uses.  Use this for user created streams if you want to determine the size of the callback buffer passed to you.  Specify 0 to use FMOD's default size which is currently equivalent to 400ms of the sound format created/loaded. */
-    int                            initialsubsound;    /* [in] Optional. Specify 0 to ignore. In a multi-sample file format such as .FSB/.DLS/.SF2, specify the initial subsound to seek to, only if FMOD_CREATESTREAM is used. */
-    int                            numsubsounds;       /* [in] Optional. Specify 0 to ignore or have no subsounds.  In a sound created with FMOD_OPENUSER, specify the number of subsounds that are accessable with Sound::getSubSound.  If not created with FMOD_OPENUSER, this will limit the number of subsounds loaded within a multi-subsound file.  If using FSB, then if FMOD_CREATESOUNDEXINFO::inclusionlist is used, this will shuffle subsounds down so that there are not any gaps.  It will mean that the indices of the sounds will be different. */
-    int                           *inclusionlist;      /* [in] Optional. Specify 0 to ignore. In a multi-sample format such as .FSB/.DLS/.SF2 it may be desirable to specify only a subset of sounds to be loaded out of the whole file.  This is an array of subsound indices to load into memory when created. */
-    int                            inclusionlistnum;   /* [in] Optional. Specify 0 to ignore. This is the number of integers contained within the inclusionlist array. */
-    FMOD_SOUND_PCMREADCALLBACK     pcmreadcallback;    /* [in] Optional. Specify 0 to ignore. Callback to 'piggyback' on FMOD's read functions and accept or even write PCM data while FMOD is opening the sound.  Used for user sounds created with FMOD_OPENUSER or for capturing decoded data as FMOD reads it. */
-    FMOD_SOUND_PCMSETPOSCALLBACK   pcmsetposcallback;  /* [in] Optional. Specify 0 to ignore. Callback for when the user calls a seeking function such as Channel::setTime or Channel::setPosition within a multi-sample sound, and for when it is opened.*/
-    FMOD_SOUND_NONBLOCKCALLBACK    nonblockcallback;   /* [in] Optional. Specify 0 to ignore. Callback for successful completion, or error while loading a sound that used the FMOD_NONBLOCKING flag.*/
-    const char                    *dlsname;            /* [in] Optional. Specify 0 to ignore. Filename for a DLS or SF2 sample set when loading a MIDI file. If not specified, on Windows it will attempt to open /windows/system32/drivers/gm.dls or /windows/system32/drivers/etc/gm.dls, on Mac it will attempt to load /System/Library/Components/CoreAudio.component/Contents/Resources/gs_instruments.dls, otherwise the MIDI will fail to open. Current DLS support is for level 1 of the specification. */
-    const char                    *encryptionkey;      /* [in] Optional. Specify 0 to ignore. Key for encrypted FSB file.  Without this key an encrypted FSB file will not load. */
-    int                            maxpolyphony;       /* [in] Optional. Specify 0 to ignore. For sequenced formats with dynamic channel allocation such as .MID and .IT, this specifies the maximum voice count allowed while playing.  .IT defaults to 64.  .MID defaults to 32. */
-    void                          *userdata;           /* [in] Optional. Specify 0 to ignore. This is user data to be attached to the sound during creation.  Access via Sound::getUserData.  Note: This is not passed to FMOD_FILE_OPENCALLBACK, that is a different userdata that is file specific. */
-    FMOD_SOUND_TYPE                suggestedsoundtype; /* [in] Optional. Specify 0 or FMOD_SOUND_TYPE_UNKNOWN to ignore.  Instead of scanning all codec types, use this to speed up loading by making it jump straight to this codec. */
-    FMOD_FILE_OPENCALLBACK         useropen;           /* [in] Optional. Specify 0 to ignore. Callback for opening this file. */
-    FMOD_FILE_CLOSECALLBACK        userclose;          /* [in] Optional. Specify 0 to ignore. Callback for closing this file. */
-    FMOD_FILE_READCALLBACK         userread;           /* [in] Optional. Specify 0 to ignore. Callback for reading from this file. */
-    FMOD_FILE_SEEKCALLBACK         userseek;           /* [in] Optional. Specify 0 to ignore. Callback for seeking within this file. */
-    FMOD_SPEAKERMAPTYPE            speakermap;         /* [in] Optional. Specify 0 to ignore. Use this to differ the way fmod maps multichannel sounds to speakers.  See FMOD_SPEAKERMAPTYPE for more. */
-    FMOD_SOUNDGROUP               *initialsoundgroup;  /* [in] Optional. Specify 0 to ignore. Specify a sound group if required, to put sound in as it is created. */
-    unsigned int                   initialseekposition;/* [in] Optional. Specify 0 to ignore. For streams. Specify an initial position to seek the stream to. */
-    FMOD_TIMEUNIT                  initialseekpostype; /* [in] Optional. Specify 0 to ignore. For streams. Specify the time unit for the position set in initialseekposition. */
-    int                            ignoresetfilesystem;/* [in] Optional. Specify 0 to ignore. Set to 1 to use fmod's built in file system. Ignores setFileSystem callbacks and also FMOD_CREATESOUNEXINFO file callbacks.  Useful for specific cases where you don't want to use your own file system but want to use fmod's file system (ie net streaming). */
+    int                            cbsize;             /* [w] Size of this structure.  This is used so the structure can be expanded in the future and still work on older versions of FMOD Ex. */
+    unsigned int                   length;             /* [w] Optional. Specify 0 to ignore. Size in bytes of file to load, or sound to create (in this case only if FMOD_OPENUSER is used).  Required if loading from memory.  If 0 is specified, then it will use the size of the file (unless loading from memory then an error will be returned). */
+    unsigned int                   fileoffset;         /* [w] Optional. Specify 0 to ignore. Offset from start of the file to start loading from.  This is useful for loading files from inside big data files. */
+    int                            numchannels;        /* [w] Optional. Specify 0 to ignore. Number of channels in a sound mandatory if FMOD_OPENUSER or FMOD_OPENRAW is used. */
+    int                            defaultfrequency;   /* [w] Optional. Specify 0 to ignore. Default frequency of sound in a sound mandatory if FMOD_OPENUSER or FMOD_OPENRAW is used.  Other formats use the frequency determined by the file format. */
+    FMOD_SOUND_FORMAT              format;             /* [w] Optional. Specify 0 or FMOD_SOUND_FORMAT_NONE to ignore. Format of the sound mandatory if FMOD_OPENUSER or FMOD_OPENRAW is used.  Other formats use the format determined by the file format.   */
+    unsigned int                   decodebuffersize;   /* [w] Optional. Specify 0 to ignore. For streams.  This determines the size of the double buffer (in PCM samples) that a stream uses.  Use this for user created streams if you want to determine the size of the callback buffer passed to you.  Specify 0 to use FMOD's default size which is currently equivalent to 400ms of the sound format created/loaded. */
+    int                            initialsubsound;    /* [w] Optional. Specify 0 to ignore. In a multi-sample file format such as .FSB/.DLS/.SF2, specify the initial subsound to seek to, only if FMOD_CREATESTREAM is used. */
+    int                            numsubsounds;       /* [w] Optional. Specify 0 to ignore or have no subsounds.  In a sound created with FMOD_OPENUSER, specify the number of subsounds that are accessable with Sound::getSubSound.  If not created with FMOD_OPENUSER, this will limit the number of subsounds loaded within a multi-subsound file.  If using FSB, then if FMOD_CREATESOUNDEXINFO::inclusionlist is used, this will shuffle subsounds down so that there are not any gaps.  It will mean that the indices of the sounds will be different. */
+    int                           *inclusionlist;      /* [w] Optional. Specify 0 to ignore. In a multi-sample format such as .FSB/.DLS/.SF2 it may be desirable to specify only a subset of sounds to be loaded out of the whole file.  This is an array of subsound indices to load into memory when created. */
+    int                            inclusionlistnum;   /* [w] Optional. Specify 0 to ignore. This is the number of integers contained within the inclusionlist array. */
+    FMOD_SOUND_PCMREADCALLBACK     pcmreadcallback;    /* [w] Optional. Specify 0 to ignore. Callback to 'piggyback' on FMOD's read functions and accept or even write PCM data while FMOD is opening the sound.  Used for user sounds created with FMOD_OPENUSER or for capturing decoded data as FMOD reads it. */
+    FMOD_SOUND_PCMSETPOSCALLBACK   pcmsetposcallback;  /* [w] Optional. Specify 0 to ignore. Callback for when the user calls a seeking function such as Channel::setTime or Channel::setPosition within a multi-sample sound, and for when it is opened.*/
+    FMOD_SOUND_NONBLOCKCALLBACK    nonblockcallback;   /* [w] Optional. Specify 0 to ignore. Callback for successful completion, or error while loading a sound that used the FMOD_NONBLOCKING flag.*/
+    const char                    *dlsname;            /* [w] Optional. Specify 0 to ignore. Filename for a DLS or SF2 sample set when loading a MIDI file. If not specified, on Windows it will attempt to open /windows/system32/drivers/gm.dls or /windows/system32/drivers/etc/gm.dls, on Mac it will attempt to load /System/Library/Components/CoreAudio.component/Contents/Resources/gs_instruments.dls, otherwise the MIDI will fail to open. Current DLS support is for level 1 of the specification. */
+    const char                    *encryptionkey;      /* [w] Optional. Specify 0 to ignore. Key for encrypted FSB file.  Without this key an encrypted FSB file will not load. */
+    int                            maxpolyphony;       /* [w] Optional. Specify 0 to ignore. For sequenced formats with dynamic channel allocation such as .MID and .IT, this specifies the maximum voice count allowed while playing.  .IT defaults to 64.  .MID defaults to 32. */
+    void                          *userdata;           /* [w] Optional. Specify 0 to ignore. This is user data to be attached to the sound during creation.  Access via Sound::getUserData.  Note: This is not passed to FMOD_FILE_OPENCALLBACK, that is a different userdata that is file specific. */
+    FMOD_SOUND_TYPE                suggestedsoundtype; /* [w] Optional. Specify 0 or FMOD_SOUND_TYPE_UNKNOWN to ignore.  Instead of scanning all codec types, use this to speed up loading by making it jump straight to this codec. */
+    FMOD_FILE_OPENCALLBACK         useropen;           /* [w] Optional. Specify 0 to ignore. Callback for opening this file. */
+    FMOD_FILE_CLOSECALLBACK        userclose;          /* [w] Optional. Specify 0 to ignore. Callback for closing this file. */
+    FMOD_FILE_READCALLBACK         userread;           /* [w] Optional. Specify 0 to ignore. Callback for reading from this file. */
+    FMOD_FILE_SEEKCALLBACK         userseek;           /* [w] Optional. Specify 0 to ignore. Callback for seeking within this file. */
+    FMOD_FILE_ASYNCREADCALLBACK    userasyncread;      /* [w] Optional. Specify 0 to ignore. Callback for seeking within this file. */
+    FMOD_FILE_ASYNCCANCELCALLBACK  userasynccancel;    /* [w] Optional. Specify 0 to ignore. Callback for seeking within this file. */
+    FMOD_SPEAKERMAPTYPE            speakermap;         /* [w] Optional. Specify 0 to ignore. Use this to differ the way fmod maps multichannel sounds to speakers.  See FMOD_SPEAKERMAPTYPE for more. */
+    FMOD_SOUNDGROUP               *initialsoundgroup;  /* [w] Optional. Specify 0 to ignore. Specify a sound group if required, to put sound in as it is created. */
+    unsigned int                   initialseekposition;/* [w] Optional. Specify 0 to ignore. For streams. Specify an initial position to seek the stream to. */
+    FMOD_TIMEUNIT                  initialseekpostype; /* [w] Optional. Specify 0 to ignore. For streams. Specify the time unit for the position set in initialseekposition. */
+    int                            ignoresetfilesystem;/* [w] Optional. Specify 0 to ignore. Set to 1 to use fmod's built in file system. Ignores setFileSystem callbacks and also FMOD_CREATESOUNEXINFO file callbacks.  Useful for specific cases where you don't want to use your own file system but want to use fmod's file system (ie net streaming). */
+    int                            cddaforceaspi;      /* [w] Optional. Specify 0 to ignore. For CDDA sounds only - if non-zero use ASPI instead of NTSCSI to access the specified CD/DVD device. */
+    unsigned int                   audioqueuepolicy;   /* [w] Optional. Specify 0 or FMOD_AUDIOQUEUE_CODECPOLICY_DEFAULT to ignore. Policy used to determine whether hardware or software is used for decoding, see FMOD_AUDIOQUEUE_CODECPOLICY for options (iOS >= 3.0 required, otherwise only hardware is available) */ 
+    unsigned int                   minmidigranularity; /* [w] Optional. Specify 0 to ignore. Allows you to set a minimum desired MIDI mixer granularity. Values smaller than 512 give greater than default accuracy at the cost of more CPU and vise versa. Specify 0 for default (512 samples). */
 } FMOD_CREATESOUNDEXINFO;
 
 
@@ -1473,11 +1526,21 @@ typedef struct FMOD_CREATESOUNDEXINFO
     PS2   means Playstation 2 hardware reverb (must use FMOD_HARDWARE).<br>
     SFX   means FMOD SFX software reverb.  This works on any platform that uses FMOD_SOFTWARE for loading sounds.<br>
     <br>
-    Members marked with [in] mean the user sets the value before passing it to the function.<br>
-    Members marked with [out] mean FMOD sets the value to be used after the function exits.<br>
+    Nintendo Wii Notes:<br>
+    This structure supports only limited parameters, and maps them to the Wii hardware reverb as follows.<br>
+    DecayTime = 'time'<br>
+    ReverbDelay = 'predelay'<br>
+    ModulationDepth = 'damping'<br>
+    Reflections = 'coloration'<br>
+    EnvDiffusion = 'crosstalk'<br>
+    Room = 'mix'<br>
+    <br>
+    Members marked with [r] mean the variable is modified by FMOD and is for reading purposes only.  Do not change this value.<br>
+    Members marked with [w] mean the variable can be written to.  The user can set the value.<br>
+    Members marked with [r/w] are either read or write depending on if you are using System::setReverbProperties (w) or System::getReverbProperties (r).
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]
     System::setReverbProperties
@@ -1487,34 +1550,34 @@ typedef struct FMOD_CREATESOUNDEXINFO
 ]
 */
 typedef struct FMOD_REVERB_PROPERTIES
-{                                   /*          MIN     MAX     DEFAULT  DESCRIPTION */
-    int          Instance;          /* [in]     0     , 3     , 0      , Environment Instance. Simultaneous HW reverbs are possible on some platforms. (SUPPORTED:EAX4/SFX(4 instances) and Wii (3 instances)) */
-    int          Environment;       /* [in/out] -1    , 25    , -1     , sets all listener properties.  -1 = OFF.                                      (SUPPORTED:EAX/PS2) */
-    float        EnvSize;           /* [in/out] 1.0   , 100.0 , 7.5    , environment size in meters                                                    (SUPPORTED:EAX) */
-    float        EnvDiffusion;      /* [in/out] 0.0   , 1.0   , 1.0    , environment diffusion                                                         (SUPPORTED:EAX) */
-    int          Room;              /* [in/out] -10000, 0     , -1000  , room effect level (at mid frequencies)                                        (SUPPORTED:EAX/I3DL2/SFX) */
-    int          RoomHF;            /* [in/out] -10000, 0     , -100   , relative room effect level at high frequencies                                (SUPPORTED:EAX/I3DL2/SFX) */
-    int          RoomLF;            /* [in/out] -10000, 0     , 0      , relative room effect level at low frequencies                                 (SUPPORTED:EAX/SFX) */
-    float        DecayTime;         /* [in/out] 0.1   , 20.0  , 1.49   , reverberation decay time at mid frequencies                                   (SUPPORTED:EAX/I3DL2/SFX) */
-    float        DecayHFRatio;      /* [in/out] 0.1   , 2.0   , 0.83   , high-frequency to mid-frequency decay time ratio                              (SUPPORTED:EAX/I3DL2/SFX) */
-    float        DecayLFRatio;      /* [in/out] 0.1   , 2.0   , 1.0    , low-frequency to mid-frequency decay time ratio                               (SUPPORTED:EAX) */
-    int          Reflections;       /* [in/out] -10000, 1000  , -2602  , early reflections level relative to room effect                               (SUPPORTED:EAX/I3DL2/SFX) */
-    float        ReflectionsDelay;  /* [in/out] 0.0   , 0.3   , 0.007  , initial reflection delay time                                                 (SUPPORTED:EAX/I3DL2/SFX) */
-    float        ReflectionsPan[3]; /* [in/out]       ,       , [0,0,0], early reflections panning vector                                              (SUPPORTED:EAX) */
-    int          Reverb;            /* [in/out] -10000, 2000  , 200    , late reverberation level relative to room effect                              (SUPPORTED:EAX/I3DL2/SFX) */
-    float        ReverbDelay;       /* [in/out] 0.0   , 0.1   , 0.011  , late reverberation delay time relative to initial reflection                  (SUPPORTED:EAX/I3DL2/SFX) */
-    float        ReverbPan[3];      /* [in/out]       ,       , [0,0,0], late reverberation panning vector                                             (SUPPORTED:EAX) */
-    float        EchoTime;          /* [in/out] .075  , 0.25  , 0.25   , echo time                                                                     (SUPPORTED:EAX/PS2(FMOD_PRESET_PS2_ECHO/FMOD_PRESET_PS2_DELAY only) */
-    float        EchoDepth;         /* [in/out] 0.0   , 1.0   , 0.0    , echo depth                                                                    (SUPPORTED:EAX/PS2(FMOD_PRESET_PS2_ECHO only) */
-    float        ModulationTime;    /* [in/out] 0.04  , 4.0   , 0.25   , modulation time                                                               (SUPPORTED:EAX) */
-    float        ModulationDepth;   /* [in/out] 0.0   , 1.0   , 0.0    , modulation depth                                                              (SUPPORTED:EAX) */
-    float        AirAbsorptionHF;   /* [in/out] -100  , 0.0   , -5.0   , change in level per meter at high frequencies                                 (SUPPORTED:EAX) */
-    float        HFReference;       /* [in/out] 1000.0, 20000 , 5000.0 , reference high frequency (hz)                                                 (SUPPORTED:EAX/I3DL2/SFX) */
-    float        LFReference;       /* [in/out] 20.0  , 1000.0, 250.0  , reference low frequency (hz)                                                  (SUPPORTED:EAX/SFX) */
-    float        RoomRolloffFactor; /* [in/out] 0.0   , 10.0  , 0.0    , like rolloffscale in System::set3DSettings but for reverb room size effect    (SUPPORTED:EAX/I3DL2) */
-    float        Diffusion;         /* [in/out] 0.0   , 100.0 , 100.0  , Value that controls the echo density in the late reverberation decay.         (SUPPORTED:I3DL2/SFX) */
-    float        Density;           /* [in/out] 0.0   , 100.0 , 100.0  , Value that controls the modal density in the late reverberation decay         (SUPPORTED:I3DL2/SFX) */
-    unsigned int Flags;             /* [in/out] FMOD_REVERB_FLAGS - modifies the behavior of above properties                                          (SUPPORTED:EAX/PS2/WII) */
+{                                   /*       MIN     MAX     DEFAULT  DESCRIPTION */
+    int          Instance;          /* [w]   0     , 3     , 0      , Environment Instance. Simultaneous HW reverbs are possible on some platforms. (SUPPORTED:EAX4/SFX(4 instances) and Wii (3 instances)) */
+    int          Environment;       /* [r/w] -1    , 25    , -1     , sets all listener properties.  -1 = OFF.                                      (SUPPORTED:EAX/PS2) */
+    float        EnvSize;           /* [r/w] 1.0   , 100.0 , 7.5    , environment size in meters                                                    (SUPPORTED:EAX) */
+    float        EnvDiffusion;      /* [r/w] 0.0   , 1.0   , 1.0    , environment diffusion                                                         (SUPPORTED:EAX/WII) */
+    int          Room;              /* [r/w] -10000, 0     , -1000  , room effect level (at mid frequencies)                                        (SUPPORTED:EAX/I3DL2/SFX/WII) */
+    int          RoomHF;            /* [r/w] -10000, 0     , -100   , relative room effect level at high frequencies                                (SUPPORTED:EAX/I3DL2/SFX) */
+    int          RoomLF;            /* [r/w] -10000, 0     , 0      , relative room effect level at low frequencies                                 (SUPPORTED:EAX/SFX) */
+    float        DecayTime;         /* [r/w] 0.1   , 20.0  , 1.49   , reverberation decay time at mid frequencies                                   (SUPPORTED:EAX/I3DL2/SFX/WII) */
+    float        DecayHFRatio;      /* [r/w] 0.1   , 2.0   , 0.83   , high-frequency to mid-frequency decay time ratio                              (SUPPORTED:EAX/I3DL2/SFX) */
+    float        DecayLFRatio;      /* [r/w] 0.1   , 2.0   , 1.0    , low-frequency to mid-frequency decay time ratio                               (SUPPORTED:EAX) */
+    int          Reflections;       /* [r/w] -10000, 1000  , -2602  , early reflections level relative to room effect                               (SUPPORTED:EAX/I3DL2/SFX/WII) */
+    float        ReflectionsDelay;  /* [r/w] 0.0   , 0.3   , 0.007  , initial reflection delay time                                                 (SUPPORTED:EAX/I3DL2/SFX) */
+    float        ReflectionsPan[3]; /* [r/w]       ,       , [0,0,0], early reflections panning vector                                              (SUPPORTED:EAX) */
+    int          Reverb;            /* [r/w] -10000, 2000  , 200    , late reverberation level relative to room effect                              (SUPPORTED:EAX/I3DL2/SFX) */
+    float        ReverbDelay;       /* [r/w] 0.0   , 0.1   , 0.011  , late reverberation delay time relative to initial reflection                  (SUPPORTED:EAX/I3DL2/SFX/WII) */
+    float        ReverbPan[3];      /* [r/w]       ,       , [0,0,0], late reverberation panning vector                                             (SUPPORTED:EAX) */
+    float        EchoTime;          /* [r/w] .075  , 0.25  , 0.25   , echo time                                                                     (SUPPORTED:EAX/PS2(FMOD_PRESET_PS2_ECHO/FMOD_PRESET_PS2_DELAY only) */
+    float        EchoDepth;         /* [r/w] 0.0   , 1.0   , 0.0    , echo depth                                                                    (SUPPORTED:EAX/PS2(FMOD_PRESET_PS2_ECHO only) */
+    float        ModulationTime;    /* [r/w] 0.04  , 4.0   , 0.25   , modulation time                                                               (SUPPORTED:EAX) */
+    float        ModulationDepth;   /* [r/w] 0.0   , 1.0   , 0.0    , modulation depth                                                              (SUPPORTED:EAX/WII) */
+    float        AirAbsorptionHF;   /* [r/w] -100  , 0.0   , -5.0   , change in level per meter at high frequencies                                 (SUPPORTED:EAX) */
+    float        HFReference;       /* [r/w] 1000.0, 20000 , 5000.0 , reference high frequency (hz)                                                 (SUPPORTED:EAX/I3DL2/SFX) */
+    float        LFReference;       /* [r/w] 20.0  , 1000.0, 250.0  , reference low frequency (hz)                                                  (SUPPORTED:EAX/SFX) */
+    float        RoomRolloffFactor; /* [r/w] 0.0   , 10.0  , 0.0    , like rolloffscale in System::set3DSettings but for reverb room size effect    (SUPPORTED:EAX/I3DL2) */
+    float        Diffusion;         /* [r/w] 0.0   , 100.0 , 100.0  , Value that controls the echo density in the late reverberation decay.         (SUPPORTED:I3DL2/SFX) */
+    float        Density;           /* [r/w] 0.0   , 100.0 , 100.0  , Value that controls the modal density in the late reverberation decay         (SUPPORTED:I3DL2/SFX) */
+    unsigned int Flags;             /* [r/w] FMOD_REVERB_FLAGS - modifies the behavior of above properties                                          (SUPPORTED:EAX/PS2/WII) */
 } FMOD_REVERB_PROPERTIES;
 
 
@@ -1530,7 +1593,7 @@ typedef struct FMOD_REVERB_PROPERTIES
     [REMARKS]
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]
     FMOD_REVERB_PROPERTIES
@@ -1575,7 +1638,7 @@ typedef struct FMOD_REVERB_PROPERTIES
     [REMARKS]
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]
     System::setReverbProperties
@@ -1662,10 +1725,13 @@ typedef struct FMOD_REVERB_PROPERTIES
     By default the dsp network connection for a channel and its reverb is between the 'SFX Reverb' unit, and the channel's wavetable/resampler/dspcodec/oscillator unit (the unit below the channel DSP head).  NULL can be used for this parameter to make it use this default behaviour.<br>
     This parameter allows the user to connect the SFX reverb to somewhere else internally, for example the channel DSP head, or a related channelgroup.  The event system uses this so that it can have the output of an event going to the reverb, instead of just the output of the event's channels (thereby ignoring event effects/submixes etc).<br>
     Do not use if you are unaware of DSP network connection issues.  Leave it at the default of NULL instead.<br>
-
+    <br>
+    Members marked with [r] mean the variable is modified by FMOD and is for reading purposes only.  Do not change this value.<br>
+    Members marked with [w] mean the variable can be written to.  The user can set the value.<br>
+    Members marked with [r/w] are either read or write depending on if you are using Channel::setReverbProperties (w) or Channel::getReverbProperties (r).
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]
     Channel::setReverbProperties
@@ -1674,26 +1740,26 @@ typedef struct FMOD_REVERB_PROPERTIES
 ]
 */
 typedef struct FMOD_REVERB_CHANNELPROPERTIES
-{                                      /*          MIN     MAX    DEFAULT  DESCRIPTION */
-    int          Direct;               /* [in/out] -10000, 1000,  0,       direct path level (at low and mid frequencies)              (SUPPORTED:EAX/I3DL2/SFX) */
-    int          DirectHF;             /* [in/out] -10000, 0,     0,       relative direct path level at high frequencies              (SUPPORTED:EAX/I3DL2) */
-    int          Room;                 /* [in/out] -10000, 1000,  0,       room effect level (at low and mid frequencies)              (SUPPORTED:EAX/I3DL2/SFX) */
-    int          RoomHF;               /* [in/out] -10000, 0,     0,       relative room effect level at high frequencies              (SUPPORTED:EAX/I3DL2) */
-    int          Obstruction;          /* [in/out] -10000, 0,     0,       main obstruction control (attenuation at high frequencies)  (SUPPORTED:EAX/I3DL2) */
-    float        ObstructionLFRatio;   /* [in/out] 0.0,    1.0,   0.0,     obstruction low-frequency level re. main control            (SUPPORTED:EAX/I3DL2) */
-    int          Occlusion;            /* [in/out] -10000, 0,     0,       main occlusion control (attenuation at high frequencies)    (SUPPORTED:EAX/I3DL2) */
-    float        OcclusionLFRatio;     /* [in/out] 0.0,    1.0,   0.25,    occlusion low-frequency level re. main control              (SUPPORTED:EAX/I3DL2) */
-    float        OcclusionRoomRatio;   /* [in/out] 0.0,    10.0,  1.5,     relative occlusion control for room effect                  (SUPPORTED:EAX only) */
-    float        OcclusionDirectRatio; /* [in/out] 0.0,    10.0,  1.0,     relative occlusion control for direct path                  (SUPPORTED:EAX only) */
-    int          Exclusion;            /* [in/out] -10000, 0,     0,       main exlusion control (attenuation at high frequencies)     (SUPPORTED:EAX only) */
-    float        ExclusionLFRatio;     /* [in/out] 0.0,    1.0,   1.0,     exclusion low-frequency level re. main control              (SUPPORTED:EAX only) */
-    int          OutsideVolumeHF;      /* [in/out] -10000, 0,     0,       outside sound cone level at high frequencies                (SUPPORTED:EAX only) */
-    float        DopplerFactor;        /* [in/out] 0.0,    10.0,  0.0,     like DS3D flDopplerFactor but per source                    (SUPPORTED:EAX only) */
-    float        RolloffFactor;        /* [in/out] 0.0,    10.0,  0.0,     like DS3D flRolloffFactor but per source                    (SUPPORTED:EAX only) */
-    float        RoomRolloffFactor;    /* [in/out] 0.0,    10.0,  0.0,     like DS3D flRolloffFactor but for room effect               (SUPPORTED:EAX/I3DL2) */
-    float        AirAbsorptionFactor;  /* [in/out] 0.0,    10.0,  1.0,     multiplies AirAbsorptionHF member of FMOD_REVERB_PROPERTIES (SUPPORTED:EAX only) */
-    unsigned int Flags;                /* [in/out] FMOD_REVERB_CHANNELFLAGS - modifies the behavior of properties                      (SUPPORTED:EAX/SFX) */
-    FMOD_DSP    *ConnectionPoint;      /* [in/out] See remarks.            DSP network location to connect reverb for this channel.    (SUPPORTED:SFX only).*/
+{                                      /*       MIN     MAX    DEFAULT  DESCRIPTION */
+    int          Direct;               /* [r/w] -10000, 1000,  0,       direct path level (at low and mid frequencies)              (SUPPORTED:EAX/I3DL2/SFX) */
+    int          DirectHF;             /* [r/w] -10000, 0,     0,       relative direct path level at high frequencies              (SUPPORTED:EAX/I3DL2) */
+    int          Room;                 /* [r/w] -10000, 1000,  0,       room effect level (at low and mid frequencies)              (SUPPORTED:EAX/I3DL2/SFX) */
+    int          RoomHF;               /* [r/w] -10000, 0,     0,       relative room effect level at high frequencies              (SUPPORTED:EAX/I3DL2) */
+    int          Obstruction;          /* [r/w] -10000, 0,     0,       main obstruction control (attenuation at high frequencies)  (SUPPORTED:EAX/I3DL2) */
+    float        ObstructionLFRatio;   /* [r/w] 0.0,    1.0,   0.0,     obstruction low-frequency level re. main control            (SUPPORTED:EAX/I3DL2) */
+    int          Occlusion;            /* [r/w] -10000, 0,     0,       main occlusion control (attenuation at high frequencies)    (SUPPORTED:EAX/I3DL2) */
+    float        OcclusionLFRatio;     /* [r/w] 0.0,    1.0,   0.25,    occlusion low-frequency level re. main control              (SUPPORTED:EAX/I3DL2) */
+    float        OcclusionRoomRatio;   /* [r/w] 0.0,    10.0,  1.5,     relative occlusion control for room effect                  (SUPPORTED:EAX only) */
+    float        OcclusionDirectRatio; /* [r/w] 0.0,    10.0,  1.0,     relative occlusion control for direct path                  (SUPPORTED:EAX only) */
+    int          Exclusion;            /* [r/w] -10000, 0,     0,       main exlusion control (attenuation at high frequencies)     (SUPPORTED:EAX only) */
+    float        ExclusionLFRatio;     /* [r/w] 0.0,    1.0,   1.0,     exclusion low-frequency level re. main control              (SUPPORTED:EAX only) */
+    int          OutsideVolumeHF;      /* [r/w] -10000, 0,     0,       outside sound cone level at high frequencies                (SUPPORTED:EAX only) */
+    float        DopplerFactor;        /* [r/w] 0.0,    10.0,  0.0,     like DS3D flDopplerFactor but per source                    (SUPPORTED:EAX only) */
+    float        RolloffFactor;        /* [r/w] 0.0,    10.0,  0.0,     like DS3D flRolloffFactor but per source                    (SUPPORTED:EAX only) */
+    float        RoomRolloffFactor;    /* [r/w] 0.0,    10.0,  0.0,     like DS3D flRolloffFactor but for room effect               (SUPPORTED:EAX/I3DL2) */
+    float        AirAbsorptionFactor;  /* [r/w] 0.0,    10.0,  1.0,     multiplies AirAbsorptionHF member of FMOD_REVERB_PROPERTIES (SUPPORTED:EAX only) */
+    unsigned int Flags;                /* [r/w] FMOD_REVERB_CHANNELFLAGS - modifies the behavior of properties                      (SUPPORTED:EAX/SFX) */
+    FMOD_DSP    *ConnectionPoint;      /* [r/w] See remarks.            DSP network location to connect reverb for this channel.    (SUPPORTED:SFX only).*/
 } FMOD_REVERB_CHANNELPROPERTIES;
 
 
@@ -1715,7 +1781,7 @@ typedef struct FMOD_REVERB_CHANNELPROPERTIES
     - If you specify more than one instance with setReverbProperties, it will set more than 1 instance at once.<br>
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]
     FMOD_REVERB_CHANNELPROPERTIES
@@ -1751,9 +1817,13 @@ typedef struct FMOD_REVERB_CHANNELPROPERTIES
     Memory will be allocated for codecs 'up front' (during System::init) if these values are specified as non zero.  If any are zero, it allocates memory for the codec whenever a file of the type in question is loaded.  So if maxMPEGcodecs is 0 for example, it will allocate memory for the mpeg codecs the first time an mp3 is loaded or an mp3 based .FSB file is loaded.<br>
     <br>
     Due to inefficient encoding techniques on certain .wav based ADPCM files, FMOD can can need an extra 29720 bytes per codec.  This means for lowest memory consumption.  Use FSB as it uses an optimal/small ADPCM block size.<br>
+    <br>
+    Members marked with [r] mean the variable is modified by FMOD and is for reading purposes only.  Do not change this value.<br>
+    Members marked with [w] mean the variable can be written to.  The user can set the value.<br>
+    Members marked with [r/w] are either read or write depending on if you are using System::setAdvancedSettings (w) or System::getAdvancedSettings (r).
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]
     System::setAdvancedSettings
@@ -1764,26 +1834,27 @@ typedef struct FMOD_REVERB_CHANNELPROPERTIES
 */
 typedef struct FMOD_ADVANCEDSETTINGS
 {                       
-    int             cbsize;                     /* [in]     Size of this structure.  Use sizeof(FMOD_ADVANCEDSETTINGS)  NOTE: This must be set before calling System::getAdvancedSettings! */
-    int             maxMPEGcodecs;              /* [in/out] Optional. Specify 0 to ignore. For use with FMOD_CREATECOMPRESSEDSAMPLE only.  Mpeg  codecs consume 21,684 bytes per instance and this number will determine how many mpeg channels can be played simultaneously.  Default = 16. */
-    int             maxADPCMcodecs;             /* [in/out] Optional. Specify 0 to ignore. For use with FMOD_CREATECOMPRESSEDSAMPLE only.  ADPCM codecs consume 2,136 bytes per instance (based on FSB encoded ADPCM block size - see remarks) and this number will determine how many ADPCM channels can be played simultaneously.  Default = 32. */
-    int             maxXMAcodecs;               /* [in/out] Optional. Specify 0 to ignore. For use with FMOD_CREATECOMPRESSEDSAMPLE only.  XMA   codecs consume 14,836 bytes per instance and this number will determine how many XMA channels can be played simultaneously.  Default = 32.  */
-    int             maxCELTcodecs;              /* [in/out] Optional. Specify 0 to ignore. For use with FMOD_CREATECOMPRESSEDSAMPLE only.  CELT  codecs consume 11,500 bytes per instance and this number will determine how many CELT channels can be played simultaneously. Default = 16 */    
-    int             maxPCMcodecs;               /* [in/out] Optional. Specify 0 to ignore. For use with PS3 only.                          PCM   codecs consume 12,672 bytes per instance and this number will determine how many streams and PCM voices can be played simultaneously. Default = 16 */
-    int             ASIONumChannels;            /* [in/out] Optional. Specify 0 to ignore. Number of channels available on the ASIO device. */
-    char          **ASIOChannelList;            /* [in/out] Optional. Specify 0 to ignore. Pointer to an array of strings (number of entries defined by ASIONumChannels) with ASIO channel names. */
-    FMOD_SPEAKER   *ASIOSpeakerList;            /* [in/out] Optional. Specify 0 to ignore. Pointer to a list of speakers that the ASIO channels map to.  This can be called after System::init to remap ASIO output. */
-    int             max3DReverbDSPs;            /* [in/out] Optional. Specify 0 to ignore. The max number of 3d reverb DSP's in the system. (NOTE: CURRENTLY DISABLED / UNUSED) */
-    float           HRTFMinAngle;               /* [in/out] Optional. Specify 0 to ignore. For use with FMOD_INIT_SOFTWARE_HRTF.  The angle range (0-360) of a 3D sound in relation to the listener, at which the HRTF function begins to have an effect. 0 = in front of the listener. 180 = from 90 degrees to the left of the listener to 90 degrees to the right. 360 = behind the listener. Default = 180.0. */
-    float           HRTFMaxAngle;               /* [in/out] Optional. Specify 0 to ignore. For use with FMOD_INIT_SOFTWARE_HRTF.  The angle range (0-360) of a 3D sound in relation to the listener, at which the HRTF function has maximum effect. 0 = front of the listener. 180 = from 90 degrees to the left of the listener to 90 degrees to the right. 360 = behind the listener. Default = 360.0. */
-    float           HRTFFreq;                   /* [in/out] Optional. Specify 0 to ignore. For use with FMOD_INIT_SOFTWARE_HRTF.  The cutoff frequency of the HRTF's lowpass filter function when at maximum effect. (i.e. at HRTFMaxAngle).  Default = 4000.0. */
-    float           vol0virtualvol;             /* [in/out] Optional. Specify 0 to ignore. For use with FMOD_INIT_VOL0_BECOMES_VIRTUAL.  If this flag is used, and the volume is 0.0, then the sound will become virtual.  Use this value to raise the threshold to a different point where a sound goes virtual. */
-    int             eventqueuesize;             /* [in/out] Optional. Specify 0 to ignore. For use with FMOD Event system only.  Specifies the number of slots available for simultaneous non blocking loads.  Default = 32. */
-    unsigned int    defaultDecodeBufferSize;    /* [in/out] Optional. Specify 0 to ignore. For streams. This determines the default size of the double buffer (in milliseconds) that a stream uses.  Default = 400ms */
-    char           *debugLogFilename;           /* [in/out] Optional. Specify 0 to ignore. Gives fmod's logging system a path/filename.  Normally the log is placed in the same directory as the executable and called fmod.log. When using System::getAdvancedSettings, provide at least 256 bytes of memory to copy into. */
-    unsigned short  profileport;                /* [in/out] Optional. Specify 0 to ignore. For use with FMOD_INIT_ENABLE_PROFILE.  Specify the port to listen on for connections by the profiler application. */
-    unsigned int    geometryMaxFadeTime;        /* [in/out] Optional. Specify 0 to ignore. The maximum time in miliseconds it takes for a channel to fade to the new level when its occlusion changes. */
-    unsigned int    maxSpectrumWaveDataBuffers; /* [in/out] Optional. Specify 0 to ignore. Tells System::init to allocate a pool of wavedata/spectrum buffers to prevent memory fragmentation, any additional buffers will be allocated normally. */
+    int             cbsize;                     /* [w]   Size of this structure.  Use sizeof(FMOD_ADVANCEDSETTINGS)  NOTE: This must be set before calling System::getAdvancedSettings! */
+    int             maxMPEGcodecs;              /* [r/w] Optional. Specify 0 to ignore. For use with FMOD_CREATECOMPRESSEDSAMPLE only.  Mpeg  codecs consume 21,684 bytes per instance and this number will determine how many mpeg channels can be played simultaneously.   Default = 32. */
+    int             maxADPCMcodecs;             /* [r/w] Optional. Specify 0 to ignore. For use with FMOD_CREATECOMPRESSEDSAMPLE only.  ADPCM codecs consume  2,136 bytes per instance and this number will determine how many ADPCM channels can be played simultaneously.  Default = 32. */
+    int             maxXMAcodecs;               /* [r/w] Optional. Specify 0 to ignore. For use with FMOD_CREATECOMPRESSEDSAMPLE only.  XMA   codecs consume 14,836 bytes per instance and this number will determine how many XMA channels can be played simultaneously.    Default = 32. */
+    int             maxCELTcodecs;              /* [r/w] Optional. Specify 0 to ignore. For use with FMOD_CREATECOMPRESSEDSAMPLE only.  CELT  codecs consume 11,500 bytes per instance and this number will determine how many CELT channels can be played simultaneously.   Default = 32. */    
+    int             maxPCMcodecs;               /* [r/w] Optional. Specify 0 to ignore. For use with PS3 only.                          PCM   codecs consume 12,672 bytes per instance and this number will determine how many streams and PCM voices can be played simultaneously. Default = 16. */
+    int             ASIONumChannels;            /* [r/w] Optional. Specify 0 to ignore. Number of channels available on the ASIO device. */
+    char          **ASIOChannelList;            /* [r/w] Optional. Specify 0 to ignore. Pointer to an array of strings (number of entries defined by ASIONumChannels) with ASIO channel names. */
+    FMOD_SPEAKER   *ASIOSpeakerList;            /* [r/w] Optional. Specify 0 to ignore. Pointer to a list of speakers that the ASIO channels map to.  This can be called after System::init to remap ASIO output. */
+    int             max3DReverbDSPs;            /* [r/w] Optional. Specify 0 to ignore. The max number of 3d reverb DSP's in the system. (NOTE: CURRENTLY DISABLED / UNUSED) */
+    float           HRTFMinAngle;               /* [r/w] Optional. Specify 0 to ignore. For use with FMOD_INIT_SOFTWARE_HRTF.  The angle range (0-360) of a 3D sound in relation to the listener, at which the HRTF function begins to have an effect. 0 = in front of the listener. 180 = from 90 degrees to the left of the listener to 90 degrees to the right. 360 = behind the listener. Default = 180.0. */
+    float           HRTFMaxAngle;               /* [r/w] Optional. Specify 0 to ignore. For use with FMOD_INIT_SOFTWARE_HRTF.  The angle range (0-360) of a 3D sound in relation to the listener, at which the HRTF function has maximum effect. 0 = front of the listener. 180 = from 90 degrees to the left of the listener to 90 degrees to the right. 360 = behind the listener. Default = 360.0. */
+    float           HRTFFreq;                   /* [r/w] Optional. Specify 0 to ignore. For use with FMOD_INIT_SOFTWARE_HRTF.  The cutoff frequency of the HRTF's lowpass filter function when at maximum effect. (i.e. at HRTFMaxAngle).  Default = 4000.0. */
+    float           vol0virtualvol;             /* [r/w] Optional. Specify 0 to ignore. For use with FMOD_INIT_VOL0_BECOMES_VIRTUAL.  If this flag is used, and the volume is 0.0, then the sound will become virtual.  Use this value to raise the threshold to a different point where a sound goes virtual. */
+    int             eventqueuesize;             /* [r/w] Optional. Specify 0 to ignore. For use with FMOD Event system only.  Specifies the number of slots available for simultaneous non blocking loads.  Default = 32. */
+    unsigned int    defaultDecodeBufferSize;    /* [r/w] Optional. Specify 0 to ignore. For streams. This determines the default size of the double buffer (in milliseconds) that a stream uses.  Default = 400ms */
+    char           *debugLogFilename;           /* [r/w] Optional. Specify 0 to ignore. Gives fmod's logging system a path/filename.  Normally the log is placed in the same directory as the executable and called fmod.log. When using System::getAdvancedSettings, provide at least 256 bytes of memory to copy into. */
+    unsigned short  profileport;                /* [r/w] Optional. Specify 0 to ignore. For use with FMOD_INIT_ENABLE_PROFILE.  Specify the port to listen on for connections by the profiler application. */
+    unsigned int    geometryMaxFadeTime;        /* [r/w] Optional. Specify 0 to ignore. The maximum time in miliseconds it takes for a channel to fade to the new level when its occlusion changes. */
+    unsigned int    maxSpectrumWaveDataBuffers; /* [r/w] Optional. Specify 0 to ignore. Tells System::init to allocate a pool of wavedata/spectrum buffers to prevent memory fragmentation, any additional buffers will be allocated normally. */
+    unsigned int    musicSystemCacheDelay;      /* [r/w] Optional. Specify 0 to ignore. The delay the music system should allow for loading a sample from disk (in milliseconds). Default = 400 ms. */
 } FMOD_ADVANCEDSETTINGS;
 
 
@@ -1797,7 +1868,7 @@ typedef struct FMOD_ADVANCEDSETTINGS
     To get 'all' of the channels, use System::getMasterChannelGroup.
 
     [PLATFORMS]
-    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, Solaris, iPhone
+    Win32, Win64, Linux, Linux64, Macintosh, Xbox360, PlayStation 2, PlayStation Portable, PlayStation 3, Wii, iPhone
 
     [SEE_ALSO]
     System::playSound
@@ -1868,7 +1939,7 @@ FMOD_RESULT F_API FMOD_System_SetSoftwareFormat      (FMOD_SYSTEM *system, int s
 FMOD_RESULT F_API FMOD_System_GetSoftwareFormat      (FMOD_SYSTEM *system, int *samplerate, FMOD_SOUND_FORMAT *format, int *numoutputchannels, int *maxinputchannels, FMOD_DSP_RESAMPLER *resamplemethod, int *bits);
 FMOD_RESULT F_API FMOD_System_SetDSPBufferSize       (FMOD_SYSTEM *system, unsigned int bufferlength, int numbuffers);
 FMOD_RESULT F_API FMOD_System_GetDSPBufferSize       (FMOD_SYSTEM *system, unsigned int *bufferlength, int *numbuffers);
-FMOD_RESULT F_API FMOD_System_SetFileSystem          (FMOD_SYSTEM *system, FMOD_FILE_OPENCALLBACK useropen, FMOD_FILE_CLOSECALLBACK userclose, FMOD_FILE_READCALLBACK userread, FMOD_FILE_SEEKCALLBACK userseek, int blockalign);
+FMOD_RESULT F_API FMOD_System_SetFileSystem          (FMOD_SYSTEM *system, FMOD_FILE_OPENCALLBACK useropen, FMOD_FILE_CLOSECALLBACK userclose, FMOD_FILE_READCALLBACK userread, FMOD_FILE_SEEKCALLBACK userseek, FMOD_FILE_ASYNCREADCALLBACK userasyncread, FMOD_FILE_ASYNCCANCELCALLBACK userasynccancel, int blockalign);
 FMOD_RESULT F_API FMOD_System_AttachFileSystem       (FMOD_SYSTEM *system, FMOD_FILE_OPENCALLBACK useropen, FMOD_FILE_CLOSECALLBACK userclose, FMOD_FILE_READCALLBACK userread, FMOD_FILE_SEEKCALLBACK userseek);
 FMOD_RESULT F_API FMOD_System_SetAdvancedSettings    (FMOD_SYSTEM *system, FMOD_ADVANCEDSETTINGS *settings);
 FMOD_RESULT F_API FMOD_System_GetAdvancedSettings    (FMOD_SYSTEM *system, FMOD_ADVANCEDSETTINGS *settings);
@@ -2043,7 +2114,7 @@ FMOD_RESULT F_API FMOD_Sound_GetFormat               (FMOD_SOUND *sound, FMOD_SO
 FMOD_RESULT F_API FMOD_Sound_GetNumSubSounds         (FMOD_SOUND *sound, int *numsubsounds);
 FMOD_RESULT F_API FMOD_Sound_GetNumTags              (FMOD_SOUND *sound, int *numtags, int *numtagsupdated);
 FMOD_RESULT F_API FMOD_Sound_GetTag                  (FMOD_SOUND *sound, const char *name, int index, FMOD_TAG *tag);
-FMOD_RESULT F_API FMOD_Sound_GetOpenState            (FMOD_SOUND *sound, FMOD_OPENSTATE *openstate, unsigned int *percentbuffered, FMOD_BOOL *starving);
+FMOD_RESULT F_API FMOD_Sound_GetOpenState            (FMOD_SOUND *sound, FMOD_OPENSTATE *openstate, unsigned int *percentbuffered, FMOD_BOOL *starving, FMOD_BOOL *diskbusy);
 FMOD_RESULT F_API FMOD_Sound_ReadData                (FMOD_SOUND *sound, void *buffer, unsigned int lenbytes, unsigned int *read);
 FMOD_RESULT F_API FMOD_Sound_SeekData                (FMOD_SOUND *sound, unsigned int pcm);
 
@@ -2078,6 +2149,8 @@ FMOD_RESULT F_API FMOD_Sound_GetLoopPoints           (FMOD_SOUND *sound, unsigne
 FMOD_RESULT F_API FMOD_Sound_GetMusicNumChannels     (FMOD_SOUND *sound, int *numchannels);
 FMOD_RESULT F_API FMOD_Sound_SetMusicChannelVolume   (FMOD_SOUND *sound, int channel, float volume);
 FMOD_RESULT F_API FMOD_Sound_GetMusicChannelVolume   (FMOD_SOUND *sound, int channel, float *volume);
+FMOD_RESULT F_API FMOD_Sound_SetMusicSpeed           (FMOD_SOUND *sound, float speed);
+FMOD_RESULT F_API FMOD_Sound_GetMusicSpeed           (FMOD_SOUND *sound, float *speed);
 
 /*
      Userdata set/get.
