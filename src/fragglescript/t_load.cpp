@@ -306,8 +306,8 @@ bool FScriptLoader::ParseInfo(MapData * map)
 		new DFraggleThinker;
 		DFraggleThinker::ActiveThinker->LevelScript->data = copystring(scriptsrc.GetChars());
 
-		if (drownflag==-1) drownflag = ((level.maptype == MAPTYPE_HEXEN) || fsglobal);
-		if (!drownflag) level.airsupply=0;	// Legacy doesn't to water damage.
+		if (drownflag==-1) drownflag = (level.maptype != MAPTYPE_DOOM || fsglobal);
+		if (!drownflag) level.airsupply=0;	// Legacy doesn't to water damage so we need to check if it has to be disabled here.
 
 		FFsOptions *opt = level.info->GetOptData<FFsOptions>("fragglescript", false);
 		if (opt != NULL)
