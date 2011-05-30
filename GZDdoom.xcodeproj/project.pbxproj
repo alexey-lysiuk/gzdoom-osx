@@ -6,6 +6,21 @@
 	objectVersion = 45;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		49E91DDE1393BF3900CCEBBC /* xlat_parser.y */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 49E91DE11393BF6F00CCEBBC /* Build configuration list for PBXAggregateTarget "xlat_parser.y" */;
+			buildPhases = (
+				49E91DDD1393BF3900CCEBBC /* Generate xlat_parser */,
+			);
+			dependencies = (
+				49E91DE31393BF8E00CCEBBC /* PBXTargetDependency */,
+			);
+			name = xlat_parser.y;
+			productName = "Compile ";
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
 		8A74F2A2139235E0001F54B0 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2A1139235E0001F54B0 /* OpenGL.framework */; };
@@ -15,7 +30,6 @@
 		8A74F38F13925284001F54B0 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F38E13925284001F54B0 /* IOKit.framework */; };
 		8A74F451139252F9001F54B0 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F450139252F9001F54B0 /* AudioUnit.framework */; };
 		8A74F4671392532C001F54B0 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F4661392532C001F54B0 /* Carbon.framework */; };
-		8A74F56B139258D8001F54B0 /* libfmodex.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8A74F2B91392360F001F54B0 /* libfmodex.dylib */; };
 		8AC81C411391321300F49DC3 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF278CA1390F0370095D9A0 /* libjpeg.a */; };
 		8AC81C421391321300F49DC3 /* liblzma.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF2795A1390F1200095D9A0 /* liblzma.a */; };
 		8AC81C431391321300F49DC3 /* libgme.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27A541390F4F40095D9A0 /* libgme.a */; };
@@ -595,6 +609,41 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		49E91DE21393BF8E00CCEBBC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8AF279BB1390F2540095D9A0;
+			remoteInfo = lemon;
+		};
+		49E91DE61393BFB000CCEBBC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 49E91DDE1393BF3900CCEBBC;
+			remoteInfo = xlat_parser.y;
+		};
+		49E91DE81393BFC800CCEBBC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8AF27A301390F41F0095D9A0;
+			remoteInfo = zipdir;
+		};
+		49E91DEA1393BFC800CCEBBC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8AF27A091390F2B50095D9A0;
+			remoteInfo = re2c;
+		};
+		49E91DEC1393BFC800CCEBBC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8AF279BB1390F2540095D9A0;
+			remoteInfo = lemon;
+		};
 		8AC81C35139131FE00F49DC3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
@@ -615,27 +664,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 8AF27A531390F4F40095D9A0;
 			remoteInfo = gme;
-		};
-		8AC81C3B139131FE00F49DC3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8AF27A301390F41F0095D9A0;
-			remoteInfo = zipdir;
-		};
-		8AC81C3D139131FE00F49DC3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8AF27A091390F2B50095D9A0;
-			remoteInfo = re2c;
-		};
-		8AC81C3F139131FE00F49DC3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8AF279BB1390F2540095D9A0;
-			remoteInfo = lemon;
 		};
 		8AF278CD1390F0410095D9A0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -659,19 +687,6 @@
 			remoteInfo = lzma;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		8A74F56E139258DB001F54B0 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 6;
-			files = (
-				8A74F56B139258D8001F54B0 /* libfmodex.dylib in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -3511,20 +3526,20 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "GZDoom" */;
 			buildPhases = (
-				8A74F33113924397001F54B0 /* Generate xlat_parser */,
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
-				8A74F56E139258DB001F54B0 /* CopyFiles */,
+				49E91DF81393C02300CCEBBC /* Run Post-Build Script */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				49E91DE71393BFB000CCEBBC /* PBXTargetDependency */,
+				49E91DED1393BFC800CCEBBC /* PBXTargetDependency */,
+				49E91DEB1393BFC800CCEBBC /* PBXTargetDependency */,
+				49E91DE91393BFC800CCEBBC /* PBXTargetDependency */,
 				8AF278CE1390F0410095D9A0 /* PBXTargetDependency */,
 				8AF2795E1390F1370095D9A0 /* PBXTargetDependency */,
-				8AC81C40139131FE00F49DC3 /* PBXTargetDependency */,
-				8AC81C3E139131FE00F49DC3 /* PBXTargetDependency */,
-				8AC81C3C139131FE00F49DC3 /* PBXTargetDependency */,
 				8AC81C3A139131FE00F49DC3 /* PBXTargetDependency */,
 				8AC81C38139131FE00F49DC3 /* PBXTargetDependency */,
 				8AC81C36139131FE00F49DC3 /* PBXTargetDependency */,
@@ -3558,11 +3573,12 @@
 			projectRoot = "";
 			targets = (
 				8D1107260486CEB800E47090 /* GZDoom */,
-				8AF278C91390F0370095D9A0 /* jpeg */,
-				8AF279591390F1200095D9A0 /* lzma */,
+				49E91DDE1393BF3900CCEBBC /* xlat_parser.y */,
 				8AF279BB1390F2540095D9A0 /* lemon */,
 				8AF27A091390F2B50095D9A0 /* re2c */,
 				8AF27A301390F41F0095D9A0 /* zipdir */,
+				8AF278C91390F0370095D9A0 /* jpeg */,
+				8AF279591390F1200095D9A0 /* lzma */,
 				8AF27A531390F4F40095D9A0 /* gme */,
 				8AF27B241390F5DC0095D9A0 /* dumb */,
 				8AF27C1B1390F7E20095D9A0 /* gdtoa */,
@@ -3583,7 +3599,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		8A74F33113924397001F54B0 /* Generate xlat_parser */ = {
+		49E91DDD1393BF3900CCEBBC /* Generate xlat_parser */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3600,7 +3616,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"Generating xlat_parser.c and xlat_parser.h...\"\ncp -f ${SRCROOT}/tools/lemon/lempar.c ${CONFIGURATION_BUILD_DIR}/lempar.c\ncd ${SRCROOT}/src/xlat\n${CONFIGURATION_BUILD_DIR}/lemon xlat_parser.y\n";
+			shellScript = "\necho \"Generating xlat_parser.c and xlat_parser.h...\"\n\ncp -f \"${SRCROOT}/tools/lemon/lempar.c\" \"${CONFIGURATION_BUILD_DIR}/lempar.c\"\n\t\ncd \"${SRCROOT}/src/xlat\"\n\"${CONFIGURATION_BUILD_DIR}/lemon\" xlat_parser.y\n";
+		};
+		49E91DF81393C02300CCEBBC /* Run Post-Build Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Post-Build Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\nGZDOOM_EXEC_DIR=${CONFIGURATION_BUILD_DIR}/${EXECUTABLE_FOLDER_PATH}\n\nif [ ! -e \"${GZDOOM_EXEC_DIR}\" ]; then\n\tmkdir -p \"${GZDOOM_EXEC_DIR}\"\nfi\n\nif [ ! -e \"${GZDOOM_EXEC_DIR}/libfmodex.dylib\" ]; then\n\tln \"${SRCROOT}/thirdparty/FMOD/lib/libfmodex.dylib\" \"${GZDOOM_EXEC_DIR}\"\nfi\n\nif [ -e \"${GZDOOM_EXEC_DIR}/${EXECUTABLE_NAME}\" ]; then\n\tinstall_name_tool -change ./libfmodex.dylib @executable_path/libfmodex.dylib \"${GZDOOM_EXEC_DIR}/${EXECUTABLE_NAME}\"\nfi\n\nif [ -e \"${CONFIGURATION_BUILD_DIR}/zipdir\" ]; then\n\t\"${CONFIGURATION_BUILD_DIR}/zipdir\" -ud \"${GZDOOM_EXEC_DIR}/gzdoom.pk3\" \"${SRCROOT}/wadsrc/static\"\nfi\n\nfor ITEM in \"${SRCROOT}\"/wads/*; do\n\tITEM_BASENAME=`basename \"${ITEM}\"`\n\t\n\tif [ ! -e \"${GZDOOM_EXEC_DIR}/${ITEM_BASENAME}\" ]; then\n\t\tln \"${ITEM}\" \"${GZDOOM_EXEC_DIR}/${ITEM_BASENAME}\"\n\tfi\ndone\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -4235,6 +4265,31 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		49E91DE31393BF8E00CCEBBC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8AF279BB1390F2540095D9A0 /* lemon */;
+			targetProxy = 49E91DE21393BF8E00CCEBBC /* PBXContainerItemProxy */;
+		};
+		49E91DE71393BFB000CCEBBC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 49E91DDE1393BF3900CCEBBC /* xlat_parser.y */;
+			targetProxy = 49E91DE61393BFB000CCEBBC /* PBXContainerItemProxy */;
+		};
+		49E91DE91393BFC800CCEBBC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8AF27A301390F41F0095D9A0 /* zipdir */;
+			targetProxy = 49E91DE81393BFC800CCEBBC /* PBXContainerItemProxy */;
+		};
+		49E91DEB1393BFC800CCEBBC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8AF27A091390F2B50095D9A0 /* re2c */;
+			targetProxy = 49E91DEA1393BFC800CCEBBC /* PBXContainerItemProxy */;
+		};
+		49E91DED1393BFC800CCEBBC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8AF279BB1390F2540095D9A0 /* lemon */;
+			targetProxy = 49E91DEC1393BFC800CCEBBC /* PBXContainerItemProxy */;
+		};
 		8AC81C36139131FE00F49DC3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 8AF27C1B1390F7E20095D9A0 /* gdtoa */;
@@ -4249,21 +4304,6 @@
 			isa = PBXTargetDependency;
 			target = 8AF27A531390F4F40095D9A0 /* gme */;
 			targetProxy = 8AC81C39139131FE00F49DC3 /* PBXContainerItemProxy */;
-		};
-		8AC81C3C139131FE00F49DC3 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8AF27A301390F41F0095D9A0 /* zipdir */;
-			targetProxy = 8AC81C3B139131FE00F49DC3 /* PBXContainerItemProxy */;
-		};
-		8AC81C3E139131FE00F49DC3 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8AF27A091390F2B50095D9A0 /* re2c */;
-			targetProxy = 8AC81C3D139131FE00F49DC3 /* PBXContainerItemProxy */;
-		};
-		8AC81C40139131FE00F49DC3 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8AF279BB1390F2540095D9A0 /* lemon */;
-			targetProxy = 8AC81C3F139131FE00F49DC3 /* PBXContainerItemProxy */;
 		};
 		8AF278CE1390F0410095D9A0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -4302,6 +4342,27 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		49E91DDF1393BF3900CCEBBC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = "Compile ";
+			};
+			name = Debug;
+		};
+		49E91DE01393BF3900CCEBBC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = "Compile ";
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 		8AF278CB1390F0370095D9A0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4664,6 +4725,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		49E91DE11393BF6F00CCEBBC /* Build configuration list for PBXAggregateTarget "xlat_parser.y" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				49E91DDF1393BF3900CCEBBC /* Debug */,
+				49E91DE01393BF3900CCEBBC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		8AF279091390F05D0095D9A0 /* Build configuration list for PBXNativeTarget "jpeg" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
