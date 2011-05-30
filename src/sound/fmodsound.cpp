@@ -151,6 +151,7 @@ static const FEnumList OutputNames[] =
 	{ "Default",				FMOD_OUTPUTTYPE_AUTODETECT },
 	{ "No sound",				FMOD_OUTPUTTYPE_NOSOUND },
 
+#if !defined (__APPLE__)
 	// Windows
 	{ "DirectSound",			FMOD_OUTPUTTYPE_DSOUND },
 	{ "DSound",					FMOD_OUTPUTTYPE_DSOUND },
@@ -166,6 +167,7 @@ static const FEnumList OutputNames[] =
 	{ "ALSA",					FMOD_OUTPUTTYPE_ALSA },
 	{ "ESD",					FMOD_OUTPUTTYPE_ESD },
 	{ "SDL",					666 },
+#endif // __APPLE__
 
 	// Mac
 #if FMOD_VERSION < 0x43000
@@ -388,12 +390,13 @@ public:
 		bool is;
 		FMOD_OPENSTATE openstate = FMOD_OPENSTATE_MAX;
 		bool starving;
+		bool diskbusy;
 
 		if (Stream == NULL)
 		{
 			return true;
 		}
-		if (FMOD_OK != Stream->getOpenState(&openstate, NULL, &starving))
+		if (FMOD_OK != Stream->getOpenState(&openstate, NULL, &starving, &diskbusy))
 		{
 			openstate = FMOD_OPENSTATE_ERROR;
 		}
@@ -436,7 +439,7 @@ public:
 			Owner->Sys->setStreamBufferSize(16*1024, FMOD_TIMEUNIT_RAWBYTES);
 			return result != FMOD_OK;
 		}
-		if (JustStarted && openstate == FMOD_OPENSTATE_STREAMING)
+		if (JustStarted && openstate == FMOD_OPENSTATE_PLAYING)
 		{
 			JustStarted = false;
 		}
@@ -480,14 +483,15 @@ public:
 		unsigned int percentbuffered;
 		unsigned int position;
 		bool starving;
+		bool diskbusy;
 		float volume;
 		float frequency;
 		bool paused;
 		bool isplaying;
 
-		if (FMOD_OK == Stream->getOpenState(&openstate, &percentbuffered, &starving))
+		if (FMOD_OK == Stream->getOpenState(&openstate, &percentbuffered, &starving, &diskbusy))
 		{
-			stats = (openstate <= FMOD_OPENSTATE_STREAMING ? OpenStateNames[openstate] : "Unknown state");
+			stats = (openstate <= FMOD_OPENSTATE_PLAYING ? OpenStateNames[openstate] : "Unknown state");
 			stats.AppendFormat(",%3d%% buffered, %s", percentbuffered, starving ? "Starving" : "Well-fed");
 		}
 		if (Channel == NULL)
