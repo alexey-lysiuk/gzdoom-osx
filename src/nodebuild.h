@@ -1,3 +1,7 @@
+
+#ifndef SRC_NODEBUILD_H_INCLUDED
+#define SRC_NODEBUILD_H_INCLUDED
+
 #include "doomdata.h"
 #include "tarray.h"
 #include "r_defs.h"
@@ -360,3 +364,5 @@ inline int FNodeBuilder::ClassifyLine (node_t &node, const FPrivVert *v1, const 
 #endif
 #endif
 }
+
+#endif // SRC_NODEBUILD_H_INCLUDED

@@ -31,6 +31,10 @@
 **
 */
 
+#ifndef SRC_P_EFFECT_H_INCLUDED
+#define SRC_P_EFFECT_H_INCLUDED
+
+
 #include "vectors.h"
 #include "tables.h"
 
@@ -64,3 +68,6 @@ void P_DrawRailTrail (AActor *source, const FVector3 &start, const FVector3 &end
 void P_DrawSplash (int count, fixed_t x, fixed_t y, fixed_t z, angle_t angle, int kind);
 void P_DrawSplash2 (int count, fixed_t x, fixed_t y, fixed_t z, angle_t angle, int updown, int kind);
 void P_DisconnectEffect (AActor *actor);
+
+
+#endif // SRC_P_EFFECT_H_INCLUDED

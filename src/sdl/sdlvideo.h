@@ -1,3 +1,8 @@
+
+#ifndef SRC_SDL_SDLVIDEO_H_INCLUDED
+#define SRC_SDL_SDLVIDEO_H_INCLUDED
+
+
 #include "hardware.h"
 #include "v_video.h"
 
@@ -20,3 +25,6 @@ private:
 	int IteratorBits;
 	bool IteratorFS;
 };
+
+
+#endif // SRC_SDL_SDLVIDEO_H_INCLUDED

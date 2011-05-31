@@ -8,6 +8,7 @@
 #include <sys/ucontext.h>
 #include <string.h>
 #include <errno.h>
+#include <signal.h>
 
 #ifdef __linux__
 #include <sys/prctl.h>

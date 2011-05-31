@@ -41,6 +41,10 @@
 #include "templates.h"
 #include "po_man.h"
 
+#ifdef check
+#undef check
+#endif
+
 static AActor *RoughBlockCheck (AActor *mo, int index, void *);
 
 

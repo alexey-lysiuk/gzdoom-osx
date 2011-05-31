@@ -23,6 +23,37 @@
 
 /* Begin PBXBuildFile section */
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
+		49E9203E1394CE6000CCEBBC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
+		49E9203F1394CE6000CCEBBC /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
+		49E920411394CE6000CCEBBC /* autostart.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D0C139126C00095D9A0 /* autostart.cpp */; };
+		49E921521394CE6000CCEBBC /* iwadpicker_cocoa.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3B139126C00095D9A0 /* iwadpicker_cocoa.mm */; };
+		49E921A71394CE6000CCEBBC /* autozend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D0D139126C00095D9A0 /* autozend.cpp */; };
+		49E921AD1394CE6000CCEBBC /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F450139252F9001F54B0 /* AudioUnit.framework */; };
+		49E921AE1394CE6000CCEBBC /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F4661392532C001F54B0 /* Carbon.framework */; };
+		49E921AF1394CE6000CCEBBC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		49E921B01394CE6000CCEBBC /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F38E13925284001F54B0 /* IOKit.framework */; };
+		49E921B11394CE6000CCEBBC /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2A1139235E0001F54B0 /* OpenGL.framework */; };
+		49E921B21394CE6000CCEBBC /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF279491390F0C20095D9A0 /* libbz2.dylib */; };
+		49E921B31394CE6000CCEBBC /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27A461390F47C0095D9A0 /* libz.dylib */; };
+		49E921B41394CE6000CCEBBC /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF278CA1390F0370095D9A0 /* libjpeg.a */; };
+		49E921B51394CE6000CCEBBC /* liblzma.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF2795A1390F1200095D9A0 /* liblzma.a */; };
+		49E921B61394CE6000CCEBBC /* libgme.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27A541390F4F40095D9A0 /* libgme.a */; };
+		49E921B71394CE6000CCEBBC /* libdumb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27B251390F5DC0095D9A0 /* libdumb.a */; };
+		49E921B81394CE6000CCEBBC /* libgdtoa.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27C1C1390F7E20095D9A0 /* libgdtoa.a */; };
+		49E921B91394CE6000CCEBBC /* libfmodex.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2B91392360F001F54B0 /* libfmodex.dylib */; };
+		49E921BA1394CE6000CCEBBC /* libSDL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2B5139235FD001F54B0 /* libSDL.a */; };
+		49E921BB1394CE6000CCEBBC /* libSDLmain.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2B6139235FD001F54B0 /* libSDLmain.a */; };
+		49E921C31394CEAC00CCEBBC /* blob_fragglescript.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E920091394C83300CCEBBC /* blob_fragglescript.cpp */; };
+		49E921C41394CEAC00CCEBBC /* blob_games.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E920121394C8AA00CCEBBC /* blob_games.cpp */; };
+		49E921C51394CEAD00CCEBBC /* blob_menu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E920191394CC3700CCEBBC /* blob_menu.cpp */; };
+		49E921C61394CEAE00CCEBBC /* blob_opengl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E920171394CAC300CCEBBC /* blob_opengl.cpp */; };
+		49E921C71394CEAE00CCEBBC /* blob_resources.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E9201E1394CDB500CCEBBC /* blob_resources.cpp */; };
+		49E921C81394CEAF00CCEBBC /* blob_sdl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E920251394CE0B00CCEBBC /* blob_sdl.cpp */; };
+		49E921C91394CEB000CCEBBC /* blob_sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E9201B1394CC9B00CCEBBC /* blob_sound.cpp */; };
+		49E923CE13951A7500CCEBBC /* crashcatcher.c in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F2D139126C00095D9A0 /* crashcatcher.c */; };
+		49E9242313951E5F00CCEBBC /* blob_src_1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E9242213951E5F00CCEBBC /* blob_src_1.cpp */; };
+		49E924691395222500CCEBBC /* blob_src_2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E924681395222500CCEBBC /* blob_src_2.cpp */; };
+		49E92496139523FB00CCEBBC /* c_expr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D20139126C00095D9A0 /* c_expr.cpp */; };
 		8A74F2A2139235E0001F54B0 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2A1139235E0001F54B0 /* OpenGL.framework */; };
 		8A74F2B7139235FD001F54B0 /* libSDL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2B5139235FD001F54B0 /* libSDL.a */; };
 		8A74F2B8139235FD001F54B0 /* libSDLmain.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2B6139235FD001F54B0 /* libSDLmain.a */; };
@@ -644,6 +675,69 @@
 			remoteGlobalIDString = 8AF279BB1390F2540095D9A0;
 			remoteInfo = lemon;
 		};
+		49E9202C1394CE6000CCEBBC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 49E91DDE1393BF3900CCEBBC;
+			remoteInfo = xlat_parser.y;
+		};
+		49E9202E1394CE6000CCEBBC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8AF279BB1390F2540095D9A0;
+			remoteInfo = lemon;
+		};
+		49E920301394CE6000CCEBBC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8AF27A091390F2B50095D9A0;
+			remoteInfo = re2c;
+		};
+		49E920321394CE6000CCEBBC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8AF27A301390F41F0095D9A0;
+			remoteInfo = zipdir;
+		};
+		49E920341394CE6000CCEBBC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8AF278C91390F0370095D9A0;
+			remoteInfo = jpeg;
+		};
+		49E920361394CE6000CCEBBC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8AF279591390F1200095D9A0;
+			remoteInfo = lzma;
+		};
+		49E920381394CE6000CCEBBC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8AF27A531390F4F40095D9A0;
+			remoteInfo = gme;
+		};
+		49E9203A1394CE6000CCEBBC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8AF27B241390F5DC0095D9A0;
+			remoteInfo = dumb;
+		};
+		49E9203C1394CE6000CCEBBC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8AF27C1B1390F7E20095D9A0;
+			remoteInfo = gdtoa;
+		};
 		8AC81C35139131FE00F49DC3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
@@ -692,6 +786,16 @@
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		1DDD58150DA1D0A300B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		49E920091394C83300CCEBBC /* blob_fragglescript.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_fragglescript.cpp; sourceTree = "<group>"; };
+		49E920121394C8AA00CCEBBC /* blob_games.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_games.cpp; sourceTree = "<group>"; };
+		49E920171394CAC300CCEBBC /* blob_opengl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_opengl.cpp; sourceTree = "<group>"; };
+		49E920191394CC3700CCEBBC /* blob_menu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_menu.cpp; sourceTree = "<group>"; };
+		49E9201B1394CC9B00CCEBBC /* blob_sound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_sound.cpp; sourceTree = "<group>"; };
+		49E9201E1394CDB500CCEBBC /* blob_resources.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_resources.cpp; sourceTree = "<group>"; };
+		49E920251394CE0B00CCEBBC /* blob_sdl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_sdl.cpp; sourceTree = "<group>"; };
+		49E921C01394CE6000CCEBBC /* GZDoom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GZDoom.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		49E9242213951E5F00CCEBBC /* blob_src_1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_src_1.cpp; sourceTree = "<group>"; };
+		49E924681395222500CCEBBC /* blob_src_2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_src_2.cpp; sourceTree = "<group>"; };
 		8A74F2A1139235E0001F54B0 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		8A74F2B5139235FD001F54B0 /* libSDL.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL.a; path = thirdparty/SDL/lib/libSDL.a; sourceTree = "<group>"; };
 		8A74F2B6139235FD001F54B0 /* libSDLmain.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDLmain.a; path = thirdparty/SDL/lib/libSDLmain.a; sourceTree = "<group>"; };
@@ -1575,7 +1679,6 @@
 		8AF27F27139126C00095D9A0 /* sc_man.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sc_man.cpp; sourceTree = "<group>"; };
 		8AF27F28139126C00095D9A0 /* sc_man.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sc_man.h; sourceTree = "<group>"; };
 		8AF27F29139126C00095D9A0 /* sc_man_scanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sc_man_scanner.h; sourceTree = "<group>"; };
-		8AF27F2A139126C00095D9A0 /* sc_man_scanner.re */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sc_man_scanner.re; sourceTree = "<group>"; };
 		8AF27F2B139126C00095D9A0 /* sc_man_tokens.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sc_man_tokens.h; sourceTree = "<group>"; };
 		8AF27F2D139126C00095D9A0 /* crashcatcher.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = crashcatcher.c; sourceTree = "<group>"; };
 		8AF27F2E139126C00095D9A0 /* critsec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = critsec.h; sourceTree = "<group>"; };
@@ -1778,6 +1881,28 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		49E921AC1394CE6000CCEBBC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49E921AD1394CE6000CCEBBC /* AudioUnit.framework in Frameworks */,
+				49E921AE1394CE6000CCEBBC /* Carbon.framework in Frameworks */,
+				49E921AF1394CE6000CCEBBC /* Cocoa.framework in Frameworks */,
+				49E921B01394CE6000CCEBBC /* IOKit.framework in Frameworks */,
+				49E921B11394CE6000CCEBBC /* OpenGL.framework in Frameworks */,
+				49E921B21394CE6000CCEBBC /* libbz2.dylib in Frameworks */,
+				49E921B31394CE6000CCEBBC /* libz.dylib in Frameworks */,
+				49E921B41394CE6000CCEBBC /* libjpeg.a in Frameworks */,
+				49E921B51394CE6000CCEBBC /* liblzma.a in Frameworks */,
+				49E921B61394CE6000CCEBBC /* libgme.a in Frameworks */,
+				49E921B71394CE6000CCEBBC /* libdumb.a in Frameworks */,
+				49E921B81394CE6000CCEBBC /* libgdtoa.a in Frameworks */,
+				49E921B91394CE6000CCEBBC /* libfmodex.dylib in Frameworks */,
+				49E921BA1394CE6000CCEBBC /* libSDL.a in Frameworks */,
+				49E921BB1394CE6000CCEBBC /* libSDLmain.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8AF279BA1390F2540095D9A0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1853,6 +1978,7 @@
 				8AF27A541390F4F40095D9A0 /* libgme.a */,
 				8AF27B251390F5DC0095D9A0 /* libdumb.a */,
 				8AF27C1C1390F7E20095D9A0 /* libgdtoa.a */,
+				49E921C01394CE6000CCEBBC /* GZDoom.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1893,6 +2019,22 @@
 				8A74F2B6139235FD001F54B0 /* libSDLmain.a */,
 			);
 			name = Dependencies;
+			sourceTree = "<group>";
+		};
+		49E920081394C83300CCEBBC /* blobs */ = {
+			isa = PBXGroup;
+			children = (
+				49E920091394C83300CCEBBC /* blob_fragglescript.cpp */,
+				49E9242213951E5F00CCEBBC /* blob_src_1.cpp */,
+				49E924681395222500CCEBBC /* blob_src_2.cpp */,
+				49E920121394C8AA00CCEBBC /* blob_games.cpp */,
+				49E920171394CAC300CCEBBC /* blob_opengl.cpp */,
+				49E920191394CC3700CCEBBC /* blob_menu.cpp */,
+				49E9201E1394CDB500CCEBBC /* blob_resources.cpp */,
+				49E920251394CE0B00CCEBBC /* blob_sdl.cpp */,
+				49E9201B1394CC9B00CCEBBC /* blob_sound.cpp */,
+			);
+			path = blobs;
 			sourceTree = "<group>";
 		};
 		8AF2790A1390F0880095D9A0 /* jpeg-6b */ = {
@@ -2398,6 +2540,7 @@
 			isa = PBXGroup;
 			children = (
 				8AF27D02139126C00095D9A0 /* asm_ia32 */,
+				49E920081394C83300CCEBBC /* blobs */,
 				8AF27D08139126C00095D9A0 /* asm_x86_64 */,
 				8AF27D55139126C00095D9A0 /* fragglescript */,
 				8AF27D62139126C00095D9A0 /* g_doom */,
@@ -2663,7 +2806,6 @@
 				8AF27F27139126C00095D9A0 /* sc_man.cpp */,
 				8AF27F28139126C00095D9A0 /* sc_man.h */,
 				8AF27F29139126C00095D9A0 /* sc_man_scanner.h */,
-				8AF27F2A139126C00095D9A0 /* sc_man_scanner.re */,
 				8AF27F2B139126C00095D9A0 /* sc_man_tokens.h */,
 				8AF27F53139126C00095D9A0 /* skins.cpp */,
 				8AF27F54139126C00095D9A0 /* skins.h */,
@@ -3398,6 +3540,34 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		49E9202A1394CE6000CCEBBC /* GZDoom_BLOB */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 49E921BD1394CE6000CCEBBC /* Build configuration list for PBXNativeTarget "GZDoom_BLOB" */;
+			buildPhases = (
+				49E9203D1394CE6000CCEBBC /* Resources */,
+				49E920401394CE6000CCEBBC /* Sources */,
+				49E921AC1394CE6000CCEBBC /* Frameworks */,
+				49E921BC1394CE6000CCEBBC /* Run Post-Build Script */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				49E9202B1394CE6000CCEBBC /* PBXTargetDependency */,
+				49E9202D1394CE6000CCEBBC /* PBXTargetDependency */,
+				49E9202F1394CE6000CCEBBC /* PBXTargetDependency */,
+				49E920311394CE6000CCEBBC /* PBXTargetDependency */,
+				49E920331394CE6000CCEBBC /* PBXTargetDependency */,
+				49E920351394CE6000CCEBBC /* PBXTargetDependency */,
+				49E920371394CE6000CCEBBC /* PBXTargetDependency */,
+				49E920391394CE6000CCEBBC /* PBXTargetDependency */,
+				49E9203B1394CE6000CCEBBC /* PBXTargetDependency */,
+			);
+			name = GZDoom_BLOB;
+			productInstallPath = "$(HOME)/Applications";
+			productName = GZDoom;
+			productReference = 49E921C01394CE6000CCEBBC /* GZDoom.app */;
+			productType = "com.apple.product-type.application";
+		};
 		8AF278C91390F0370095D9A0 /* jpeg */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8AF279091390F05D0095D9A0 /* Build configuration list for PBXNativeTarget "jpeg" */;
@@ -3572,6 +3742,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				49E9202A1394CE6000CCEBBC /* GZDoom_BLOB */,
 				8D1107260486CEB800E47090 /* GZDoom */,
 				49E91DDE1393BF3900CCEBBC /* xlat_parser.y */,
 				8AF279BB1390F2540095D9A0 /* lemon */,
@@ -3587,6 +3758,15 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		49E9203D1394CE6000CCEBBC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49E9203E1394CE6000CCEBBC /* InfoPlist.strings in Resources */,
+				49E9203F1394CE6000CCEBBC /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D1107290486CEB800E47090 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3632,9 +3812,44 @@
 			shellPath = /bin/sh;
 			shellScript = "\nGZDOOM_EXEC_DIR=${CONFIGURATION_BUILD_DIR}/${EXECUTABLE_FOLDER_PATH}\n\nif [ ! -e \"${GZDOOM_EXEC_DIR}\" ]; then\n\tmkdir -p \"${GZDOOM_EXEC_DIR}\"\nfi\n\nif [ ! -e \"${GZDOOM_EXEC_DIR}/libfmodex.dylib\" ]; then\n\tln \"${SRCROOT}/thirdparty/FMOD/lib/libfmodex.dylib\" \"${GZDOOM_EXEC_DIR}\"\nfi\n\nif [ -e \"${GZDOOM_EXEC_DIR}/${EXECUTABLE_NAME}\" ]; then\n\tinstall_name_tool -change ./libfmodex.dylib @executable_path/libfmodex.dylib \"${GZDOOM_EXEC_DIR}/${EXECUTABLE_NAME}\"\nfi\n\nif [ -e \"${CONFIGURATION_BUILD_DIR}/zipdir\" ]; then\n\t\"${CONFIGURATION_BUILD_DIR}/zipdir\" -ud \"${GZDOOM_EXEC_DIR}/gzdoom.pk3\" \"${SRCROOT}/wadsrc/static\"\nfi\n\nfor ITEM in \"${SRCROOT}\"/wads/*; do\n\tITEM_BASENAME=`basename \"${ITEM}\"`\n\t\n\tif [ ! -e \"${GZDOOM_EXEC_DIR}/${ITEM_BASENAME}\" ]; then\n\t\tln \"${ITEM}\" \"${GZDOOM_EXEC_DIR}/${ITEM_BASENAME}\"\n\tfi\ndone\n";
 		};
+		49E921BC1394CE6000CCEBBC /* Run Post-Build Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Post-Build Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\nGZDOOM_EXEC_DIR=${CONFIGURATION_BUILD_DIR}/${EXECUTABLE_FOLDER_PATH}\n\nif [ ! -e \"${GZDOOM_EXEC_DIR}\" ]; then\n\tmkdir -p \"${GZDOOM_EXEC_DIR}\"\nfi\n\nif [ ! -e \"${GZDOOM_EXEC_DIR}/libfmodex.dylib\" ]; then\n\tln \"${SRCROOT}/thirdparty/FMOD/lib/libfmodex.dylib\" \"${GZDOOM_EXEC_DIR}\"\nfi\n\nif [ -e \"${GZDOOM_EXEC_DIR}/${EXECUTABLE_NAME}\" ]; then\n\tinstall_name_tool -change ./libfmodex.dylib @executable_path/libfmodex.dylib \"${GZDOOM_EXEC_DIR}/${EXECUTABLE_NAME}\"\nfi\n\nif [ -e \"${CONFIGURATION_BUILD_DIR}/zipdir\" ]; then\n\t\"${CONFIGURATION_BUILD_DIR}/zipdir\" -ud \"${GZDOOM_EXEC_DIR}/gzdoom.pk3\" \"${SRCROOT}/wadsrc/static\"\nfi\n\nfor ITEM in \"${SRCROOT}\"/wads/*; do\n\tITEM_BASENAME=`basename \"${ITEM}\"`\n\t\n\tif [ ! -e \"${GZDOOM_EXEC_DIR}/${ITEM_BASENAME}\" ]; then\n\t\tln \"${ITEM}\" \"${GZDOOM_EXEC_DIR}/${ITEM_BASENAME}\"\n\tfi\ndone\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		49E920401394CE6000CCEBBC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49E920411394CE6000CCEBBC /* autostart.cpp in Sources */,
+				49E921C31394CEAC00CCEBBC /* blob_fragglescript.cpp in Sources */,
+				49E921C41394CEAC00CCEBBC /* blob_games.cpp in Sources */,
+				49E921C51394CEAD00CCEBBC /* blob_menu.cpp in Sources */,
+				49E921C61394CEAE00CCEBBC /* blob_opengl.cpp in Sources */,
+				49E921C71394CEAE00CCEBBC /* blob_resources.cpp in Sources */,
+				49E921C81394CEAF00CCEBBC /* blob_sdl.cpp in Sources */,
+				49E921C91394CEB000CCEBBC /* blob_sound.cpp in Sources */,
+				49E9242313951E5F00CCEBBC /* blob_src_1.cpp in Sources */,
+				49E924691395222500CCEBBC /* blob_src_2.cpp in Sources */,
+				49E92496139523FB00CCEBBC /* c_expr.cpp in Sources */,
+				49E923CE13951A7500CCEBBC /* crashcatcher.c in Sources */,
+				49E921521394CE6000CCEBBC /* iwadpicker_cocoa.mm in Sources */,
+				49E921A71394CE6000CCEBBC /* autozend.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8AF278C71390F0370095D9A0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4290,6 +4505,51 @@
 			target = 8AF279BB1390F2540095D9A0 /* lemon */;
 			targetProxy = 49E91DEC1393BFC800CCEBBC /* PBXContainerItemProxy */;
 		};
+		49E9202B1394CE6000CCEBBC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 49E91DDE1393BF3900CCEBBC /* xlat_parser.y */;
+			targetProxy = 49E9202C1394CE6000CCEBBC /* PBXContainerItemProxy */;
+		};
+		49E9202D1394CE6000CCEBBC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8AF279BB1390F2540095D9A0 /* lemon */;
+			targetProxy = 49E9202E1394CE6000CCEBBC /* PBXContainerItemProxy */;
+		};
+		49E9202F1394CE6000CCEBBC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8AF27A091390F2B50095D9A0 /* re2c */;
+			targetProxy = 49E920301394CE6000CCEBBC /* PBXContainerItemProxy */;
+		};
+		49E920311394CE6000CCEBBC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8AF27A301390F41F0095D9A0 /* zipdir */;
+			targetProxy = 49E920321394CE6000CCEBBC /* PBXContainerItemProxy */;
+		};
+		49E920331394CE6000CCEBBC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8AF278C91390F0370095D9A0 /* jpeg */;
+			targetProxy = 49E920341394CE6000CCEBBC /* PBXContainerItemProxy */;
+		};
+		49E920351394CE6000CCEBBC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8AF279591390F1200095D9A0 /* lzma */;
+			targetProxy = 49E920361394CE6000CCEBBC /* PBXContainerItemProxy */;
+		};
+		49E920371394CE6000CCEBBC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8AF27A531390F4F40095D9A0 /* gme */;
+			targetProxy = 49E920381394CE6000CCEBBC /* PBXContainerItemProxy */;
+		};
+		49E920391394CE6000CCEBBC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8AF27B241390F5DC0095D9A0 /* dumb */;
+			targetProxy = 49E9203A1394CE6000CCEBBC /* PBXContainerItemProxy */;
+		};
+		49E9203B1394CE6000CCEBBC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8AF27C1B1390F7E20095D9A0 /* gdtoa */;
+			targetProxy = 49E9203C1394CE6000CCEBBC /* PBXContainerItemProxy */;
+		};
 		8AC81C36139131FE00F49DC3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 8AF27C1B1390F7E20095D9A0 /* gdtoa */;
@@ -4360,6 +4620,83 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = "Compile ";
 				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		49E921BE1394CE6000CCEBBC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"NO_GTK=1",
+					"NEED_STRUPR=1",
+					"stricmp=strcasecmp",
+					"strnicmp=strncasecmp",
+					"__forceinline=inline",
+					NO_CLOCK_GETTIME,
+					DISABLE_SSE,
+					NOASM,
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					src,
+					lzma/C,
+					"jpeg-6b",
+					thirdparty/FMOD/inc,
+					thirdparty/SDL/include,
+					thirdparty/glew/include,
+				);
+				INFOPLIST_FILE = "GZDoom-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					thirdparty/FMOD/lib,
+					thirdparty/SDL/lib,
+				);
+				PRODUCT_NAME = GZDoom;
+			};
+			name = Debug;
+		};
+		49E921BF1394CE6000CCEBBC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"NO_GTK=1",
+					"NEED_STRUPR=1",
+					"stricmp=strcasecmp",
+					"strnicmp=strncasecmp",
+					"__forceinline=inline",
+					NO_CLOCK_GETTIME,
+					DISABLE_SSE,
+					NOASM,
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					src,
+					lzma/C,
+					"jpeg-6b",
+					thirdparty/FMOD/inc,
+					thirdparty/SDL/include,
+					thirdparty/glew/include,
+				);
+				INFOPLIST_FILE = "GZDoom-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					thirdparty/FMOD/lib,
+					thirdparty/SDL/lib,
+				);
+				PRODUCT_NAME = GZDoom;
 			};
 			name = Release;
 		};
@@ -4716,6 +5053,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				SDKROOT = macosx10.5;
 				VALID_ARCHS = "i386 x86_64";
@@ -4730,6 +5068,15 @@
 			buildConfigurations = (
 				49E91DDF1393BF3900CCEBBC /* Debug */,
 				49E91DE01393BF3900CCEBBC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		49E921BD1394CE6000CCEBBC /* Build configuration list for PBXNativeTarget "GZDoom_BLOB" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				49E921BE1394CE6000CCEBBC /* Debug */,
+				49E921BF1394CE6000CCEBBC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

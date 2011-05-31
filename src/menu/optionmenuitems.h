@@ -32,6 +32,9 @@
 **
 */
 
+#ifndef SRC_MENU_OPTIONMENUITEMS_H_INCLUDED
+#define SRC_MENU_OPTIONMENUITEMS_H_INCLUDED
+
 
 void M_DrawConText (int color, int x, int y, const char *str);
 void M_SetVideoMode();
@@ -961,3 +964,6 @@ CCMD(am_restorecolors)
 	}
 }
 #endif
+
+
+#endif // SRC_MENU_OPTIONMENUITEMS_H_INCLUDED

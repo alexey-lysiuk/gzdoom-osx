@@ -64,6 +64,9 @@
 #include "r_sky.h"
 #include "menu/menu.h"
 
+#ifdef pow
+#undef pow
+#endif
 
 IMPLEMENT_ABSTRACT_CLASS (DCanvas)
 IMPLEMENT_ABSTRACT_CLASS (DFrameBuffer)

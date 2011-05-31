@@ -1,3 +1,8 @@
+
+#ifndef SRC_TIMIDITY_SF2_H_INCLUDED
+#define SRC_TIMIDITY_SF2_H_INCLUDED
+
+
 typedef WORD SFGenerator;
 
 struct SFRange
@@ -316,3 +321,6 @@ struct SFFile : public Timidity::FontFile
 };
 
 SFFile *ReadSF2(const char *filename, FileReader *f);
+
+
+#endif // SRC_TIMIDITY_SF2_H_INCLUDED

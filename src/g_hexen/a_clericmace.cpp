@@ -7,7 +7,7 @@
 
 extern void AdjustPlayerAngle (AActor *pmo, AActor *linetarget);
 
-static FRandom pr_maceatk ("CMaceAttack");
+static FRandom pr_maceatkcm ("CMaceAttack");
 
 //===========================================================================
 //
@@ -29,7 +29,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_CMaceAttack)
 		return;
 	}
 
-	damage = 25+(pr_maceatk()&15);
+	damage = 25+(pr_maceatkcm()&15);
 	for (i = 0; i < 16; i++)
 	{
 		angle = player->mo->angle+i*(ANG45/16);

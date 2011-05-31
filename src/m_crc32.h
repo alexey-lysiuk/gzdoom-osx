@@ -32,6 +32,10 @@
 **
 */
 
+#ifndef SRC_M_CRC32_H_INCLUDED
+#define SRC_M_CRC32_H_INCLUDED
+
+
 #include <zlib.h>
 #include "basictypes.h"
 
@@ -50,3 +54,6 @@ inline DWORD CRC1 (DWORD crc, const BYTE c, const DWORD *crcTable)
 {
 	return crcTable[(crc & 0xff) ^ c] ^ (crc >> 8);
 }
+
+
+#endif // #ifndef SRC_M_CRC32_H_INCLUDED

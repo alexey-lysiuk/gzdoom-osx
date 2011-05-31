@@ -1,3 +1,8 @@
+
+#ifndef SRC_RESOURCEFILES_ANCIENTZIP_H_INCLUDED
+#define SRC_RESOURCEFILES_ANCIENTZIP_H_INCLUDED
+
+
 #include "files.h"
 #include "doomerrors.h"
 
@@ -48,3 +53,6 @@ public:
 };
 
 int ShrinkLoop(unsigned char *out, unsigned int outsize, FileReader *in, unsigned int insize);
+
+
+#endif // SRC_RESOURCEFILES_ANCIENTZIP_H_INCLUDED

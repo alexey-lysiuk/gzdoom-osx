@@ -16,7 +16,7 @@
 
 static FRandom pr_minotauratk1 ("MinotaurAtk1");
 static FRandom pr_minotaurdecide ("MinotaurDecide");
-static FRandom pr_atk ("MinotaurAtk2");
+static FRandom pr_atkm ("MinotaurAtk2");
 static FRandom pr_minotauratk3 ("MinotaurAtk3");
 static FRandom pr_fire ("MntrFloorFire");
 static FRandom pr_minotaurslam ("MinotaurSlam");
@@ -279,7 +279,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_MinotaurAtk2)
 	if (self->CheckMeleeRange())
 	{
 		int damage;
-		damage = pr_atk.HitDice (friendly ? 3 : 5);
+		damage = pr_atkm.HitDice (friendly ? 3 : 5);
 		P_DamageMobj (self->target, self, self, damage, NAME_Melee);
 		P_TraceBleed (damage, self->target, self);
 		return;
