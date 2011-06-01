@@ -2541,8 +2541,8 @@
 			isa = PBXGroup;
 			children = (
 				8AF27D02139126C00095D9A0 /* asm_ia32 */,
-				49E920081394C83300CCEBBC /* blobs */,
 				8AF27D08139126C00095D9A0 /* asm_x86_64 */,
+				49E920081394C83300CCEBBC /* blobs */,
 				8AF27D55139126C00095D9A0 /* fragglescript */,
 				8AF27D62139126C00095D9A0 /* g_doom */,
 				8AF27D78139126C00095D9A0 /* g_heretic */,
@@ -5036,6 +5036,7 @@
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -5053,6 +5054,7 @@
 					x86_64,
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
