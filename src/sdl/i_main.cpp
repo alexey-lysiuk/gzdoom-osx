@@ -251,10 +251,12 @@ void I_ShutdownJoysticks();
 
 int main (int argc, char **argv)
 {
+#if !defined (__APPLE__)
 	{
 		int s[4] = { SIGSEGV, SIGILL, SIGFPE, SIGBUS };
 		cc_install_handlers(argc, argv, 4, s, "zdoom-crash.log", DoomSpecificInfo);
 	}
+#endif // !__APPLE__
 
 	printf(GAMENAME" v%s - SVN revision %s - SDL version\nCompiled on %s\n\n",
 		DOTVERSIONSTR_NOREV,SVN_REVISION_STRING,__DATE__);

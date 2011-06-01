@@ -50,7 +50,6 @@
 		49E921C71394CEAE00CCEBBC /* blob_resources.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E9201E1394CDB500CCEBBC /* blob_resources.cpp */; };
 		49E921C81394CEAF00CCEBBC /* blob_sdl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E920251394CE0B00CCEBBC /* blob_sdl.cpp */; };
 		49E921C91394CEB000CCEBBC /* blob_sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E9201B1394CC9B00CCEBBC /* blob_sound.cpp */; };
-		49E923CE13951A7500CCEBBC /* crashcatcher.c in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F2D139126C00095D9A0 /* crashcatcher.c */; };
 		49E9242313951E5F00CCEBBC /* blob_src_1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E9242213951E5F00CCEBBC /* blob_src_1.cpp */; };
 		49E924691395222500CCEBBC /* blob_src_2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E924681395222500CCEBBC /* blob_src_2.cpp */; };
 		49E92496139523FB00CCEBBC /* c_expr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D20139126C00095D9A0 /* c_expr.cpp */; };
@@ -3845,7 +3844,6 @@
 				49E9242313951E5F00CCEBBC /* blob_src_1.cpp in Sources */,
 				49E924691395222500CCEBBC /* blob_src_2.cpp in Sources */,
 				49E92496139523FB00CCEBBC /* c_expr.cpp in Sources */,
-				49E923CE13951A7500CCEBBC /* crashcatcher.c in Sources */,
 				49E925D213953E9400CCEBBC /* i_main.cpp in Sources */,
 				49E921521394CE6000CCEBBC /* iwadpicker_cocoa.mm in Sources */,
 				49E921A71394CE6000CCEBBC /* autozend.cpp in Sources */,
