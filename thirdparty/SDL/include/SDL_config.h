@@ -305,7 +305,7 @@
 
 /* Enable assembly routines */
 #define SDL_ASSEMBLY_ROUTINES 1
-#define SDL_HERMES_BLITTERS 1
+/* #undef SDL_HERMES_BLITTERS */
 /* #undef SDL_ALTIVEC_BLITTERS */
 
 #endif /* _SDL_config_h */
