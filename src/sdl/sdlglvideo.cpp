@@ -306,7 +306,7 @@ SDLGLFB::SDLGLFB (void *, int width, int height, int, int, bool fullscreen)
 	if (Screen == NULL)
 		return;
 
-	m_supportsGamma = !!SDL_GetGammaRamp(m_origGamma[0], m_origGamma[1], m_origGamma[2]);
+	m_supportsGamma = -1 != SDL_GetGammaRamp(m_origGamma[0], m_origGamma[1], m_origGamma[2]);
 }
 
 SDLGLFB::~SDLGLFB ()
