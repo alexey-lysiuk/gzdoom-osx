@@ -54,6 +54,8 @@
 		49E924691395222500CCEBBC /* blob_src_2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E924681395222500CCEBBC /* blob_src_2.cpp */; };
 		49E92496139523FB00CCEBBC /* c_expr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D20139126C00095D9A0 /* c_expr.cpp */; };
 		49E925D213953E9400CCEBBC /* i_main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F36139126C00095D9A0 /* i_main.cpp */; };
+		49E9287813978BF600CCEBBC /* doom.icns in Resources */ = {isa = PBXBuildFile; fileRef = 49E9287713978BF600CCEBBC /* doom.icns */; };
+		49E9287913978BF600CCEBBC /* doom.icns in Resources */ = {isa = PBXBuildFile; fileRef = 49E9287713978BF600CCEBBC /* doom.icns */; };
 		8A74F2A2139235E0001F54B0 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2A1139235E0001F54B0 /* OpenGL.framework */; };
 		8A74F2B7139235FD001F54B0 /* libSDL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2B5139235FD001F54B0 /* libSDL.a */; };
 		8A74F2B8139235FD001F54B0 /* libSDLmain.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2B6139235FD001F54B0 /* libSDLmain.a */; };
@@ -796,6 +798,7 @@
 		49E921C01394CE6000CCEBBC /* GZDoom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GZDoom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49E9242213951E5F00CCEBBC /* blob_src_1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_src_1.cpp; sourceTree = "<group>"; };
 		49E924681395222500CCEBBC /* blob_src_2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_src_2.cpp; sourceTree = "<group>"; };
+		49E9287713978BF600CCEBBC /* doom.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = doom.icns; sourceTree = "<group>"; };
 		8A74F2A1139235E0001F54B0 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		8A74F2B5139235FD001F54B0 /* libSDL.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL.a; path = thirdparty/SDL/lib/libSDL.a; sourceTree = "<group>"; };
 		8A74F2B6139235FD001F54B0 /* libSDLmain.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDLmain.a; path = thirdparty/SDL/lib/libSDLmain.a; sourceTree = "<group>"; };
@@ -1997,6 +2000,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				49E9287713978BF600CCEBBC /* doom.icns */,
 				8D1107310486CEB800E47090 /* GZDoom-Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
@@ -3764,6 +3768,7 @@
 			files = (
 				49E9203E1394CE6000CCEBBC /* InfoPlist.strings in Resources */,
 				49E9203F1394CE6000CCEBBC /* MainMenu.xib in Resources */,
+				49E9287813978BF600CCEBBC /* doom.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3773,6 +3778,7 @@
 			files = (
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
+				49E9287913978BF600CCEBBC /* doom.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
