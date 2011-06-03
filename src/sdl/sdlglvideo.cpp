@@ -318,6 +318,11 @@ SDLGLFB::SDLGLFB (void *, int width, int height, int, int, bool fullscreen)
 		return;
 
 	m_supportsGamma = -1 != SDL_GetGammaRamp(m_origGamma[0], m_origGamma[1], m_origGamma[2]);
+	
+#if defined(__APPLE__)
+	// Need to set title here because a window is not created yet when calling the same function from main()
+	SDL_WM_SetCaption( GAMESIG " " DOTVERSIONSTR " (" __DATE__ ")", NULL );
+#endif // __APPLE__
 }
 
 SDLGLFB::~SDLGLFB ()
