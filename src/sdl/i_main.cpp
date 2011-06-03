@@ -274,10 +274,6 @@ int main (int argc, char **argv)
 	
 	setlocale (LC_ALL, "C");
 
-#if defined (__APPLE__)
-	setenv( "SDL_ENABLEAPPEVENTS", "1", 1 );
-#endif // __APPLE__
-	
 	if (SDL_Init (SDL_INIT_VIDEO|SDL_INIT_TIMER|SDL_INIT_NOPARACHUTE|SDL_INIT_JOYSTICK) == -1)
 	{
 		fprintf (stderr, "Could not initialize SDL:\n%s\n", SDL_GetError());
