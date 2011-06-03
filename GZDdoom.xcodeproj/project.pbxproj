@@ -11,13 +11,25 @@
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 49E91DE11393BF6F00CCEBBC /* Build configuration list for PBXAggregateTarget "xlat_parser.y" */;
 			buildPhases = (
-				49E91DDD1393BF3900CCEBBC /* Generate xlat_parser */,
+				49E91DDD1393BF3900CCEBBC /* Generate xlat_parser.c|.h */,
 			);
 			dependencies = (
 				49E91DE31393BF8E00CCEBBC /* PBXTargetDependency */,
 			);
 			name = xlat_parser.y;
 			productName = "Compile ";
+		};
+		49E92B3213991F2900CCEBBC /* sc_man_scanner.re */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 49E92B3F13991F4C00CCEBBC /* Build configuration list for PBXAggregateTarget "sc_man_scanner.re" */;
+			buildPhases = (
+				49E92B3113991F2900CCEBBC /* Generate sc_man_scanner.h */,
+			);
+			dependencies = (
+				49E92B3613991F3900CCEBBC /* PBXTargetDependency */,
+			);
+			name = sc_man_scanner.re;
+			productName = sc_man_scanner.re;
 		};
 /* End PBXAggregateTarget section */
 
@@ -739,6 +751,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = 8AF27C1B1390F7E20095D9A0;
 			remoteInfo = gdtoa;
+		};
+		49E92B3513991F3900CCEBBC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8AF27A091390F2B50095D9A0 /* re2c */;
+			remoteInfo = re2c;
+		};
+		49E92B3713991F4900CCEBBC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 49E92B3213991F2900CCEBBC /* sc_man_scanner.re */;
+			remoteInfo = sc_man_scanner.re;
 		};
 		8AC81C35139131FE00F49DC3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3556,6 +3582,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				49E92B3813991F4900CCEBBC /* PBXTargetDependency */,
 				49E9202B1394CE6000CCEBBC /* PBXTargetDependency */,
 				49E9202D1394CE6000CCEBBC /* PBXTargetDependency */,
 				49E9202F1394CE6000CCEBBC /* PBXTargetDependency */,
@@ -3748,6 +3775,7 @@
 			targets = (
 				49E9202A1394CE6000CCEBBC /* GZDoom_BLOB */,
 				8D1107260486CEB800E47090 /* GZDoom */,
+				49E92B3213991F2900CCEBBC /* sc_man_scanner.re */,
 				49E91DDE1393BF3900CCEBBC /* xlat_parser.y */,
 				8AF279BB1390F2540095D9A0 /* lemon */,
 				8AF27A091390F2B50095D9A0 /* re2c */,
@@ -3785,7 +3813,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		49E91DDD1393BF3900CCEBBC /* Generate xlat_parser */ = {
+		49E91DDD1393BF3900CCEBBC /* Generate xlat_parser.c|.h */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3794,7 +3822,7 @@
 				"$(SRCROOT)/src/xlat/xlat_parser.y",
 				"$(SRCROOT)/tools/lemon/lempar.c",
 			);
-			name = "Generate xlat_parser";
+			name = "Generate xlat_parser.c|.h";
 			outputPaths = (
 				"$(SRCROOT)/src/xlat/xlat_parser.c",
 				"$(SRCROOT)/src/xlat/xlat_parser.h",
@@ -3831,6 +3859,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\nGZDOOM_EXEC_DIR=${CONFIGURATION_BUILD_DIR}/${EXECUTABLE_FOLDER_PATH}\n\nif [ ! -e \"${GZDOOM_EXEC_DIR}\" ]; then\n\tmkdir -p \"${GZDOOM_EXEC_DIR}\"\nfi\n\nif [ ! -e \"${GZDOOM_EXEC_DIR}/libfmodex.dylib\" ]; then\n\tln \"${SRCROOT}/thirdparty/FMOD/lib/libfmodex.dylib\" \"${GZDOOM_EXEC_DIR}\"\nfi\n\nif [ -e \"${GZDOOM_EXEC_DIR}/${EXECUTABLE_NAME}\" ]; then\n\tinstall_name_tool -change ./libfmodex.dylib @executable_path/libfmodex.dylib \"${GZDOOM_EXEC_DIR}/${EXECUTABLE_NAME}\"\nfi\n\nif [ -e \"${CONFIGURATION_BUILD_DIR}/zipdir\" ]; then\n\t\"${CONFIGURATION_BUILD_DIR}/zipdir\" -ud \"${GZDOOM_EXEC_DIR}/gzdoom.pk3\" \"${SRCROOT}/wadsrc/static\"\n\t\"${CONFIGURATION_BUILD_DIR}/zipdir\" -ud \"${GZDOOM_EXEC_DIR}/brightmaps.pk3\" \"${SRCROOT}/wadsrc_bm/static\"\n\t\"${CONFIGURATION_BUILD_DIR}/zipdir\" -ud \"${GZDOOM_EXEC_DIR}/lights.pk3\" \"${SRCROOT}/wadsrc_lights/static\"\nfi\n\nfor ITEM in \"${SRCROOT}\"/wads/*; do\n\tITEM_BASENAME=`basename \"${ITEM}\"`\n\t\n\tif [ ! -e \"${GZDOOM_EXEC_DIR}/${ITEM_BASENAME}\" ]; then\n\t\tln \"${ITEM}\" \"${GZDOOM_EXEC_DIR}/${ITEM_BASENAME}\"\n\tfi\ndone\n";
+		};
+		49E92B3113991F2900CCEBBC /* Generate sc_man_scanner.h */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/src/sc_man_scanner.re",
+			);
+			name = "Generate sc_man_scanner.h";
+			outputPaths = (
+				"$(SRCROOT)/src/sc_man_scanner.h",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\necho \"Generating sc_man_scanner.h...\"\n\ncd \"${SRCROOT}/src\"\n\"${CONFIGURATION_BUILD_DIR}/re2c\" --no-generation-date -s -o sc_man_scanner.h sc_man_scanner.re\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -4556,6 +4600,16 @@
 			target = 8AF27C1B1390F7E20095D9A0 /* gdtoa */;
 			targetProxy = 49E9203C1394CE6000CCEBBC /* PBXContainerItemProxy */;
 		};
+		49E92B3613991F3900CCEBBC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8AF27A091390F2B50095D9A0 /* re2c */;
+			targetProxy = 49E92B3513991F3900CCEBBC /* PBXContainerItemProxy */;
+		};
+		49E92B3813991F4900CCEBBC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 49E92B3213991F2900CCEBBC /* sc_man_scanner.re */;
+			targetProxy = 49E92B3713991F4900CCEBBC /* PBXContainerItemProxy */;
+		};
 		8AC81C36139131FE00F49DC3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 8AF27C1B1390F7E20095D9A0 /* gdtoa */;
@@ -4703,6 +4757,27 @@
 					thirdparty/SDL/lib,
 				);
 				PRODUCT_NAME = GZDoom;
+			};
+			name = Release;
+		};
+		49E92B3313991F2900CCEBBC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = sc_man_scanner.re;
+			};
+			name = Debug;
+		};
+		49E92B3413991F2900CCEBBC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = sc_man_scanner.re;
+				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
@@ -5084,6 +5159,15 @@
 			buildConfigurations = (
 				49E921BE1394CE6000CCEBBC /* Debug */,
 				49E921BF1394CE6000CCEBBC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		49E92B3F13991F4C00CCEBBC /* Build configuration list for PBXAggregateTarget "sc_man_scanner.re" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				49E92B3313991F2900CCEBBC /* Debug */,
+				49E92B3413991F2900CCEBBC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
