@@ -84,12 +84,7 @@ EXTERN_CVAR (Float, Gamma)
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
-#if defined (__APPLE__)
-// Mac OS X version will crash when entering fullscreen mode with BPP != 32
-CVAR (Int, vid_displaybits, 32, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
-#else // !__APPLE__
 CVAR (Int, vid_displaybits, 8, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
-#endif // __APPLE__
 
 CUSTOM_CVAR (Float, rgamma, 1.f, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 {

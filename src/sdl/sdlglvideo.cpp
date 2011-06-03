@@ -299,7 +299,18 @@ SDLGLFB::SDLGLFB (void *, int width, int height, int, int, bool fullscreen)
 		return;
 	}
 
-	Screen = SDL_SetVideoMode (width, height, vid_displaybits,
+#if defined(__APPLE__)
+
+	// Mac OS X version will crash when entering fullscreen mode with BPP <= 8
+	const int bpp = fullscreen && vid_displaybits <= 8
+		? 16
+		: vid_displaybits;
+	
+#else // ! __APPLE__
+	const int bpp = vid_displaybits;
+#endif // __APPLE__
+
+	Screen = SDL_SetVideoMode (width, height, bpp,
 		SDL_HWSURFACE|SDL_HWPALETTE|SDL_OPENGL | SDL_GL_DOUBLEBUFFER|SDL_ANYFORMAT|
 		(fullscreen ? SDL_FULLSCREEN : 0));
 
