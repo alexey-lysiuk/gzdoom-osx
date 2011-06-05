@@ -1,0 +1,18 @@
+#!/bin/sh
+
+cd `dirname $0`/..
+
+DEPLOY_IMAGE_DIR=.deploy_image
+
+rm -r ${DEPLOY_IMAGE_DIR} 2>/dev/null
+mkdir ${DEPLOY_IMAGE_DIR}
+
+echo "Copying game..."
+cp -R build/Release/GZDoom.app ${DEPLOY_IMAGE_DIR}
+
+echo "Copying documentation..."
+mkdir ${DEPLOY_IMAGE_DIR}/Documentation
+cp -R docs/ ${DEPLOY_IMAGE_DIR}/Documentation
+
+echo "Building image..."
+hdiutil create -srcfolder ${DEPLOY_IMAGE_DIR} -volname GZDoom ${DEPLOY_IMAGE_DIR}/GZDoom.dmg

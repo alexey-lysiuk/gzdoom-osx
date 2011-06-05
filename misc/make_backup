@@ -1,4 +1,3 @@
 #!/bin/sh
 cd `dirname $0`/../..
-#tar -cvj --exclude GZDoom/build/\* GZDoom > gzdoom_macosx.tar.bz2
-zip -9rv GZDoom-MacOSX-`date "+%Y_%m_%d_%H_%M_%S"` GZDoom -x GZDoom/build/\*
+zip -9rv GZDoom-MacOSX-`date "+%Y_%m_%d_%H_%M_%S"` GZDoom -x GZDoom/build/\* -x GZDoom/.deploy_image/\*
