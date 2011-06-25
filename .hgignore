@@ -7,3 +7,4 @@ src/xlat/xlat_parser\.c
 src/xlat/xlat_parser\.h
 src/xlat/xlat_parser\.out
 src/sc_man_scanner\.h
+.deploy_image
