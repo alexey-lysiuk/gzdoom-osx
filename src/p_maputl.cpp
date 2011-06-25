@@ -725,14 +725,11 @@ line_t *FBlockLinesIterator::Next()
 			{
 				line_t *ld = &lines[*list];
 
+				list++;
 				if (ld->validcount != validcount)
 				{
 					ld->validcount = validcount;
 					return ld;
-				}
-				else
-				{
-					list++;
 				}
 			}
 		}

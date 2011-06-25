@@ -227,8 +227,12 @@ void AActor::Serialize (FArchive &arc)
 		<< velz
 		<< tics
 		<< state
-		<< Damage
-		<< flags
+		<< Damage;
+	if (SaveVersion >= 3227)
+	{
+		arc << projectileKickback;
+	}
+	arc	<< flags
 		<< flags2
 		<< flags3
 		<< flags4
@@ -290,8 +294,14 @@ void AActor::Serialize (FArchive &arc)
 		<< maxtargetrange
 		<< meleethreshold
 		<< meleerange
-		<< DamageType
-		<< gravity
+		<< DamageType;
+	if (SaveVersion >= 3237) 
+	{
+		arc
+		<< PainType
+		<< DeathType;
+	}
+	arc	<< gravity
 		<< FastChaseStrafeCount
 		<< master
 		<< smokecounter
@@ -309,8 +319,12 @@ void AActor::Serialize (FArchive &arc)
 		<< DamageFactor
 		<< WeaveIndexXY << WeaveIndexZ
 		<< PoisonDamageReceived << PoisonDurationReceived << PoisonPeriodReceived << Poisoner
-		<< PoisonDamage << PoisonDuration << PoisonPeriod
-		<< ConversationRoot << Conversation;
+		<< PoisonDamage << PoisonDuration << PoisonPeriod;
+	if (SaveVersion >= 3235)
+	{
+		arc << PoisonDamageType << PoisonDamageTypeReceived;
+	}
+	arc << ConversationRoot << Conversation;
 
 	{
 		FString tagstr;
@@ -2668,7 +2682,7 @@ bool AActor::IsOkayToAttack (AActor *link)
 	if (P_CheckSight (this, link))
 	{
 		// AMageStaffFX2::IsOkayToAttack had an extra check here, generalized with a flag,
-		// to only allow the check to succeed if the enemy was in a ~84ï¾° FOV of the player
+		// to only allow the check to succeed if the enemy was in a ~84° FOV of the player
 		if (flags3 & MF3_SCREENSEEKER)
 		{
 			angle_t angle = R_PointToAngle2(Friend->x, 
@@ -3227,7 +3241,7 @@ void AActor::Tick ()
 		// Check for poison damage, but only once per PoisonPeriod tics (or once per second if none).
 		if (PoisonDurationReceived && (level.time % (PoisonPeriodReceived ? PoisonPeriodReceived : TICRATE) == 0))
 		{
-			P_DamageMobj(this, NULL, Poisoner, PoisonDamageReceived, NAME_Poison, 0);
+			P_DamageMobj(this, NULL, Poisoner, PoisonDamageReceived, PoisonDamageTypeReceived ? PoisonDamageTypeReceived : (FName)NAME_Poison, 0);
 
 			--PoisonDurationReceived;
 
@@ -4417,6 +4431,10 @@ AActor *P_SpawnPuff (AActor *source, const PClass *pufftype, fixed_t x, fixed_t 
 	{
 		puff->SetState (crashstate);
 	}
+	else if ((flags & PF_HITTHINGBLEED) && (crashstate = puff->FindState(NAME_Death, NAME_Extreme, true)) != NULL)
+	{
+		puff->SetState (crashstate);
+	}
 	else if ((flags & PF_MELEERANGE) && puff->MeleeState != NULL)
 	{
 		// handle the hard coded state jump of Doom's bullet puff
@@ -5462,6 +5480,10 @@ int AActor::TakeSpecialDamage (AActor *inflictor, AActor *source, int damage, FN
 	{
 		return damage;
 	}
+	
+	if (inflictor && inflictor->DeathType != NAME_None)
+		damagetype = inflictor->DeathType;
+
 	if (damagetype == NAME_Ice)
 	{
 		death = FindState (NAME_Death, NAME_Ice, true);
@@ -5514,7 +5536,7 @@ void AActor::Crash()
 		// so this code doesn't have to be executed repeatedly.
 		flags3 |= MF3_CRASHED;
 	}
-}
+	}
 }
 
 void AActor::SetIdle()

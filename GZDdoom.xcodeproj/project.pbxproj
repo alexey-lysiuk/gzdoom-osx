@@ -75,6 +75,7 @@
 		8A74F38F13925284001F54B0 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F38E13925284001F54B0 /* IOKit.framework */; };
 		8A74F451139252F9001F54B0 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F450139252F9001F54B0 /* AudioUnit.framework */; };
 		8A74F4671392532C001F54B0 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F4661392532C001F54B0 /* Carbon.framework */; };
+		8A938D1113B6039F002627DE /* actorptrselect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A938D0F13B6039F002627DE /* actorptrselect.cpp */; };
 		8AC81C411391321300F49DC3 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF278CA1390F0370095D9A0 /* libjpeg.a */; };
 		8AC81C421391321300F49DC3 /* liblzma.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF2795A1390F1200095D9A0 /* liblzma.a */; };
 		8AC81C431391321300F49DC3 /* libgme.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27A541390F4F40095D9A0 /* libgme.a */; };
@@ -756,14 +757,14 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 8AF27A091390F2B50095D9A0 /* re2c */;
+			remoteGlobalIDString = 8AF27A091390F2B50095D9A0;
 			remoteInfo = re2c;
 		};
 		49E92B3713991F4900CCEBBC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 49E92B3213991F2900CCEBBC /* sc_man_scanner.re */;
+			remoteGlobalIDString = 49E92B3213991F2900CCEBBC;
 			remoteInfo = sc_man_scanner.re;
 		};
 		8AC81C35139131FE00F49DC3 /* PBXContainerItemProxy */ = {
@@ -832,6 +833,8 @@
 		8A74F38E13925284001F54B0 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		8A74F450139252F9001F54B0 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		8A74F4661392532C001F54B0 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
+		8A938D0F13B6039F002627DE /* actorptrselect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = actorptrselect.cpp; sourceTree = "<group>"; };
+		8A938D1013B6039F002627DE /* actorptrselect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = actorptrselect.h; sourceTree = "<group>"; };
 		8AF278CA1390F0370095D9A0 /* libjpeg.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libjpeg.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AF2790B1390F0880095D9A0 /* jcomapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = jcomapi.c; sourceTree = "<group>"; };
 		8AF2790C1390F0880095D9A0 /* jconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jconfig.h; sourceTree = "<group>"; };
@@ -2595,6 +2598,8 @@
 				8AF28002139126C00095D9A0 /* xlat */,
 				8AF27CFD139126C00095D9A0 /* actionspecials.h */,
 				8AF27CFE139126C00095D9A0 /* actor.h */,
+				8A938D0F13B6039F002627DE /* actorptrselect.cpp */,
+				8A938D1013B6039F002627DE /* actorptrselect.h */,
 				8AF27CFF139126C00095D9A0 /* am_map.cpp */,
 				8AF27D00139126C00095D9A0 /* am_map.h */,
 				8AF27D01139126C00095D9A0 /* announcer.h */,
@@ -4524,6 +4529,7 @@
 				8AF281F2139126C10095D9A0 /* zstrformat.cpp in Sources */,
 				8AF281F3139126C10095D9A0 /* zstring.cpp in Sources */,
 				8AF28013139126C00095D9A0 /* autozend.cpp in Sources */,
+				8A938D1113B6039F002627DE /* actorptrselect.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

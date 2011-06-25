@@ -1,4 +1,5 @@
 
+#include "actorptrselect.cpp"
 #include "am_map.cpp"
 #include "b_bot.cpp"
 #include "b_func.cpp"
