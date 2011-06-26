@@ -4700,6 +4700,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
 					"NO_GTK=1",
 					"NEED_STRUPR=1",
 					"stricmp=strcasecmp",
@@ -4737,6 +4738,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
 					"NO_GTK=1",
 					"NEED_STRUPR=1",
 					"stricmp=strcasecmp",
@@ -4886,7 +4888,10 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = HAVE_CONFIG_H;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					HAVE_CONFIG_H,
+				);
 				INSTALL_PATH = /usr/local/bin;
 				PREBINDING = NO;
 				PRODUCT_NAME = re2c;
@@ -4901,7 +4906,10 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
-				GCC_PREPROCESSOR_DEFINITIONS = HAVE_CONFIG_H;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					HAVE_CONFIG_H,
+				);
 				INSTALL_PATH = /usr/local/bin;
 				PREBINDING = NO;
 				PRODUCT_NAME = re2c;
@@ -4979,7 +4987,10 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = NEED_ITOA;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					NEED_ITOA,
+				);
 				HEADER_SEARCH_PATHS = dumb/include;
 				INSTALL_PATH = /usr/local/lib;
 				PREBINDING = NO;
@@ -4996,7 +5007,10 @@
 				GCC_C_LANGUAGE_STANDARD = gnu89;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
-				GCC_PREPROCESSOR_DEFINITIONS = NEED_ITOA;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					NEED_ITOA,
+				);
 				HEADER_SEARCH_PATHS = dumb/include;
 				INSTALL_PATH = /usr/local/lib;
 				PREBINDING = NO;
@@ -5121,6 +5135,10 @@
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					DEBUG,
+					_DEBUG,
+				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -5138,6 +5156,7 @@
 					x86_64,
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				PREBINDING = NO;
