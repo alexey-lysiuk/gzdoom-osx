@@ -65,10 +65,8 @@
 #include <fcntl.h>
 
 #if defined(__APPLE__)
-//#include <OpenGL/gl.h>
-//#include <OpenGL/glu.h>
-//#include <OpenGL/glext.h>
 #include <GL/glew.h>
+#include <OpenGL/OpenGL.h>
 #else // !__APPLE__
 #include <GL/gl.h>
 #include <GL/glu.h>

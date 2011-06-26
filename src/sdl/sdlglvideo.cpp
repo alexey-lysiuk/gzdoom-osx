@@ -403,6 +403,14 @@ bool SDLGLFB::IsValid ()
 	return DFrameBuffer::IsValid() && Screen != NULL;
 }
 
+void SDLGLFB::SetVSync( bool vsync )
+{
+#if defined (__APPLE__)
+	const GLint value = vsync ? 1 : 0;
+	CGLSetParameter( CGLGetCurrentContext(), kCGLCPSwapInterval, &value );
+#endif
+}
+
 void SDLGLFB::NewRefreshRate ()
 {
 }
