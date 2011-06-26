@@ -150,3 +150,5 @@ DEFINE_ACTION_FUNCTION(AActor, A_SkelFist)
 		P_TraceBleed (damage, self->target, self);
 	}
 }
+
+#undef TRACEANGLE

@@ -509,3 +509,6 @@ void FNodeBuilder::PushConnectingGLSeg (int subsector, TArray<glseg_t> &segs, ve
 	newseg.Partner = DWORD_MAX;
 	segs.Push (newseg);
 }
+
+#undef D
+#undef DD
