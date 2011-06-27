@@ -4713,6 +4713,18 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					src,
+					src/g_doom,
+					src/g_heretic,
+					src/g_hexen,
+					src/g_raven,
+					src/g_shared,
+					src/g_strife,
+					src/Linux,
+					src/sdl,
+					src/sound,
+					src/textures,
+					"game-music-emu/gme",
+					gdtoa,
 					lzma/C,
 					"jpeg-6b",
 					thirdparty/FMOD/inc,
@@ -4751,6 +4763,18 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					src,
+					src/g_doom,
+					src/g_heretic,
+					src/g_hexen,
+					src/g_raven,
+					src/g_shared,
+					src/g_strife,
+					src/Linux,
+					src/sdl,
+					src/sound,
+					src/textures,
+					"game-music-emu/gme",
+					gdtoa,
 					lzma/C,
 					"jpeg-6b",
 					thirdparty/FMOD/inc,
@@ -4926,6 +4950,7 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = lzma/C;
 				INSTALL_PATH = /usr/local/bin;
 				PREBINDING = NO;
 				PRODUCT_NAME = zipdir;
@@ -4940,6 +4965,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = lzma/C;
 				INSTALL_PATH = /usr/local/bin;
 				PREBINDING = NO;
 				PRODUCT_NAME = zipdir;
@@ -5072,6 +5098,18 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					src,
+					src/g_doom,
+					src/g_heretic,
+					src/g_hexen,
+					src/g_raven,
+					src/g_shared,
+					src/g_strife,
+					src/Linux,
+					src/sdl,
+					src/sound,
+					src/textures,
+					"game-music-emu/gme",
+					gdtoa,
 					lzma/C,
 					"jpeg-6b",
 					thirdparty/FMOD/inc,
@@ -5109,6 +5147,18 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					src,
+					src/g_doom,
+					src/g_heretic,
+					src/g_hexen,
+					src/g_raven,
+					src/g_shared,
+					src/g_strife,
+					src/Linux,
+					src/sdl,
+					src/sound,
+					src/textures,
+					"game-music-emu/gme",
+					gdtoa,
 					lzma/C,
 					"jpeg-6b",
 					thirdparty/FMOD/inc,
@@ -5144,6 +5194,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				SDKROOT = macosx10.5;
+				USE_HEADERMAP = NO;
 				VALID_ARCHS = "i386 x86_64";
 			};
 			name = Debug;
@@ -5161,6 +5212,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				PREBINDING = NO;
 				SDKROOT = macosx10.5;
+				USE_HEADERMAP = NO;
 				VALID_ARCHS = "i386 x86_64";
 			};
 			name = Release;
