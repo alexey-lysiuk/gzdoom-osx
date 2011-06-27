@@ -302,14 +302,16 @@ SDLGLFB::SDLGLFB (void *, int width, int height, int, int, bool fullscreen)
 #if defined(__APPLE__)
 
 	// Mac OS X version will crash when entering fullscreen mode with BPP <= 8
-	const int bpp = fullscreen && vid_displaybits <= 8
-		? 16
-		: vid_displaybits;
+	// Also it may crash with BPP == 16 on some configurations
+	// It seems 24 and 32 bits are safe values
+	// So value of vid_displaybits is ignored and hardcoded constant is used instead
 	
+	const int bpp = 32;
+
 #else // ! __APPLE__
 	const int bpp = vid_displaybits;
 #endif // __APPLE__
-
+	
 	Screen = SDL_SetVideoMode (width, height, bpp,
 		SDL_HWSURFACE|SDL_HWPALETTE|SDL_OPENGL | SDL_GL_DOUBLEBUFFER|SDL_ANYFORMAT|
 		(fullscreen ? SDL_FULLSCREEN : 0));

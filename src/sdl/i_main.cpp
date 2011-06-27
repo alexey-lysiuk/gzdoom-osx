@@ -282,6 +282,24 @@ int main (int argc, char **argv)
 	atterm (SDL_Quit);
 
 	SDL_WM_SetCaption (GAMESIG " " DOTVERSIONSTR " (" __DATE__ ")", NULL);
+
+#ifdef __APPLE__
+	
+	const SDL_VideoInfo* videoInfo = SDL_GetVideoInfo();
+	if ( NULL != videoInfo )
+	{
+		EXTERN_CVAR(  Int, vid_defwidth  )
+		EXTERN_CVAR(  Int, vid_defheight )
+		EXTERN_CVAR(  Int, vid_defbits   )
+		EXTERN_CVAR( Bool, fullscreen    )
+		
+		vid_defwidth  = videoInfo->current_w;
+		vid_defheight = videoInfo->current_h;
+		vid_defbits   = videoInfo->vfmt->BitsPerPixel;
+		fullscreen    = True;
+	}
+	
+#endif // __APPLE__
 	
     try
     {
