@@ -291,11 +291,13 @@ int main (int argc, char **argv)
 		EXTERN_CVAR(  Int, vid_defwidth  )
 		EXTERN_CVAR(  Int, vid_defheight )
 		EXTERN_CVAR(  Int, vid_defbits   )
+		EXTERN_CVAR( Bool, vid_vsync     )
 		EXTERN_CVAR( Bool, fullscreen    )
 		
 		vid_defwidth  = videoInfo->current_w;
 		vid_defheight = videoInfo->current_h;
 		vid_defbits   = videoInfo->vfmt->BitsPerPixel;
+		vid_vsync     = True;
 		fullscreen    = True;
 	}
 	
