@@ -826,6 +826,7 @@
 		49E9242213951E5F00CCEBBC /* blob_src_1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_src_1.cpp; sourceTree = "<group>"; };
 		49E924681395222500CCEBBC /* blob_src_2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_src_2.cpp; sourceTree = "<group>"; };
 		49E9287713978BF600CCEBBC /* doom.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = doom.icns; sourceTree = "<group>"; };
+		8A44602813BF0306007FA8E1 /* gzdoom_sdl.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = gzdoom_sdl.xcconfig; sourceTree = "<group>"; };
 		8A74F2A1139235E0001F54B0 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		8A74F2B5139235FD001F54B0 /* libSDL.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL.a; path = thirdparty/SDL/lib/libSDL.a; sourceTree = "<group>"; };
 		8A74F2B6139235FD001F54B0 /* libSDLmain.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDLmain.a; path = thirdparty/SDL/lib/libSDLmain.a; sourceTree = "<group>"; };
@@ -1994,6 +1995,7 @@
 				8AF2790A1390F0880095D9A0 /* jpeg-6b */,
 				8AF2795F1390F1410095D9A0 /* lzma */,
 				8AF279C01390F26E0095D9A0 /* tools */,
+				8A44602813BF0306007FA8E1 /* gzdoom_sdl.xcconfig */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -4691,103 +4693,18 @@
 		};
 		49E921BE1394CE6000CCEBBC /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8A44602813BF0306007FA8E1 /* gzdoom_sdl.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"NO_GTK=1",
-					"NEED_STRUPR=1",
-					"stricmp=strcasecmp",
-					"strnicmp=strncasecmp",
-					"__forceinline=inline",
-					NO_CLOCK_GETTIME,
-					DISABLE_SSE,
-					NOASM,
-				);
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					src,
-					src/g_doom,
-					src/g_heretic,
-					src/g_hexen,
-					src/g_raven,
-					src/g_shared,
-					src/g_strife,
-					src/Linux,
-					src/sdl,
-					src/sound,
-					src/textures,
-					"game-music-emu/gme",
-					gdtoa,
-					lzma/C,
-					"jpeg-6b",
-					thirdparty/FMOD/inc,
-					thirdparty/SDL/include,
-					thirdparty/glew/include,
-				);
 				INFOPLIST_FILE = "GZDoom-Info.plist";
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					thirdparty/FMOD/lib,
-					thirdparty/SDL/lib,
-				);
 				PRODUCT_NAME = GZDoom;
 			};
 			name = Debug;
 		};
 		49E921BF1394CE6000CCEBBC /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8A44602813BF0306007FA8E1 /* gzdoom_sdl.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"NO_GTK=1",
-					"NEED_STRUPR=1",
-					"stricmp=strcasecmp",
-					"strnicmp=strncasecmp",
-					"__forceinline=inline",
-					NO_CLOCK_GETTIME,
-					DISABLE_SSE,
-					NOASM,
-				);
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					src,
-					src/g_doom,
-					src/g_heretic,
-					src/g_hexen,
-					src/g_raven,
-					src/g_shared,
-					src/g_strife,
-					src/Linux,
-					src/sdl,
-					src/sound,
-					src/textures,
-					"game-music-emu/gme",
-					gdtoa,
-					lzma/C,
-					"jpeg-6b",
-					thirdparty/FMOD/inc,
-					thirdparty/SDL/include,
-					thirdparty/glew/include,
-				);
 				INFOPLIST_FILE = "GZDoom-Info.plist";
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					thirdparty/FMOD/lib,
-					thirdparty/SDL/lib,
-				);
 				PRODUCT_NAME = GZDoom;
 			};
 			name = Release;
@@ -4816,14 +4733,6 @@
 		8AF278CB1390F0370095D9A0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
 				PRODUCT_NAME = jpeg;
 			};
 			name = Debug;
@@ -4831,29 +4740,13 @@
 		8AF278CC1390F0370095D9A0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
 				PRODUCT_NAME = jpeg;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		8AF2795B1390F1210095D9A0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
 				PRODUCT_NAME = lzma;
 			};
 			name = Debug;
@@ -4861,29 +4754,13 @@
 		8AF2795C1390F1210095D9A0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
 				PRODUCT_NAME = lzma;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		8AF279BE1390F2540095D9A0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				INSTALL_PATH = /usr/local/bin;
-				PREBINDING = NO;
 				PRODUCT_NAME = lemon;
 			};
 			name = Debug;
@@ -4891,33 +4768,17 @@
 		8AF279BF1390F2540095D9A0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = /usr/local/bin;
-				PREBINDING = NO;
 				PRODUCT_NAME = lemon;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		8AF27A0C1390F2B50095D9A0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					HAVE_CONFIG_H,
 				);
-				INSTALL_PATH = /usr/local/bin;
-				PREBINDING = NO;
 				PRODUCT_NAME = re2c;
 			};
 			name = Debug;
@@ -4925,34 +4786,18 @@
 		8AF27A0D1390F2B50095D9A0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					HAVE_CONFIG_H,
 				);
-				INSTALL_PATH = /usr/local/bin;
-				PREBINDING = NO;
 				PRODUCT_NAME = re2c;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		8AF27A331390F4200095D9A0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				HEADER_SEARCH_PATHS = lzma/C;
-				INSTALL_PATH = /usr/local/bin;
-				PREBINDING = NO;
 				PRODUCT_NAME = zipdir;
 			};
 			name = Debug;
@@ -4960,30 +4805,14 @@
 		8AF27A341390F4200095D9A0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
 				HEADER_SEARCH_PATHS = lzma/C;
-				INSTALL_PATH = /usr/local/bin;
-				PREBINDING = NO;
 				PRODUCT_NAME = zipdir;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		8AF27A551390F4F50095D9A0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
 				PRODUCT_NAME = gme;
 			};
 			name = Debug;
@@ -4991,35 +4820,19 @@
 		8AF27A561390F4F50095D9A0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
 				PRODUCT_NAME = gme;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		8AF27B261390F5DD0095D9A0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu89;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					NEED_ITOA,
 				);
 				HEADER_SEARCH_PATHS = dumb/include;
-				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
 				PRODUCT_NAME = dumb;
 			};
 			name = Debug;
@@ -5027,35 +4840,19 @@
 		8AF27B271390F5DD0095D9A0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_C_LANGUAGE_STANDARD = gnu89;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					NEED_ITOA,
 				);
 				HEADER_SEARCH_PATHS = dumb/include;
-				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
 				PRODUCT_NAME = dumb;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		8AF27C1D1390F7E30095D9A0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
 				PRODUCT_NAME = gdtoa;
 			};
 			name = Debug;
@@ -5063,115 +4860,24 @@
 		8AF27C1E1390F7E30095D9A0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
 				PRODUCT_NAME = gdtoa;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8A44602813BF0306007FA8E1 /* gzdoom_sdl.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"NO_GTK=1",
-					"NEED_STRUPR=1",
-					"stricmp=strcasecmp",
-					"strnicmp=strncasecmp",
-					"__forceinline=inline",
-					NO_CLOCK_GETTIME,
-					DISABLE_SSE,
-					NOASM,
-				);
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					src,
-					src/g_doom,
-					src/g_heretic,
-					src/g_hexen,
-					src/g_raven,
-					src/g_shared,
-					src/g_strife,
-					src/Linux,
-					src/sdl,
-					src/sound,
-					src/textures,
-					"game-music-emu/gme",
-					gdtoa,
-					lzma/C,
-					"jpeg-6b",
-					thirdparty/FMOD/inc,
-					thirdparty/SDL/include,
-					thirdparty/glew/include,
-				);
 				INFOPLIST_FILE = "GZDoom-Info.plist";
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					thirdparty/FMOD/lib,
-					thirdparty/SDL/lib,
-				);
 				PRODUCT_NAME = GZDoom;
 			};
 			name = Debug;
 		};
 		C01FCF4C08A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8A44602813BF0306007FA8E1 /* gzdoom_sdl.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"NO_GTK=1",
-					"NEED_STRUPR=1",
-					"stricmp=strcasecmp",
-					"strnicmp=strncasecmp",
-					"__forceinline=inline",
-					NO_CLOCK_GETTIME,
-					DISABLE_SSE,
-					NOASM,
-				);
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					src,
-					src/g_doom,
-					src/g_heretic,
-					src/g_hexen,
-					src/g_raven,
-					src/g_shared,
-					src/g_strife,
-					src/Linux,
-					src/sdl,
-					src/sound,
-					src/textures,
-					"game-music-emu/gme",
-					gdtoa,
-					lzma/C,
-					"jpeg-6b",
-					thirdparty/FMOD/inc,
-					thirdparty/SDL/include,
-					thirdparty/glew/include,
-				);
 				INFOPLIST_FILE = "GZDoom-Info.plist";
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					thirdparty/FMOD/lib,
-					thirdparty/SDL/lib,
-				);
 				PRODUCT_NAME = GZDoom;
 			};
 			name = Release;
@@ -5179,11 +4885,14 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = (
 					i386,
 					x86_64,
 				);
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_MODEL_TUNING = "";
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					DEBUG,
@@ -5192,7 +4901,6 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PREBINDING = NO;
 				SDKROOT = macosx10.5;
 				USE_HEADERMAP = NO;
 				VALID_ARCHS = "i386 x86_64";
@@ -5202,16 +4910,18 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = (
 					i386,
 					x86_64,
 				);
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_MODEL_TUNING = "";
 				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PREBINDING = NO;
 				SDKROOT = macosx10.5;
 				USE_HEADERMAP = NO;
 				VALID_ARCHS = "i386 x86_64";
