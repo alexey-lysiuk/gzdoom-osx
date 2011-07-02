@@ -60,7 +60,3 @@
 #include "gl/utility/gl_clock.cpp"
 #include "gl/utility/gl_cycler.cpp"
 #include "gl/utility/gl_geometric.cpp"
-
-#if defined (unix) || defined (__APPLE__)
-#include "sdl/sdlglvideo.cpp"
-#endif
