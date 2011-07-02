@@ -54,7 +54,6 @@
 		49E921B81394CE6000CCEBBC /* libgdtoa.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27C1C1390F7E20095D9A0 /* libgdtoa.a */; };
 		49E921B91394CE6000CCEBBC /* libfmodex.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2B91392360F001F54B0 /* libfmodex.dylib */; };
 		49E921BA1394CE6000CCEBBC /* libSDL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2B5139235FD001F54B0 /* libSDL.a */; };
-		49E921BB1394CE6000CCEBBC /* libSDLmain.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2B6139235FD001F54B0 /* libSDLmain.a */; };
 		49E921C31394CEAC00CCEBBC /* blob_fragglescript.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E920091394C83300CCEBBC /* blob_fragglescript.cpp */; };
 		49E921C41394CEAC00CCEBBC /* blob_games.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E920121394C8AA00CCEBBC /* blob_games.cpp */; };
 		49E921C51394CEAD00CCEBBC /* blob_menu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E920191394CC3700CCEBBC /* blob_menu.cpp */; };
@@ -65,16 +64,16 @@
 		49E9242313951E5F00CCEBBC /* blob_src_1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E9242213951E5F00CCEBBC /* blob_src_1.cpp */; };
 		49E924691395222500CCEBBC /* blob_src_2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E924681395222500CCEBBC /* blob_src_2.cpp */; };
 		49E92496139523FB00CCEBBC /* c_expr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D20139126C00095D9A0 /* c_expr.cpp */; };
-		49E925D213953E9400CCEBBC /* i_main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F36139126C00095D9A0 /* i_main.cpp */; };
 		49E9287813978BF600CCEBBC /* doom.icns in Resources */ = {isa = PBXBuildFile; fileRef = 49E9287713978BF600CCEBBC /* doom.icns */; };
 		49E9287913978BF600CCEBBC /* doom.icns in Resources */ = {isa = PBXBuildFile; fileRef = 49E9287713978BF600CCEBBC /* doom.icns */; };
 		8A74F2A2139235E0001F54B0 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2A1139235E0001F54B0 /* OpenGL.framework */; };
 		8A74F2B7139235FD001F54B0 /* libSDL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2B5139235FD001F54B0 /* libSDL.a */; };
-		8A74F2B8139235FD001F54B0 /* libSDLmain.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2B6139235FD001F54B0 /* libSDLmain.a */; };
 		8A74F2BA1392360F001F54B0 /* libfmodex.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2B91392360F001F54B0 /* libfmodex.dylib */; };
 		8A74F38F13925284001F54B0 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F38E13925284001F54B0 /* IOKit.framework */; };
 		8A74F451139252F9001F54B0 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F450139252F9001F54B0 /* AudioUnit.framework */; };
 		8A74F4671392532C001F54B0 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F4661392532C001F54B0 /* Carbon.framework */; };
+		8A7C81C613BF3C0B000B654E /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3E139126C00095D9A0 /* SDLMain.m */; };
+		8A7C81C713BF3C5A000B654E /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3E139126C00095D9A0 /* SDLMain.m */; };
 		8A938D1113B6039F002627DE /* actorptrselect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A938D0F13B6039F002627DE /* actorptrselect.cpp */; };
 		8AC81C411391321300F49DC3 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF278CA1390F0370095D9A0 /* libjpeg.a */; };
 		8AC81C421391321300F49DC3 /* liblzma.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF2795A1390F1200095D9A0 /* liblzma.a */; };
@@ -1933,7 +1932,6 @@
 				49E921B81394CE6000CCEBBC /* libgdtoa.a in Frameworks */,
 				49E921B91394CE6000CCEBBC /* libfmodex.dylib in Frameworks */,
 				49E921BA1394CE6000CCEBBC /* libSDL.a in Frameworks */,
-				49E921BB1394CE6000CCEBBC /* libSDLmain.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1979,7 +1977,6 @@
 				8AC81C451391321300F49DC3 /* libgdtoa.a in Frameworks */,
 				8A74F2BA1392360F001F54B0 /* libfmodex.dylib in Frameworks */,
 				8A74F2B7139235FD001F54B0 /* libSDL.a in Frameworks */,
-				8A74F2B8139235FD001F54B0 /* libSDLmain.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3903,7 +3900,7 @@
 				49E9242313951E5F00CCEBBC /* blob_src_1.cpp in Sources */,
 				49E924691395222500CCEBBC /* blob_src_2.cpp in Sources */,
 				49E92496139523FB00CCEBBC /* c_expr.cpp in Sources */,
-				49E925D213953E9400CCEBBC /* i_main.cpp in Sources */,
+				8A7C81C713BF3C5A000B654E /* SDLMain.m in Sources */,
 				49E921521394CE6000CCEBBC /* iwadpicker_cocoa.mm in Sources */,
 				49E921A71394CE6000CCEBBC /* autozend.cpp in Sources */,
 			);
@@ -4447,7 +4444,6 @@
 				8AF28172139126C10095D9A0 /* i_main.cpp in Sources */,
 				8AF28173139126C10095D9A0 /* i_movie.cpp in Sources */,
 				8AF28174139126C10095D9A0 /* i_system.cpp in Sources */,
-				8AF28175139126C10095D9A0 /* iwadpicker_cocoa.mm in Sources */,
 				8AF28176139126C10095D9A0 /* sdlglvideo.cpp in Sources */,
 				8AF28178139126C10095D9A0 /* sdlvideo.cpp in Sources */,
 				8AF28179139126C10095D9A0 /* st_start.cpp in Sources */,
@@ -4532,8 +4528,10 @@
 				8AF281F0139126C10095D9A0 /* parse_xlat.cpp in Sources */,
 				8AF281F2139126C10095D9A0 /* zstrformat.cpp in Sources */,
 				8AF281F3139126C10095D9A0 /* zstring.cpp in Sources */,
-				8AF28013139126C00095D9A0 /* autozend.cpp in Sources */,
 				8A938D1113B6039F002627DE /* actorptrselect.cpp in Sources */,
+				8AF28175139126C10095D9A0 /* iwadpicker_cocoa.mm in Sources */,
+				8A7C81C613BF3C0B000B654E /* SDLMain.m in Sources */,
+				8AF28013139126C00095D9A0 /* autozend.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
