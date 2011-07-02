@@ -16,7 +16,7 @@ class OpenGLFrameBuffer : public Win32GLFrameBuffer
 	typedef Win32GLFrameBuffer Super;
 	DECLARE_CLASS(OpenGLFrameBuffer, Win32GLFrameBuffer)
 #else
-#include "sdlglvideo.h"
+#include "qtvideo.h"
 class OpenGLFrameBuffer : public SDLGLFB
 {
 //	typedef SDLGLFB Super;	//[C]commented, DECLARE_CLASS defines this in linux
