@@ -1,34 +1,35 @@
-#ifndef __SDLGLVIDEO_H__
-#define __SDLGLVIDEO_H__
+
+#ifndef SRC_QT_QTVIDEO_H_INCLUDED
+#define SRC_QT_QTVIDEO_H_INCLUDED
 
 #include "hardware.h"
 #include "v_video.h"
-#include <SDL.h>
 #include "gl/system/gl_system.h"
 
 EXTERN_CVAR (Float, dimamount)
 EXTERN_CVAR (Color, dimcolor)
 
-class SDLGLVideo : public IVideo
+class QtGLVideo : public IVideo
 {
  public:
-	SDLGLVideo (int parm);
-	~SDLGLVideo ();
+	QtGLVideo();
+	~QtGLVideo();
 
 	EDisplayType GetDisplayType () { return DISPLAY_Both; }
-	void SetWindowedScale (float scale);
+	void SetWindowedScale( float scale ) { }
 
-	DFrameBuffer *CreateFrameBuffer (int width, int height, bool fs, DFrameBuffer *old);
-
-	void StartModeIterator (int bits, bool fs);
-	bool NextMode (int *width, int *height, bool *letterbox);
-	bool SetResolution (int width, int height, int bits);
-
-private:
-	int IteratorMode;
-	int IteratorBits;
-	bool IteratorFS;
+//	DFrameBuffer *CreateFrameBuffer( int width, int height, bool fs, DFrameBuffer *old );
+//
+//	void StartModeIterator (int bits, bool fs);
+//	bool NextMode (int *width, int *height, bool *letterbox);
+//	bool SetResolution (int width, int height, int bits);
+//
+//private:
+//	int IteratorMode;
+//	int IteratorBits;
+//	bool IteratorFS;
 };
+
 class SDLGLFB : public DFrameBuffer
 {
 	DECLARE_CLASS(SDLGLFB, DFrameBuffer)
@@ -72,4 +73,5 @@ protected:
 	Uint16 m_origGamma[3][256];
 	bool m_supportsGamma;
 };
-#endif
+
+#endif // SRC_QT_QTVIDEO_H_INCLUDED
