@@ -835,6 +835,7 @@
 		8A74F450139252F9001F54B0 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		8A74F4661392532C001F54B0 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		8A7C819913BF38FE000B654E /* svnrevision_gz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = svnrevision_gz.h; sourceTree = "<group>"; };
+		8A7C81A513BF3A4A000B654E /* gzdoom_qt.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = gzdoom_qt.xcconfig; sourceTree = "<group>"; };
 		8A938D0F13B6039F002627DE /* actorptrselect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = actorptrselect.cpp; sourceTree = "<group>"; };
 		8A938D1013B6039F002627DE /* actorptrselect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = actorptrselect.h; sourceTree = "<group>"; };
 		8AF278CA1390F0370095D9A0 /* libjpeg.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libjpeg.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1996,6 +1997,7 @@
 				8AF2790A1390F0880095D9A0 /* jpeg-6b */,
 				8AF2795F1390F1410095D9A0 /* lzma */,
 				8AF279C01390F26E0095D9A0 /* tools */,
+				8A7C81A513BF3A4A000B654E /* gzdoom_qt.xcconfig */,
 				8A44602813BF0306007FA8E1 /* gzdoom_sdl.xcconfig */,
 			);
 			name = Sources;
@@ -4695,7 +4697,7 @@
 		};
 		49E921BE1394CE6000CCEBBC /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8A44602813BF0306007FA8E1 /* gzdoom_sdl.xcconfig */;
+			baseConfigurationReference = 8A7C81A513BF3A4A000B654E /* gzdoom_qt.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = "GZDoom-Info.plist";
 				PRODUCT_NAME = GZDoom;
@@ -4704,7 +4706,7 @@
 		};
 		49E921BF1394CE6000CCEBBC /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8A44602813BF0306007FA8E1 /* gzdoom_sdl.xcconfig */;
+			baseConfigurationReference = 8A7C81A513BF3A4A000B654E /* gzdoom_qt.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = "GZDoom-Info.plist";
 				PRODUCT_NAME = GZDoom;
@@ -4868,7 +4870,7 @@
 		};
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8A44602813BF0306007FA8E1 /* gzdoom_sdl.xcconfig */;
+			baseConfigurationReference = 8A7C81A513BF3A4A000B654E /* gzdoom_qt.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = "GZDoom-Info.plist";
 				PRODUCT_NAME = GZDoom;
@@ -4877,7 +4879,7 @@
 		};
 		C01FCF4C08A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8A44602813BF0306007FA8E1 /* gzdoom_sdl.xcconfig */;
+			baseConfigurationReference = 8A7C81A513BF3A4A000B654E /* gzdoom_qt.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = "GZDoom-Info.plist";
 				PRODUCT_NAME = GZDoom;
