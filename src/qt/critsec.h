@@ -1,48 +1,35 @@
-// Wraps an SDL mutex object. (A critical section is a Windows synchronization
+
+// Wraps an Qt mutex object. (A critical section is a Windows synchronization
 // object similar to a mutex but optimized for access by threads belonging to
 // only one process, hence the class name.)
 
-#ifndef CRITSEC_H
-#define CRITSEC_H
+#ifndef SRC_QT_CRITSEC_H_INCLUDED
+#define SRC_QT_CRITSEC_H_INCLUDED
 
-#include "SDL.h"
-#include "SDL_thread.h"
-#include "i_system.h"
+#include <QtCore/QMutex>
 
 class FCriticalSection
 {
 public:
 	FCriticalSection()
+	: m_mutex( QMutex::Recursive )
 	{
-		CritSec = SDL_CreateMutex();
-		if (CritSec == NULL)
-		{
-			I_FatalError("Failed to create a critical section mutex.");
-		}
+		
 	}
-	~FCriticalSection()
-	{
-		if (CritSec != NULL)
-		{
-			SDL_DestroyMutex(CritSec);
-		}
-	}
+	
 	void Enter()
 	{
-		if (SDL_mutexP(CritSec) != 0)
-		{
-			I_FatalError("Failed entering a critical section.");
-		}
+		m_mutex.lock();
 	}
+	
 	void Leave()
 	{
-		if (SDL_mutexV(CritSec) != 0)
-		{
-			I_FatalError("Failed to leave a critical section.");
-		}
+		m_mutex.unlock();
 	}
+	
 private:
-	SDL_mutex *CritSec;
+	QMutex m_mutex;
+	
 };
 
-#endif
+#endif // SRC_QT_CRITSEC_H_INCLUDED
