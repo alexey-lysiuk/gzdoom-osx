@@ -654,6 +654,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		49440B1013C1BFDA00646B56 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 49E92B3213991F2900CCEBBC /* sc_man_scanner.re */;
+			remoteInfo = sc_man_scanner.re;
+		};
 		49E91DE21393BF8E00CCEBBC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
@@ -3741,6 +3748,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				49440B1113C1BFDA00646B56 /* PBXTargetDependency */,
 				49E91DE71393BFB000CCEBBC /* PBXTargetDependency */,
 				49E91DED1393BFC800CCEBBC /* PBXTargetDependency */,
 				49E91DEB1393BFC800CCEBBC /* PBXTargetDependency */,
@@ -4538,6 +4546,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		49440B1113C1BFDA00646B56 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 49E92B3213991F2900CCEBBC /* sc_man_scanner.re */;
+			targetProxy = 49440B1013C1BFDA00646B56 /* PBXContainerItemProxy */;
+		};
 		49E91DE31393BF8E00CCEBBC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 8AF279BB1390F2540095D9A0 /* lemon */;
