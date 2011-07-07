@@ -655,6 +655,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		49440B2C13C1C0E600646B56 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 49E92B3213991F2900CCEBBC;
+			remoteInfo = sc_man_scanner.re;
+		};
 		49E91DE21393BF8E00CCEBBC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
@@ -828,8 +835,6 @@
 		49E9287713978BF600CCEBBC /* doom.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = doom.icns; sourceTree = "<group>"; };
 		8A44602813BF0306007FA8E1 /* gzdoom_sdl.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = gzdoom_sdl.xcconfig; sourceTree = "<group>"; };
 		8A74F2A1139235E0001F54B0 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		8A74F2B5139235FD001F54B0 /* libSDL.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL.a; path = thirdparty/SDL/lib/libSDL.a; sourceTree = "<group>"; };
-		8A74F2B6139235FD001F54B0 /* libSDLmain.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDLmain.a; path = thirdparty/SDL/lib/libSDLmain.a; sourceTree = "<group>"; };
 		8A74F2B91392360F001F54B0 /* libfmodex.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfmodex.dylib; path = thirdparty/FMOD/lib/libfmodex.dylib; sourceTree = "<group>"; };
 		8A74F38E13925284001F54B0 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		8A74F450139252F9001F54B0 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
@@ -1952,12 +1957,12 @@
 				8A7C823713BF4064000B654E /* QtOpenGL.framework in Frameworks */,
 				49E921B21394CE6000CCEBBC /* libbz2.dylib in Frameworks */,
 				49E921B31394CE6000CCEBBC /* libz.dylib in Frameworks */,
+				49E921B91394CE6000CCEBBC /* libfmodex.dylib in Frameworks */,
 				49E921B41394CE6000CCEBBC /* libjpeg.a in Frameworks */,
 				49E921B51394CE6000CCEBBC /* liblzma.a in Frameworks */,
 				49E921B61394CE6000CCEBBC /* libgme.a in Frameworks */,
 				49E921B71394CE6000CCEBBC /* libdumb.a in Frameworks */,
 				49E921B81394CE6000CCEBBC /* libgdtoa.a in Frameworks */,
-				49E921B91394CE6000CCEBBC /* libfmodex.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1999,12 +2004,12 @@
 				8A7C88B913BF40B3000B654E /* QtOpenGL.framework in Frameworks */,
 				8AF2794A1390F0C20095D9A0 /* libbz2.dylib in Frameworks */,
 				8AF27A491390F4910095D9A0 /* libz.dylib in Frameworks */,
+				8A74F2BA1392360F001F54B0 /* libfmodex.dylib in Frameworks */,
 				8AC81C411391321300F49DC3 /* libjpeg.a in Frameworks */,
 				8AC81C421391321300F49DC3 /* liblzma.a in Frameworks */,
 				8AC81C431391321300F49DC3 /* libgme.a in Frameworks */,
 				8AC81C441391321300F49DC3 /* libdumb.a in Frameworks */,
 				8AC81C451391321300F49DC3 /* libgdtoa.a in Frameworks */,
-				8A74F2BA1392360F001F54B0 /* libfmodex.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2080,8 +2085,6 @@
 				8AF279491390F0C20095D9A0 /* libbz2.dylib */,
 				8AF27A461390F47C0095D9A0 /* libz.dylib */,
 				8A74F2B91392360F001F54B0 /* libfmodex.dylib */,
-				8A74F2B5139235FD001F54B0 /* libSDL.a */,
-				8A74F2B6139235FD001F54B0 /* libSDLmain.a */,
 			);
 			name = Dependencies;
 			sourceTree = "<group>";
@@ -3800,6 +3803,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				49440B2D13C1C0E600646B56 /* PBXTargetDependency */,
 				49E91DE71393BFB000CCEBBC /* PBXTargetDependency */,
 				49E91DED1393BFC800CCEBBC /* PBXTargetDependency */,
 				49E91DEB1393BFC800CCEBBC /* PBXTargetDependency */,
@@ -4594,6 +4598,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		49440B2D13C1C0E600646B56 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 49E92B3213991F2900CCEBBC /* sc_man_scanner.re */;
+			targetProxy = 49440B2C13C1C0E600646B56 /* PBXContainerItemProxy */;
+		};
 		49E91DE31393BF8E00CCEBBC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 8AF279BB1390F2540095D9A0 /* lemon */;

@@ -17,10 +17,10 @@ class OpenGLFrameBuffer : public Win32GLFrameBuffer
 	DECLARE_CLASS(OpenGLFrameBuffer, Win32GLFrameBuffer)
 #else
 #include "qtvideo.h"
-class OpenGLFrameBuffer : public SDLGLFB
+class OpenGLFrameBuffer : public QtGLFB
 {
 //	typedef SDLGLFB Super;	//[C]commented, DECLARE_CLASS defines this in linux
-	DECLARE_CLASS(OpenGLFrameBuffer, SDLGLFB)
+	DECLARE_CLASS(OpenGLFrameBuffer, QtGLFB)
 #endif
 
 

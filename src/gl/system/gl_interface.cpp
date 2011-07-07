@@ -45,9 +45,37 @@
 #include "gl/system/gl_cvars.h"
 
 #if defined (unix) || defined (__APPLE__)
-#include <SDL.h>
-#define wglGetProcAddress(x) (*SDL_GL_GetProcAddress)(x)
-#endif
+//#include <SDL.h>
+//#define wglGetProcAddress(x) (*SDL_GL_GetProcAddress)(x)
+
+#include <dlfcn.h>
+#include <QtOpenGL/QGLWidget>
+
+extern QGLWidget* g_renderWidget;
+
+void* wglGetProcAddress( const char* name )
+{
+//	if ( NULL != name && NULL != g_renderWidget )
+//	{
+//		const QGLContext* const glContext = g_renderWidget->context();
+//		
+//		if ( NULL != glContext )
+//		{
+//			glContext->getProcAddress( name );
+//		}
+//	}
+
+	static void* ogl = dlopen( "/System/Library/Frameworks/OpenGL.framework/OpenGL", RTLD_NOW );
+	if (NULL!=ogl)
+	{
+		return dlsym(ogl, name);
+	}
+	
+	return NULL;
+}
+
+#endif // unix || __APPLE__
+
 static void APIENTRY glBlendEquationDummy (GLenum mode);
 
 
@@ -701,39 +729,39 @@ static bool SetupPixelFormat(HDC hDC, bool allowsoftware, bool nostencil, int mu
 
 static bool SetupPixelFormat(bool allowsoftware, bool nostencil, int multisample)
 {
-	int stencil;
-	
-	if (!nostencil)
-	{
-		stencil=1;
-		SDL_GL_SetAttribute( SDL_GL_RED_SIZE,  8 );
-		SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE,  8 );
-		SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE,  8 );
-		SDL_GL_SetAttribute( SDL_GL_ALPHA_SIZE,  8 );
-		SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE,  24 );
-		SDL_GL_SetAttribute( SDL_GL_STENCIL_SIZE,  8 );
-//		SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER,  1 );
-		if (multisample > 0) {
-			SDL_GL_SetAttribute( SDL_GL_MULTISAMPLEBUFFERS, 1 );
-			SDL_GL_SetAttribute( SDL_GL_MULTISAMPLESAMPLES, multisample );
-		}
-	}
-	else
-	{
-		// Use the cheapest mode available and let's hope the driver can handle this...
-		stencil=0;
-
-		SDL_GL_SetAttribute( SDL_GL_RED_SIZE,  4 );
-		SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE,  4 );
-		SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE,  4 );
-		SDL_GL_SetAttribute( SDL_GL_ALPHA_SIZE,  4 );
-		SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE,  16 );
-		//SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER,  1 )*/
-	}
-	if (stencil==0)
-	{
-		gl->flags|=RFL_NOSTENCIL;
-	}
+//	int stencil;
+//	
+//	if (!nostencil)
+//	{
+//		stencil=1;
+//		SDL_GL_SetAttribute( SDL_GL_RED_SIZE,  8 );
+//		SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE,  8 );
+//		SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE,  8 );
+//		SDL_GL_SetAttribute( SDL_GL_ALPHA_SIZE,  8 );
+//		SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE,  24 );
+//		SDL_GL_SetAttribute( SDL_GL_STENCIL_SIZE,  8 );
+////		SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER,  1 );
+//		if (multisample > 0) {
+//			SDL_GL_SetAttribute( SDL_GL_MULTISAMPLEBUFFERS, 1 );
+//			SDL_GL_SetAttribute( SDL_GL_MULTISAMPLESAMPLES, multisample );
+//		}
+//	}
+//	else
+//	{
+//		// Use the cheapest mode available and let's hope the driver can handle this...
+//		stencil=0;
+//
+//		SDL_GL_SetAttribute( SDL_GL_RED_SIZE,  4 );
+//		SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE,  4 );
+//		SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE,  4 );
+//		SDL_GL_SetAttribute( SDL_GL_ALPHA_SIZE,  4 );
+//		SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE,  16 );
+//		//SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER,  1 )*/
+//	}
+//	if (stencil==0)
+//	{
+//		gl->flags|=RFL_NOSTENCIL;
+//	}
 	return true;
 }
 #endif
@@ -856,7 +884,11 @@ static void APIENTRY iSwapBuffers()
 #if !defined (unix) && !defined (__APPLE__)
 	SwapBuffers(m_hDC);
 #else
-	SDL_GL_SwapBuffers ();
+	//SDL_GL_SwapBuffers ();
+	if ( NULL != g_renderWidget )
+	{
+		g_renderWidget->swapBuffers();
+	}
 #endif
 }
 

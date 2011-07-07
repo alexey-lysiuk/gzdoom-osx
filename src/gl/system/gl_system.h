@@ -67,6 +67,7 @@
 #if defined(__APPLE__)
 #include <GL/glew.h>
 #include <OpenGL/OpenGL.h>
+#include <QtOpenGL/QtOpenGL>
 #else // !__APPLE__
 #include <GL/gl.h>
 #include <GL/glu.h>

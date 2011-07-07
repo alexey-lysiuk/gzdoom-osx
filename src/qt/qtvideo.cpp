@@ -27,11 +27,13 @@
 #include "gl/textures/gl_material.h"
 #include "gl/system/gl_cvars.h"
 
+#include <QtOpenGL/QGLWidget>
+
 // MACROS ------------------------------------------------------------------
 
 // TYPES -------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(SDLGLFB)
+IMPLEMENT_ABSTRACT_CLASS( QtGLFB )
 
 struct MiniModeInfo
 {
@@ -61,6 +63,7 @@ CUSTOM_CVAR(Int, gl_vid_multisample, 0, CVAR_ARCHIVE | CVAR_GLOBALCONFIG | CVAR_
 
 RenderContext gl;
 
+extern QGLWidget* g_renderWidget;
 
 // CODE --------------------------------------------------------------------
 
@@ -72,7 +75,7 @@ QtGLVideo::QtGLVideo()
 //        fprintf( stderr, "Video initialization failed: %s\n",
 //             SDL_GetError( ) );
 //    }
-//	GetContext(gl);
+	GetContext(gl);
 //#ifndef	_WIN32
 //	// mouse cursor is visible by default on linux systems, we disable it by default
 //	SDL_ShowCursor (0);
@@ -85,15 +88,15 @@ QtGLVideo::~QtGLVideo()
 //	SDL_Quit( );
 }
 
-//void SDLGLVideo::StartModeIterator (int bits, bool fs)
-//{
+void QtGLVideo::StartModeIterator (int bits, bool fs)
+{
 //	IteratorMode = 0;
 //	IteratorBits = bits;
 //	IteratorFS = fs;
-//}
-//
-//bool SDLGLVideo::NextMode (int *width, int *height, bool *letterbox)
-//{
+}
+
+bool QtGLVideo::NextMode (int *width, int *height, bool *letterbox)
+{
 //	if (IteratorBits != 8)
 //		return false;
 //	
@@ -118,11 +121,11 @@ QtGLVideo::~QtGLVideo()
 //			return true;
 //		}
 //	}
-//	return false;
-//}
-//
-//DFrameBuffer *SDLGLVideo::CreateFrameBuffer (int width, int height, bool fullscreen, DFrameBuffer *old)
-//{
+	return false;
+}
+
+DFrameBuffer *QtGLVideo::CreateFrameBuffer (int width, int height, bool fullscreen, DFrameBuffer *old)
+{
 //	static int retry = 0;
 //	static int owidth, oheight;
 //	
@@ -200,13 +203,29 @@ QtGLVideo::~QtGLVideo()
 //
 ////	fb->SetFlash (flashColor, flashAmount);
 //	return fb;
-//}
-//
+	
+	if ( NULL != old )
+	{
+		return old;
+	}
+	
+	QtGLFB* result = new OpenGLFrameBuffer( 0, width, height, 32, 60, fullscreen );
+	if ( NULL == result )
+	{
+		I_FatalError( "Could not create new screen (%d x %d)", width, height );
+	}
+	
+	g_renderWidget->setGeometry( 100, 100, width, height );
+	g_renderWidget->show();
+	
+	return result;
+}
+
 //void SDLGLVideo::SetWindowedScale (float scale)
 //{
 //}
 //
-//bool SDLGLVideo::SetResolution (int width, int height, int bits)
+//bool QtGLVideo::SetResolution (int width, int height, int bits)
 //{
 //	// FIXME: Is it possible to do this without completely destroying the old
 //	// interface?
@@ -215,7 +234,7 @@ QtGLVideo::~QtGLVideo()
 //	if (GLRenderer != NULL) GLRenderer->FlushTextures();
 //	I_ShutdownGraphics();
 //
-//	Video = new SDLGLVideo(0);
+//	Video = new QtGLVideo;
 //	if (Video == NULL) I_FatalError ("Failed to initialize display");
 //
 //#if (defined(WINDOWS)) || defined(WIN32)
@@ -231,73 +250,82 @@ QtGLVideo::~QtGLVideo()
 
 // FrameBuffer implementation -----------------------------------------------
 
-SDLGLFB::SDLGLFB (void *, int width, int height, int, int, bool fullscreen)
+QtGLFB::QtGLFB (void *, int width, int height, int, int, bool fullscreen)
 	: DFrameBuffer (width, height)
 {
-	static int localmultisample=-1;
-
-	if (localmultisample<0) localmultisample=gl_vid_multisample;
-
-	int i;
+//	static int localmultisample=-1;
+//
+//	if (localmultisample<0) localmultisample=gl_vid_multisample;
+//
+//	int i;
 	
 	m_Lock=0;
 
 	UpdatePending = false;
 	
-	if (!gl.InitHardware(false, gl_vid_compatibility, localmultisample))
-	{
-		vid_renderer = 0;
-		return;
-	}
-
-#if defined(__APPLE__)
-
-	// Mac OS X version will crash when entering fullscreen mode with BPP <= 8
-	// Also it may crash with BPP == 16 on some configurations
-	// It seems 24 and 32 bits are safe values
-	// So value of vid_displaybits is ignored and hardcoded constant is used instead
+//	if (!gl.InitHardware(false, gl_vid_compatibility, localmultisample))
+//	{
+//		vid_renderer = 0;
+//		return;
+//	}
+//
+//#if defined(__APPLE__)
+//
+//	// Mac OS X version will crash when entering fullscreen mode with BPP <= 8
+//	// Also it may crash with BPP == 16 on some configurations
+//	// It seems 24 and 32 bits are safe values
+//	// So value of vid_displaybits is ignored and hardcoded constant is used instead
+//	
+//	const int bpp = 32;
+//
+//#else // ! __APPLE__
+//	const int bpp = vid_displaybits;
+//#endif // __APPLE__
+//	
+//	Screen = SDL_SetVideoMode (width, height, bpp,
+//		SDL_HWSURFACE|SDL_HWPALETTE|SDL_OPENGL | SDL_GL_DOUBLEBUFFER|SDL_ANYFORMAT|
+//		(fullscreen ? SDL_FULLSCREEN : 0));
+//
+//	if (Screen == NULL)
+//		return;
+//
+//	m_supportsGamma = -1 != SDL_GetGammaRamp(m_origGamma[0], m_origGamma[1], m_origGamma[2]);
 	
-	const int bpp = 32;
-
-#else // ! __APPLE__
-	const int bpp = vid_displaybits;
-#endif // __APPLE__
+	m_supportsGamma = false;
 	
-	Screen = SDL_SetVideoMode (width, height, bpp,
-		SDL_HWSURFACE|SDL_HWPALETTE|SDL_OPENGL | SDL_GL_DOUBLEBUFFER|SDL_ANYFORMAT|
-		(fullscreen ? SDL_FULLSCREEN : 0));
-
-	if (Screen == NULL)
-		return;
-
-	m_supportsGamma = -1 != SDL_GetGammaRamp(m_origGamma[0], m_origGamma[1], m_origGamma[2]);
-	
-#if defined(__APPLE__)
-	// Need to set title here because a window is not created yet when calling the same function from main()
-	SDL_WM_SetCaption( GAMESIG " " DOTVERSIONSTR " (" __DATE__ ")", NULL );
-#endif // __APPLE__
+//#if defined(__APPLE__)
+//	// Need to set title here because a window is not created yet when calling the same function from main()
+//	SDL_WM_SetCaption( GAMESIG " " DOTVERSIONSTR " (" __DATE__ ")", NULL );
+//#endif // __APPLE__
 }
 
-SDLGLFB::~SDLGLFB ()
+QtGLFB::~QtGLFB ()
 {
-	if (m_supportsGamma) 
-	{
-		SDL_SetGammaRamp(m_origGamma[0], m_origGamma[1], m_origGamma[2]);
-	}
+//	if (m_supportsGamma) 
+//	{
+//		SDL_SetGammaRamp(m_origGamma[0], m_origGamma[1], m_origGamma[2]);
+//	}
 }
 
-void SDLGLFB::InitializeState() 
+void QtGLFB::InitializeState() 
 {
-	int value = 0;
-	SDL_GL_GetAttribute( SDL_GL_STENCIL_SIZE, &value );
-	if (!value) 
-	{
-		Printf("Failed to use stencil buffer!\n");	//[C] is it needed to recreate buffer in "cheapest mode"?
-		gl.flags|=RFL_NOSTENCIL;
-	}
+//	int value = 0;
+//	SDL_GL_GetAttribute( SDL_GL_STENCIL_SIZE, &value );
+//	if (!value) 
+//	{
+//		Printf("Failed to use stencil buffer!\n");	//[C] is it needed to recreate buffer in "cheapest mode"?
+//		gl.flags|=RFL_NOSTENCIL;
+//	}
+	
+//	extern QGLWidget* g_renderWidget;
+//	
+//	if ( NULL != g_renderWidget )
+//	{
+//		g_renderWidget->show();
+//	}
 }
 
-bool SDLGLFB::CanUpdate ()
+bool QtGLFB::CanUpdate ()
 {
 	if (m_Lock != 1)
 	{
@@ -311,24 +339,24 @@ bool SDLGLFB::CanUpdate ()
 	return true;
 }
 
-void SDLGLFB::SetGammaTable(WORD *tbl)
+void QtGLFB::SetGammaTable(WORD *tbl)
 {
-	SDL_SetGammaRamp(&tbl[0], &tbl[256], &tbl[512]);
+//	SDL_SetGammaRamp(&tbl[0], &tbl[256], &tbl[512]);
 }
 
-bool SDLGLFB::Lock(bool buffered)
+bool QtGLFB::Lock(bool buffered)
 {
 	m_Lock++;
-	Buffer = MemBuffer;
+//	Buffer = MemBuffer;
 	return true;
 }
 
-bool SDLGLFB::Lock () 
+bool QtGLFB::Lock () 
 { 	
 	return Lock(false); 
 }
 
-void SDLGLFB::Unlock () 	
+void QtGLFB::Unlock () 	
 { 
 	if (UpdatePending && m_Lock == 1)
 	{
@@ -340,23 +368,25 @@ void SDLGLFB::Unlock ()
 	}
 }
 
-bool SDLGLFB::IsLocked () 
+bool QtGLFB::IsLocked () 
 { 
 	return m_Lock>0;// true;
 }
 
-bool SDLGLFB::IsFullscreen ()
+bool QtGLFB::IsFullscreen ()
 {
-	return (Screen->flags & SDL_FULLSCREEN) != 0;
+	//return (Screen->flags & SDL_FULLSCREEN) != 0;
+	return false;
 }
 
 
-bool SDLGLFB::IsValid ()
+bool QtGLFB::IsValid ()
 {
-	return DFrameBuffer::IsValid() && Screen != NULL;
+	//return DFrameBuffer::IsValid() && Screen != NULL;
+	return true;
 }
 
-void SDLGLFB::SetVSync( bool vsync )
+void QtGLFB::SetVSync( bool vsync )
 {
 #if defined (__APPLE__)
 	const GLint value = vsync ? 1 : 0;
@@ -364,7 +394,7 @@ void SDLGLFB::SetVSync( bool vsync )
 #endif
 }
 
-void SDLGLFB::NewRefreshRate ()
+void QtGLFB::NewRefreshRate ()
 {
 }
 

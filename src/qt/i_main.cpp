@@ -34,24 +34,26 @@
 
 // HEADER FILES ------------------------------------------------------------
 
-#include <SDL.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <signal.h>
 #include <new>
 #include <sys/param.h>
-#ifndef NO_GTK
-#include <gtk/gtk.h>
-#endif
 #include <locale.h>
 #if defined(__MACH__) && !defined(NOASM)
 #include <sys/types.h>
 #include <sys/mman.h>
 #endif
 
+#include <QtGui/QApplication>
+#include <QtGui/QKeyEvent>
+#include <QtOpenGL/QGLWidget>
+
 #include "doomerrors.h"
 #include "m_argv.h"
 #include "d_main.h"
+#include "d_event.h"
+#include "d_gui.h"
 #include "i_system.h"
 #include "i_video.h"
 #include "c_console.h"
@@ -63,6 +65,7 @@
 #include "cmdlib.h"
 #include "r_main.h"
 #include "doomstat.h"
+#include "dikeys.h"
 
 // MACROS ------------------------------------------------------------------
 
@@ -249,6 +252,145 @@ static void unprotect_rtext()
 void I_StartupJoysticks();
 void I_ShutdownJoysticks();
 
+
+QGLWidget* g_renderWidget = NULL;
+
+
+class RenderWidget : public QGLWidget
+{
+public:
+	
+	
+protected:
+	virtual void initializeGL();
+	//virtual void resizeGL( int width, int height );
+	
+	virtual void resizeEvent( QResizeEvent* event );
+	
+	virtual void keyPressEvent( QKeyEvent* keyEvent );
+    virtual void keyReleaseEvent( QKeyEvent* keyEvent );
+
+private:
+	void processKeyEvent( QKeyEvent* keyEvent );
+	
+};
+
+
+void RenderWidget::initializeGL()
+{
+	glClearColor( 0.5f, 0.5f, 0.5f, 1.0f );
+	glClear( GL_COLOR_BUFFER_BIT );
+}
+
+//void RenderWidget::resizeGL( int width, int height )
+//{
+//	extern int NewWidth, NewHeight, NewBits, DisplayBits;
+//	extern bool setmodeneeded;
+//	
+//	NewWidth    = width;
+//	NewHeight   = height;
+//	NewBits     = 32;
+//	DisplayBits = 32;
+//	
+//	setmodeneeded = true;
+//}
+
+void RenderWidget::resizeEvent( QResizeEvent* event )
+{
+	extern int NewWidth, NewHeight, NewBits, DisplayBits;
+	extern bool setmodeneeded;
+	
+	NewWidth    = event->size().width();
+	NewHeight   = event->size().height();
+	NewBits     = 32;
+	DisplayBits = 32;
+	
+	setmodeneeded = true;
+}
+
+
+void RenderWidget::keyPressEvent( QKeyEvent* keyEvent )
+{
+	processKeyEvent( keyEvent );
+}
+
+void RenderWidget::keyReleaseEvent( QKeyEvent* keyEvent )
+{
+	processKeyEvent( keyEvent );
+}
+
+extern bool GUICapture;
+
+void RenderWidget::processKeyEvent( QKeyEvent* keyEvent )
+{
+	event_t event;
+	memset( &event, 0, sizeof( event ) );
+	
+	if ( GUICapture )
+	{
+		event.type = EV_GUI_Event;
+		event.subtype = QEvent::KeyPress == keyEvent->type()
+			? EV_GUI_KeyDown
+			: EV_GUI_KeyUp;
+		
+		switch ( keyEvent->key() )
+		{
+			case Qt::Key_Up:
+				event.data1 = GK_UP;
+				break;
+				
+			case Qt::Key_Down:
+				event.data1 = GK_DOWN;
+				break;
+				
+			case Qt::Key_Escape:
+				event.data1 = GK_ESCAPE;
+				break;
+				
+			case Qt::Key_Return:
+			case Qt::Key_Enter:
+				event.data1 = GK_RETURN;
+				break;
+				
+			default:
+				break;
+		}
+		
+	}
+	else
+	{
+		event.type = QEvent::KeyPress == keyEvent->type()
+			? EV_KeyDown
+			: EV_KeyUp;
+		
+		switch ( keyEvent->key() )
+		{
+			case Qt::Key_Up:
+				event.data1 = DIK_UP;
+				break;
+				
+			case Qt::Key_Down:
+				event.data1 = DIK_DOWN;
+				break;
+				
+			case Qt::Key_Escape:
+				event.data1 = DIK_ESCAPE;
+				break;
+				
+			case Qt::Key_Return:
+			case Qt::Key_Enter:
+				event.data1 = DIK_RETURN;
+				break;
+				
+			default:
+				break;
+		}
+	}
+	
+	D_PostEvent( &event );
+}
+
+
 int main (int argc, char **argv)
 {
 #if !defined (__APPLE__)
@@ -258,7 +400,7 @@ int main (int argc, char **argv)
 	}
 #endif // !__APPLE__
 
-	printf(GAMENAME" v%s - SVN revision %s - SDL version\nCompiled on %s\n\n",
+	printf(GAMENAME" v%s - SVN revision %s - Qt version\nCompiled on %s\n\n",
 		DOTVERSIONSTR_NOREV,SVN_REVISION_STRING,__DATE__);
 
 	seteuid (getuid ());
@@ -268,40 +410,14 @@ int main (int argc, char **argv)
 	unprotect_rtext();
 #endif
 	
-#ifndef NO_GTK
-	GtkAvailable = gtk_init_check (&argc, &argv);
-#endif
+	QApplication application( argc, argv );
 	
-	setlocale (LC_ALL, "C");
-
-	if (SDL_Init (SDL_INIT_VIDEO|SDL_INIT_TIMER|SDL_INIT_NOPARACHUTE|SDL_INIT_JOYSTICK) == -1)
-	{
-		fprintf (stderr, "Could not initialize SDL:\n%s\n", SDL_GetError());
-		return -1;
-	}
-	atterm (SDL_Quit);
-
-	SDL_WM_SetCaption (GAMESIG " " DOTVERSIONSTR " (" __DATE__ ")", NULL);
-
-#ifdef __APPLE__
-	
-	const SDL_VideoInfo* videoInfo = SDL_GetVideoInfo();
-	if ( NULL != videoInfo )
-	{
-		EXTERN_CVAR(  Int, vid_defwidth  )
-		EXTERN_CVAR(  Int, vid_defheight )
-		EXTERN_CVAR(  Int, vid_defbits   )
-		EXTERN_CVAR( Bool, vid_vsync     )
-		EXTERN_CVAR( Bool, fullscreen    )
-		
-		vid_defwidth  = videoInfo->current_w;
-		vid_defheight = videoInfo->current_h;
-		vid_defbits   = videoInfo->vfmt->BitsPerPixel;
-		vid_vsync     = True;
-		fullscreen    = True;
-	}
-	
-#endif // __APPLE__
+	g_renderWidget = new RenderWidget; //new QGLWidget;
+//	g_renderWidget->setAttribute( Qt::WA_QuitOnClose, true );
+	g_renderWidget->setWindowTitle( GAMESIG " " DOTVERSIONSTR " (" __DATE__ ")" );
+	g_renderWidget->setMinimumSize( 640, 480 );
+//	g_renderWidget->setGeometry( 100, 100, 800, 600 );
+	g_renderWidget->makeCurrent();
 	
     try
     {

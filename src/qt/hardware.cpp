@@ -32,8 +32,6 @@
 **
 */
 
-#include <SDL.h>
-
 #include "version.h"
 #include "hardware.h"
 #include "i_video.h"
@@ -41,11 +39,10 @@
 #include "c_console.h"
 #include "c_cvars.h"
 #include "c_dispatch.h"
-#include "sdlvideo.h"
+#include "qtvideo.h"
 #include "v_text.h"
 #include "doomstat.h"
 #include "m_argv.h"
-#include "sdlglvideo.h"
 
 EXTERN_CVAR (Bool, ticker)
 EXTERN_CVAR (Bool, fullscreen)
@@ -105,8 +102,7 @@ void I_InitGraphics ()
 	ticker.SetGenericRepDefault (val, CVAR_Bool);
 	
 	currentrenderer = vid_renderer;
-	if (currentrenderer==1) Video = new SDLGLVideo(0);
-	else Video = new SDLVideo (0);
+	Video = new QtGLVideo;
 	
 	if (Video == NULL)
 		I_FatalError ("Failed to initialize display");
@@ -148,6 +144,7 @@ DFrameBuffer *I_SetMode (int &width, int &height, DFrameBuffer *old)
 
 bool I_CheckResolution (int width, int height, int bits)
 {
+/*
 	int twidth, theight;
 
 	Video->StartModeIterator (bits, screen ? screen->IsFullscreen() : fullscreen);
@@ -157,6 +154,8 @@ bool I_CheckResolution (int width, int height, int bits)
 			return true;
 	}
 	return false;
+*/
+	return true;
 }
 
 void I_ClosestResolution (int *width, int *height, int bits)

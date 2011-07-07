@@ -18,6 +18,7 @@
 #include <windows.h>
 #include <mmsystem.h>
 #else
+#include <stdlib.h>
 #define FALSE 0
 #define TRUE 1
 #endif
