@@ -60,18 +60,18 @@
 #include "gi.h"
 #include "c_dispatch.h"
 #include "decallib.h"
-#include "r_draw.h"
 #include "v_palette.h"
 #include "a_sharedglobal.h"
 #include "thingdef/thingdef.h"
 #include "thingdef/thingdef_exp.h"
 #include "vectors.h"
 #include "dobject.h"
-#include "r_translate.h"
+#include "r_data/r_translate.h"
 #include "sc_man.h"
 #include "i_system.h"
 #include "doomerrors.h"
 #include "p_effect.h"
+#include "farchive.h"
 
 // [SO] Just the way Randy said to do it :)
 // [RH] Made this CVAR_SERVERINFO

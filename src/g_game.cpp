@@ -61,9 +61,7 @@
 #include "p_local.h" 
 #include "s_sound.h"
 #include "gstrings.h"
-#include "r_data.h"
 #include "r_sky.h"
-#include "r_draw.h"
 #include "g_game.h"
 #include "g_level.h"
 #include "b_bot.h"			//Added by MC:
@@ -73,12 +71,14 @@
 #include "gi.h"
 #include "a_keys.h"
 #include "a_artifacts.h"
-#include "r_translate.h"
+#include "r_data/r_translate.h"
 #include "cmdlib.h"
 #include "d_net.h"
 #include "d_event.h"
 #include "p_acs.h"
 #include "m_joy.h"
+#include "farchive.h"
+#include "r_data/colormaps.h"
 
 #include <zlib.h>
 

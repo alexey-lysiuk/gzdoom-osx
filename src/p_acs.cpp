@@ -66,12 +66,13 @@
 #include "sc_man.h"
 #include "c_bind.h"
 #include "info.h"
-#include "r_translate.h"
+#include "r_data/r_translate.h"
 #include "cmdlib.h"
 #include "m_png.h"
 #include "p_setup.h"
 #include "po_man.h"
 #include "actorptrselect.h"
+#include "farchive.h"
 
 #include "g_shared/a_pickups.h"
 
@@ -1960,6 +1961,14 @@ IMPLEMENT_POINTY_CLASS (DLevelScript)
  DECLARE_POINTER(prev)
  DECLARE_POINTER(activator)
 END_POINTERS
+
+inline FArchive &operator<< (FArchive &arc, DLevelScript::EScriptState &state)
+{
+	BYTE val = (BYTE)state;
+	arc << val;
+	state = (DLevelScript::EScriptState)val;
+	return arc;
+}
 
 void DLevelScript::Serialize (FArchive &arc)
 {

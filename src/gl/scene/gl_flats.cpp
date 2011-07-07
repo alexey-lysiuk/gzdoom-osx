@@ -40,10 +40,12 @@
 
 #include "gl/system/gl_system.h"
 #include "a_sharedglobal.h"
+#include "r_defs.h"
 #include "r_sky.h"
-#include "r_main.h"
+#include "r_utility.h"
 #include "g_level.h"
 #include "doomstat.h"
+#include "d_player.h"
 
 #include "gl/system/gl_cvars.h"
 #include "gl/renderer/gl_renderer.h"
@@ -599,7 +601,7 @@ void GLFlat::ProcessSector(sector_t * frontsector)
 
 		srf |= SSRF_RENDERFLOOR;
 
-		lightlevel = gl_ClampLight(GetFloorLight(frontsector));
+		lightlevel = gl_ClampLight(frontsector->GetFloorLight());
 		Colormap=frontsector->ColorMap;
 		if ((stack = (frontsector->portals[sector_t::floor] != NULL)))
 		{
@@ -647,7 +649,7 @@ void GLFlat::ProcessSector(sector_t * frontsector)
 
 		srf |= SSRF_RENDERCEILING;
 
-		lightlevel = gl_ClampLight(GetCeilingLight(frontsector));
+		lightlevel = gl_ClampLight(frontsector->GetCeilingLight());
 		Colormap=frontsector->ColorMap;
 		if ((stack = (frontsector->portals[sector_t::ceiling] != NULL))) 
 		{

@@ -39,20 +39,25 @@
 #include "r_sky.h"
 #include "st_stuff.h"
 #include "c_cvars.h"
+#include "c_dispatch.h"
 #include "v_video.h"
 #include "stats.h"
 #include "i_video.h"
 #include "i_system.h"
 #include "a_sharedglobal.h"
-#include "r_translate.h"
+#include "r_data/r_translate.h"
 #include "p_3dmidtex.h"
-#include "r_interpolate.h"
+#include "r_data/r_interpolate.h"
 #include "r_bsp.h"
 #include "r_plane.h"
 #include "r_3dfloors.h"
 #include "v_palette.h"
 #include "po_man.h"
-//#include "gl/data/gl_data.h"
+#include "p_effect.h"
+#include "st_start.h"
+#include "v_font.h"
+#include "r_data/colormaps.h"
+#include "farchive.h"
 #include "gl/gl_functions.h"
 
 EXTERN_CVAR(Int, vid_renderer)
@@ -96,7 +101,6 @@ extern bool DrawFSHUD;		// [RH] Defined in d_main.cpp
 extern short *openings;
 extern bool r_fakingunderwater;
 extern "C" int fuzzviewheight;
-EXTERN_CVAR (Bool, r_particles)
 EXTERN_CVAR (Bool, cl_capfps)
 
 // PRIVATE DATA DECLARATIONS -----------------------------------------------
@@ -627,6 +631,32 @@ float R_GetVisibility ()
 
 //==========================================================================
 //
+// CCMD r_visibility
+//
+// Controls how quickly light ramps across a 1/z range. Set this, and it
+// sets all the r_*Visibility variables (except r_SkyVisibilily, which is
+// currently unused).
+//
+//==========================================================================
+
+CCMD (r_visibility)
+{
+	if (argv.argc() < 2)
+	{
+		Printf ("Visibility is %g\n", R_GetVisibility());
+	}
+	else if (!netgame)
+	{
+		R_SetVisibility ((float)atof (argv[1]));
+	}
+	else
+	{
+		Printf ("Visibility cannot be changed in net games.\n");
+	}
+}
+
+//==========================================================================
+//
 // R_SetViewSize
 //
 // Do not really change anything here, because it might be in the middle
@@ -813,7 +843,14 @@ void R_Init ()
 {
 	atterm (R_Shutdown);
 
-	R_InitData ();
+	clearbufshort (zeroarray, MAXWIDTH, 0);
+
+	StartScreen->Progress();
+	V_InitFonts();
+	StartScreen->Progress();
+	R_InitColormaps ();
+	StartScreen->Progress();
+
 	gl_ParseDefs();
 	R_InitPointToAngle ();
 	R_InitTables ();
@@ -822,7 +859,7 @@ void R_Init ()
 	R_SetViewSize (screenblocks);
 	R_InitPlanes ();
 	R_InitTranslationTables ();
-	R_InitParticles ();	// [RH] Setup particle engine
+	R_InitShadeMaps();
 	R_InitColumnDrawers ();
 
 	colfunc = basecolfunc = R_DrawColumn;
@@ -846,10 +883,24 @@ void R_Init ()
 
 static void R_Shutdown ()
 {
-	R_DeinitParticles();
 	R_DeinitTranslationTables();
 	R_DeinitPlanes();
-	R_DeinitData();
+	R_DeinitColormaps ();
+	FCanvasTextureInfo::EmptyList();
+
+	// Free openings
+	if (openings != NULL)
+	{
+		M_Free (openings);
+		openings = NULL;
+	}
+
+	// Free drawsegs
+	if (drawsegs != NULL)
+	{
+		M_Free (drawsegs);
+		drawsegs = NULL;
+	}
 }
 
 //==========================================================================
@@ -1387,35 +1438,6 @@ void R_SetupFrame (AActor *actor)
 
 //==========================================================================
 //
-// R_RefreshViewBorder
-//
-// Draws the border around the player view, if needed.
-//
-//==========================================================================
-
-void R_RefreshViewBorder ()
-{
-	if (setblocks < 10)
-	{
-		if (BorderNeedRefresh)
-		{
-			BorderNeedRefresh--;
-			if (BorderTopRefresh)
-			{
-				BorderTopRefresh--;
-			}
-			R_DrawViewBorder();
-		}
-		else if (BorderTopRefresh)
-		{
-			BorderTopRefresh--;
-			R_DrawTopBorder();
-		}
-	}
-}
-
-//==========================================================================
-//
 // R_EnterMirror
 //
 // [RH] Draw the reflection inside a mirror
@@ -1602,7 +1624,7 @@ void R_RenderActorView (AActor *actor, bool dontmaplines)
 	r_fakingunderwater = false;
 
 	// [RH] Setup particles for this frame
-	R_FindParticleSubsectors ();
+	P_FindParticleSubsectors ();
 
 	WallCycles.Clock();
 	DWORD savedflags = camera->renderflags;

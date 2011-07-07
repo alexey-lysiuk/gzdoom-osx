@@ -36,17 +36,20 @@
 #include <ctype.h>
 #include "doomtype.h"
 #include "files.h"
-#include "r_data.h"
 #include "w_wad.h"
 #include "i_system.h"
 #include "gi.h"
 #include "st_start.h"
 #include "sc_man.h"
 #include "templates.h"
-#include "r_translate.h"
+#include "r_data/r_translate.h"
 #include "bitmap.h"
 #include "colormatcher.h"
 #include "v_palette.h"
+#include "v_video.h"
+#include "m_fixed.h"
+#include "textures/textures.h"
+#include "r_data/colormaps.h"
 
 // On the Alpha, accessing the shorts directly if they aren't aligned on a
 // 4-byte boundary causes unaligned access warnings. Why it does this at

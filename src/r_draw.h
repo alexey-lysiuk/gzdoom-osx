@@ -23,7 +23,7 @@
 #ifndef __R_DRAW__
 #define __R_DRAW__
 
-#include "r_data.h"
+#include "r_defs.h"
 
 extern "C" int			ylookup[MAXHEIGHT];
 
@@ -251,13 +251,8 @@ extern FDynamicColormap ShadeFakeColormap[16];
 extern BYTE identitymap[256];
 extern BYTE *dc_translation;
 
-
-// If the view size is not full screen, draws a border around it.
-void R_DrawViewBorder (void);
-void R_DrawTopBorder (void);
-void R_DrawBorder (int x1, int y1, int x2, int y2);
-
 // [RH] Added for muliresolution support
+void R_InitShadeMaps();
 void R_InitFuzzTable (int fuzzoff);
 
 // [RH] Consolidate column drawer selection

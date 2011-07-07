@@ -46,6 +46,9 @@
 #include "g_game.h"
 #include "doomstat.h"
 #include "g_level.h"
+#include "r_state.h"
+#include "d_player.h"
+//#include "resources/voxels.h"
 //#include "gl/gl_intern.h"
 
 #include "gl/renderer/gl_renderer.h"

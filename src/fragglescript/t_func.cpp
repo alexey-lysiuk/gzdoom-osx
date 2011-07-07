@@ -65,6 +65,8 @@
 #include "g_level.h"
 #include "v_palette.h"
 #include "v_font.h"
+#include "r_data/colormaps.h"
+#include "farchive.h"
 
 #include "gl/gl_functions.h"
 

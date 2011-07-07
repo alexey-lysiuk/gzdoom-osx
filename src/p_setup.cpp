@@ -58,14 +58,15 @@
 #include "s_sndseq.h"
 #include "sbar.h"
 #include "p_setup.h"
-#include "r_translate.h"
-#include "r_interpolate.h"
+#include "r_data/r_translate.h"
+#include "r_data/r_interpolate.h"
 #include "r_sky.h"
 #include "cmdlib.h"
 #include "g_level.h"
 #include "md5.h"
 #include "compatibility.h"
 #include "po_man.h"
+#include "r_data/colormaps.h"
 
 #include "gl/gl_functions.h"
 
@@ -3957,13 +3958,13 @@ void P_SetupLevel (char *lumpname, int position)
 	R_OldBlend = 0xffffffff;
 
 	// [RH] Remove all particles
-	R_ClearParticles ();
+	P_ClearParticles ();
 
 	times[17].Clock();
 	// preload graphics and sounds
 	if (precache)
 	{
-		R_PrecacheLevel ();
+		TexMan.PrecacheLevel ();
 		S_PrecacheLevel ();
 	}
 	times[17].Unclock();

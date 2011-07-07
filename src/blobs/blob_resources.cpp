@@ -1,4 +1,11 @@
 
+#include "r_data/colormaps.cpp"
+#include "r_data/r_interpolate.cpp"
+#include "r_data/r_translate.cpp"
+#include "r_data/renderstyle.cpp"
+#include "r_data/sprites.cpp"
+#include "r_data/voxels.cpp"
+
 #include "resourcefiles/ancientzip.cpp"
 #include "resourcefiles/file_7z.cpp"
 #include "resourcefiles/file_directory.cpp"

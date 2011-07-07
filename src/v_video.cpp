@@ -29,7 +29,6 @@
 #include "x86.h"
 #include "i_video.h"
 #include "r_local.h"
-#include "r_draw.h"
 #include "r_state.h"
 
 #include "doomdef.h"
@@ -56,13 +55,14 @@
 #include "templates.h"
 #include "sbar.h"
 #include "hardware.h"
-#include "r_translate.h"
+#include "r_data/r_translate.h"
 #include "f_wipe.h"
 #include "m_png.h"
 #include "colormatcher.h"
 #include "v_palette.h"
 #include "r_sky.h"
 #include "menu/menu.h"
+#include "r_data/voxels.h"
 
 #ifdef pow
 #undef pow
@@ -1321,7 +1321,6 @@ void DFrameBuffer::RenderView(player_t *player)
 //
 //
 //==========================================================================
-extern TDeletingArray<FVoxel *> Voxels;
 
 void DFrameBuffer::RemapVoxels()
 {

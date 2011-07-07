@@ -44,7 +44,6 @@
 #include "m_bbox.h"
 #include "w_wad.h"
 
-#include "r_local.h"
 #include "p_local.h"
 #include "p_lnspec.h"
 #include "p_terrain.h"
@@ -60,13 +59,14 @@
 #include "g_level.h"
 #include "v_font.h"
 #include "a_sharedglobal.h"
+#include "farchive.h"
 
 // State.
 #include "r_state.h"
 
 #include "c_console.h"
 
-#include "r_interpolate.h"
+#include "r_data/r_interpolate.h"
 
 static FRandom pr_playerinspecialsector ("PlayerInSpecialSector");
 void P_SetupPortals();
@@ -84,6 +84,14 @@ END_POINTERS
 IMPLEMENT_POINTY_CLASS (DPusher)
  DECLARE_POINTER (m_Source)
 END_POINTERS
+
+inline FArchive &operator<< (FArchive &arc, DScroller::EScrollType &type)
+{
+	BYTE val = (BYTE)type;
+	arc << val;
+	type = (DScroller::EScrollType)val;
+	return arc;
+}
 
 DScroller::DScroller ()
 {
@@ -107,6 +115,14 @@ void DScroller::Serialize (FArchive &arc)
 
 DPusher::DPusher ()
 {
+}
+
+inline FArchive &operator<< (FArchive &arc, DPusher::EPusher &type)
+{
+	BYTE val = (BYTE)type;
+	arc << val;
+	type = (DPusher::EPusher)val;
+	return arc;
 }
 
 void DPusher::Serialize (FArchive &arc)

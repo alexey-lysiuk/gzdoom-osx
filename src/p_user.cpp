@@ -30,7 +30,6 @@
 #include "doomstat.h"
 #include "s_sound.h"
 #include "i_system.h"
-#include "r_draw.h"
 #include "gi.h"
 #include "m_random.h"
 #include "p_pspr.h"
@@ -53,6 +52,7 @@
 #include "g_level.h"
 #include "d_net.h"
 #include "gstrings.h"
+#include "farchive.h"
 
 static FRandom pr_skullpop ("SkullPop");
 
@@ -210,6 +210,11 @@ CCMD (playerclasses)
 #define MAXBOB			0x100000
 
 bool onground;
+
+FArchive &operator<< (FArchive &arc, player_t *&p)
+{
+	return arc.SerializePointer (players, (BYTE **)&p, sizeof(*players));
+}
 
 // The player_t constructor. Since LogText is not a POD, we cannot just
 // memset it all to 0.

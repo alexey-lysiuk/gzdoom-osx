@@ -33,12 +33,13 @@
 #include "w_wad.h"
 #include "a_sharedglobal.h"
 #include "statnums.h"
-#include "r_translate.h"
+#include "r_data/r_translate.h"
 #include "d_event.h"
 #include "gi.h"
 #include "r_bsp.h"
 #include "p_setup.h"
 #include "c_bind.h"
+#include "farchive.h"
 
 #include "m_cheat.h"
 #include "i_system.h"
@@ -63,6 +64,7 @@
 #include "a_artifacts.h"
 #include "po_man.h"
 #include "a_keys.h"
+#include "r_data/colormaps.h"
 
 //=============================================================================
 //

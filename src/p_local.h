@@ -23,9 +23,12 @@
 #ifndef __P_LOCAL__
 #define __P_LOCAL__
 
-#ifndef __R_LOCAL__
-#include "r_local.h"
-#endif
+#include "doomtype.h"
+#include "doomdef.h"
+#include "tables.h"
+#include "r_state.h"
+#include "r_utility.h"
+#include "d_player.h"
 
 #include "a_morph.h"
 
@@ -547,5 +550,6 @@ FPolyObj *PO_GetPolyobj(int polyNum);
 //
 #include "p_spec.h"
 
+bool P_AlignFlat (int linenum, int side, int fc);
 
 #endif	// __P_LOCAL__
