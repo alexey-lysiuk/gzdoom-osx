@@ -34,9 +34,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
 		49E9203E1394CE6000CCEBBC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
-		49E9203F1394CE6000CCEBBC /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
 		49E920411394CE6000CCEBBC /* autostart.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D0C139126C00095D9A0 /* autostart.cpp */; };
 		49E921521394CE6000CCEBBC /* iwadpicker_cocoa.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3B139126C00095D9A0 /* iwadpicker_cocoa.mm */; };
 		49E921A71394CE6000CCEBBC /* autozend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D0D139126C00095D9A0 /* autozend.cpp */; };
@@ -658,7 +656,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 49E92B3213991F2900CCEBBC /* sc_man_scanner.re */;
+			remoteGlobalIDString = 49E92B3213991F2900CCEBBC;
 			remoteInfo = sc_man_scanner.re;
 		};
 		49E91DE21393BF8E00CCEBBC /* PBXContainerItemProxy */ = {
@@ -820,7 +818,6 @@
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
-		1DDD58150DA1D0A300B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		49E920091394C83300CCEBBC /* blob_fragglescript.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_fragglescript.cpp; sourceTree = "<group>"; };
 		49E920121394C8AA00CCEBBC /* blob_games.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_games.cpp; sourceTree = "<group>"; };
 		49E920171394CAC300CCEBBC /* blob_opengl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_opengl.cpp; sourceTree = "<group>"; };
@@ -2008,15 +2005,15 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D1107320486CEB800E47090 /* GZDoom.app */,
-				8AF278CA1390F0370095D9A0 /* libjpeg.a */,
-				8AF2795A1390F1200095D9A0 /* liblzma.a */,
-				8AF279BC1390F2540095D9A0 /* lemon */,
-				8AF27A0A1390F2B50095D9A0 /* re2c */,
-				8AF27A311390F41F0095D9A0 /* zipdir */,
-				8AF27A541390F4F40095D9A0 /* libgme.a */,
-				8AF27B251390F5DC0095D9A0 /* libdumb.a */,
 				8AF27C1C1390F7E20095D9A0 /* libgdtoa.a */,
+				8AF27B251390F5DC0095D9A0 /* libdumb.a */,
+				8AF27A541390F4F40095D9A0 /* libgme.a */,
+				8AF2795A1390F1200095D9A0 /* liblzma.a */,
+				8AF278CA1390F0370095D9A0 /* libjpeg.a */,
+				8AF27A311390F41F0095D9A0 /* zipdir */,
+				8AF27A0A1390F2B50095D9A0 /* re2c */,
+				8AF279BC1390F2540095D9A0 /* lemon */,
+				8D1107320486CEB800E47090 /* GZDoom.app */,
 				49E921C01394CE6000CCEBBC /* GZDoom.app */,
 			);
 			name = Products;
@@ -2039,7 +2036,6 @@
 				49E9287713978BF600CCEBBC /* doom.icns */,
 				8D1107310486CEB800E47090 /* GZDoom-Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
-				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -3809,7 +3805,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				49E9203E1394CE6000CCEBBC /* InfoPlist.strings in Resources */,
-				49E9203F1394CE6000CCEBBC /* MainMenu.xib in Resources */,
 				49E9287813978BF600CCEBBC /* doom.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3819,7 +3814,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
-				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
 				49E9287913978BF600CCEBBC /* doom.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4670,14 +4664,6 @@
 				089C165DFE840E0CC02AAC07 /* English */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		1DDD58140DA1D0A300B32029 /* MainMenu.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1DDD58150DA1D0A300B32029 /* English */,
-			);
-			name = MainMenu.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
