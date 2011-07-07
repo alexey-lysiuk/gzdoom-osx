@@ -370,9 +370,9 @@ void I_Init (void)
 	atterm (I_ShutdownSound);
     I_InitSound ();
 	
-	extern QGLWidget* g_renderWidget;
-	I_InitInput( reinterpret_cast< void* >( g_renderWidget->winId() ) );
-	atterm (I_ShutdownSound);
+//	extern QGLWidget* g_renderWidget;
+//	I_InitInput( reinterpret_cast< void* >( g_renderWidget->winId() ) );
+//	atterm (I_ShutdownSound);
 }
 
 //
