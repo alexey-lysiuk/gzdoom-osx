@@ -35,6 +35,7 @@
 
 /* Begin PBXBuildFile section */
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
+		497C944B13C5DBE100E6B4A8 /* render_widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 497C944A13C5DBE100E6B4A8 /* render_widget.cpp */; };
 		49E9203E1394CE6000CCEBBC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		49E9203F1394CE6000CCEBBC /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
 		49E920411394CE6000CCEBBC /* autostart.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D0C139126C00095D9A0 /* autostart.cpp */; };
@@ -73,7 +74,6 @@
 		8A7C821A13BF3F71000B654E /* crashcatcher.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A7C820813BF3F71000B654E /* crashcatcher.c */; };
 		8A7C821B13BF3F71000B654E /* hardware.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A7C820B13BF3F71000B654E /* hardware.cpp */; };
 		8A7C821C13BF3F71000B654E /* i_cd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A7C820D13BF3F71000B654E /* i_cd.cpp */; };
-		8A7C821D13BF3F71000B654E /* i_input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A7C820E13BF3F71000B654E /* i_input.cpp */; };
 		8A7C821E13BF3F71000B654E /* i_joystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A7C821013BF3F71000B654E /* i_joystick.cpp */; };
 		8A7C821F13BF3F71000B654E /* i_main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A7C821113BF3F71000B654E /* i_main.cpp */; };
 		8A7C822013BF3F71000B654E /* i_movie.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A7C821213BF3F71000B654E /* i_movie.cpp */; };
@@ -822,6 +822,8 @@
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		1DDD58150DA1D0A300B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		497C944913C5DBE100E6B4A8 /* render_widget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = render_widget.h; sourceTree = "<group>"; };
+		497C944A13C5DBE100E6B4A8 /* render_widget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = render_widget.cpp; sourceTree = "<group>"; };
 		49E920091394C83300CCEBBC /* blob_fragglescript.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_fragglescript.cpp; sourceTree = "<group>"; };
 		49E920121394C8AA00CCEBBC /* blob_games.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_games.cpp; sourceTree = "<group>"; };
 		49E920171394CAC300CCEBBC /* blob_opengl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_opengl.cpp; sourceTree = "<group>"; };
@@ -2126,6 +2128,8 @@
 				8A7C821613BF3F71000B654E /* iwadpicker_cocoa.mm */,
 				8A7C821713BF3F71000B654E /* qtvideo.cpp */,
 				8A7C821813BF3F71000B654E /* qtvideo.h */,
+				497C944A13C5DBE100E6B4A8 /* render_widget.cpp */,
+				497C944913C5DBE100E6B4A8 /* render_widget.h */,
 				8A7C821913BF3F71000B654E /* st_start.cpp */,
 			);
 			path = qt;
@@ -4583,7 +4587,6 @@
 				8A7C821A13BF3F71000B654E /* crashcatcher.c in Sources */,
 				8A7C821B13BF3F71000B654E /* hardware.cpp in Sources */,
 				8A7C821C13BF3F71000B654E /* i_cd.cpp in Sources */,
-				8A7C821D13BF3F71000B654E /* i_input.cpp in Sources */,
 				8A7C821E13BF3F71000B654E /* i_joystick.cpp in Sources */,
 				8A7C821F13BF3F71000B654E /* i_main.cpp in Sources */,
 				8A7C822013BF3F71000B654E /* i_movie.cpp in Sources */,
@@ -4592,6 +4595,7 @@
 				8A7C822413BF3F71000B654E /* st_start.cpp in Sources */,
 				8A7C822213BF3F71000B654E /* iwadpicker_cocoa.mm in Sources */,
 				8AF28013139126C00095D9A0 /* autozend.cpp in Sources */,
+				497C944B13C5DBE100E6B4A8 /* render_widget.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -46,14 +46,12 @@
 #endif
 
 #include <QtGui/QApplication>
-#include <QtGui/QKeyEvent>
-#include <QtOpenGL/QGLWidget>
+//#include <QtGui/QKeyEvent>
+//#include <QtOpenGL/QGLWidget>
 
 #include "doomerrors.h"
 #include "m_argv.h"
 #include "d_main.h"
-#include "d_event.h"
-#include "d_gui.h"
 #include "i_system.h"
 #include "i_video.h"
 #include "c_console.h"
@@ -65,7 +63,6 @@
 #include "cmdlib.h"
 #include "r_main.h"
 #include "doomstat.h"
-#include "dikeys.h"
 
 // MACROS ------------------------------------------------------------------
 
@@ -252,145 +249,6 @@ static void unprotect_rtext()
 void I_StartupJoysticks();
 void I_ShutdownJoysticks();
 
-
-QGLWidget* g_renderWidget = NULL;
-
-
-class RenderWidget : public QGLWidget
-{
-public:
-	
-	
-protected:
-	virtual void initializeGL();
-	//virtual void resizeGL( int width, int height );
-	
-	virtual void resizeEvent( QResizeEvent* event );
-	
-	virtual void keyPressEvent( QKeyEvent* keyEvent );
-    virtual void keyReleaseEvent( QKeyEvent* keyEvent );
-
-private:
-	void processKeyEvent( QKeyEvent* keyEvent );
-	
-};
-
-
-void RenderWidget::initializeGL()
-{
-	glClearColor( 0.5f, 0.5f, 0.5f, 1.0f );
-	glClear( GL_COLOR_BUFFER_BIT );
-}
-
-//void RenderWidget::resizeGL( int width, int height )
-//{
-//	extern int NewWidth, NewHeight, NewBits, DisplayBits;
-//	extern bool setmodeneeded;
-//	
-//	NewWidth    = width;
-//	NewHeight   = height;
-//	NewBits     = 32;
-//	DisplayBits = 32;
-//	
-//	setmodeneeded = true;
-//}
-
-void RenderWidget::resizeEvent( QResizeEvent* event )
-{
-	extern int NewWidth, NewHeight, NewBits, DisplayBits;
-	extern bool setmodeneeded;
-	
-	NewWidth    = event->size().width();
-	NewHeight   = event->size().height();
-	NewBits     = 32;
-	DisplayBits = 32;
-	
-	setmodeneeded = true;
-}
-
-
-void RenderWidget::keyPressEvent( QKeyEvent* keyEvent )
-{
-	processKeyEvent( keyEvent );
-}
-
-void RenderWidget::keyReleaseEvent( QKeyEvent* keyEvent )
-{
-	processKeyEvent( keyEvent );
-}
-
-extern bool GUICapture;
-
-void RenderWidget::processKeyEvent( QKeyEvent* keyEvent )
-{
-	event_t event;
-	memset( &event, 0, sizeof( event ) );
-	
-	if ( GUICapture )
-	{
-		event.type = EV_GUI_Event;
-		event.subtype = QEvent::KeyPress == keyEvent->type()
-			? EV_GUI_KeyDown
-			: EV_GUI_KeyUp;
-		
-		switch ( keyEvent->key() )
-		{
-			case Qt::Key_Up:
-				event.data1 = GK_UP;
-				break;
-				
-			case Qt::Key_Down:
-				event.data1 = GK_DOWN;
-				break;
-				
-			case Qt::Key_Escape:
-				event.data1 = GK_ESCAPE;
-				break;
-				
-			case Qt::Key_Return:
-			case Qt::Key_Enter:
-				event.data1 = GK_RETURN;
-				break;
-				
-			default:
-				break;
-		}
-		
-	}
-	else
-	{
-		event.type = QEvent::KeyPress == keyEvent->type()
-			? EV_KeyDown
-			: EV_KeyUp;
-		
-		switch ( keyEvent->key() )
-		{
-			case Qt::Key_Up:
-				event.data1 = DIK_UP;
-				break;
-				
-			case Qt::Key_Down:
-				event.data1 = DIK_DOWN;
-				break;
-				
-			case Qt::Key_Escape:
-				event.data1 = DIK_ESCAPE;
-				break;
-				
-			case Qt::Key_Return:
-			case Qt::Key_Enter:
-				event.data1 = DIK_RETURN;
-				break;
-				
-			default:
-				break;
-		}
-	}
-	
-	D_PostEvent( &event );
-}
-
-
 int main (int argc, char **argv)
 {
 #if !defined (__APPLE__)
@@ -411,13 +269,6 @@ int main (int argc, char **argv)
 #endif
 	
 	QApplication application( argc, argv );
-	
-	g_renderWidget = new RenderWidget; //new QGLWidget;
-//	g_renderWidget->setAttribute( Qt::WA_QuitOnClose, true );
-	g_renderWidget->setWindowTitle( GAMESIG " " DOTVERSIONSTR " (" __DATE__ ")" );
-	g_renderWidget->setMinimumSize( 640, 480 );
-//	g_renderWidget->setGeometry( 100, 100, 800, 600 );
-	g_renderWidget->makeCurrent();
 	
     try
     {

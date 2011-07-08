@@ -27,7 +27,7 @@
 #include "gl/textures/gl_material.h"
 #include "gl/system/gl_cvars.h"
 
-#include <QtOpenGL/QGLWidget>
+#include "render_widget.h"
 
 // MACROS ------------------------------------------------------------------
 
@@ -62,8 +62,6 @@ CUSTOM_CVAR(Int, gl_vid_multisample, 0, CVAR_ARCHIVE | CVAR_GLOBALCONFIG | CVAR_
 }
 
 RenderContext gl;
-
-extern QGLWidget* g_renderWidget;
 
 // CODE --------------------------------------------------------------------
 
@@ -203,6 +201,17 @@ DFrameBuffer *QtGLVideo::CreateFrameBuffer (int width, int height, bool fullscre
 //
 ////	fb->SetFlash (flashColor, flashAmount);
 //	return fb;
+
+	if ( NULL == g_renderWidget )
+	{
+		g_renderWidget = new RenderWidget;
+	}
+
+	QRect newGeometry = g_renderWidget->geometry();
+	newGeometry.setWidth ( width  );
+	newGeometry.setHeight( height );
+	
+	g_renderWidget->setGeometry( newGeometry );
 	
 	if ( NULL != old )
 	{
@@ -215,8 +224,8 @@ DFrameBuffer *QtGLVideo::CreateFrameBuffer (int width, int height, bool fullscre
 		I_FatalError( "Could not create new screen (%d x %d)", width, height );
 	}
 	
-	g_renderWidget->setGeometry( 100, 100, width, height );
-	g_renderWidget->show();
+//	g_renderWidget->setGeometry( 100, 100, width, height );
+//	g_renderWidget->show();
 	
 	return result;
 }
