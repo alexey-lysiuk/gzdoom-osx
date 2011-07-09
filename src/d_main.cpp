@@ -73,7 +73,7 @@
 #include "st_stuff.h"
 #include "am_map.h"
 #include "p_setup.h"
-#include "r_local.h"
+#include "r_utility.h"
 #include "r_sky.h"
 #include "d_main.h"
 #include "d_dehacked.h"
@@ -87,7 +87,6 @@
 #include "gameconfigfile.h"
 #include "sbar.h"
 #include "decallib.h"
-#include "r_polymost.h"
 #include "version.h"
 #include "v_text.h"
 #include "st_start.h"
@@ -106,7 +105,11 @@
 #include "sc_man.h"
 #include "po_man.h"
 #include "resourcefiles/resourcefile.h"
-#include "r_3dfloors.h"
+#include "r_renderer.h"
+
+#ifdef USE_POLYMOST
+#include "r_polymost.h"
+#endif
 
 EXTERN_CVAR(Bool, hud_althud)
 void DrawHUD();
@@ -162,7 +165,6 @@ extern bool demorecording;
 extern bool M_DemoNoPlay;	// [RH] if true, then skip any demos in the loop
 extern bool insave;
 
-extern cycle_t WallCycles, PlaneCycles, MaskedCycles, WallScanCycles;
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
@@ -184,6 +186,9 @@ CUSTOM_CVAR (Int, fraglimit, 0, CVAR_SERVERINFO)
 	}
 }
 
+#ifdef USE_POLYMOST
+CVAR(Bool, testpolymost, false, 0)
+#endif
 CVAR (Float, timelimit, 0.f, CVAR_SERVERINFO);
 CVAR (Int, wipetype, 1, CVAR_ARCHIVE);
 CVAR (Int, snd_drawoutput, 0, 0);
@@ -276,8 +281,10 @@ void D_ProcessEvents (void)
 			continue;				// console ate the event
 		if (M_Responder (ev))
 			continue;				// menu ate the event
-		if (testpolymost)
-			Polymost_Responder (ev);
+		#ifdef USE_POLYMOST
+			if (testpolymost)
+				Polymost_Responder (ev);
+		#endif
 		G_Responder (ev);
 	}
 }
@@ -298,8 +305,11 @@ void D_PostEvent (const event_t *ev)
 		return;
 	}
 	events[eventhead] = *ev;
-	if (ev->type == EV_Mouse && !testpolymost && !paused && menuactive == MENU_Off &&
-		ConsoleState != c_down && ConsoleState != c_falling)
+	if (ev->type == EV_Mouse && !paused && menuactive == MENU_Off && ConsoleState != c_down && ConsoleState != c_falling
+#ifdef USE_POLYMOST
+		&& !testpolymost		
+#endif
+		)
 	{
 		if (Button_Mlook.bDown || freelook)
 		{
@@ -498,6 +508,7 @@ CVAR (Flag, sv_disallowsuicide,		dmflags2, DF2_NOSUICIDE);
 CVAR (Flag, sv_noautoaim,			dmflags2, DF2_NOAUTOAIM);
 CVAR (Flag, sv_dontcheckammo,		dmflags2, DF2_DONTCHECKAMMO);
 CVAR (Flag, sv_killbossmonst,		dmflags2, DF2_KILLBOSSMONST);
+CVAR (Flag, sv_nocountendmonst,		dmflags2, DF2_NOCOUNTENDMONST);
 //==========================================================================
 //
 // CVAR compatflags
@@ -710,6 +721,7 @@ void D_Display ()
 
 	hw2d = false;
 
+#ifdef USE_POLYMOST
 	if (testpolymost)
 	{
 		drawpolymosttest();
@@ -717,6 +729,7 @@ void D_Display ()
 		M_Drawer();
 	}
 	else
+#endif
 	{
 		unsigned int nowtime = I_FPSTime();
 		TexMan.UpdateAnimations(nowtime);
@@ -744,14 +757,14 @@ void D_Display ()
 			screen->SetBlendingRect(viewwindowx, viewwindowy,
 				viewwindowx + viewwidth, viewwindowy + viewheight);
 			P_CheckPlayerSprites();
-			screen->RenderView(&players[consoleplayer]);
+			Renderer->RenderView(&players[consoleplayer]);
 			if ((hw2d = screen->Begin2D(viewactive)))
 			{
 				// Redraw everything every frame when using 2D accel
 				SB_state = screen->GetPageCount();
 				BorderNeedRefresh = screen->GetPageCount();
 			}
-			screen->DrawRemainingPlayerSprites();
+			Renderer->DrawRemainingPlayerSprites();
 			screen->DrawBlendingRect();
 			if (automapactive)
 			{
@@ -915,15 +928,7 @@ void D_ErrorCleanup ()
 		menuactive = MENU_Off;
 	}
 	insave = false;
-	fakeActive = 0;
-	fake3D = 0;
-	while (CurrentSkybox)
-	{
-		R_3D_DeleteHeights();
-		R_3D_LeaveSkybox();
-	}
-	R_3D_ResetClip();
-	R_3D_DeleteHeights();
+	Renderer->ErrorCleanup();
 }
 
 //==========================================================================
@@ -2109,6 +2114,7 @@ void D_DoomMain (void)
 		{
 			Printf ("I_Init: Setting up machine state.\n");
 			I_Init ();
+			I_CreateRenderer();
 		}
 
 		Printf ("V_Init: allocate screen.\n");
@@ -2463,97 +2469,3 @@ void FStartupScreen::NetMessage(char const *,...) {}
 void FStartupScreen::NetDone(void) {}
 bool FStartupScreen::NetLoop(bool (*)(void *),void *) { return false; }
 
-//==========================================================================
-//
-// STAT fps
-//
-// Displays statistics about rendering times
-//
-//==========================================================================
-
-//==========================================================================
-//
-// STAT fps
-//
-// Displays statistics about rendering times
-//
-//==========================================================================
-
-ADD_STAT (fps)
-{
-	FString out;
-	out.Format("frame=%04.1f ms  walls=%04.1f ms  planes=%04.1f ms  masked=%04.1f ms",
-		FrameCycles.TimeMS(), WallCycles.TimeMS(), PlaneCycles.TimeMS(), MaskedCycles.TimeMS());
-	return out;
-}
-
-
-static double f_acc, w_acc,p_acc,m_acc;
-static int acc_c;
-
-ADD_STAT (fps_accumulated)
-{
-	f_acc += FrameCycles.TimeMS();
-	w_acc += WallCycles.TimeMS();
-	p_acc += PlaneCycles.TimeMS();
-	m_acc += MaskedCycles.TimeMS();
-	acc_c++;
-	FString out;
-	out.Format("frame=%04.1f ms  walls=%04.1f ms  planes=%04.1f ms  masked=%04.1f ms  %d counts",
-		f_acc/acc_c, w_acc/acc_c, p_acc/acc_c, m_acc/acc_c, acc_c);
-	Printf(PRINT_LOG, "%s\n", out.GetChars());
-	return out;
-}
-
-//==========================================================================
-//
-// STAT wallcycles
-//
-// Displays the minimum number of cycles spent drawing walls
-//
-//==========================================================================
-
-static double bestwallcycles = HUGE_VAL;
-
-ADD_STAT (wallcycles)
-{
-	FString out;
-	double cycles = WallCycles.Time();
-	if (cycles && cycles < bestwallcycles)
-		bestwallcycles = cycles;
-	out.Format ("%g", bestwallcycles);
-	return out;
-}
-
-//==========================================================================
-//
-// CCMD clearwallcycles
-//
-// Resets the count of minimum wall drawing cycles
-//
-//==========================================================================
-
-CCMD (clearwallcycles)
-{
-	bestwallcycles = HUGE_VAL;
-}
-
-#if 1
-// To use these, also uncomment the clock/unclock in wallscan
-static double bestscancycles = HUGE_VAL;
-
-ADD_STAT (scancycles)
-{
-	FString out;
-	double scancycles = WallScanCycles.Time();
-	if (scancycles && scancycles < bestscancycles)
-		bestscancycles = scancycles;
-	out.Format ("%g", bestscancycles);
-	return out;
-}
-
-CCMD (clearscancycles)
-{
-	bestscancycles = HUGE_VAL;
-}
-#endif

@@ -48,7 +48,6 @@
 #include "gl/system/gl_wipe.cpp"
 
 #include "gl/textures/gl_bitmap.cpp"
-#include "gl/textures/gl_cameratexture.cpp"
 #include "gl/textures/gl_hirestex.cpp"
 #include "gl/textures/gl_hqresize.cpp"
 #include "gl/textures/gl_hwtexture.cpp"

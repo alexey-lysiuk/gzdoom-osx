@@ -78,6 +78,8 @@
 		8A74F4671392532C001F54B0 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F4661392532C001F54B0 /* Carbon.framework */; };
 		8A7C81C613BF3C0B000B654E /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3E139126C00095D9A0 /* SDLMain.m */; };
 		8A7C81C713BF3C5A000B654E /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3E139126C00095D9A0 /* SDLMain.m */; };
+		8A8D68B713C84344001D368F /* r_swrenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D68B313C84344001D368F /* r_swrenderer.cpp */; };
+		8A8D68B813C84344001D368F /* r_utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D68B513C84344001D368F /* r_utility.cpp */; };
 		8A938D1113B6039F002627DE /* actorptrselect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A938D0F13B6039F002627DE /* actorptrselect.cpp */; };
 		8AC81C411391321300F49DC3 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF278CA1390F0370095D9A0 /* libjpeg.a */; };
 		8AC81C421391321300F49DC3 /* liblzma.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF2795A1390F1200095D9A0 /* liblzma.a */; };
@@ -434,7 +436,6 @@
 		8AF280EB139126C00095D9A0 /* gl_threads.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E49139126C00095D9A0 /* gl_threads.cpp */; };
 		8AF280EC139126C00095D9A0 /* gl_wipe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E4B139126C00095D9A0 /* gl_wipe.cpp */; };
 		8AF280ED139126C00095D9A0 /* gl_bitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E4D139126C00095D9A0 /* gl_bitmap.cpp */; };
-		8AF280EE139126C00095D9A0 /* gl_cameratexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E4F139126C00095D9A0 /* gl_cameratexture.cpp */; };
 		8AF280EF139126C00095D9A0 /* gl_hirestex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E50139126C00095D9A0 /* gl_hirestex.cpp */; };
 		8AF280F0139126C00095D9A0 /* gl_hqresize.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E51139126C00095D9A0 /* gl_hqresize.cpp */; };
 		8AF280F1139126C00095D9A0 /* gl_hwtexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E52139126C00095D9A0 /* gl_hwtexture.cpp */; };
@@ -854,6 +855,11 @@
 		8A74F450139252F9001F54B0 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		8A74F4661392532C001F54B0 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		8A7C819913BF38FE000B654E /* svnrevision_gz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = svnrevision_gz.h; sourceTree = "<group>"; };
+		8A8D68B213C84344001D368F /* r_renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = r_renderer.h; sourceTree = "<group>"; };
+		8A8D68B313C84344001D368F /* r_swrenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = r_swrenderer.cpp; sourceTree = "<group>"; };
+		8A8D68B413C84344001D368F /* r_swrenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = r_swrenderer.h; sourceTree = "<group>"; };
+		8A8D68B513C84344001D368F /* r_utility.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = r_utility.cpp; sourceTree = "<group>"; };
+		8A8D68B613C84344001D368F /* r_utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = r_utility.h; sourceTree = "<group>"; };
 		8A938D0F13B6039F002627DE /* actorptrselect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = actorptrselect.cpp; sourceTree = "<group>"; };
 		8A938D1013B6039F002627DE /* actorptrselect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = actorptrselect.h; sourceTree = "<group>"; };
 		8AF278CA1390F0370095D9A0 /* libjpeg.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libjpeg.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1514,7 +1520,6 @@
 		8AF27E4B139126C00095D9A0 /* gl_wipe.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gl_wipe.cpp; sourceTree = "<group>"; };
 		8AF27E4D139126C00095D9A0 /* gl_bitmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gl_bitmap.cpp; sourceTree = "<group>"; };
 		8AF27E4E139126C00095D9A0 /* gl_bitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gl_bitmap.h; sourceTree = "<group>"; };
-		8AF27E4F139126C00095D9A0 /* gl_cameratexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gl_cameratexture.cpp; sourceTree = "<group>"; };
 		8AF27E50139126C00095D9A0 /* gl_hirestex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gl_hirestex.cpp; sourceTree = "<group>"; };
 		8AF27E51139126C00095D9A0 /* gl_hqresize.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gl_hqresize.cpp; sourceTree = "<group>"; };
 		8AF27E52139126C00095D9A0 /* gl_hwtexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gl_hwtexture.cpp; sourceTree = "<group>"; };
@@ -2828,13 +2833,18 @@
 				8AF27F06139126C00095D9A0 /* r_plane.h */,
 				8AF27F07139126C00095D9A0 /* r_polymost.cpp */,
 				8AF27F08139126C00095D9A0 /* r_polymost.h */,
+				8A8D68B213C84344001D368F /* r_renderer.h */,
 				8AF27F09139126C00095D9A0 /* r_segs.cpp */,
 				8AF27F0A139126C00095D9A0 /* r_segs.h */,
 				8AF27F0B139126C00095D9A0 /* r_sky.cpp */,
 				8AF27F0C139126C00095D9A0 /* r_sky.h */,
 				8AF27F0D139126C00095D9A0 /* r_state.h */,
+				8A8D68B313C84344001D368F /* r_swrenderer.cpp */,
+				8A8D68B413C84344001D368F /* r_swrenderer.h */,
 				8AF27F0E139126C00095D9A0 /* r_things.cpp */,
 				8AF27F0F139126C00095D9A0 /* r_things.h */,
+				8A8D68B513C84344001D368F /* r_utility.cpp */,
+				8A8D68B613C84344001D368F /* r_utility.h */,
 				8AF27F1F139126C00095D9A0 /* s_advsound.cpp */,
 				8AF27F20139126C00095D9A0 /* s_environment.cpp */,
 				8AF27F21139126C00095D9A0 /* s_playlist.cpp */,
@@ -3268,7 +3278,6 @@
 			children = (
 				8AF27E4D139126C00095D9A0 /* gl_bitmap.cpp */,
 				8AF27E4E139126C00095D9A0 /* gl_bitmap.h */,
-				8AF27E4F139126C00095D9A0 /* gl_cameratexture.cpp */,
 				8AF27E50139126C00095D9A0 /* gl_hirestex.cpp */,
 				8AF27E51139126C00095D9A0 /* gl_hqresize.cpp */,
 				8AF27E52139126C00095D9A0 /* gl_hwtexture.cpp */,
@@ -4313,7 +4322,6 @@
 				8AF280EB139126C00095D9A0 /* gl_threads.cpp in Sources */,
 				8AF280EC139126C00095D9A0 /* gl_wipe.cpp in Sources */,
 				8AF280ED139126C00095D9A0 /* gl_bitmap.cpp in Sources */,
-				8AF280EE139126C00095D9A0 /* gl_cameratexture.cpp in Sources */,
 				8AF280EF139126C00095D9A0 /* gl_hirestex.cpp in Sources */,
 				8AF280F0139126C00095D9A0 /* gl_hqresize.cpp in Sources */,
 				8AF280F1139126C00095D9A0 /* gl_hwtexture.cpp in Sources */,
@@ -4529,15 +4537,17 @@
 				8AF281F2139126C10095D9A0 /* zstrformat.cpp in Sources */,
 				8AF281F3139126C10095D9A0 /* zstring.cpp in Sources */,
 				8A938D1113B6039F002627DE /* actorptrselect.cpp in Sources */,
-				8AF28175139126C10095D9A0 /* iwadpicker_cocoa.mm in Sources */,
-				8A7C81C613BF3C0B000B654E /* SDLMain.m in Sources */,
-				8AF28013139126C00095D9A0 /* autozend.cpp in Sources */,
 				497C93EB13C5A6F800E6B4A8 /* colormaps.cpp in Sources */,
 				497C93EC13C5A6F800E6B4A8 /* r_interpolate.cpp in Sources */,
 				497C93ED13C5A6F800E6B4A8 /* r_translate.cpp in Sources */,
 				497C93EE13C5A6F800E6B4A8 /* renderstyle.cpp in Sources */,
 				497C93EF13C5A6F800E6B4A8 /* sprites.cpp in Sources */,
 				497C93F013C5A6F800E6B4A8 /* voxels.cpp in Sources */,
+				8A8D68B713C84344001D368F /* r_swrenderer.cpp in Sources */,
+				8A8D68B813C84344001D368F /* r_utility.cpp in Sources */,
+				8AF28175139126C10095D9A0 /* iwadpicker_cocoa.mm in Sources */,
+				8A7C81C613BF3C0B000B654E /* SDLMain.m in Sources */,
+				8AF28013139126C00095D9A0 /* autozend.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

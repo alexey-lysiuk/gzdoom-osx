@@ -34,7 +34,6 @@ typedef BYTE lighttable_t;	// This could be wider for >8 bit display.
 //
 // POV related.
 //
-extern DCanvas			*RenderTarget;
 extern bool				bRenderingToCanvas;
 extern fixed_t			viewcos;
 extern fixed_t			viewsin;
@@ -46,15 +45,8 @@ extern fixed_t			InvZtoScale;
 extern float			WallTMapScale;
 extern float			WallTMapScale2;
 
-extern "C" int				viewwidth;
-extern "C" int				viewheight;
 extern int				viewwindowx;
 extern int				viewwindowy;
-
-
-
-extern "C" int			centerx, centerxwide;
-extern "C" int			centery;
 
 extern fixed_t			centerxfrac;
 extern fixed_t			centeryfrac;
@@ -65,8 +57,6 @@ extern FDynamicColormap*basecolormap;	// [RH] Colormap for sector currently bein
 
 extern int				linecount;
 extern int				loopcount;
-
-extern int				r_Yaspect;
 
 extern bool				r_dontmaplines;
 
@@ -106,7 +96,7 @@ extern float			r_TiltVisibility;
 extern fixed_t			r_SpriteVisibility;
 extern fixed_t			r_SkyVisibility;
 
-extern int				extralight, r_actualextralight;
+extern int				r_actualextralight;
 extern bool				foggy;
 extern int				fixedlightlev;
 extern lighttable_t*	fixedcolormap;
@@ -131,11 +121,8 @@ extern void (*hcolfunc_post2) (int hx, int sx, int yl, int yh);
 extern void (STACK_ARGS *hcolfunc_post4) (int sx, int yl, int yh);
 
 
-void R_SetFOV (float fov);
-float R_GetFOV ();
 void R_InitTextureMapping ();
 
-void R_SetViewAngle ();
 
 //
 // REFRESH - the actual rendering functions.
@@ -146,14 +133,6 @@ void R_RenderActorView (AActor *actor, bool dontmaplines = false);
 void R_SetupBuffer ();
 
 void R_RenderViewToCanvas (AActor *actor, DCanvas *canvas, int x, int y, int width, int height, bool dontmaplines = false);
-
-
-// Called by startup code.
-void R_Init (void);
-void R_ExecuteSetViewSize (void);
-
-// Called by M_Responder.
-void R_SetViewSize (int blocks);
 
 // [RH] Initialize multires stuff for renderer
 void R_MultiresInit (void);

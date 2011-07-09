@@ -31,7 +31,7 @@
 #include "c_cvars.h"
 #include "g_level.h"
 #include "r_sky.h"
-#include "r_main.h"
+#include "r_utility.h"
 #include "v_text.h"
 #include "gi.h"
 
@@ -54,7 +54,7 @@ CUSTOM_CVAR (Bool, r_stretchsky, true, CVAR_ARCHIVE)
 	R_InitSkyMap ();
 }
 
-extern fixed_t freelookviewheight;
+fixed_t			freelookviewheight;
 
 //==========================================================================
 //
