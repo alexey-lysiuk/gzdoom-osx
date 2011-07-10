@@ -70,14 +70,16 @@
 		49E92496139523FB00CCEBBC /* c_expr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D20139126C00095D9A0 /* c_expr.cpp */; };
 		49E9287813978BF600CCEBBC /* doom.icns in Resources */ = {isa = PBXBuildFile; fileRef = 49E9287713978BF600CCEBBC /* doom.icns */; };
 		49E9287913978BF600CCEBBC /* doom.icns in Resources */ = {isa = PBXBuildFile; fileRef = 49E9287713978BF600CCEBBC /* doom.icns */; };
-		8A3C758713C898E8002608BC /* ANSIString.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3C757813C898E8002608BC /* ANSIString.m */; };
-		8A3C758813C898E8002608BC /* ConsoleController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3C757A13C898E8002608BC /* ConsoleController.m */; };
-		8A3C758913C898E8002608BC /* FileButtonController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3C757C13C898E8002608BC /* FileButtonController.m */; };
-		8A3C758A13C898E8002608BC /* LauncherApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3C757E13C898E8002608BC /* LauncherApp.m */; };
-		8A3C758B13C898E8002608BC /* LauncherMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3C757F13C898E8002608BC /* LauncherMain.m */; };
-		8A3C758C13C898E8002608BC /* UKKQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3C758213C898E8002608BC /* UKKQueue.m */; };
-		8A3C758D13C898E8002608BC /* UKMainThreadProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3C758413C898E8002608BC /* UKMainThreadProxy.m */; };
-		8A3C758E13C898E8002608BC /* WadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3C758613C898E8002608BC /* WadViewController.m */; };
+		8A3AEE4313C9E170003AC5B8 /* ANSIString.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3AEE3013C9E170003AC5B8 /* ANSIString.m */; };
+		8A3AEE4413C9E170003AC5B8 /* ConsoleController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3AEE3213C9E170003AC5B8 /* ConsoleController.m */; };
+		8A3AEE4513C9E170003AC5B8 /* DrawerButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3AEE3413C9E170003AC5B8 /* DrawerButton.m */; };
+		8A3AEE4613C9E170003AC5B8 /* FileButtonController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3AEE3613C9E170003AC5B8 /* FileButtonController.m */; };
+		8A3AEE4713C9E170003AC5B8 /* LauncherApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3AEE3813C9E170003AC5B8 /* LauncherApp.m */; };
+		8A3AEE4813C9E170003AC5B8 /* LauncherMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3AEE3913C9E170003AC5B8 /* LauncherMain.m */; };
+		8A3AEE4913C9E170003AC5B8 /* ResolutionDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3AEE3B13C9E170003AC5B8 /* ResolutionDataSource.m */; };
+		8A3AEE4A13C9E170003AC5B8 /* UKKQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3AEE3E13C9E170003AC5B8 /* UKKQueue.m */; };
+		8A3AEE4B13C9E170003AC5B8 /* UKMainThreadProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3AEE4013C9E170003AC5B8 /* UKMainThreadProxy.m */; };
+		8A3AEE4C13C9E170003AC5B8 /* WadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3AEE4213C9E170003AC5B8 /* WadViewController.m */; };
 		8A3C759513C89942002608BC /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8A3C759313C89942002608BC /* MainMenu.nib */; };
 		8A74F2A2139235E0001F54B0 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2A1139235E0001F54B0 /* OpenGL.framework */; };
 		8A74F2B7139235FD001F54B0 /* libSDL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2B5139235FD001F54B0 /* libSDL.a */; };
@@ -855,24 +857,28 @@
 		49E9242213951E5F00CCEBBC /* blob_src_1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_src_1.cpp; sourceTree = "<group>"; };
 		49E924681395222500CCEBBC /* blob_src_2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_src_2.cpp; sourceTree = "<group>"; };
 		49E9287713978BF600CCEBBC /* doom.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = doom.icns; sourceTree = "<group>"; };
+		8A3AEE2F13C9E170003AC5B8 /* ANSIString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANSIString.h; sourceTree = "<group>"; };
+		8A3AEE3013C9E170003AC5B8 /* ANSIString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANSIString.m; sourceTree = "<group>"; };
+		8A3AEE3113C9E170003AC5B8 /* ConsoleController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConsoleController.h; sourceTree = "<group>"; };
+		8A3AEE3213C9E170003AC5B8 /* ConsoleController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConsoleController.m; sourceTree = "<group>"; };
+		8A3AEE3313C9E170003AC5B8 /* DrawerButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawerButton.h; sourceTree = "<group>"; };
+		8A3AEE3413C9E170003AC5B8 /* DrawerButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawerButton.m; sourceTree = "<group>"; };
+		8A3AEE3513C9E170003AC5B8 /* FileButtonController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileButtonController.h; sourceTree = "<group>"; };
+		8A3AEE3613C9E170003AC5B8 /* FileButtonController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileButtonController.m; sourceTree = "<group>"; };
+		8A3AEE3713C9E170003AC5B8 /* LauncherApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LauncherApp.h; sourceTree = "<group>"; };
+		8A3AEE3813C9E170003AC5B8 /* LauncherApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LauncherApp.m; sourceTree = "<group>"; };
+		8A3AEE3913C9E170003AC5B8 /* LauncherMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LauncherMain.m; sourceTree = "<group>"; };
+		8A3AEE3A13C9E170003AC5B8 /* ResolutionDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResolutionDataSource.h; sourceTree = "<group>"; };
+		8A3AEE3B13C9E170003AC5B8 /* ResolutionDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResolutionDataSource.m; sourceTree = "<group>"; };
+		8A3AEE3C13C9E170003AC5B8 /* UKFileWatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UKFileWatcher.h; sourceTree = "<group>"; };
+		8A3AEE3D13C9E170003AC5B8 /* UKKQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UKKQueue.h; sourceTree = "<group>"; };
+		8A3AEE3E13C9E170003AC5B8 /* UKKQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UKKQueue.m; sourceTree = "<group>"; };
+		8A3AEE3F13C9E170003AC5B8 /* UKMainThreadProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UKMainThreadProxy.h; sourceTree = "<group>"; };
+		8A3AEE4013C9E170003AC5B8 /* UKMainThreadProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UKMainThreadProxy.m; sourceTree = "<group>"; };
+		8A3AEE4113C9E170003AC5B8 /* WadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WadViewController.h; sourceTree = "<group>"; };
+		8A3AEE4213C9E170003AC5B8 /* WadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WadViewController.m; sourceTree = "<group>"; };
 		8A3C755213C897E6002608BC /* Launcher.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Launcher.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A3C755413C897E6002608BC /* Launcher-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Launcher-Info.plist"; sourceTree = "<group>"; };
-		8A3C757713C898E8002608BC /* ANSIString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANSIString.h; sourceTree = "<group>"; };
-		8A3C757813C898E8002608BC /* ANSIString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANSIString.m; sourceTree = "<group>"; };
-		8A3C757913C898E8002608BC /* ConsoleController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConsoleController.h; sourceTree = "<group>"; };
-		8A3C757A13C898E8002608BC /* ConsoleController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConsoleController.m; sourceTree = "<group>"; };
-		8A3C757B13C898E8002608BC /* FileButtonController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileButtonController.h; sourceTree = "<group>"; };
-		8A3C757C13C898E8002608BC /* FileButtonController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileButtonController.m; sourceTree = "<group>"; };
-		8A3C757D13C898E8002608BC /* LauncherApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LauncherApp.h; sourceTree = "<group>"; };
-		8A3C757E13C898E8002608BC /* LauncherApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LauncherApp.m; sourceTree = "<group>"; };
-		8A3C757F13C898E8002608BC /* LauncherMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LauncherMain.m; sourceTree = "<group>"; };
-		8A3C758013C898E8002608BC /* UKFileWatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UKFileWatcher.h; sourceTree = "<group>"; };
-		8A3C758113C898E8002608BC /* UKKQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UKKQueue.h; sourceTree = "<group>"; };
-		8A3C758213C898E8002608BC /* UKKQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UKKQueue.m; sourceTree = "<group>"; };
-		8A3C758313C898E8002608BC /* UKMainThreadProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UKMainThreadProxy.h; sourceTree = "<group>"; };
-		8A3C758413C898E8002608BC /* UKMainThreadProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UKMainThreadProxy.m; sourceTree = "<group>"; };
-		8A3C758513C898E8002608BC /* WadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WadViewController.h; sourceTree = "<group>"; };
-		8A3C758613C898E8002608BC /* WadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WadViewController.m; sourceTree = "<group>"; };
 		8A3C759413C89942002608BC /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		8A44602813BF0306007FA8E1 /* gzdoom_sdl.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = gzdoom_sdl.xcconfig; sourceTree = "<group>"; };
 		8A74F2A1139235E0001F54B0 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
@@ -2141,22 +2147,26 @@
 		8A3C756113C898A8002608BC /* Launcher */ = {
 			isa = PBXGroup;
 			children = (
-				8A3C757713C898E8002608BC /* ANSIString.h */,
-				8A3C757813C898E8002608BC /* ANSIString.m */,
-				8A3C757913C898E8002608BC /* ConsoleController.h */,
-				8A3C757A13C898E8002608BC /* ConsoleController.m */,
-				8A3C757B13C898E8002608BC /* FileButtonController.h */,
-				8A3C757C13C898E8002608BC /* FileButtonController.m */,
-				8A3C757D13C898E8002608BC /* LauncherApp.h */,
-				8A3C757E13C898E8002608BC /* LauncherApp.m */,
-				8A3C757F13C898E8002608BC /* LauncherMain.m */,
-				8A3C758013C898E8002608BC /* UKFileWatcher.h */,
-				8A3C758113C898E8002608BC /* UKKQueue.h */,
-				8A3C758213C898E8002608BC /* UKKQueue.m */,
-				8A3C758313C898E8002608BC /* UKMainThreadProxy.h */,
-				8A3C758413C898E8002608BC /* UKMainThreadProxy.m */,
-				8A3C758513C898E8002608BC /* WadViewController.h */,
-				8A3C758613C898E8002608BC /* WadViewController.m */,
+				8A3AEE2F13C9E170003AC5B8 /* ANSIString.h */,
+				8A3AEE3013C9E170003AC5B8 /* ANSIString.m */,
+				8A3AEE3113C9E170003AC5B8 /* ConsoleController.h */,
+				8A3AEE3213C9E170003AC5B8 /* ConsoleController.m */,
+				8A3AEE3313C9E170003AC5B8 /* DrawerButton.h */,
+				8A3AEE3413C9E170003AC5B8 /* DrawerButton.m */,
+				8A3AEE3513C9E170003AC5B8 /* FileButtonController.h */,
+				8A3AEE3613C9E170003AC5B8 /* FileButtonController.m */,
+				8A3AEE3713C9E170003AC5B8 /* LauncherApp.h */,
+				8A3AEE3813C9E170003AC5B8 /* LauncherApp.m */,
+				8A3AEE3913C9E170003AC5B8 /* LauncherMain.m */,
+				8A3AEE3A13C9E170003AC5B8 /* ResolutionDataSource.h */,
+				8A3AEE3B13C9E170003AC5B8 /* ResolutionDataSource.m */,
+				8A3AEE3C13C9E170003AC5B8 /* UKFileWatcher.h */,
+				8A3AEE3D13C9E170003AC5B8 /* UKKQueue.h */,
+				8A3AEE3E13C9E170003AC5B8 /* UKKQueue.m */,
+				8A3AEE3F13C9E170003AC5B8 /* UKMainThreadProxy.h */,
+				8A3AEE4013C9E170003AC5B8 /* UKMainThreadProxy.m */,
+				8A3AEE4113C9E170003AC5B8 /* WadViewController.h */,
+				8A3AEE4213C9E170003AC5B8 /* WadViewController.m */,
 			);
 			path = Launcher;
 			sourceTree = "<group>";
@@ -4010,14 +4020,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8A3C758713C898E8002608BC /* ANSIString.m in Sources */,
-				8A3C758813C898E8002608BC /* ConsoleController.m in Sources */,
-				8A3C758913C898E8002608BC /* FileButtonController.m in Sources */,
-				8A3C758A13C898E8002608BC /* LauncherApp.m in Sources */,
-				8A3C758B13C898E8002608BC /* LauncherMain.m in Sources */,
-				8A3C758C13C898E8002608BC /* UKKQueue.m in Sources */,
-				8A3C758D13C898E8002608BC /* UKMainThreadProxy.m in Sources */,
-				8A3C758E13C898E8002608BC /* WadViewController.m in Sources */,
+				8A3AEE4313C9E170003AC5B8 /* ANSIString.m in Sources */,
+				8A3AEE4413C9E170003AC5B8 /* ConsoleController.m in Sources */,
+				8A3AEE4513C9E170003AC5B8 /* DrawerButton.m in Sources */,
+				8A3AEE4613C9E170003AC5B8 /* FileButtonController.m in Sources */,
+				8A3AEE4713C9E170003AC5B8 /* LauncherApp.m in Sources */,
+				8A3AEE4813C9E170003AC5B8 /* LauncherMain.m in Sources */,
+				8A3AEE4913C9E170003AC5B8 /* ResolutionDataSource.m in Sources */,
+				8A3AEE4A13C9E170003AC5B8 /* UKKQueue.m in Sources */,
+				8A3AEE4B13C9E170003AC5B8 /* UKMainThreadProxy.m in Sources */,
+				8A3AEE4C13C9E170003AC5B8 /* WadViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

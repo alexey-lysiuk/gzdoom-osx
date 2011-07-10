@@ -14,7 +14,7 @@ static LauncherApp *LApp;
 
 - (NSString *)wadPath
 {
-	return [@"~/Library/Application Support/PrBoom" stringByExpandingTildeInPath];
+	return [@"~/Documents/GZDoom" stringByExpandingTildeInPath];
 }
 
 - (void)awakeFromNib
@@ -378,6 +378,7 @@ static LauncherApp *LApp;
 - (id)performDefaultImplementation
 {
 	[LApp tryToLaunch];
+	return [super performDefaultImplementation];
 }
 
 @end
