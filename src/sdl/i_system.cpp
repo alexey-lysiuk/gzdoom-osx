@@ -125,7 +125,8 @@ static DWORD BaseTime;
 static int TicFrozen;
 
 // Signal based timer.
-static sem_t timerWait;
+static sem_t* timerWait;
+static sem_t  timerWaitValue;
 static int tics;
 static DWORD sig_start, sig_next;
 
@@ -197,7 +198,7 @@ int I_WaitForTicSignaled (int prevtic)
 	assert (TicFrozen == 0);
 
 	while(tics <= prevtic)
-		while(sem_wait(&timerWait) != 0);
+		while(sem_wait(timerWait) != 0);
 
 	return tics;
 }
@@ -246,7 +247,7 @@ void I_HandleAlarm (int sig)
 		tics++;
 	sig_start = SDL_GetTicks();
 	sig_next = Scale((Scale (sig_start, TICRATE, 1000) + 1), 1000, TICRATE);
-	sem_post(&timerWait);
+	sem_post(timerWait);
 }
 
 //
@@ -256,7 +257,23 @@ void I_HandleAlarm (int sig)
 //
 void I_SelectTimer()
 {
-	sem_init(&timerWait, 0, 0);
+#ifdef __APPLE__
+	
+	// Mac OS X does not implement unnamed semaphores
+	
+	timerWait = sem_open( "GZDoomTimer", O_CREAT, S_IRUSR | S_IWUSR, 0 );
+	if ( SEM_FAILED == timerWait )
+	{
+		I_FatalError( "sem_init() failed with errno = %i", errno );
+	}
+	
+#else // !__APPLE__
+	
+	timerWait = &timerWaitValue;
+	sem_init(timerWait, 0, 0);
+	
+#endif // __APPLE__
+
 	signal(SIGALRM, I_HandleAlarm);
 
 	struct itimerval itv;
