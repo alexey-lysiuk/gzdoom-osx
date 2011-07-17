@@ -115,7 +115,7 @@ IWad
 	Name = "Hexen: Demo Version"
 	Game = "Hexen"
 	Config = "Hexen"
-	Mapinfo = "mapinfo/doom2.txt"
+	Mapinfo = "mapinfo/hexen.txt"
 	Compatibility = "Shareware"
 	MustContain = "TITLE", "MAP01", "WINNOWR"
 	BannerColors = "f0 f0 f0", "6b 3c 18"
