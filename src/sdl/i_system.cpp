@@ -33,10 +33,17 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <signal.h>
-#include <semaphore.h>
 #ifndef NO_GTK
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
+#endif
+
+#ifdef __APPLE__
+#include <mach/mach_init.h>
+#include <mach/semaphore.h>
+#include <mach/task.h>
+#else
+#include <semaphore.h>
 #endif
 
 #include "doomerrors.h"
@@ -125,8 +132,11 @@ static DWORD BaseTime;
 static int TicFrozen;
 
 // Signal based timer.
-static sem_t* timerWait;
-static sem_t  timerWaitValue;
+#ifdef __APPLE__
+static semaphore_t timerWait;
+#else
+static sem_t timerWait;
+#endif
 static int tics;
 static DWORD sig_start, sig_next;
 
@@ -198,7 +208,14 @@ int I_WaitForTicSignaled (int prevtic)
 	assert (TicFrozen == 0);
 
 	while(tics <= prevtic)
-		while(sem_wait(timerWait) != 0);
+	{
+#ifdef __APPLE__
+		while(semaphore_wait(timerWait) != KERN_SUCCESS)
+			;
+#else
+		while(sem_wait(&timerWait) != 0);
+#endif
+	}
 
 	return tics;
 }
@@ -247,7 +264,11 @@ void I_HandleAlarm (int sig)
 		tics++;
 	sig_start = SDL_GetTicks();
 	sig_next = Scale((Scale (sig_start, TICRATE, 1000) + 1), 1000, TICRATE);
-	sem_post(timerWait);
+#ifdef __APPLE__
+	semaphore_signal(timerWait);
+#else
+	sem_post(&timerWait);
+#endif
 }
 
 //
@@ -258,22 +279,10 @@ void I_HandleAlarm (int sig)
 void I_SelectTimer()
 {
 #ifdef __APPLE__
-	
-	// Mac OS X does not implement unnamed semaphores
-	
-	timerWait = sem_open( "GZDoomTimer", O_CREAT, S_IRUSR | S_IWUSR, 0 );
-	if ( SEM_FAILED == timerWait )
-	{
-		I_FatalError( "sem_init() failed with errno = %i", errno );
-	}
-	
-#else // !__APPLE__
-	
-	timerWait = &timerWaitValue;
-	sem_init(timerWait, 0, 0);
-	
-#endif // __APPLE__
-
+	semaphore_create(mach_task_self(), &timerWait, 0, 0);
+#else
+	sem_init(&timerWait, 0, 0);
+#endif
 	signal(SIGALRM, I_HandleAlarm);
 
 	struct itimerval itv;
