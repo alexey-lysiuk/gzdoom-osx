@@ -75,6 +75,10 @@ extern HWND Window;
 
 #define SPECTRUM_SIZE				256
 
+#if FMOD_VERSION < 0x43400
+#define FMOD_OPENSTATE_PLAYING FMOD_OPENSTATE_STREAMING
+#endif
+
 // TYPES -------------------------------------------------------------------
 
 struct FEnumList
@@ -151,14 +155,15 @@ static const FEnumList OutputNames[] =
 	{ "Default",				FMOD_OUTPUTTYPE_AUTODETECT },
 	{ "No sound",				FMOD_OUTPUTTYPE_NOSOUND },
 
-#if !defined (__APPLE__)
 	// Windows
 	{ "DirectSound",			FMOD_OUTPUTTYPE_DSOUND },
 	{ "DSound",					FMOD_OUTPUTTYPE_DSOUND },
 	{ "Windows Multimedia",		FMOD_OUTPUTTYPE_WINMM },
 	{ "WinMM",					FMOD_OUTPUTTYPE_WINMM },
 	{ "WaveOut",				FMOD_OUTPUTTYPE_WINMM },
+#if FMOD_VERSION < 0x43400
 	{ "OpenAL",					FMOD_OUTPUTTYPE_OPENAL },
+#endif
 	{ "WASAPI",					FMOD_OUTPUTTYPE_WASAPI },
 	{ "ASIO",					FMOD_OUTPUTTYPE_ASIO },
 
@@ -166,8 +171,10 @@ static const FEnumList OutputNames[] =
 	{ "OSS",					FMOD_OUTPUTTYPE_OSS },
 	{ "ALSA",					FMOD_OUTPUTTYPE_ALSA },
 	{ "ESD",					FMOD_OUTPUTTYPE_ESD },
+#if FMOD_VERSION >= 0x43400
+	{ "PulseAudio",				FMOD_OUTPUTTYPE_PULSEAUDIO },
+#endif
 	{ "SDL",					666 },
-#endif // __APPLE__
 
 	// Mac
 #if FMOD_VERSION < 0x43000
@@ -390,13 +397,19 @@ public:
 		bool is;
 		FMOD_OPENSTATE openstate = FMOD_OPENSTATE_MAX;
 		bool starving;
+#if FMOD_VERSION >= 0x43400
 		bool diskbusy;
+#endif
 
 		if (Stream == NULL)
 		{
 			return true;
 		}
+#if FMOD_VERSION < 0x43400
+		if (FMOD_OK != Stream->getOpenState(&openstate, NULL, &starving))
+#else
 		if (FMOD_OK != Stream->getOpenState(&openstate, NULL, &starving, &diskbusy))
+#endif
 		{
 			openstate = FMOD_OPENSTATE_ERROR;
 		}
@@ -483,13 +496,19 @@ public:
 		unsigned int percentbuffered;
 		unsigned int position;
 		bool starving;
+#if FMOD_VERSION >= 0x43400
 		bool diskbusy;
+#endif
 		float volume;
 		float frequency;
 		bool paused;
 		bool isplaying;
 
+#if FMOD_VERSION < 0x43400
+		if (FMOD_OK == Stream->getOpenState(&openstate, &percentbuffered, &starving))
+#else
 		if (FMOD_OK == Stream->getOpenState(&openstate, &percentbuffered, &starving, &diskbusy))
+#endif
 		{
 			stats = (openstate <= FMOD_OPENSTATE_PLAYING ? OpenStateNames[openstate] : "Unknown state");
 			stats.AppendFormat(",%3d%% buffered, %s", percentbuffered, starving ? "Starving" : "Well-fed");
