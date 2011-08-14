@@ -1,3 +1,0 @@
-#!/bin/sh
-cd `dirname $0`/../..
-zip -9rv GZDoom-MacOSX-`date "+%Y_%m_%d_%H_%M_%S"` GZDoom -x GZDoom/build/\* -x GZDoom/.deploy_image/\*
