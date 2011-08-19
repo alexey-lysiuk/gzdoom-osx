@@ -1162,5 +1162,3 @@ extern "C" __declspec(noinline) __declspec(naked) int ClassifyLineBackpatch (nod
 }
 #endif
 #endif
-
-#undef D

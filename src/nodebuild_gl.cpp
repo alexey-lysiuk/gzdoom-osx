@@ -382,5 +382,3 @@ DWORD FNodeBuilder::CheckLoopEnd (fixed_t dx, fixed_t dy, int vertex)
 	}
 	return bestseg;
 }
-
-#undef D

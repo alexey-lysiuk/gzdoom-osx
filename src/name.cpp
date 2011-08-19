@@ -281,5 +281,3 @@ FName::NameManager::~NameManager()
 	NumNames = MaxNames = 0;
 	memset (Buckets, -1, sizeof(Buckets));
 }
-
-#undef BLOCK_SIZE

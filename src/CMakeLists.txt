@@ -72,7 +72,9 @@ if( WIN32 )
 	set( FMOD_SEARCH_PATHS
 		"C:/Program Files/FMOD SoundSystem/FMOD Programmers API ${WIN_TYPE}/api"
 		"C:/Program Files (x86)/FMOD SoundSystem/FMOD Programmers API ${WIN_TYPE}/api"
-		"E:/Program Files (x86)/FMOD SoundSystem/FMOD Programmers API ${WIN_TYPE}/api" )
+		"E:/Program Files (x86)/FMOD SoundSystem/FMOD Programmers API ${WIN_TYPE}/api"
+		# This next one is for me.
+		"E:/Software/Dev/FMOD/${WIN_TYPE}/api" )
 	set( FMOD_INC_PATH_SUFFIXES PATH_SUFFIXES inc )
 	set( FMOD_LIB_PATH_SUFFIXES PATH_SUFFIXES lib )
 	set( NASM_NAMES nasmw nasm )
@@ -273,7 +275,7 @@ endif( FMOD_LIBRARY )
 
 # Search for FluidSynth
 
-include( ../FindFluidSynth.cmake )
+find_package( FluidSynth )
 
 # Search for NASM
 
@@ -369,21 +371,6 @@ if( NOT NO_ASM )
 		set( ASM_SOURCES ${ASM_SOURCES} "${ASM_OUTPUT_${infile}}" )
 	ENDMACRO( ADD_ASM_FILE )
 endif( NOT NO_ASM )
-
-
-# Search for GLEW include files
-
-if( APPLE )
-	find_path( GLEW_INCLUDE_DIR GL/glew.h
-		PATHS "/usr/include"
-		"/usr/local/include" )
-		
-	if( GLEW_INCLUDE_DIR )
-		message( STATUS "GLEW include files found at ${GLEW_INCLUDE_DIR}" )
-	else( GLEW_INCLUDE_DIR )
-		message( SEND_ERROR "Could not find GLEW include files" )
-	endif( GLEW_INCLUDE_DIR )
-endif( APPLE )
 
 # Decide on SSE setup
 
@@ -525,7 +512,7 @@ add_custom_target( revision_check ALL
 
 message( STATUS "Fluid synth libs: ${FLUIDSYNTH_LIBRARIES}" )
 set( ZDOOM_LIBS ${ZDOOM_LIBS} "${ZLIB_LIBRARIES}" "${JPEG_LIBRARIES}" "${BZIP2_LIBRARIES}" "${FMOD_LIBRARY}" )
-include_directories( "${ZLIB_INCLUDE_DIR}" "${JPEG_INCLUDE_DIR}" "${FMOD_INCLUDE_DIR}" "${GLEW_INCLUDE_DIR}" "${BZIP2_INCLUDE_DIR}" "${LZMA_INCLUDE_DIR}" )
+include_directories( "${ZLIB_INCLUDE_DIR}" "${FMOD_INCLUDE_DIR}" "${BZIP2_INCLUDE_DIR}" "${LZMA_INCLUDE_DIR}" "${JPEG_INCLUDE_DIR}" )
 
 if( FLUIDSYNTH_FOUND )
   if( NOT DYN_FLUIDSYNTH)

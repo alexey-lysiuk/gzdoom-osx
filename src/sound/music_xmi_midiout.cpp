@@ -725,5 +725,3 @@ XMISong::XMISong(const XMISong *original, const char *filename, EMidiDevice type
 		newtrack->TimbreLen = oldtrack->TimbreLen;
 	}
 }
-
-#undef CHECK_FINISHED
