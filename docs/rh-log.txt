@@ -1,12 +1,4 @@
-﻿January 3, 2010  (Changes by Graf Zahl)
-- fixed: The player setup menu used the main menu's line spacing which
-  for all non-Doom games was too wide.
-- fixed: Strife's dialogues cannot use the new options menu code to draw
-  themselves so now they use a stripped down version of the old code.
-- Replaced I_MSTime with I_FPSTime in node builder timing because basetime
-  will not be initialized yet if a map is started directly from the commandline.
-
-January 2, 2010  (Changes by Graf Zahl)
+﻿January 2, 2010  (Changes by Graf Zahl)
 - fixed: Polyobjects could contain segs that weren't flagged as such.
 - fixed: Trying to show a popup crashed in the SBARINFO code because of a 
   missing NULL pointer check.
@@ -39,6 +31,9 @@ January 1, 2010  (Changes by Graf Zahl)
 - replaced wadlist_t with an array of FStrings and added a list parameter to
   everything that eventually calls D_AddFile. Also create the list of files
   loaded on the command line separately to allow further checks on them.
+- fixed: The node builder did not check if all segs could be split properly.
+  Also removed some fudging that tried to work around this case but produced
+  a broken BSP tree on other maps.
 - Added Blzut3's Solaris patch.
 - Fixed: Heretic's Weredragon (Beast) should not have a melee state.
 
@@ -50,10 +45,6 @@ January 1, 2010  (SBARINFO update)
 - As an extension to the previous you can now use comparison operators on
   inventory items and armortype in drawswitchableimage.
   
-January 1, 2010  (Changes by Graf Zahl)
-- Added Blzut3's Solaris patch.
-- Fixed: Heretic's Weredragon (Beast) should not have a melee state.
-
 December 31, 2009  (Changes by Graf Zahl)
 - fixed: FastProjectile was missing all sky checks when the projectile's move
   was blocked.
