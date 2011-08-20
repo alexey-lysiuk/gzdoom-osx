@@ -6,8 +6,8 @@ vec4 Process(vec4 color)
 	vec2 texCoord = gl_TexCoord[0].st;
 	vec4 basicColor = getTexel(texCoord) * color;
 
-	texCoord.x = float( int(texCoord.x * 128.0) / 128 );
-	texCoord.y = float( int(texCoord.y * 128.0) / 128 );
+	texCoord.x = float( int(texCoord.x * 128.0) ) / 128.0;
+	texCoord.y = float( int(texCoord.y * 128.0) ) / 128.0;
 
 	float texX = texCoord.x / 3.0 + 0.66;
 	float texY = 0.34 - texCoord.y / 3.0;
