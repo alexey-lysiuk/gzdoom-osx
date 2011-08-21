@@ -79,6 +79,7 @@
 
 #include "m_fixed.h"
 #include "g_level.h"
+#include "v_text.h"
 
 EXTERN_CVAR (String, language)
 
@@ -437,7 +438,27 @@ void I_SetIWADInfo ()
 
 void I_PrintStr (const char *cp)
 {
-	fputs (cp, stdout);
+	const size_t stringLength = strlen( cp );
+	
+	char* cleanString = static_cast< char* >( alloca( stringLength + 1 ) );
+	char* cleanPos = cleanString;
+	
+	for ( const char* pos = cp; '\0' != *pos; ++pos )
+	{
+		if ( TEXTCOLOR_ESCAPE == *pos )
+		{
+			// Skip next character
+			++pos;
+		}
+		else
+		{
+			*cleanPos++ = *pos;
+		}
+	}
+	
+	*cleanPos = '\0';
+	
+	fputs (cleanString, stdout);
 	fflush (stdout);
 }
 
