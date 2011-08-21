@@ -303,7 +303,7 @@ SDLGLFB::SDLGLFB (void *, int width, int height, int, int, bool fullscreen)
 	// Also it may crash with BPP == 16 on some configurations
 	// It seems 24 and 32 bits are safe values
 	// So value of vid_displaybits is ignored and hardcoded constant is used instead
-	
+		
 	Screen = SDL_SetVideoMode (width, height,
 #if defined(__APPLE__)
 		32,
@@ -316,11 +316,7 @@ SDLGLFB::SDLGLFB (void *, int width, int height, int, int, bool fullscreen)
 	if (Screen == NULL)
 		return;
 
-#ifdef _DEBUG
-	m_supportsGamma = false;
-#else  // !_DEBUG
 	m_supportsGamma = -1 != SDL_GetGammaRamp(m_origGamma[0], m_origGamma[1], m_origGamma[2]);
-#endif // !_DEBUG
 	
 #if defined(__APPLE__)
 	// Need to set title here because a window is not created yet when calling the same function from main()

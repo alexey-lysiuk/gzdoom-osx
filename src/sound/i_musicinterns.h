@@ -1,8 +1,3 @@
-
-#ifndef SRC_SOUND_I_MUSICINTERNS_H_INCLUDED
-#define SRC_SOUND_I_MUSICINTERNS_H_INCLUDED
-
-
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #define USE_WINDOWS_DWORD
@@ -756,6 +751,3 @@ MusInfo *GME_OpenSong(FILE *file, BYTE *musiccache, int len, const char *fmt);
 extern MusInfo *currSong;
 
 EXTERN_CVAR (Float, snd_musicvolume)
-
-
-#endif // SRC_SOUND_I_MUSICINTERNS_H_INCLUDED

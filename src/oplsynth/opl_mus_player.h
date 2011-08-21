@@ -1,8 +1,3 @@
-
-#ifndef SRC_OPLSYNTH_OPL_MUS_PLAYER_H_INCLUDED
-#define SRC_OPLSYNTH_OPL_MUS_PLAYER_H_INCLUDED
-
-
 #include "critsec.h"
 #include "muslib.h"
 
@@ -50,6 +45,3 @@ protected:
 	int ScoreLen;
 	int WhichChip;
 };
-
-
-#endif // SRC_OPLSYNTH_OPL_MUS_PLAYER_H_INCLUDED

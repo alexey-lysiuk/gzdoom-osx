@@ -250,7 +250,7 @@ int FResourceLump::ReleaseCache()
 //
 //==========================================================================
 
-typedef FResourceFile * (*ResourceCheckFunc)(const char *filename, FileReader *file, bool quiet);
+typedef FResourceFile * (*CheckFunc)(const char *filename, FileReader *file, bool quiet);
 
 FResourceFile *CheckWad(const char *filename, FileReader *file, bool quiet);
 FResourceFile *CheckGRP(const char *filename, FileReader *file, bool quiet);
@@ -261,7 +261,7 @@ FResourceFile *Check7Z(const char *filename, FileReader *file, bool quiet);
 FResourceFile *CheckLump(const char *filename, FileReader *file, bool quiet);
 FResourceFile *CheckDir(const char *filename, FileReader *file, bool quiet);
 
-static ResourceCheckFunc funcs[] = { CheckWad, CheckZip, Check7Z, CheckPak, CheckGRP, CheckRFF, CheckLump };
+static CheckFunc funcs[] = { CheckWad, CheckZip, Check7Z, CheckPak, CheckGRP, CheckRFF, CheckLump };
 
 FResourceFile *FResourceFile::OpenResourceFile(const char *filename, FileReader *file, bool quiet)
 {

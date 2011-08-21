@@ -34,10 +34,6 @@
 ** Actual implementation is system-specific.
 */
 
-#ifndef SRC_ST_START_H_INCLUDED
-#define SRC_ST_START_H_INCLUDED
-
-
 class FStartupScreen
 {
 public:
@@ -62,6 +58,3 @@ protected:
 extern FStartupScreen *StartScreen;
 
 extern void ST_Endoom();
-
-
-#endif // SRC_ST_START_H_INCLUDED

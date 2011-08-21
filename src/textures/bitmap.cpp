@@ -303,21 +303,21 @@ bool ClipCopyPixelRect(const FClipRect *cr, int &originx, int &originy,
 		step_y = pstep_y;
 		break;
 
-	case 1: // rotate 90ï¾° right
+	case 1: // rotate 90° right
 		pixxoffset = 0;
 		pixyoffset = srcheight - 1;
 		step_x = -pstep_y;
 		step_y = pstep_x;
 		break;
 
-	case 2:	// rotate 180ï¾°
+	case 2:	// rotate 180°
 		pixxoffset = srcwidth - 1;
 		pixyoffset = srcheight - 1;
 		step_x = -pstep_x;
 		step_y = -pstep_y;
 		break;
 
-	case 3: // rotate 90ï¾° left
+	case 3: // rotate 90° left
 		pixxoffset = srcwidth - 1;
 		pixyoffset = 0;
 		step_x = pstep_y;
@@ -331,7 +331,7 @@ bool ClipCopyPixelRect(const FClipRect *cr, int &originx, int &originy,
 		step_y = pstep_y;
 		break;
 
-	case 5:	// flip horizontally and rotate 90ï¾° right
+	case 5:	// flip horizontally and rotate 90° right
 		pixxoffset = srcwidth - 1;
 		pixyoffset = srcheight - 1;
 		step_x = -pstep_y;
@@ -345,7 +345,7 @@ bool ClipCopyPixelRect(const FClipRect *cr, int &originx, int &originy,
 		step_y = -pstep_y;
 		break;
 
-	case 7:	// flip horizontally and rotate 90ï¾° left
+	case 7:	// flip horizontally and rotate 90° left
 		pixxoffset = 0;
 		pixyoffset = 0;
 		step_x = pstep_y;
