@@ -132,6 +132,7 @@
 #define HAVE_VSNPRINTF 1
 /* #undef HAVE_ICONV */
 #define HAVE_SIGACTION 1
+#define HAVE_SA_SIGACTION 1
 #define HAVE_SETJMP 1
 #define HAVE_NANOSLEEP 1
 /* #undef HAVE_CLOCK_GETTIME */
