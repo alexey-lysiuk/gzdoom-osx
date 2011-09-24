@@ -210,6 +210,9 @@ struct FActorInfo
 	PainChanceList *PainChances;
 	PainFlashList *PainFlashes;
 	FPlayerColorSetMap *ColorSets;
+	TArray<const PClass *> VisibleToPlayerClass;
+	TArray<const PClass *> RestrictedToPlayerClass;
+	TArray<const PClass *> ForbiddenToPlayerClass;
 };
 
 class FDoomEdMap

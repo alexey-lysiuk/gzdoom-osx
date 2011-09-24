@@ -1235,10 +1235,61 @@ DEFINE_PROPERTY(designatedteam, I, Actor)
 }
 
 //==========================================================================
+// [BB]
+//==========================================================================
+DEFINE_PROPERTY(visibletoteam, I, Actor)
+{
+	PROP_INT_PARM(i, 0);
+	defaults->VisibleToTeam=i+1;
+}
+
+//==========================================================================
+// [BB]
+//==========================================================================
+DEFINE_PROPERTY(visibletoplayerclass, S_s, Actor)
+{
+	info->VisibleToPlayerClass.Clear();
+	for(int i = 0;i < PROP_PARM_COUNT;++i)
+	{
+		PROP_STRING_PARM(n, i);
+		if (*n != 0)
+			info->VisibleToPlayerClass.Push(FindClassTentative(n, "PlayerPawn"));
+	}
+}
+
+//==========================================================================
 //
 // Special inventory properties
 //
 //==========================================================================
+
+//==========================================================================
+//
+//==========================================================================
+DEFINE_CLASS_PROPERTY(restrictedto, S_s, Inventory)
+{
+	info->RestrictedToPlayerClass.Clear();
+	for(int i = 0;i < PROP_PARM_COUNT;++i)
+	{
+		PROP_STRING_PARM(n, i);
+		if (*n != 0)
+			info->RestrictedToPlayerClass.Push(FindClassTentative(n, "PlayerPawn"));
+	}
+}
+
+//==========================================================================
+//
+//==========================================================================
+DEFINE_CLASS_PROPERTY(forbiddento, S_s, Inventory)
+{
+	info->ForbiddenToPlayerClass.Clear();
+	for(int i = 0;i < PROP_PARM_COUNT;++i)
+	{
+		PROP_STRING_PARM(n, i);
+		if (*n != 0)
+			info->ForbiddenToPlayerClass.Push(FindClassTentative(n, "PlayerPawn"));
+	}
+}
 
 //==========================================================================
 //
