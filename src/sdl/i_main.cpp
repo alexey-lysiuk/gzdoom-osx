@@ -277,6 +277,10 @@ int main (int argc, char **argv)
 #endif
 	
 	setlocale (LC_ALL, "C");
+	
+#if defined (__APPLE__)
+	setenv( "SDL_ENABLEAPPEVENTS", "1", 1 );
+#endif // __APPLE__
 
 	if (SDL_Init (SDL_INIT_VIDEO|SDL_INIT_TIMER|SDL_INIT_NOPARACHUTE|SDL_INIT_JOYSTICK) == -1)
 	{
