@@ -2640,7 +2640,7 @@
 				003235561070931700C76517 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = "Deployment GZDoom";
 		};
 		0073177A0858DB0500B2BC32 /* Build configuration list for PBXNativeTarget "Framework" */ = {
 			isa = XCConfigurationList;
@@ -2655,7 +2655,7 @@
 				0073177D0858DB0500B2BC32 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = "Deployment GZDoom";
 		};
 		0073177E0858DB0500B2BC32 /* Build configuration list for PBXNativeTarget "Static Library" */ = {
 			isa = XCConfigurationList;
@@ -2670,7 +2670,7 @@
 				007317810858DB0500B2BC32 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = "Deployment GZDoom";
 		};
 		007317820858DB0500B2BC32 /* Build configuration list for PBXNativeTarget "Main Library" */ = {
 			isa = XCConfigurationList;
@@ -2685,7 +2685,7 @@
 				007317850858DB0500B2BC32 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = "Deployment GZDoom";
 		};
 		007317860858DB0500B2BC32 /* Build configuration list for PBXNativeTarget "Standard DMG" */ = {
 			isa = XCConfigurationList;
@@ -2700,7 +2700,7 @@
 				007317890858DB0500B2BC32 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = "Deployment GZDoom";
 		};
 		0073178A0858DB0500B2BC32 /* Build configuration list for PBXNativeTarget "Developer Extras Package" */ = {
 			isa = XCConfigurationList;
@@ -2715,7 +2715,7 @@
 				0073178D0858DB0500B2BC32 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = "Deployment GZDoom";
 		};
 		0073178E0858DB0500B2BC32 /* Build configuration list for PBXProject "SDL" */ = {
 			isa = XCConfigurationList;
@@ -2730,7 +2730,7 @@
 				007317910858DB0500B2BC32 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = "Deployment GZDoom";
 		};
 /* End XCConfigurationList section */
 	};
