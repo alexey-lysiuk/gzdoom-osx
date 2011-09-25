@@ -792,14 +792,14 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 8AF62EA6142F259E003F3556 /* SDL.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = BECDF66D0761BA81005FE872 /* Static Library */;
+			remoteGlobalIDString = BECDF66D0761BA81005FE872;
 			remoteInfo = "Static Library";
 		};
 		8A2AD157142F281400149995 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8AF62EA6142F259E003F3556 /* SDL.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = BECDF66D0761BA81005FE872 /* Static Library */;
+			remoteGlobalIDString = BECDF66D0761BA81005FE872;
 			remoteInfo = "Static Library";
 		};
 		8AC81C35139131FE00F49DC3 /* PBXContainerItemProxy */ = {
