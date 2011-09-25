@@ -205,6 +205,8 @@
 		046B91ED0A11B53500FB151C /* SDL_sysloadso.c in Sources */ = {isa = PBXBuildFile; fileRef = 046B91E90A11B53500FB151C /* SDL_sysloadso.c */; };
 		046B92130A11B8AD00FB151C /* SDL_dlcompat.c in Sources */ = {isa = PBXBuildFile; fileRef = 046B92100A11B8AD00FB151C /* SDL_dlcompat.c */; };
 		046B92140A11B8AD00FB151C /* SDL_dlcompat.c in Sources */ = {isa = PBXBuildFile; fileRef = 046B92100A11B8AD00FB151C /* SDL_dlcompat.c */; };
+		8A46CCC7142F112700D35AB1 /* libSDL.a in CopyFiles */ = {isa = PBXBuildFile; fileRef = BECDF6B30761BA81005FE872 /* libSDL.a */; };
+		8A46CCCF142F15B400D35AB1 /* SDL_syscdrom.c in Sources */ = {isa = PBXBuildFile; fileRef = B2A23A7B04157C5700A80002 /* SDL_syscdrom.c */; };
 		BECDF62B0761BA81005FE872 /* SDLMain.nib in Resources */ = {isa = PBXBuildFile; fileRef = 2EECDF2F0086C3A07F000001 /* SDLMain.nib */; };
 		BECDF62E0761BA81005FE872 /* SDL_audio.c in Sources */ = {isa = PBXBuildFile; fileRef = 01538330006D78D67F000001 /* SDL_audio.c */; };
 		BECDF62F0761BA81005FE872 /* SDL_audiocvt.c in Sources */ = {isa = PBXBuildFile; fileRef = 01538331006D78D67F000001 /* SDL_audiocvt.c */; };
@@ -293,7 +295,6 @@
 		BECDF6A30761BA81005FE872 /* SDL_fatal.c in Sources */ = {isa = PBXBuildFile; fileRef = 01538439006D7D947F000001 /* SDL_fatal.c */; };
 		BECDF6A50761BA81005FE872 /* SDL.c in Sources */ = {isa = PBXBuildFile; fileRef = 0153843C006D7D947F000001 /* SDL.c */; };
 		BECDF6A60761BA81005FE872 /* SDL_sysjoystick.c in Sources */ = {isa = PBXBuildFile; fileRef = F51789D101769A2401D3D55B /* SDL_sysjoystick.c */; };
-		BECDF6A80761BA81005FE872 /* SDL_syscdrom.c in Sources */ = {isa = PBXBuildFile; fileRef = 083E4894006D86FF7F000001 /* SDL_syscdrom.c */; };
 		BECDF6A90761BA81005FE872 /* SDL_QuartzEvents.m in Sources */ = {isa = PBXBuildFile; fileRef = B24DA4D705A88AD0006B9F1C /* SDL_QuartzEvents.m */; };
 		BECDF6AA0761BA81005FE872 /* SDL_QuartzGL.m in Sources */ = {isa = PBXBuildFile; fileRef = B24DA4D805A88AD0006B9F1C /* SDL_QuartzGL.m */; };
 		BECDF6AB0761BA81005FE872 /* SDL_QuartzVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = B24DA4DB05A88AD0006B9F1C /* SDL_QuartzVideo.m */; };
@@ -320,6 +321,19 @@
 			remoteInfo = "Framework (Upgraded)";
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8A46CCC9142F112A00D35AB1 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = ../../../../lib;
+			dstSubfolderSpec = 16;
+			files = (
+				8A46CCC7142F112700D35AB1 /* libSDL.a in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0014B7E809C0D8D2003A99D5 /* SDL_dgaevents_c.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SDL_dgaevents_c.h; sourceTree = "<group>"; };
@@ -1271,7 +1285,7 @@
 				BECDF66E0761BA81005FE872 /* Headers */,
 				BECDF6790761BA81005FE872 /* Sources */,
 				BECDF6B10761BA81005FE872 /* Frameworks */,
-				BECDF6B20761BA81005FE872 /* Rez */,
+				8A46CCC9142F112A00D35AB1 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -1358,8 +1372,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				BECDF5FE0761BA81005FE872 /* Framework */,
 				BECDF66D0761BA81005FE872 /* Static Library */,
+				BECDF5FE0761BA81005FE872 /* Framework */,
 				BECDF6B40761BA81005FE872 /* Main Library */,
 				BECDF6BB0761BA81005FE872 /* Standard DMG */,
 				BECDF6C00761BA81005FE872 /* Developer Extras Package */,
@@ -1381,13 +1395,6 @@
 
 /* Begin PBXRezBuildPhase section */
 		BECDF6690761BA81005FE872 /* Rez */ = {
-			isa = PBXRezBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		BECDF6B20761BA81005FE872 /* Rez */ = {
 			isa = PBXRezBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1602,7 +1609,6 @@
 				BECDF6A30761BA81005FE872 /* SDL_fatal.c in Sources */,
 				BECDF6A50761BA81005FE872 /* SDL.c in Sources */,
 				BECDF6A60761BA81005FE872 /* SDL_sysjoystick.c in Sources */,
-				BECDF6A80761BA81005FE872 /* SDL_syscdrom.c in Sources */,
 				BECDF6A90761BA81005FE872 /* SDL_QuartzEvents.m in Sources */,
 				BECDF6AA0761BA81005FE872 /* SDL_QuartzGL.m in Sources */,
 				BECDF6AB0761BA81005FE872 /* SDL_QuartzVideo.m in Sources */,
@@ -1654,6 +1660,7 @@
 				046B91ED0A11B53500FB151C /* SDL_sysloadso.c in Sources */,
 				046B92140A11B8AD00FB151C /* SDL_dlcompat.c in Sources */,
 				00EAE6FD0C4D3F88009A420A /* SDL_yuv_mmx.c in Sources */,
+				8A46CCCF142F15B400D35AB1 /* SDL_syscdrom.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2506,12 +2513,124 @@
 			};
 			name = Development_native_only;
 		};
+		8A46CCBD142F104B00D35AB1 /* Deployment GZDoom */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
+				GCC_ALTIVEC_EXTENSIONS = YES;
+				GCC_AUTO_VECTORIZATION = YES;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				WARNING_CFLAGS = "";
+				ZERO_LINK = NO;
+			};
+			name = "Deployment GZDoom";
+		};
+		8A46CCBE142F104B00D35AB1 /* Deployment GZDoom */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(GCC_PREPROCESSOR_DEFINITIONS)",
+					"SDL_VIDEO_DRIVER_DGA=1",
+					"SDL_VIDEO_DRIVER_X11=1",
+					"SDL_VIDEO_DRIVER_X11_DGAMOUSE=1",
+					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1)",
+					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_2)",
+					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_3)",
+					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_4)",
+					"SDL_VIDEO_DRIVER_X11_VIDMODE=1",
+					"SDL_VIDEO_DRIVER_X11_XINERAMA=1",
+					"SDL_VIDEO_DRIVER_X11_XME=1",
+					"SDL_VIDEO_DRIVER_X11_XRANDR=1",
+					"SDL_VIDEO_DRIVER_X11_XV=1",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				HEADER_SEARCH_PATHS = /usr/X11R6/include;
+				INFOPLIST_FILE = "Info-Framework.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_CFLAGS = "$(OTHER_CFLAGS_$(CURRENT_ARCH))";
+				OTHER_CFLAGS_i386 = "";
+				OTHER_CFLAGS_ppc = "";
+				OTHER_LDFLAGS_ppc = "-prebind -seg1addr 0x30000000";
+				PRODUCT_NAME = SDL;
+				WRAPPER_EXTENSION = framework;
+			};
+			name = "Deployment GZDoom";
+		};
+		8A46CCBF142F104B00D35AB1 /* Deployment GZDoom */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(GCC_PREPROCESSOR_DEFINITIONS)",
+					"SDL_VIDEO_DRIVER_DGA=1",
+					"SDL_VIDEO_DRIVER_X11=1",
+					"SDL_VIDEO_DRIVER_X11_DGAMOUSE=1",
+					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1)",
+					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_2)",
+					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_3)",
+					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_4)",
+					"SDL_VIDEO_DRIVER_X11_VIDMODE=1",
+					"SDL_VIDEO_DRIVER_X11_XINERAMA=1",
+					"SDL_VIDEO_DRIVER_X11_XME=1",
+					"SDL_VIDEO_DRIVER_X11_XRANDR=1",
+					"SDL_VIDEO_DRIVER_X11_XV=1",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1 = "SDL_VIDEO_DRIVER_X11_DYNAMIC=\\\"/usr/X11R6/lib/libX11.6.dylib\\\"";
+				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_2 = "SDL_VIDEO_DRIVER_X11_DYNAMIC_XEXT=\\\"/usr/X11R6/lib/libXext.6.dylib\\\"";
+				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_3 = "SDL_VIDEO_DRIVER_X11_DYNAMIC_XRANDR=\\\"/usr/X11R6/lib/libXrandr.2.dylib\\\"";
+				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_4 = "SDL_VIDEO_DRIVER_X11_DYNAMIC_XRENDER=\\\"/usr/X11R6/lib/libXrender.1.dylib\\\"";
+				HEADER_SEARCH_PATHS = /usr/X11R6/include;
+				OTHER_CFLAGS = "$(OTHER_CFLAGS_$(CURRENT_ARCH))";
+				OTHER_CFLAGS_i386 = "";
+				OTHER_CFLAGS_ppc = "";
+				PRODUCT_NAME = SDL;
+			};
+			name = "Deployment GZDoom";
+		};
+		8A46CCC0142F104B00D35AB1 /* Deployment GZDoom */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = SDLmain;
+			};
+			name = "Deployment GZDoom";
+		};
+		8A46CCC1142F104B00D35AB1 /* Deployment GZDoom */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "Standard DMG";
+			};
+			name = "Deployment GZDoom";
+		};
+		8A46CCC2142F104B00D35AB1 /* Deployment GZDoom */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "Developer Extras Package";
+			};
+			name = "Deployment GZDoom";
+		};
+		8A46CCC3142F104B00D35AB1 /* Deployment GZDoom */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DOXYGEN_EXE = /Applications/Doxygen.app/Contents/Resources/doxygen;
+				PRODUCT_NAME = "Generate Doxygen DocSet";
+			};
+			name = "Deployment GZDoom";
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
 		003235571070933500C76517 /* Build configuration list for PBXAggregateTarget "Generate Doxygen DocSet" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
+				8A46CCC3142F104B00D35AB1 /* Deployment GZDoom */,
 				003235501070931700C76517 /* Deployment_for_official_releases_using_10.4SDK_and_10.6SDK */,
 				003235511070931700C76517 /* Development_using_10.4SDK_and_10.6SDK */,
 				003235521070931700C76517 /* Development_native_only */,
@@ -2526,6 +2645,7 @@
 		0073177A0858DB0500B2BC32 /* Build configuration list for PBXNativeTarget "Framework" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
+				8A46CCBE142F104B00D35AB1 /* Deployment GZDoom */,
 				0073177C0858DB0500B2BC32 /* Deployment_for_official_releases_using_10.4SDK_and_10.6SDK */,
 				0073177B0858DB0500B2BC32 /* Development_using_10.4SDK_and_10.6SDK */,
 				00CFA628106A568900758660 /* Development_native_only */,
@@ -2540,6 +2660,7 @@
 		0073177E0858DB0500B2BC32 /* Build configuration list for PBXNativeTarget "Static Library" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
+				8A46CCBF142F104B00D35AB1 /* Deployment GZDoom */,
 				007317800858DB0500B2BC32 /* Deployment_for_official_releases_using_10.4SDK_and_10.6SDK */,
 				0073177F0858DB0500B2BC32 /* Development_using_10.4SDK_and_10.6SDK */,
 				00CFA629106A568900758660 /* Development_native_only */,
@@ -2554,6 +2675,7 @@
 		007317820858DB0500B2BC32 /* Build configuration list for PBXNativeTarget "Main Library" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
+				8A46CCC0142F104B00D35AB1 /* Deployment GZDoom */,
 				007317840858DB0500B2BC32 /* Deployment_for_official_releases_using_10.4SDK_and_10.6SDK */,
 				007317830858DB0500B2BC32 /* Development_using_10.4SDK_and_10.6SDK */,
 				00CFA62A106A568900758660 /* Development_native_only */,
@@ -2568,6 +2690,7 @@
 		007317860858DB0500B2BC32 /* Build configuration list for PBXNativeTarget "Standard DMG" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
+				8A46CCC1142F104B00D35AB1 /* Deployment GZDoom */,
 				007317880858DB0500B2BC32 /* Deployment_for_official_releases_using_10.4SDK_and_10.6SDK */,
 				007317870858DB0500B2BC32 /* Development_using_10.4SDK_and_10.6SDK */,
 				00CFA62B106A568900758660 /* Development_native_only */,
@@ -2582,6 +2705,7 @@
 		0073178A0858DB0500B2BC32 /* Build configuration list for PBXNativeTarget "Developer Extras Package" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
+				8A46CCC2142F104B00D35AB1 /* Deployment GZDoom */,
 				0073178C0858DB0500B2BC32 /* Deployment_for_official_releases_using_10.4SDK_and_10.6SDK */,
 				0073178B0858DB0500B2BC32 /* Development_using_10.4SDK_and_10.6SDK */,
 				00CFA62C106A568900758660 /* Development_native_only */,
@@ -2596,6 +2720,7 @@
 		0073178E0858DB0500B2BC32 /* Build configuration list for PBXProject "SDL" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
+				8A46CCBD142F104B00D35AB1 /* Deployment GZDoom */,
 				007317900858DB0500B2BC32 /* Deployment_for_official_releases_using_10.4SDK_and_10.6SDK */,
 				0073178F0858DB0500B2BC32 /* Development_using_10.4SDK_and_10.6SDK */,
 				00CFA627106A568900758660 /* Development_native_only */,

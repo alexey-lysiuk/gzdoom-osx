@@ -38,6 +38,7 @@ typedef unsigned int NSUInteger;
 - (void)appWillUnhide:(NSNotification*)note;
 - (void)appDidUnhide:(NSNotification*)note;
 - (id)initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)styleMask backing:(NSBackingStoreType)backingType defer:(BOOL)flag;
+- (void)keyDown:(NSEvent *)event;
 @end
 
 /* Delegate for our NSWindow to send SDLQuit() on close */

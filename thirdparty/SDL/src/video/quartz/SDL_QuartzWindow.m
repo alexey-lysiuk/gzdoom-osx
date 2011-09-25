@@ -197,6 +197,11 @@ static void QZ_SetPortAlphaOpaque () {
     return [ super initWithContentRect:contentRect styleMask:styleMask backing:backingType defer:flag ];
 }
 
+- (void)keyDown:(NSEvent *)event
+{
+	
+}
+
 @end
 
 @implementation SDL_QuartzWindowDelegate
