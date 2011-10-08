@@ -829,7 +829,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 49E9202A1394CE6000CCEBBC /* GZDoom_BLOB */;
+			remoteGlobalIDString = 49E9202A1394CE6000CCEBBC;
 			remoteInfo = GZDoom_BLOB;
 		};
 		8AC81C35139131FE00F49DC3 /* PBXContainerItemProxy */ = {
