@@ -95,6 +95,7 @@ void (*WIN_WinPAINT)(_THIS, HDC hdc);
 extern void DIB_SwapGamma(_THIS);
 
 #ifndef NO_GETKEYBOARDSTATE
+#ifndef _WIN64
 /* Variables and support functions for SDL_ToUnicode() */
 static int codepage;
 static int Is9xME();
@@ -102,6 +103,7 @@ static int GetCodePage();
 static int WINAPI ToUnicode9xME(UINT vkey, UINT scancode, const BYTE *keystate, LPWSTR wchars, int wsize, UINT flags);
 
 ToUnicodeFN SDL_ToUnicode = ToUnicode9xME;
+#endif
 #endif /* !NO_GETKEYBOARDSTATE */
 
 
@@ -218,13 +220,13 @@ static BOOL (WINAPI *_TrackMouseEvent)(TRACKMOUSEEVENT *ptme) = NULL;
 static VOID CALLBACK
 TrackMouseTimerProc(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 {
-	RECT rect;
+	union { RECT rect; POINT pt; } rectpt;  /* prevent type-punning issue. */
 	POINT pt;
 
-	GetClientRect(hWnd, &rect);
-	MapWindowPoints(hWnd, NULL, (LPPOINT)&rect, 2);
+	GetClientRect(hWnd, &rectpt.rect);
+	MapWindowPoints(hWnd, NULL, &rectpt.pt, 2);
 	GetCursorPos(&pt);
-	if ( !PtInRect(&rect, pt) || (WindowFromPoint(pt) != hWnd) ) {
+	if ( !PtInRect(&rectpt.rect, pt) || (WindowFromPoint(pt) != hWnd) ) {
 		if ( !KillTimer(hWnd, idEvent) ) {
 			/* Error killing the timer! */
 		}
@@ -570,11 +572,24 @@ this->hidden->hiresFix, &x, &y);
 
 		case WM_WINDOWPOSCHANGED: {
 			SDL_VideoDevice *this = current_video;
+			POINT pt;
 			int w, h;
 
 			GetClientRect(SDL_Window, &SDL_bounds);
-			ClientToScreen(SDL_Window, (LPPOINT)&SDL_bounds);
-			ClientToScreen(SDL_Window, (LPPOINT)&SDL_bounds+1);
+
+			/* avoiding type-punning here... */
+			pt.x = SDL_bounds.left;
+			pt.y = SDL_bounds.top;
+			ClientToScreen(SDL_Window, &pt);
+			SDL_bounds.left = pt.x;
+			SDL_bounds.top = pt.y;
+
+			pt.x = SDL_bounds.right;
+			pt.y = SDL_bounds.bottom;
+			ClientToScreen(SDL_Window, &pt);
+			SDL_bounds.right = pt.x;
+			SDL_bounds.bottom = pt.y;
+
 			if ( !SDL_resizing && !IsZoomed(SDL_Window) &&
 			     SDL_PublicSurface &&
 				!(SDL_PublicSurface->flags & SDL_FULLSCREEN) ) {
@@ -650,9 +665,10 @@ this->hidden->hiresFix, &x, &y);
 		return(0);
 
 #ifndef NO_GETKEYBOARDSTATE
-		case WM_INPUTLANGCHANGE: {
+		case WM_INPUTLANGCHANGE:
+#ifndef _WIN64
 			codepage = GetCodePage();
-		}
+#endif
 		return(TRUE);
 #endif
 
@@ -760,6 +776,7 @@ int SDL_RegisterApp(char *name, Uint32 style, void *hInst)
 #endif /* WM_MOUSELEAVE */
 
 #ifndef NO_GETKEYBOARDSTATE
+#ifndef _WIN64
 	/* Initialise variables for SDL_ToUnicode() */
 	codepage = GetCodePage();
 
@@ -767,6 +784,7 @@ int SDL_RegisterApp(char *name, Uint32 style, void *hInst)
 	   const issue here... */
 	SDL_ToUnicode = Is9xME() ? ToUnicode9xME : (ToUnicodeFN) ToUnicode;
 #endif
+#endif /* NO_GETKEYBOARDSTATE */
 
 	app_registered = 1;
 	return(0);
@@ -793,6 +811,7 @@ void SDL_UnregisterApp()
 }
 
 #ifndef NO_GETKEYBOARDSTATE
+#ifndef _WIN64
 /* JFP: Implementation of ToUnicode() that works on 9x/ME/2K/XP */
 
 static int Is9xME()
@@ -825,9 +844,9 @@ static int WINAPI ToUnicode9xME(UINT vkey, UINT scancode, const BYTE *keystate, 
 
 	/* arg #3 should be const BYTE *, but cygwin lists it as PBYTE. */
 	if (ToAsciiEx(vkey, scancode, (PBYTE) keystate, (WORD*)chars, 0, GetKeyboardLayout(0)) == 1) {
-		return MultiByteToWideChar(codepage, 0, chars, 1, wchars, wsize);
+		return MultiByteToWideChar(codepage, 0, (LPCSTR) chars, 1, wchars, wsize);
 	}
 	return 0;
 }
-
+#endif
 #endif /* !NO_GETKEYBOARDSTATE */
