@@ -325,6 +325,20 @@ SDLGLFB::SDLGLFB (void *, int width, int height, int, int, bool fullscreen)
 #if defined(__APPLE__)
 	// Need to set title here because a window is not created yet when calling the same function from main()
 	SDL_WM_SetCaption( GAMESIG " " DOTVERSIONSTR " (" __DATE__ ")", NULL );
+
+	static const char* const ENABLE_APP_EVENTS = "SDL_ENABLEAPPEVENTS";
+
+	// Enable processing of application events inside SDL in windowed mode only
+	// TODO: find out why NSBeep() is called in fullscreen mode on each key press (possible SDL issue)
+	
+	if ( fullscreen )
+	{
+		unsetenv( ENABLE_APP_EVENTS );
+	}
+	else
+	{
+		setenv( ENABLE_APP_EVENTS, "1", 1 );
+	}
 #endif // __APPLE__
 }
 
