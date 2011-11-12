@@ -664,6 +664,8 @@ void G_DoCompleted (void)
 		}
 		else
 		{
+
+
 			level_info_t *nextinfo = FindLevelInfo (nextlevel);
 			wminfo.next = nextinfo->mapname;
 			wminfo.LName1 = TexMan[TexMan.CheckForTexture(nextinfo->pname, FTexture::TEX_MiscPatch)];
@@ -1253,6 +1255,7 @@ void G_InitLevelLocals ()
 	level.skypic2[8] = 0;
 
 	compatflags.Callback();
+	compatflags2.Callback();
 
 	NormalLight.ChangeFade (level.fadeto);
 
@@ -1363,6 +1366,11 @@ void G_SerializeLevel (FArchive &arc, bool hubLoad)
 		<< level.teamdamage
 		<< level.maptime
 		<< i;
+
+	if (SaveVersion >= 3313)
+	{
+		arc << level.nextmusic;
+	}
 
 	// Hub transitions must keep the current total time
 	if (!hubLoad)

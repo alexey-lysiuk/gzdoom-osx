@@ -275,9 +275,9 @@ FUNC(LS_Floor_LowerToLowest)
 }
 
 FUNC(LS_Floor_LowerToHighest)
-// Floor_LowerToHighest (tag, speed, adjust)
+// Floor_LowerToHighest (tag, speed, adjust, hereticlower)
 {
-	return EV_DoFloor (DFloor::floorLowerToHighest, ln, arg0, SPEED(arg1), (arg2-128)*FRACUNIT, 0, 0, false);
+	return EV_DoFloor (DFloor::floorLowerToHighest, ln, arg0, SPEED(arg1), (arg2-128)*FRACUNIT, 0, 0, false, arg3==1);
 }
 
 FUNC(LS_Floor_LowerToNearest)
@@ -2656,7 +2656,7 @@ FUNC(LS_SetPlayerProperty)
 			{ // Take power from activator
 				if (power != 4)
 				{
-					AInventory *item = it->FindInventory (powers[power]);
+					AInventory *item = it->FindInventory (powers[power], true);
 					if (item != NULL)
 					{
 						item->Destroy ();
