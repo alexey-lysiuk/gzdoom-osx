@@ -74,11 +74,11 @@
 		49E921B11394CE6000CCEBBC /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2A1139235E0001F54B0 /* OpenGL.framework */; };
 		49E921B21394CE6000CCEBBC /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF279491390F0C20095D9A0 /* libbz2.dylib */; };
 		49E921B31394CE6000CCEBBC /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27A461390F47C0095D9A0 /* libz.dylib */; };
-		49E921B41394CE6000CCEBBC /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF278CA1390F0370095D9A0 /* libjpeg.a */; };
-		49E921B51394CE6000CCEBBC /* liblzma.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF2795A1390F1200095D9A0 /* liblzma.a */; };
-		49E921B61394CE6000CCEBBC /* libgme.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27A541390F4F40095D9A0 /* libgme.a */; };
-		49E921B71394CE6000CCEBBC /* libdumb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27B251390F5DC0095D9A0 /* libdumb.a */; };
-		49E921B81394CE6000CCEBBC /* libgdtoa.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27C1C1390F7E20095D9A0 /* libgdtoa.a */; };
+		49E921B41394CE6000CCEBBC /* libjpeg_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF278CA1390F0370095D9A0 /* libjpeg_gzdoom.a */; };
+		49E921B51394CE6000CCEBBC /* liblzma_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF2795A1390F1200095D9A0 /* liblzma_gzdoom.a */; };
+		49E921B61394CE6000CCEBBC /* libgme_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27A541390F4F40095D9A0 /* libgme_gzdoom.a */; };
+		49E921B71394CE6000CCEBBC /* libdumb_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27B251390F5DC0095D9A0 /* libdumb_gzdoom.a */; };
+		49E921B81394CE6000CCEBBC /* libgdtoa_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27C1C1390F7E20095D9A0 /* libgdtoa_gzdoom.a */; };
 		49E921B91394CE6000CCEBBC /* libfmodex.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2B91392360F001F54B0 /* libfmodex.dylib */; };
 		49E921C31394CEAC00CCEBBC /* blob_fragglescript.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E920091394C83300CCEBBC /* blob_fragglescript.cpp */; };
 		49E921C41394CEAC00CCEBBC /* blob_games.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E920121394C8AA00CCEBBC /* blob_games.cpp */; };
@@ -113,11 +113,11 @@
 		8A8D68B713C84344001D368F /* r_swrenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D68B313C84344001D368F /* r_swrenderer.cpp */; };
 		8A8D68B813C84344001D368F /* r_utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D68B513C84344001D368F /* r_utility.cpp */; };
 		8A938D1113B6039F002627DE /* actorptrselect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A938D0F13B6039F002627DE /* actorptrselect.cpp */; };
-		8AC81C411391321300F49DC3 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF278CA1390F0370095D9A0 /* libjpeg.a */; };
-		8AC81C421391321300F49DC3 /* liblzma.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF2795A1390F1200095D9A0 /* liblzma.a */; };
-		8AC81C431391321300F49DC3 /* libgme.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27A541390F4F40095D9A0 /* libgme.a */; };
-		8AC81C441391321300F49DC3 /* libdumb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27B251390F5DC0095D9A0 /* libdumb.a */; };
-		8AC81C451391321300F49DC3 /* libgdtoa.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27C1C1390F7E20095D9A0 /* libgdtoa.a */; };
+		8AC81C411391321300F49DC3 /* libjpeg_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF278CA1390F0370095D9A0 /* libjpeg_gzdoom.a */; };
+		8AC81C421391321300F49DC3 /* liblzma_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF2795A1390F1200095D9A0 /* liblzma_gzdoom.a */; };
+		8AC81C431391321300F49DC3 /* libgme_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27A541390F4F40095D9A0 /* libgme_gzdoom.a */; };
+		8AC81C441391321300F49DC3 /* libdumb_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27B251390F5DC0095D9A0 /* libdumb_gzdoom.a */; };
+		8AC81C451391321300F49DC3 /* libgdtoa_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27C1C1390F7E20095D9A0 /* libgdtoa_gzdoom.a */; };
 		8AD870F2140A4EC5007A06A9 /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = 8AD870F1140A4EC5007A06A9 /* Credits.html */; };
 		8AD870F3140A4EC5007A06A9 /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = 8AD870F1140A4EC5007A06A9 /* Credits.html */; };
 		8AF2792A1390F0880095D9A0 /* jcomapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 8AF2790B1390F0880095D9A0 /* jcomapi.c */; };
@@ -168,7 +168,7 @@
 		8AF27A1A1390F3370095D9A0 /* substr.cc in Sources */ = {isa = PBXBuildFile; fileRef = 8AF279F31390F26E0095D9A0 /* substr.cc */; };
 		8AF27A1B1390F3370095D9A0 /* translate.cc in Sources */ = {isa = PBXBuildFile; fileRef = 8AF279F61390F26E0095D9A0 /* translate.cc */; };
 		8AF27A351390F4300095D9A0 /* zipdir.c in Sources */ = {isa = PBXBuildFile; fileRef = 8AF279FD1390F26E0095D9A0 /* zipdir.c */; };
-		8AF27A3E1390F45B0095D9A0 /* liblzma.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF2795A1390F1200095D9A0 /* liblzma.a */; };
+		8AF27A3E1390F45B0095D9A0 /* liblzma_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF2795A1390F1200095D9A0 /* liblzma_gzdoom.a */; };
 		8AF27A421390F4670095D9A0 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF279491390F0C20095D9A0 /* libbz2.dylib */; };
 		8AF27A471390F47C0095D9A0 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27A461390F47C0095D9A0 /* libz.dylib */; };
 		8AF27A491390F4910095D9A0 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27A461390F47C0095D9A0 /* libz.dylib */; };
@@ -685,8 +685,8 @@
 		8AF281F0139126C10095D9A0 /* parse_xlat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF28003139126C00095D9A0 /* parse_xlat.cpp */; };
 		8AF281F2139126C10095D9A0 /* zstrformat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF28007139126C00095D9A0 /* zstrformat.cpp */; };
 		8AF281F3139126C10095D9A0 /* zstring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF28008139126C00095D9A0 /* zstring.cpp */; };
-		8AF62EBD142F25C5003F3556 /* libSDL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF62EB3142F259E003F3556 /* libSDL.a */; };
-		8AF62EBE142F25D0003F3556 /* libSDL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF62EB3142F259E003F3556 /* libSDL.a */; };
+		8AF62EBD142F25C5003F3556 /* libSDL_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF62EB3142F259E003F3556 /* libSDL_gzdoom.a */; };
+		8AF62EBE142F25D0003F3556 /* libSDL_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF62EB3142F259E003F3556 /* libSDL_gzdoom.a */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
@@ -978,7 +978,7 @@
 		8A938D0F13B6039F002627DE /* actorptrselect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = actorptrselect.cpp; sourceTree = "<group>"; };
 		8A938D1013B6039F002627DE /* actorptrselect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = actorptrselect.h; sourceTree = "<group>"; };
 		8AD870F1140A4EC5007A06A9 /* Credits.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Credits.html; sourceTree = "<group>"; };
-		8AF278CA1390F0370095D9A0 /* libjpeg.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libjpeg.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		8AF278CA1390F0370095D9A0 /* libjpeg_gzdoom.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libjpeg_gzdoom.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AF2790B1390F0880095D9A0 /* jcomapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = jcomapi.c; sourceTree = "<group>"; };
 		8AF2790C1390F0880095D9A0 /* jconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jconfig.h; sourceTree = "<group>"; };
 		8AF2790D1390F0880095D9A0 /* jdapimin.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = jdapimin.c; sourceTree = "<group>"; };
@@ -1009,7 +1009,7 @@
 		8AF279261390F0880095D9A0 /* jutils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = jutils.c; sourceTree = "<group>"; };
 		8AF279271390F0880095D9A0 /* jversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jversion.h; sourceTree = "<group>"; };
 		8AF279491390F0C20095D9A0 /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = usr/lib/libbz2.dylib; sourceTree = SDKROOT; };
-		8AF2795A1390F1200095D9A0 /* liblzma.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblzma.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		8AF2795A1390F1200095D9A0 /* liblzma_gzdoom.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblzma_gzdoom.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AF279611390F1410095D9A0 /* 7zBuf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = 7zBuf.c; path = C/7zBuf.c; sourceTree = "<group>"; };
 		8AF279621390F1410095D9A0 /* 7zBuf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = 7zBuf.h; path = C/7zBuf.h; sourceTree = "<group>"; };
 		8AF279631390F1410095D9A0 /* 7zCrc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = 7zCrc.c; path = C/7zCrc.c; sourceTree = "<group>"; };
@@ -1083,7 +1083,7 @@
 		8AF27A2A1390F3E70095D9A0 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
 		8AF27A311390F41F0095D9A0 /* zipdir */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = zipdir; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AF27A461390F47C0095D9A0 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		8AF27A541390F4F40095D9A0 /* libgme.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgme.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		8AF27A541390F4F40095D9A0 /* libgme_gzdoom.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgme_gzdoom.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AF27A581390F51A0095D9A0 /* Ay_Apu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Ay_Apu.cpp; sourceTree = "<group>"; };
 		8AF27A591390F51A0095D9A0 /* Ay_Apu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ay_Apu.h; sourceTree = "<group>"; };
 		8AF27A5A1390F51A0095D9A0 /* Ay_Cpu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Ay_Cpu.cpp; sourceTree = "<group>"; };
@@ -1183,7 +1183,7 @@
 		8AF27AB81390F51A0095D9A0 /* Ym2413_Emu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ym2413_Emu.h; sourceTree = "<group>"; };
 		8AF27AB91390F51A0095D9A0 /* Ym2612_Emu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Ym2612_Emu.cpp; sourceTree = "<group>"; };
 		8AF27ABA1390F51A0095D9A0 /* Ym2612_Emu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ym2612_Emu.h; sourceTree = "<group>"; };
-		8AF27B251390F5DC0095D9A0 /* libdumb.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libdumb.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		8AF27B251390F5DC0095D9A0 /* libdumb_gzdoom.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libdumb_gzdoom.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AF27B3C1390F5EE0095D9A0 /* dumb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dumb.h; sourceTree = "<group>"; };
 		8AF27B3E1390F5EE0095D9A0 /* barray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = barray.h; sourceTree = "<group>"; };
 		8AF27B3F1390F5EE0095D9A0 /* dumb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dumb.h; sourceTree = "<group>"; };
@@ -1270,7 +1270,7 @@
 		8AF27B9A1390F5EE0095D9A0 /* load_it.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = load_it.cpp; sourceTree = "<group>"; };
 		8AF27B9B1390F5EE0095D9A0 /* modulus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = modulus.h; sourceTree = "<group>"; };
 		8AF27B9C1390F5EE0095D9A0 /* typedef.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = typedef.hpp; sourceTree = "<group>"; };
-		8AF27C1C1390F7E20095D9A0 /* libgdtoa.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgdtoa.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		8AF27C1C1390F7E20095D9A0 /* libgdtoa_gzdoom.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgdtoa_gzdoom.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AF27C85139121F90095D9A0 /* arithchk.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = arithchk.c; sourceTree = "<group>"; };
 		8AF27C86139121F90095D9A0 /* dmisc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = dmisc.c; sourceTree = "<group>"; };
 		8AF27C87139121F90095D9A0 /* dtoa.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = dtoa.c; sourceTree = "<group>"; };
@@ -2053,13 +2053,13 @@
 				49E921B11394CE6000CCEBBC /* OpenGL.framework in Frameworks */,
 				49E921B21394CE6000CCEBBC /* libbz2.dylib in Frameworks */,
 				49E921B31394CE6000CCEBBC /* libz.dylib in Frameworks */,
-				49E921B41394CE6000CCEBBC /* libjpeg.a in Frameworks */,
-				49E921B51394CE6000CCEBBC /* liblzma.a in Frameworks */,
-				49E921B61394CE6000CCEBBC /* libgme.a in Frameworks */,
-				49E921B71394CE6000CCEBBC /* libdumb.a in Frameworks */,
-				49E921B81394CE6000CCEBBC /* libgdtoa.a in Frameworks */,
 				49E921B91394CE6000CCEBBC /* libfmodex.dylib in Frameworks */,
-				8AF62EBD142F25C5003F3556 /* libSDL.a in Frameworks */,
+				8AF62EBD142F25C5003F3556 /* libSDL_gzdoom.a in Frameworks */,
+				49E921B41394CE6000CCEBBC /* libjpeg_gzdoom.a in Frameworks */,
+				49E921B51394CE6000CCEBBC /* liblzma_gzdoom.a in Frameworks */,
+				49E921B61394CE6000CCEBBC /* libgme_gzdoom.a in Frameworks */,
+				49E921B71394CE6000CCEBBC /* libdumb_gzdoom.a in Frameworks */,
+				49E921B81394CE6000CCEBBC /* libgdtoa_gzdoom.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2089,7 +2089,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8AF27A421390F4670095D9A0 /* libbz2.dylib in Frameworks */,
-				8AF27A3E1390F45B0095D9A0 /* liblzma.a in Frameworks */,
+				8AF27A3E1390F45B0095D9A0 /* liblzma_gzdoom.a in Frameworks */,
 				8AF27A471390F47C0095D9A0 /* libz.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2105,13 +2105,13 @@
 				8A74F2A2139235E0001F54B0 /* OpenGL.framework in Frameworks */,
 				8AF2794A1390F0C20095D9A0 /* libbz2.dylib in Frameworks */,
 				8AF27A491390F4910095D9A0 /* libz.dylib in Frameworks */,
-				8AC81C411391321300F49DC3 /* libjpeg.a in Frameworks */,
-				8AC81C421391321300F49DC3 /* liblzma.a in Frameworks */,
-				8AC81C431391321300F49DC3 /* libgme.a in Frameworks */,
-				8AC81C441391321300F49DC3 /* libdumb.a in Frameworks */,
-				8AC81C451391321300F49DC3 /* libgdtoa.a in Frameworks */,
 				8A74F2BA1392360F001F54B0 /* libfmodex.dylib in Frameworks */,
-				8AF62EBE142F25D0003F3556 /* libSDL.a in Frameworks */,
+				8AF62EBE142F25D0003F3556 /* libSDL_gzdoom.a in Frameworks */,
+				8AC81C411391321300F49DC3 /* libjpeg_gzdoom.a in Frameworks */,
+				8AC81C421391321300F49DC3 /* liblzma_gzdoom.a in Frameworks */,
+				8AC81C431391321300F49DC3 /* libgme_gzdoom.a in Frameworks */,
+				8AC81C441391321300F49DC3 /* libdumb_gzdoom.a in Frameworks */,
+				8AC81C451391321300F49DC3 /* libgdtoa_gzdoom.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2138,11 +2138,11 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8AF27C1C1390F7E20095D9A0 /* libgdtoa.a */,
-				8AF27B251390F5DC0095D9A0 /* libdumb.a */,
-				8AF27A541390F4F40095D9A0 /* libgme.a */,
-				8AF2795A1390F1200095D9A0 /* liblzma.a */,
-				8AF278CA1390F0370095D9A0 /* libjpeg.a */,
+				8AF27C1C1390F7E20095D9A0 /* libgdtoa_gzdoom.a */,
+				8AF27B251390F5DC0095D9A0 /* libdumb_gzdoom.a */,
+				8AF27A541390F4F40095D9A0 /* libgme_gzdoom.a */,
+				8AF2795A1390F1200095D9A0 /* liblzma_gzdoom.a */,
+				8AF278CA1390F0370095D9A0 /* libjpeg_gzdoom.a */,
 				8AF27A311390F41F0095D9A0 /* zipdir */,
 				8AF27A0A1390F2B50095D9A0 /* re2c */,
 				8AF279BC1390F2540095D9A0 /* lemon */,
@@ -3754,7 +3754,7 @@
 		8AF62EA7142F259E003F3556 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8AF62EB3142F259E003F3556 /* libSDL.a */,
+				8AF62EB3142F259E003F3556 /* libSDL_gzdoom.a */,
 				8AF62EB5142F259E003F3556 /* SDL.framework */,
 				8AF62EB7142F259E003F3556 /* libSDLmain.a */,
 				8AF62EB9142F259E003F3556 /* Standard DMG */,
@@ -3825,7 +3825,7 @@
 			);
 			name = jpeg;
 			productName = jpeg;
-			productReference = 8AF278CA1390F0370095D9A0 /* libjpeg.a */;
+			productReference = 8AF278CA1390F0370095D9A0 /* libjpeg_gzdoom.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		8AF279591390F1200095D9A0 /* lzma */ = {
@@ -3840,7 +3840,7 @@
 			);
 			name = lzma;
 			productName = lzma;
-			productReference = 8AF2795A1390F1200095D9A0 /* liblzma.a */;
+			productReference = 8AF2795A1390F1200095D9A0 /* liblzma_gzdoom.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		8AF279BB1390F2540095D9A0 /* lemon */ = {
@@ -3904,7 +3904,7 @@
 			);
 			name = gme;
 			productName = gme;
-			productReference = 8AF27A541390F4F40095D9A0 /* libgme.a */;
+			productReference = 8AF27A541390F4F40095D9A0 /* libgme_gzdoom.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		8AF27B241390F5DC0095D9A0 /* dumb */ = {
@@ -3919,7 +3919,7 @@
 			);
 			name = dumb;
 			productName = dumb;
-			productReference = 8AF27B251390F5DC0095D9A0 /* libdumb.a */;
+			productReference = 8AF27B251390F5DC0095D9A0 /* libdumb_gzdoom.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		8AF27C1B1390F7E20095D9A0 /* gdtoa */ = {
@@ -3934,7 +3934,7 @@
 			);
 			name = gdtoa;
 			productName = gdtoa;
-			productReference = 8AF27C1C1390F7E20095D9A0 /* libgdtoa.a */;
+			productReference = 8AF27C1C1390F7E20095D9A0 /* libgdtoa_gzdoom.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		8D1107260486CEB800E47090 /* GZDoom */ = {
@@ -4015,10 +4015,10 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		8AF62EB3142F259E003F3556 /* libSDL.a */ = {
+		8AF62EB3142F259E003F3556 /* libSDL_gzdoom.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = libSDL.a;
+			path = libSDL_gzdoom.a;
 			remoteRef = 8AF62EB2142F259E003F3556 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -5155,28 +5155,28 @@
 		8AF278CB1390F0370095D9A0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				PRODUCT_NAME = jpeg;
+				PRODUCT_NAME = jpeg_gzdoom;
 			};
 			name = Debug;
 		};
 		8AF278CC1390F0370095D9A0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				PRODUCT_NAME = jpeg;
+				PRODUCT_NAME = jpeg_gzdoom;
 			};
 			name = Release;
 		};
 		8AF2795B1390F1210095D9A0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				PRODUCT_NAME = lzma;
+				PRODUCT_NAME = lzma_gzdoom;
 			};
 			name = Debug;
 		};
 		8AF2795C1390F1210095D9A0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				PRODUCT_NAME = lzma;
+				PRODUCT_NAME = lzma_gzdoom;
 			};
 			name = Release;
 		};
@@ -5235,14 +5235,14 @@
 		8AF27A551390F4F50095D9A0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				PRODUCT_NAME = gme;
+				PRODUCT_NAME = gme_gzdoom;
 			};
 			name = Debug;
 		};
 		8AF27A561390F4F50095D9A0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				PRODUCT_NAME = gme;
+				PRODUCT_NAME = gme_gzdoom;
 			};
 			name = Release;
 		};
@@ -5255,7 +5255,7 @@
 					NEED_ITOA,
 				);
 				HEADER_SEARCH_PATHS = dumb/include;
-				PRODUCT_NAME = dumb;
+				PRODUCT_NAME = dumb_gzdoom;
 			};
 			name = Debug;
 		};
@@ -5268,21 +5268,21 @@
 					NEED_ITOA,
 				);
 				HEADER_SEARCH_PATHS = dumb/include;
-				PRODUCT_NAME = dumb;
+				PRODUCT_NAME = dumb_gzdoom;
 			};
 			name = Release;
 		};
 		8AF27C1D1390F7E30095D9A0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				PRODUCT_NAME = gdtoa;
+				PRODUCT_NAME = gdtoa_gzdoom;
 			};
 			name = Debug;
 		};
 		8AF27C1E1390F7E30095D9A0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				PRODUCT_NAME = gdtoa;
+				PRODUCT_NAME = gdtoa_gzdoom;
 			};
 			name = Release;
 		};

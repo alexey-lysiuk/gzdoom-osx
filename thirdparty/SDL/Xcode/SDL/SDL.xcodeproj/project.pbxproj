@@ -205,7 +205,7 @@
 		046B91ED0A11B53500FB151C /* SDL_sysloadso.c in Sources */ = {isa = PBXBuildFile; fileRef = 046B91E90A11B53500FB151C /* SDL_sysloadso.c */; };
 		046B92130A11B8AD00FB151C /* SDL_dlcompat.c in Sources */ = {isa = PBXBuildFile; fileRef = 046B92100A11B8AD00FB151C /* SDL_dlcompat.c */; };
 		046B92140A11B8AD00FB151C /* SDL_dlcompat.c in Sources */ = {isa = PBXBuildFile; fileRef = 046B92100A11B8AD00FB151C /* SDL_dlcompat.c */; };
-		8A46CCC7142F112700D35AB1 /* libSDL.a in CopyFiles */ = {isa = PBXBuildFile; fileRef = BECDF6B30761BA81005FE872 /* libSDL.a */; };
+		8A46CCC7142F112700D35AB1 /* libSDL_gzdoom.a in CopyFiles */ = {isa = PBXBuildFile; fileRef = BECDF6B30761BA81005FE872 /* libSDL_gzdoom.a */; };
 		8A46CCCF142F15B400D35AB1 /* SDL_syscdrom.c in Sources */ = {isa = PBXBuildFile; fileRef = B2A23A7B04157C5700A80002 /* SDL_syscdrom.c */; };
 		BECDF62B0761BA81005FE872 /* SDLMain.nib in Resources */ = {isa = PBXBuildFile; fileRef = 2EECDF2F0086C3A07F000001 /* SDLMain.nib */; };
 		BECDF62E0761BA81005FE872 /* SDL_audio.c in Sources */ = {isa = PBXBuildFile; fileRef = 01538330006D78D67F000001 /* SDL_audio.c */; };
@@ -329,7 +329,7 @@
 			dstPath = ../../../../lib;
 			dstSubfolderSpec = 16;
 			files = (
-				8A46CCC7142F112700D35AB1 /* libSDL.a in CopyFiles */,
+				8A46CCC7142F112700D35AB1 /* libSDL_gzdoom.a in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -520,7 +520,7 @@
 		BECDF5D60761B759005FE872 /* SDL_coreaudio.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SDL_coreaudio.h; sourceTree = "<group>"; };
 		BECDF66B0761BA81005FE872 /* Info-Framework.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-Framework.plist"; sourceTree = "<group>"; };
 		BECDF66C0761BA81005FE872 /* SDL.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SDL.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		BECDF6B30761BA81005FE872 /* libSDL.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSDL.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		BECDF6B30761BA81005FE872 /* libSDL_gzdoom.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSDL_gzdoom.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BECDF6BA0761BA81005FE872 /* libSDLmain.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSDLmain.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BECDF6BE0761BA81005FE872 /* Standard DMG */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Standard DMG"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BECDF6C30761BA81005FE872 /* Developer Extras Package */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Developer Extras Package"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -938,7 +938,7 @@
 			children = (
 				089C1665FE841158C02AAC07 /* Resources */,
 				BECDF66C0761BA81005FE872 /* SDL.framework */,
-				BECDF6B30761BA81005FE872 /* libSDL.a */,
+				BECDF6B30761BA81005FE872 /* libSDL_gzdoom.a */,
 				BECDF6BA0761BA81005FE872 /* libSDLmain.a */,
 				BECDF6BE0761BA81005FE872 /* Standard DMG */,
 				BECDF6C30761BA81005FE872 /* Developer Extras Package */,
@@ -1295,7 +1295,7 @@
 			name = "Static Library";
 			productInstallPath = /usr/local/lib;
 			productName = "Static Library";
-			productReference = BECDF6B30761BA81005FE872 /* libSDL.a */;
+			productReference = BECDF6B30761BA81005FE872 /* libSDL_gzdoom.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		BECDF6B40761BA81005FE872 /* Main Library */ = {
@@ -2594,7 +2594,7 @@
 				OTHER_CFLAGS = "$(OTHER_CFLAGS_$(CURRENT_ARCH))";
 				OTHER_CFLAGS_i386 = "";
 				OTHER_CFLAGS_ppc = "";
-				PRODUCT_NAME = SDL;
+				PRODUCT_NAME = SDL_gzdoom;
 			};
 			name = "Deployment GZDoom";
 		};
