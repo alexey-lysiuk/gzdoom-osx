@@ -65,9 +65,6 @@
 #include "menu/menu.h"
 #include "r_data/voxels.h"
 
-#ifdef pow
-#undef pow
-#endif
 
 FRenderer *Renderer;
 
