@@ -108,6 +108,9 @@
 		8A74F38F13925284001F54B0 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F38E13925284001F54B0 /* IOKit.framework */; };
 		8A74F451139252F9001F54B0 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F450139252F9001F54B0 /* AudioUnit.framework */; };
 		8A74F4671392532C001F54B0 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F4661392532C001F54B0 /* Carbon.framework */; };
+		8A782596147006D9008FBC13 /* oalsound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A782594147006D9008FBC13 /* oalsound.cpp */; };
+		8A7825BA1470098C008FBC13 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7825B91470098C008FBC13 /* OpenAL.framework */; };
+		8A7825C1147009AB008FBC13 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7825B91470098C008FBC13 /* OpenAL.framework */; };
 		8A7C81C613BF3C0B000B654E /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3E139126C00095D9A0 /* SDLMain.m */; };
 		8A7C81C713BF3C5A000B654E /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3E139126C00095D9A0 /* SDLMain.m */; };
 		8A8D68B713C84344001D368F /* r_swrenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D68B313C84344001D368F /* r_swrenderer.cpp */; };
@@ -969,6 +972,10 @@
 		8A74F38E13925284001F54B0 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		8A74F450139252F9001F54B0 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		8A74F4661392532C001F54B0 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
+		8A782593147006D9008FBC13 /* efx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = efx.h; sourceTree = "<group>"; };
+		8A782594147006D9008FBC13 /* oalsound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = oalsound.cpp; sourceTree = "<group>"; };
+		8A782595147006D9008FBC13 /* oalsound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oalsound.h; sourceTree = "<group>"; };
+		8A7825B91470098C008FBC13 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		8A7C819913BF38FE000B654E /* svnrevision_gz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = svnrevision_gz.h; sourceTree = "<group>"; };
 		8A8D68B213C84344001D368F /* r_renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = r_renderer.h; sourceTree = "<group>"; };
 		8A8D68B313C84344001D368F /* r_swrenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = r_swrenderer.cpp; sourceTree = "<group>"; };
@@ -2050,6 +2057,7 @@
 				49E921AE1394CE6000CCEBBC /* Carbon.framework in Frameworks */,
 				49E921AF1394CE6000CCEBBC /* Cocoa.framework in Frameworks */,
 				49E921B01394CE6000CCEBBC /* IOKit.framework in Frameworks */,
+				8A7825BA1470098C008FBC13 /* OpenAL.framework in Frameworks */,
 				49E921B11394CE6000CCEBBC /* OpenGL.framework in Frameworks */,
 				49E921B21394CE6000CCEBBC /* libbz2.dylib in Frameworks */,
 				49E921B31394CE6000CCEBBC /* libz.dylib in Frameworks */,
@@ -2102,6 +2110,7 @@
 				8A74F4671392532C001F54B0 /* Carbon.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				8A74F38F13925284001F54B0 /* IOKit.framework in Frameworks */,
+				8A7825C1147009AB008FBC13 /* OpenAL.framework in Frameworks */,
 				8A74F2A2139235E0001F54B0 /* OpenGL.framework in Frameworks */,
 				8AF2794A1390F0C20095D9A0 /* libbz2.dylib in Frameworks */,
 				8AF27A491390F4910095D9A0 /* libz.dylib in Frameworks */,
@@ -2185,6 +2194,7 @@
 				8A74F4661392532C001F54B0 /* Carbon.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
 				8A74F38E13925284001F54B0 /* IOKit.framework */,
+				8A7825B91470098C008FBC13 /* OpenAL.framework */,
 				8A74F2A1139235E0001F54B0 /* OpenGL.framework */,
 				8AF279491390F0C20095D9A0 /* libbz2.dylib */,
 				8AF27A461390F47C0095D9A0 /* libz.dylib */,
@@ -3603,6 +3613,7 @@
 		8AF27F55139126C00095D9A0 /* sound */ = {
 			isa = PBXGroup;
 			children = (
+				8A782593147006D9008FBC13 /* efx.h */,
 				8AF27F56139126C00095D9A0 /* fmod_wrap.h */,
 				8AF27F57139126C00095D9A0 /* fmodsound.cpp */,
 				8AF27F58139126C00095D9A0 /* fmodsound.h */,
@@ -3629,6 +3640,8 @@
 				8AF27F6D139126C00095D9A0 /* music_timidity_mididevice.cpp */,
 				8AF27F6E139126C00095D9A0 /* music_win_mididevice.cpp */,
 				8AF27F6F139126C00095D9A0 /* music_xmi_midiout.cpp */,
+				8A782594147006D9008FBC13 /* oalsound.cpp */,
+				8A782595147006D9008FBC13 /* oalsound.h */,
 			);
 			path = sound;
 			sourceTree = "<group>";
@@ -4844,6 +4857,7 @@
 				8AF28175139126C10095D9A0 /* iwadpicker_cocoa.mm in Sources */,
 				8A7C81C613BF3C0B000B654E /* SDLMain.m in Sources */,
 				8AF28013139126C00095D9A0 /* autozend.cpp in Sources */,
+				8A782596147006D9008FBC13 /* oalsound.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

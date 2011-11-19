@@ -136,6 +136,8 @@ CUSTOM_CVAR (Float, snd_waterlp, 250, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 	}
 }
 
+#ifndef NO_FMOD
+
 // PRIVATE DATA DEFINITIONS ------------------------------------------------
 
 static const ReverbContainer *PrevEnvironment;
@@ -2926,3 +2928,7 @@ void FMODSoundRenderer::InitCreateSoundExInfo(FMOD_CREATESOUNDEXINFO *exinfo) co
 	}
 	memset((BYTE *)exinfo + sizeof(exinfo->cbsize), 0, exinfo->cbsize - sizeof(exinfo->cbsize));
 }
+
+#endif // NO_FMOD
+
+#undef PITCH

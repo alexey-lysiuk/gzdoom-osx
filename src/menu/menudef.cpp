@@ -60,6 +60,8 @@ static FOptionMenuDescriptor DefaultOptionMenuSettings;	// contains common setti
 FOptionMenuSettings OptionSettings;
 FOptionMap OptionValues;
 
+void I_BuildALDeviceList(FOptionValues *opt);
+
 static void DeinitMenus()
 {
 	{
@@ -1230,6 +1232,11 @@ void M_CreateMenus()
 	if (opt != NULL) 
 	{
 		I_BuildMIDIMenuList(*opt);
+	}
+	opt = OptionValues.CheckKey(NAME_Aldevices);
+	if (opt != NULL) 
+	{
+		I_BuildALDeviceList(*opt);
 	}
 }
 

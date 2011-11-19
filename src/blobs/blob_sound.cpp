@@ -26,6 +26,7 @@
 #include "sound/music_timidity_mididevice.cpp"
 #include "sound/music_win_mididevice.cpp"
 #include "sound/music_xmi_midiout.cpp"
+#include "sound/oalsound.cpp"
 
 #include "timidity/common.cpp"
 #include "timidity/instrum.cpp"
