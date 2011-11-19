@@ -1645,6 +1645,24 @@ OpenALSoundRenderer::OpenALSoundRenderer()
 		return;
 	}
 
+#ifdef __APPLE__
+
+	for ( size_t i = 0; i < 16; ++i )
+	{
+		ALuint source = 0;
+		alGenSources( 1, &source );
+		
+		if ( AL_NO_ERROR != getALError() )
+		{
+			break;
+		}
+		
+		Sources.push_back( source );
+		FreeSfx.push_back( source );
+	}
+
+#else // !__APPLE__
+		
 	ALCint numMono=0, numStereo=0;
 	alcGetIntegerv(Device, ALC_MONO_SOURCES, 1, &numMono);
 	alcGetIntegerv(Device, ALC_STEREO_SOURCES, 1, &numStereo);
@@ -1660,6 +1678,9 @@ OpenALSoundRenderer::OpenALSoundRenderer()
 		}
 		FreeSfx.push_back(Sources[i]);
 	}
+	
+#endif // __APPLE__
+	
 	if(Sources.size() == 0)
 	{
 		Printf(TEXTCOLOR_RED" Error: could not generate any sound sources!\n");
@@ -1866,7 +1887,7 @@ float OpenALSoundRenderer::GetOutputRate()
 }
 
 
-SoundHandle OpenALSoundRenderer::LoadSoundRaw(BYTE *sfxdata, int length, int frequency, int channels, int bits, int loopstart)
+SoundHandle OpenALSoundRenderer::LoadSoundRaw(BYTE *sfxdata, int length, int frequency, int channels, int bits, int loopstart, int loopend)
 {
 	SoundHandle retval = { NULL };
 
@@ -2836,5 +2857,7 @@ FSoundChan *OpenALSoundRenderer::FindLowestChannel()
 	}
 	return lowest;
 }
+
+#undef PITCH
 
 #endif // NO_OPENAL
