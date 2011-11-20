@@ -321,6 +321,12 @@ SDLFB::SDLFB (int width, int height, bool fullscreen)
 	}
 	memcpy (SourcePalette, GPalette.BaseColors, sizeof(PalEntry)*256);
 	UpdateColors ();
+	
+#ifdef __APPLE__
+	// Enable processing of application events inside SDL in windowed mode only
+	// TODO: find out why NSBeep() is called in fullscreen mode on each key press (possible SDL issue)
+	I_EnableApplicationEvents( !fullscreen );
+#endif // __APPLE__
 }
 
 SDLFB::~SDLFB ()

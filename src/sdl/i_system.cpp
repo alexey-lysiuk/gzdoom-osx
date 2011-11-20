@@ -980,3 +980,21 @@ bool I_SetCursor(FTexture *cursorpic)
 	}
 	return true;
 }
+
+#ifdef __APPLE__
+
+void I_EnableApplicationEvents( bool on )
+{
+	static const char* const ENABLE_APP_EVENTS = "SDL_ENABLEAPPEVENTS";
+
+	if ( on )
+	{
+		setenv( ENABLE_APP_EVENTS, "1", 1 );
+	}
+	else
+	{
+		unsetenv( ENABLE_APP_EVENTS );
+	}
+}
+
+#endif // __APPLE__

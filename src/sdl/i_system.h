@@ -163,4 +163,8 @@ static inline char *strlwr(char *str)
 	return str;
 }
 
+#ifdef __APPLE__
+void I_EnableApplicationEvents( bool on );
+#endif // __APPLE__
+
 #endif
