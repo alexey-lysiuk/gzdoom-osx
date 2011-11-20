@@ -1222,8 +1222,11 @@ static void CreateCachedNodes(MapData *map)
 
 	FString path = CreateCacheName(map, true);
 	FILE *f = fopen(path, "wb");
-	fwrite(compressed, 1, outlen+offset, f);
-	fclose(f);
+	if ( NULL != f )
+	{
+		fwrite(compressed, 1, outlen+offset, f);
+		fclose(f);
+	}
 	delete [] compressed;
 }
 
