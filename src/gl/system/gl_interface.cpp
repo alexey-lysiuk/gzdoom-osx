@@ -987,11 +987,11 @@ namespace
 	};
 
 	
-	const size_t VERTEX_COUNT = 16384;
+	const size_t VERTEX_COUNT = 1024;
 
 	Vertex immediate[ VERTEX_COUNT ];
 	Vertex vab;
-	short quad_indexes[VERTEX_COUNT * 3 / 2 ];
+	short quad_indexes[ VERTEX_COUNT * 3 / 2 ];
 	int curr_vertex;
 	GLenum curr_prim;
 	
@@ -1077,133 +1077,171 @@ namespace
 	DefinePointerSaver( TexCoord, TEXTURE_COORD );
 	DefinePointerSaver( Color, COLOR );
 	
-}
 
-
-void glBegin( GLenum prim )
-{
-	curr_vertex = 0;
-	curr_prim   = prim;
-}
-
-
-void glVertex3f( GLfloat x, GLfloat y, GLfloat z )
-{
-	assert( curr_vertex < VERTEX_COUNT );
+	bool s_glBeginStarted = false;
 	
-	vab.xyz[ 0 ] = x;
-	vab.xyz[ 1 ] = y;
-	vab.xyz[ 2 ] = z;
 	
-	immediate[ curr_vertex ] = vab;
-	
-	++curr_vertex;
-}
-
-void glVertex3fv( const GLfloat* xyz )
-{
-	glVertex3f( xyz[0], xyz[1], xyz[2] );
-}
-
-void glVertex2d( GLdouble x, GLdouble y, GLdouble z )
-{
-	glVertex3f( static_cast< float >(x), static_cast< float >(y), static_cast< float >(z) );
-}
-
-void glVertex2f( GLfloat x, GLfloat y )
-{
-	glVertex3f( x, y, 0.0f );
-}
-
-void glVertex2i( GLint x, GLint y )
-{
-	glVertex3f( static_cast< float >(x), static_cast< float >(y), 0.0f );
-}
-
-void glVertex2d( GLdouble x, GLdouble y )
-{
-	glVertex3f( static_cast< float >(x), static_cast< float >(y), 0.0f );
-}
-
-
-void glColor4ub( GLubyte r, GLubyte g, GLubyte b, GLubyte a )
-{
-	vab.c[0] = r;
-	vab.c[1] = g;
-	vab.c[2] = b;
-	vab.c[3] = a;
-}
-
-void glColor3ub( GLubyte r, GLubyte g, GLubyte b )
-{
-	glColor4ub( r, g, b, 255 );
-}
-
-void glColor4f( GLfloat r, GLfloat g, GLfloat b, GLfloat a )
-{
-	glColor4ub( static_cast< GLubyte >( r * 255 ),
-			    static_cast< GLubyte >( g * 255 ),
-			    static_cast< GLubyte >( b * 255 ),
-			    static_cast< GLubyte >( a * 255 ) );
-}
-
-void glColor4fv( const GLfloat *rgba )
-{
-	glColor4f( rgba[0], rgba[1], rgba[2], rgba[3] );
-}
-
-void glColor3f( GLfloat r, GLfloat g, GLfloat b )
-{
-	glColor4f( r, g, b, 1.0f );
-}
-
-
-void glTexCoord2f( GLfloat s, GLfloat t ) 
-{
-	vab.st[ 0 ] = s;
-	vab.st[ 1 ] = t;
-}
-
-void glTexCoord2fv( GLfloat *st )
-{
-	glTexCoord2f( st[0], st[1] );
-}
-
-
-void glEnd()
-{
-	// Save array buffer index and unbind the buffer
-	GLint arrayBufferIndex = 0;
-	glGetIntegerv( GL_ARRAY_BUFFER_BINDING, &arrayBufferIndex );
-
-	gl->BindBuffer( GL_ARRAY_BUFFER, 0 );
-
-	// Save all affected states to restore them on leaving the scope
-	ClientStateSaver s1( GL_VERTEX_ARRAY,        GL_TRUE  );
-	ClientStateSaver s2( GL_INDEX_ARRAY,         GL_FALSE );
-	ClientStateSaver s3( GL_TEXTURE_COORD_ARRAY, GL_TRUE  );
-	ClientStateSaver s4( GL_COLOR_ARRAY,         GL_TRUE  );
-
-	VertexPointerSaver   s5( 3, GL_FLOAT,         immediate[0].xyz );
-	TexCoordPointerSaver s6( 2, GL_FLOAT,         immediate[0].st  );
-	ColorPointerSaver    s7( 4, GL_UNSIGNED_BYTE, immediate[0].c   );
-
-	// Draw primitive
-	if ( GL_QUADS == curr_prim )
+	void glBegin_NOIMM( GLenum prim )
 	{
-		glDrawElements( GL_TRIANGLES, curr_vertex / 4 * 6, GL_UNSIGNED_SHORT, quad_indexes );
-	}
-	else
-	{
-		glDrawArrays( curr_prim, 0, curr_vertex );
+		s_glBeginStarted = true;
+		
+		curr_vertex = 0;
+		curr_prim   = prim;
 	}
 
-	curr_vertex = 0;
-	curr_prim = 0;
 
-	// Restore array buffer
-	gl->BindBuffer( GL_ARRAY_BUFFER, arrayBufferIndex );
-}
+	void glVertex3f_NOIMM( GLfloat x, GLfloat y, GLfloat z )
+	{
+		assert( curr_vertex < VERTEX_COUNT );
+		
+		vab.xyz[0] = x;
+		vab.xyz[1] = y;
+		vab.xyz[2] = z;
+		
+		immediate[ curr_vertex ] = vab;
+		
+		++curr_vertex;
+	}
+
+	void glVertex3fv_NOIMM( const GLfloat* xyz )
+	{
+		glVertex3f_NOIMM( xyz[0], xyz[1], xyz[2] );
+	}
+
+	void glVertex3d_NOIMM( GLdouble x, GLdouble y, GLdouble z )
+	{
+		glVertex3f_NOIMM( static_cast< float >(x), static_cast< float >(y), static_cast< float >(z) );
+	}
+
+	void glVertex2f_NOIMM( GLfloat x, GLfloat y )
+	{
+		glVertex3f_NOIMM( x, y, 0.0f );
+	}
+
+	void glVertex2i_NOIMM( GLint x, GLint y )
+	{
+		glVertex3f_NOIMM( static_cast< float >(x), static_cast< float >(y), 0.0f );
+	}
+
+	void glVertex2d_NOIMM( GLdouble x, GLdouble y )
+	{
+		glVertex3f_NOIMM( static_cast< float >(x), static_cast< float >(y), 0.0f );
+	}
+
+
+	void glColor4ub_NOIMM( GLubyte r, GLubyte g, GLubyte b, GLubyte a )
+	{
+		vab.c[0] = r;
+		vab.c[1] = g;
+		vab.c[2] = b;
+		vab.c[3] = a;
+
+		if ( !s_glBeginStarted )
+		{
+			glColor4ub( r, g, b, a );
+		}
+	}
+
+	void glColor3ub_NOIMM( GLubyte r, GLubyte g, GLubyte b )
+	{
+		glColor4ub_NOIMM( r, g, b, 255 );
+	}
+
+	void glColor4f_NOIMM( GLfloat r, GLfloat g, GLfloat b, GLfloat a )
+	{
+		glColor4ub_NOIMM( static_cast< GLubyte >( r * 255.0f ),
+						  static_cast< GLubyte >( g * 255.0f ),
+						  static_cast< GLubyte >( b * 255.0f ),
+						  static_cast< GLubyte >( a * 255.0f ) );
+	}
+
+	void glColor4fv_NOIMM( const GLfloat *rgba )
+	{
+		glColor4f_NOIMM( rgba[0], rgba[1], rgba[2], rgba[3] );
+	}
+
+	void glColor3f_NOIMM( GLfloat r, GLfloat g, GLfloat b )
+	{
+		glColor4f_NOIMM( r, g, b, 1.0f );
+	}
+
+
+	void glTexCoord2f_NOIMM( GLfloat s, GLfloat t ) 
+	{
+		vab.st[0] = s;
+		vab.st[1] = t;
+
+		if ( !s_glBeginStarted )
+		{
+			glTexCoord2f( s, t );
+		}
+	}
+
+	void glTexCoord2fv_NOIMM( const GLfloat *st )
+	{
+		glTexCoord2f_NOIMM( st[0], st[1] );
+	}
+
+
+	void glEnd_NOIMM()
+	{
+		// Save array buffer index and unbind the buffer
+		GLint arrayBufferIndex = 0;
+		glGetIntegerv( GL_ARRAY_BUFFER_BINDING, &arrayBufferIndex );
+
+		gl->BindBuffer( GL_ARRAY_BUFFER, 0 );
+
+		// Save all affected states to restore them on leaving the scope
+		ClientStateSaver s1( GL_VERTEX_ARRAY,        GL_TRUE  );
+		ClientStateSaver s2( GL_TEXTURE_COORD_ARRAY, GL_TRUE  );
+		ClientStateSaver s3( GL_COLOR_ARRAY,         GL_TRUE  );
+		ClientStateSaver s4( GL_INDEX_ARRAY,         GL_FALSE );
+
+		VertexPointerSaver   s5( 3, GL_FLOAT,         immediate[0].xyz );
+		TexCoordPointerSaver s6( 2, GL_FLOAT,         immediate[0].st  );
+		ColorPointerSaver    s7( 4, GL_UNSIGNED_BYTE, immediate[0].c   );
+
+		// Draw primitive
+		if ( GL_QUADS == curr_prim )
+		{
+			glDrawElements( GL_TRIANGLES, curr_vertex / 4 * 6, GL_UNSIGNED_SHORT, quad_indexes );
+		}
+		else
+		{
+			glDrawArrays( curr_prim, 0, curr_vertex );
+		}
+
+		curr_vertex = 0;
+		curr_prim = 0;
+
+		// Restore array buffer
+		gl->BindBuffer( GL_ARRAY_BUFFER, arrayBufferIndex );
+		
+		s_glBeginStarted = false;
+	}
+	
+} // end of unnamed namespace
+
+
+#define glBegin       glBegin_NOIMM
+
+#define glVertex3f    glVertex3f_NOIMM
+#define glVertex3fv   glVertex3fv_NOIMM
+#define glVertex3d    glVertex3d_NOIMM
+#define glVertex2f    glVertex2f_NOIMM
+#define glVertex2i    glVertex2i_NOIMM
+#define glVertex2d    glVertex2d_NOIMM
+
+#define glColor4ub    glColor4ub_NOIMM
+#define glColor3ub    glColor3ub_NOIMM
+#define glColor4f     glColor4f_NOIMM
+#define glColor4fv    glColor4fv_NOIMM
+#define glColor3f     glColor3f_NOIMM
+
+#define glTexCoord2f  glTexCoord2f_NOIMM
+#define glTexCoord2fv glTexCoord2fv_NOIMM
+
+#define glEnd         glEnd_NOIMM
 
 #endif // OPENGL_NO_IMMEDIATE_MODE
 
