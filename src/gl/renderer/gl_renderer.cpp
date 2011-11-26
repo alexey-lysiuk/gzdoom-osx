@@ -386,13 +386,13 @@ void FGLRenderer::DrawTexture(FTexture *img, DCanvas::DrawParms &parms)
 	gl_RenderState.Apply();
 	gl.Begin(GL_TRIANGLE_STRIP);
 	gl.TexCoord2f(u1, v1);
-	glVertex2d(x, y);
+	gl.Vertex2d(x, y);
 	gl.TexCoord2f(u1, v2);
-	glVertex2d(x, y + h);
+	gl.Vertex2d(x, y + h);
 	gl.TexCoord2f(u2, v1);
-	glVertex2d(x + w, y);
+	gl.Vertex2d(x + w, y);
 	gl.TexCoord2f(u2, v2);
-	glVertex2d(x + w, y + h);
+	gl.Vertex2d(x + w, y + h);
 	gl.End();
 
 	if (parms.colorOverlay)
@@ -404,13 +404,13 @@ void FGLRenderer::DrawTexture(FTexture *img, DCanvas::DrawParms &parms)
 		gl.Color4ub(RPART(parms.colorOverlay),GPART(parms.colorOverlay),BPART(parms.colorOverlay),APART(parms.colorOverlay));
 		gl.Begin(GL_TRIANGLE_STRIP);
 		gl.TexCoord2f(u1, v1);
-		glVertex2d(x, y);
+		gl.Vertex2d(x, y);
 		gl.TexCoord2f(u1, v2);
-		glVertex2d(x, y + h);
+		gl.Vertex2d(x, y + h);
 		gl.TexCoord2f(u2, v1);
-		glVertex2d(x + w, y);
+		gl.Vertex2d(x + w, y);
 		gl.TexCoord2f(u2, v2);
-		glVertex2d(x + w, y + h);
+		gl.Vertex2d(x + w, y + h);
 		gl.End();
 	}
 
