@@ -970,6 +970,12 @@ static void APIENTRY SetTextureMode(int type)
 //
 //==========================================================================
 
+#ifdef __APPLE__
+#define OPENGL_NO_IMMEDIATE_MODE
+#endif // __APPLE__
+
+#ifdef OPENGL_NO_IMMEDIATE_MODE
+
 namespace
 {
 
@@ -990,21 +996,12 @@ namespace
 	GLenum curr_prim;
 	
 
-	void SetImmediateModeGLVertexArrays()
-	{
-		glVertexPointer( 3, GL_FLOAT, sizeof( Vertex ), immediate[ 0 ].xyz );
-		glEnableClientState( GL_VERTEX_ARRAY );
-		glTexCoordPointer( 2, GL_FLOAT, sizeof( Vertex ), immediate[ 0 ].st );
-		glEnableClientState( GL_TEXTURE_COORD_ARRAY );
-		glColorPointer( 4, GL_UNSIGNED_BYTE, sizeof( Vertex ), immediate[ 0 ].c );
-		glEnableClientState( GL_COLOR_ARRAY );
-	}
-	
 	void InitImmediateModeGL()
 	{
 		for ( size_t i = 0; i < VERTEX_COUNT * 3 / 2; i += 6 )
 		{
-			int q = i / 6 * 4;
+			const short q = i / 6 * 4;
+			
 			quad_indexes[ i + 0 ] = q + 0;
 			quad_indexes[ i + 1 ] = q + 1;
 			quad_indexes[ i + 2 ] = q + 2;
@@ -1013,70 +1010,114 @@ namespace
 			quad_indexes[ i + 4 ] = q + 2;
 			quad_indexes[ i + 5 ] = q + 3;
 		}
-		
-		//SetImmediateModeGLVertexArrays();
 	}
+
+	class ClientStateSaver
+	{
+	public:
+		ClientStateSaver( const GLenum state, const GLboolean newValue )
+		: m_state( state )
+		{
+			glGetBooleanv( m_state, &m_value );
+			
+			ApplyValue( newValue );
+		}
+		
+		~ClientStateSaver()
+		{
+			ApplyValue( m_value );
+		}
+		
+	private:
+		GLenum    m_state;
+		GLboolean m_value;
+		
+		void ApplyValue( const GLboolean value )
+		{
+			if ( value )
+			{
+				glEnableClientState( m_state );
+			}
+			else
+			{
+				glDisableClientState( m_state );
+			}
+		}
+		
+	};
+	
+	
+#define DefinePointerSaver( TYPE_NAME, ENUM_NAME )                                                    \
+	class TYPE_NAME##PointerSaver                                                                     \
+	{                                                                                                 \
+	public:                                                                                           \
+		TYPE_NAME##PointerSaver( const GLint size, const GLenum type, const GLvoid* const pointer )   \
+		{                                                                                             \
+			glGetIntegerv( GL_##ENUM_NAME##_ARRAY_SIZE, &m_size );                                    \
+			glGetIntegerv( GL_##ENUM_NAME##_ARRAY_TYPE, reinterpret_cast< GLint* >( &m_type ) );      \
+			glGetIntegerv( GL_##ENUM_NAME##_ARRAY_STRIDE, reinterpret_cast< GLint* >( &m_stride ) );  \
+			glGetPointerv( GL_##ENUM_NAME##_ARRAY_POINTER, &m_pointer );                              \
+                                                                                                      \
+			gl##TYPE_NAME##Pointer( size, type, sizeof( Vertex ), pointer );                          \
+		}                                                                                             \
+                                                                                                      \
+		~TYPE_NAME##PointerSaver()                                                                    \
+		{                                                                                             \
+			gl##TYPE_NAME##Pointer( m_size, m_type, m_stride, m_pointer );                            \
+		}                                                                                             \
+                                                                                                      \
+	private:                                                                                          \
+		GLint   m_size;                                                                               \
+		GLenum  m_type;                                                                               \
+		GLsizei m_stride;                                                                             \
+		GLvoid* m_pointer;                                                                            \
+	}
+	
+	DefinePointerSaver( Vertex, VERTEX );
+	DefinePointerSaver( TexCoord, TEXTURE_COORD );
+	DefinePointerSaver( Color, COLOR );
 	
 }
 
-
-//#define SMALL_STARS 100
-//float  vSmallStars[SMALL_STARS*2];
 
 void glBegin( GLenum prim )
 {
-	//SetImmediateModeGLVertexArrays();
-	
 	curr_vertex = 0;
-	curr_prim = prim;
-	
-	
-	
-//	//vSmallStars[2] = 100.f;
-//	vSmallStars[3] = 100.f;
-//	vSmallStars[4] = 100.f;
-//	//vSmallStars[5] = 100.f;
-//	vSmallStars[6] = 100.f;
-//	vSmallStars[7] = 100.f;
-//	
-//	glEnableClientState(GL_VERTEX_ARRAY);
-//	
-//    glVertexPointer(2, GL_FLOAT, 0, vSmallStars);
-//    //glDrawArrays(GL_POINTS, 0, SMALL_STARS);
-//	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	curr_prim   = prim;
 }
 
-void glVertex3f( GLfloat x, GLfloat y, GLfloat z ) {
+
+void glVertex3f( GLfloat x, GLfloat y, GLfloat z )
+{
 	assert( curr_vertex < VERTEX_COUNT );
+	
 	vab.xyz[ 0 ] = x;
 	vab.xyz[ 1 ] = y;
 	vab.xyz[ 2 ] = z;
+	
 	immediate[ curr_vertex ] = vab;
-	curr_vertex++;
+	
+	++curr_vertex;
 }
-void glVertex3fv( const GLfloat *xyz ) {
-	assert( curr_vertex < VERTEX_COUNT );
-	vab.xyz[ 0 ] = xyz[0];
-	vab.xyz[ 1 ] = xyz[1];
-	vab.xyz[ 2 ] = xyz[2];
-	immediate[ curr_vertex ] = vab;
-	curr_vertex++;
+
+void glVertex3fv( const GLfloat* xyz )
+{
+	glVertex3f( xyz[0], xyz[1], xyz[2] );
 }
-void glVertex2f( GLfloat x, GLfloat y ) {
-	assert( curr_vertex < VERTEX_COUNT );
-	vab.xyz[ 0 ] = (float)x;
-	vab.xyz[ 1 ] = (float)y;
-	vab.xyz[ 2 ] = 0.0f;
-	immediate[ curr_vertex ] = vab;
-	curr_vertex++;
+
+void glVertex2d( GLdouble x, GLdouble y, GLdouble z )
+{
+	glVertex3f( static_cast< float >(x), static_cast< float >(y), static_cast< float >(z) );
 }
-void glVertex2i( GLint x, GLint y ) {
-	assert( curr_vertex < VERTEX_COUNT );
-	vab.xyz[ 0 ] = (float)x;
-	vab.xyz[ 1 ] = (float)y;
-	vab.xyz[ 2 ] = 0.0f;
-	immediate[ curr_vertex ] = vab;
-	curr_vertex++;
+
+void glVertex2f( GLfloat x, GLfloat y )
+{
+	glVertex3f( x, y, 0.0f );
+}
+
+void glVertex2i( GLint x, GLint y )
+{
+	glVertex3f( static_cast< float >(x), static_cast< float >(y), 0.0f );
 }
 
 void glVertex2d( GLdouble x, GLdouble y )
@@ -1084,163 +1125,87 @@ void glVertex2d( GLdouble x, GLdouble y )
 	glVertex3f( static_cast< float >(x), static_cast< float >(y), 0.0f );
 }
 
-//#ifdef VERTEX_COLOR
-void glColor4ub( GLubyte r, GLubyte g, GLubyte b, GLubyte a ) {
-	vab.c[ 0 ] = r;
-	vab.c[ 1 ] = g;
-	vab.c[ 2 ] = b;
-	vab.c[ 3 ] = a;
-}
-void glColor4ubv( const GLubyte *rgba ) {
-	vab.c[ 0 ] = rgba[0];
-	vab.c[ 1 ] = rgba[1];
-	vab.c[ 2 ] = rgba[2];
-	vab.c[ 3 ] = rgba[3];
-}
-void glColor4f( GLfloat r, GLfloat g, GLfloat b, GLfloat a ) {
-	vab.c[ 0 ] = (GLubyte) ( r * 255 );
-	vab.c[ 1 ] = (GLubyte) ( g * 255 );
-	vab.c[ 2 ] = (GLubyte) ( b * 255 );
-	vab.c[ 3 ] = (GLubyte) ( a * 255 );
-}
-void glColor4fv( const GLfloat *rgba ) {
-	vab.c[ 0 ] = (GLubyte) ( rgba[0] * 255 );
-	vab.c[ 1 ] = (GLubyte) ( rgba[1] * 255 );
-	vab.c[ 2 ] = (GLubyte) ( rgba[2] * 255 );
-	vab.c[ 3 ] = (GLubyte) ( rgba[3] * 255 );
-}
-void glColor3f( GLfloat r, GLfloat g, GLfloat b ) {
-	vab.c[ 0 ] = (GLubyte) ( r * 255 );
-	vab.c[ 1 ] = (GLubyte) ( g * 255 );
-	vab.c[ 2 ] = (GLubyte) ( b * 255 );
-	vab.c[ 3 ] = 255;
-}
-//#endif
 
-void glTexCoord2i( GLint s, GLint t ) {
-	vab.st[ 0 ] = (float)s;
-	vab.st[ 1 ] = (float)t;
+void glColor4ub( GLubyte r, GLubyte g, GLubyte b, GLubyte a )
+{
+	vab.c[0] = r;
+	vab.c[1] = g;
+	vab.c[2] = b;
+	vab.c[3] = a;
 }
-void glTexCoord2f( GLfloat s, GLfloat t ) {
+
+void glColor3ub( GLubyte r, GLubyte g, GLubyte b )
+{
+	glColor4ub( r, g, b, 255 );
+}
+
+void glColor4f( GLfloat r, GLfloat g, GLfloat b, GLfloat a )
+{
+	glColor4ub( static_cast< GLubyte >( r * 255 ),
+			    static_cast< GLubyte >( g * 255 ),
+			    static_cast< GLubyte >( b * 255 ),
+			    static_cast< GLubyte >( a * 255 ) );
+}
+
+void glColor4fv( const GLfloat *rgba )
+{
+	glColor4f( rgba[0], rgba[1], rgba[2], rgba[3] );
+}
+
+void glColor3f( GLfloat r, GLfloat g, GLfloat b )
+{
+	glColor4f( r, g, b, 1.0f );
+}
+
+
+void glTexCoord2f( GLfloat s, GLfloat t ) 
+{
 	vab.st[ 0 ] = s;
 	vab.st[ 1 ] = t;
 }
-void glTexCoord2fv( GLfloat *st ) {
-	vab.st[ 0 ] = st[0];
-	vab.st[ 1 ] = st[1];
-}
 
-
-class ClientStateSaver
+void glTexCoord2fv( GLfloat *st )
 {
-public:
-	ClientStateSaver( const GLenum state, const GLboolean newValue )
-	: m_state( state )
-	{
-		glGetBooleanv( m_state, &m_value );
-		
-		ApplyValue( newValue );
-	}
-	
-	~ClientStateSaver()
-	{
-		ApplyValue( m_value );
-	}
-	
-private:
-	GLenum    m_state;
-	GLboolean m_value;
-	
-	void ApplyValue( const GLboolean value )
-	{
-		if ( value )
-		{
-			glEnableClientState( m_state );
-		}
-		else
-		{
-			glDisableClientState( m_state );
-		}
-	}
-	
-};
-
-//template < typename Func >
-#define DefinePointerSaver( TYPE_NAME, ENUM_NAME ) \
-class TYPE_NAME##PointerSaver \
-{ \
-public: \
-	TYPE_NAME##PointerSaver( const GLint size, const GLenum type, const GLvoid* const pointer ) \
-	{ \
-		glGetIntegerv( GL_##ENUM_NAME##_ARRAY_SIZE, &m_size ); \
-		glGetIntegerv( GL_##ENUM_NAME##_ARRAY_TYPE, reinterpret_cast< GLint* >( &m_type ) ); \
-		glGetIntegerv( GL_##ENUM_NAME##_ARRAY_STRIDE, reinterpret_cast< GLint* >( &m_stride ) ); \
-		glGetPointerv( GL_##ENUM_NAME##_ARRAY_POINTER, &m_pointer ); \
-\
-		gl##TYPE_NAME##Pointer( size, type, sizeof( Vertex ), pointer ); \
-	} \
-	\
-	~TYPE_NAME##PointerSaver() \
-	{ \
-		gl##TYPE_NAME##Pointer( m_size, m_type, m_stride, m_pointer ); \
-	} \
-	\
-private: \
-	GLint   m_size; \
-	GLenum  m_type; \
-	GLsizei m_stride; \
-	GLvoid* m_pointer; \
+	glTexCoord2f( st[0], st[1] );
 }
 
-DefinePointerSaver( Vertex, VERTEX );
-DefinePointerSaver( TexCoord, TEXTURE_COORD );
-DefinePointerSaver( Color, COLOR );
 
 void glEnd()
 {
-//#if 0
+	// Save array buffer index and unbind the buffer
 	GLint arrayBufferIndex = 0;
 	glGetIntegerv( GL_ARRAY_BUFFER_BINDING, &arrayBufferIndex );
-	
-	gl->BindBuffer(GL_ARRAY_BUFFER, 0);	
-	
+
+	gl->BindBuffer( GL_ARRAY_BUFFER, 0 );
+
+	// Save all affected states to restore them on leaving the scope
 	ClientStateSaver s1( GL_VERTEX_ARRAY,        GL_TRUE  );
 	ClientStateSaver s2( GL_INDEX_ARRAY,         GL_FALSE );
 	ClientStateSaver s3( GL_TEXTURE_COORD_ARRAY, GL_TRUE  );
 	ClientStateSaver s4( GL_COLOR_ARRAY,         GL_TRUE  );
-	
+
 	VertexPointerSaver   s5( 3, GL_FLOAT,         immediate[0].xyz );
 	TexCoordPointerSaver s6( 2, GL_FLOAT,         immediate[0].st  );
 	ColorPointerSaver    s7( 4, GL_UNSIGNED_BYTE, immediate[0].c   );
-		
-//	//glDisableClientState( GL_INDEX_ARRAY );
-//	
-//	glEnableClientState( GL_VERTEX_ARRAY );
-//	glEnableClientState( GL_TEXTURE_COORD_ARRAY );
-//	//glDisableClientState( GL_TEXTURE_COORD_ARRAY );
-//	glEnableClientState( GL_COLOR_ARRAY );
-//	//glDisableClientState( GL_COLOR_ARRAY );
-	
-//	glVertexPointer( 3, GL_FLOAT, sizeof( Vertex ), immediate[0].xyz );
-//	glTexCoordPointer( 2, GL_FLOAT, sizeof( Vertex ), immediate[0].st );
-//	glColorPointer( 4, GL_UNSIGNED_BYTE, sizeof( Vertex ), immediate[0].c );
-//#endif
-	
-	if ( curr_prim == GL_QUADS ) {
+
+	// Draw primitive
+	if ( GL_QUADS == curr_prim )
+	{
 		glDrawElements( GL_TRIANGLES, curr_vertex / 4 * 6, GL_UNSIGNED_SHORT, quad_indexes );
-	} else {
+	}
+	else
+	{
 		glDrawArrays( curr_prim, 0, curr_vertex );
 	}
+
 	curr_vertex = 0;
 	curr_prim = 0;
-	
-//	// Reset to defaults
-//	glVertexPointer( 4, GL_FLOAT, 0, 0 );
-//	glTexCoordPointer( 4, GL_FLOAT, 0, 0 );
-//	glColorPointer( 4, GL_FLOAT, 0, 0 );
-	
-	gl->BindBuffer(GL_ARRAY_BUFFER, arrayBufferIndex);
+
+	// Restore array buffer
+	gl->BindBuffer( GL_ARRAY_BUFFER, arrayBufferIndex );
 }
+
+#endif // OPENGL_NO_IMMEDIATE_MODE
 
 
 /*
@@ -1251,7 +1216,9 @@ __declspec(dllexport)
 */
 void APIENTRY GetContext(RenderContext & gl)
 {
+#ifdef OPENGL_NO_IMMEDIATE_MODE
 	InitImmediateModeGL();
+#endif // OPENGL_NO_IMMEDIATE_MODE
 	
 	::gl=&gl;
 
