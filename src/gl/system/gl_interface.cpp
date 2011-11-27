@@ -971,10 +971,10 @@ static void APIENTRY SetTextureMode(int type)
 //==========================================================================
 
 #ifdef __APPLE__
-#define OPENGL_NO_IMMEDIATE_MODE
+CVAR( Bool, gl_no_immediate_mode, true, CVAR_ARCHIVE | CVAR_GLOBALCONFIG );
+#else // !__APPLE__
+CVAR( Bool, gl_no_immediate_mode, false, CVAR_ARCHIVE | CVAR_GLOBALCONFIG );
 #endif // __APPLE__
-
-#ifdef OPENGL_NO_IMMEDIATE_MODE
 
 namespace
 {
@@ -989,29 +989,30 @@ namespace
 	
 	const size_t VERTEX_COUNT = 1024;
 
-	Vertex immediate[ VERTEX_COUNT ];
-	Vertex vab;
-	short quad_indexes[ VERTEX_COUNT * 3 / 2 ];
-	int curr_vertex;
-	GLenum curr_prim;
+	Vertex s_vertices[ VERTEX_COUNT ];
+	Vertex s_currentVertex;
+	short  s_quadIndices[ VERTEX_COUNT * 3 / 2 ];
+	size_t s_currentVertexIndex;
+	GLenum s_currentPrimitiveType;
 	
 
 	void InitImmediateModeGL()
 	{
 		for ( size_t i = 0; i < VERTEX_COUNT * 3 / 2; i += 6 )
 		{
-			const short q = i / 6 * 4;
+			const short q = short( i / 6 * 4 );
 			
-			quad_indexes[ i + 0 ] = q + 0;
-			quad_indexes[ i + 1 ] = q + 1;
-			quad_indexes[ i + 2 ] = q + 2;
+			s_quadIndices[ i + 0 ] = q + 0;
+			s_quadIndices[ i + 1 ] = q + 1;
+			s_quadIndices[ i + 2 ] = q + 2;
 			
-			quad_indexes[ i + 3 ] = q + 0;
-			quad_indexes[ i + 4 ] = q + 2;
-			quad_indexes[ i + 5 ] = q + 3;
+			s_quadIndices[ i + 3 ] = q + 0;
+			s_quadIndices[ i + 4 ] = q + 2;
+			s_quadIndices[ i + 5 ] = q + 3;
 		}
 	}
 
+	
 	class ClientStateSaver
 	{
 	public:
@@ -1083,24 +1084,40 @@ namespace
 	
 	void glBegin_NOIMM( GLenum prim )
 	{
-		s_glBeginStarted = true;
-		
-		curr_vertex = 0;
-		curr_prim   = prim;
+		if ( gl_no_immediate_mode )
+		{
+			assert( !s_glBeginStarted );
+			s_glBeginStarted = true;
+			
+			s_currentVertexIndex   = 0;
+			s_currentPrimitiveType = prim;
+		}
+		else
+		{
+			glBegin( prim );
+		}
 	}
 
 
 	void glVertex3f_NOIMM( GLfloat x, GLfloat y, GLfloat z )
 	{
-		assert( curr_vertex < VERTEX_COUNT );
-		
-		vab.xyz[0] = x;
-		vab.xyz[1] = y;
-		vab.xyz[2] = z;
-		
-		immediate[ curr_vertex ] = vab;
-		
-		++curr_vertex;
+		if ( gl_no_immediate_mode )
+		{
+			assert( s_glBeginStarted );
+			assert( s_currentVertexIndex < VERTEX_COUNT );
+			
+			s_currentVertex.xyz[0] = x;
+			s_currentVertex.xyz[1] = y;
+			s_currentVertex.xyz[2] = z;
+			
+			s_vertices[ s_currentVertexIndex ] = s_currentVertex;
+			
+			++s_currentVertexIndex;
+		}
+		else
+		{
+			glVertex3f( x, y, z );
+		}
 	}
 
 	void glVertex3fv_NOIMM( const GLfloat* xyz )
@@ -1120,21 +1137,24 @@ namespace
 
 	void glVertex2i_NOIMM( GLint x, GLint y )
 	{
-		glVertex3f_NOIMM( static_cast< float >(x), static_cast< float >(y), 0.0f );
+		glVertex2f_NOIMM( static_cast< float >(x), static_cast< float >(y) );
 	}
 
 	void glVertex2d_NOIMM( GLdouble x, GLdouble y )
 	{
-		glVertex3f_NOIMM( static_cast< float >(x), static_cast< float >(y), 0.0f );
+		glVertex3d_NOIMM( x, y, 0.0 );
 	}
 
 
 	void glColor4ub_NOIMM( GLubyte r, GLubyte g, GLubyte b, GLubyte a )
 	{
-		vab.c[0] = r;
-		vab.c[1] = g;
-		vab.c[2] = b;
-		vab.c[3] = a;
+		if ( gl_no_immediate_mode )
+		{
+			s_currentVertex.c[0] = r;
+			s_currentVertex.c[1] = g;
+			s_currentVertex.c[2] = b;
+			s_currentVertex.c[3] = a;
+		}
 
 		if ( !s_glBeginStarted )
 		{
@@ -1149,10 +1169,18 @@ namespace
 
 	void glColor4f_NOIMM( GLfloat r, GLfloat g, GLfloat b, GLfloat a )
 	{
-		glColor4ub_NOIMM( static_cast< GLubyte >( r * 255.0f ),
-						  static_cast< GLubyte >( g * 255.0f ),
-						  static_cast< GLubyte >( b * 255.0f ),
-						  static_cast< GLubyte >( a * 255.0f ) );
+		if ( gl_no_immediate_mode )
+		{
+			glColor4ub_NOIMM( static_cast< GLubyte >( r * 255.0f ),
+							  static_cast< GLubyte >( g * 255.0f ),
+							  static_cast< GLubyte >( b * 255.0f ),
+							  static_cast< GLubyte >( a * 255.0f ) );
+		}
+		
+		if ( !s_glBeginStarted )
+		{
+			glColor4f( r, g, b, a );
+		}
 	}
 
 	void glColor4fv_NOIMM( const GLfloat *rgba )
@@ -1168,9 +1196,12 @@ namespace
 
 	void glTexCoord2f_NOIMM( GLfloat s, GLfloat t ) 
 	{
-		vab.st[0] = s;
-		vab.st[1] = t;
-
+		if ( gl_no_immediate_mode )
+		{
+			s_currentVertex.st[0] = s;
+			s_currentVertex.st[1] = t;
+		}
+		
 		if ( !s_glBeginStarted )
 		{
 			glTexCoord2f( s, t );
@@ -1185,65 +1216,51 @@ namespace
 
 	void glEnd_NOIMM()
 	{
-		// Save array buffer index and unbind the buffer
-		GLint arrayBufferIndex = 0;
-		glGetIntegerv( GL_ARRAY_BUFFER_BINDING, &arrayBufferIndex );
-
-		gl->BindBuffer( GL_ARRAY_BUFFER, 0 );
-
-		// Save all affected states to restore them on leaving the scope
-		ClientStateSaver s1( GL_VERTEX_ARRAY,        GL_TRUE  );
-		ClientStateSaver s2( GL_TEXTURE_COORD_ARRAY, GL_TRUE  );
-		ClientStateSaver s3( GL_COLOR_ARRAY,         GL_TRUE  );
-		ClientStateSaver s4( GL_INDEX_ARRAY,         GL_FALSE );
-
-		VertexPointerSaver   s5( 3, GL_FLOAT,         immediate[0].xyz );
-		TexCoordPointerSaver s6( 2, GL_FLOAT,         immediate[0].st  );
-		ColorPointerSaver    s7( 4, GL_UNSIGNED_BYTE, immediate[0].c   );
-
-		// Draw primitive
-		if ( GL_QUADS == curr_prim )
+		if ( gl_no_immediate_mode )
 		{
-			glDrawElements( GL_TRIANGLES, curr_vertex / 4 * 6, GL_UNSIGNED_SHORT, quad_indexes );
+			assert( s_glBeginStarted );
+			
+			// Save array buffer index and unbind the buffer
+			GLint arrayBufferIndex = 0;
+			glGetIntegerv( GL_ARRAY_BUFFER_BINDING, &arrayBufferIndex );
+
+			gl->BindBuffer( GL_ARRAY_BUFFER, 0 );
+
+			// Save all affected states to restore them on leaving the scope
+			ClientStateSaver s1( GL_VERTEX_ARRAY,        GL_TRUE  );
+			ClientStateSaver s2( GL_TEXTURE_COORD_ARRAY, GL_TRUE  );
+			ClientStateSaver s3( GL_COLOR_ARRAY,         GL_TRUE  );
+			ClientStateSaver s4( GL_INDEX_ARRAY,         GL_FALSE );
+
+			VertexPointerSaver   s5( 3, GL_FLOAT,         s_vertices[0].xyz );
+			TexCoordPointerSaver s6( 2, GL_FLOAT,         s_vertices[0].st  );
+			ColorPointerSaver    s7( 4, GL_UNSIGNED_BYTE, s_vertices[0].c   );
+
+			// Draw primitive
+			if ( GL_QUADS == s_currentPrimitiveType )
+			{
+				glDrawElements( GL_TRIANGLES, s_currentVertexIndex / 4 * 6, GL_UNSIGNED_SHORT, s_quadIndices );
+			}
+			else
+			{
+				glDrawArrays( s_currentPrimitiveType, 0, s_currentVertexIndex );
+			}
+
+			s_currentVertexIndex   = 0;
+			s_currentPrimitiveType = 0;
+
+			// Restore array buffer
+			gl->BindBuffer( GL_ARRAY_BUFFER, arrayBufferIndex );
+			
+			s_glBeginStarted = false;
 		}
 		else
 		{
-			glDrawArrays( curr_prim, 0, curr_vertex );
+			glEnd();
 		}
-
-		curr_vertex = 0;
-		curr_prim = 0;
-
-		// Restore array buffer
-		gl->BindBuffer( GL_ARRAY_BUFFER, arrayBufferIndex );
-		
-		s_glBeginStarted = false;
 	}
 	
 } // end of unnamed namespace
-
-
-#define glBegin       glBegin_NOIMM
-
-#define glVertex3f    glVertex3f_NOIMM
-#define glVertex3fv   glVertex3fv_NOIMM
-#define glVertex3d    glVertex3d_NOIMM
-#define glVertex2f    glVertex2f_NOIMM
-#define glVertex2i    glVertex2i_NOIMM
-#define glVertex2d    glVertex2d_NOIMM
-
-#define glColor4ub    glColor4ub_NOIMM
-#define glColor3ub    glColor3ub_NOIMM
-#define glColor4f     glColor4f_NOIMM
-#define glColor4fv    glColor4fv_NOIMM
-#define glColor3f     glColor3f_NOIMM
-
-#define glTexCoord2f  glTexCoord2f_NOIMM
-#define glTexCoord2fv glTexCoord2fv_NOIMM
-
-#define glEnd         glEnd_NOIMM
-
-#endif // OPENGL_NO_IMMEDIATE_MODE
 
 
 /*
@@ -1254,9 +1271,7 @@ __declspec(dllexport)
 */
 void APIENTRY GetContext(RenderContext & gl)
 {
-#ifdef OPENGL_NO_IMMEDIATE_MODE
 	InitImmediateModeGL();
-#endif // OPENGL_NO_IMMEDIATE_MODE
 	
 	::gl=&gl;
 
@@ -1274,25 +1289,25 @@ void APIENTRY GetContext(RenderContext & gl)
 	gl.SetFullscreen = SetFullscreen;
 #endif
 
-	gl.Begin = glBegin;
-	gl.End = glEnd;
+	gl.Begin = glBegin_NOIMM;
+	gl.End = glEnd_NOIMM;
 	gl.DrawArrays = glDrawArrays;
 
-	gl.TexCoord2f = glTexCoord2f;
-	gl.TexCoord2fv = glTexCoord2fv;
+	gl.TexCoord2f = glTexCoord2f_NOIMM;
+	gl.TexCoord2fv = glTexCoord2fv_NOIMM;
 
-	gl.Vertex2f = glVertex2f;
-	gl.Vertex2i = glVertex2i;
-	gl.Vertex2d = glVertex2d;
-	gl.Vertex3f = glVertex3f;
-	gl.Vertex3fv = glVertex3fv;
-	gl.Vertex3d = glVertex3d;
+	gl.Vertex2f = glVertex2f_NOIMM;
+	gl.Vertex2i = glVertex2i_NOIMM;
+	gl.Vertex2d = glVertex2d_NOIMM;
+	gl.Vertex3f = glVertex3f_NOIMM;
+	gl.Vertex3fv = glVertex3fv_NOIMM;
+	gl.Vertex3d = glVertex3d_NOIMM;
 
-	gl.Color4f = glColor4f;
-	gl.Color4fv = glColor4fv;
-	gl.Color3f = glColor3f;
-	gl.Color3ub = glColor3ub;
-	gl.Color4ub = glColor4ub;
+	gl.Color4f = glColor4f_NOIMM;
+	gl.Color4fv = glColor4fv_NOIMM;
+	gl.Color3f = glColor3f_NOIMM;
+	gl.Color3ub = glColor3ub_NOIMM;
+	gl.Color4ub = glColor4ub_NOIMM;
 
 	gl.ColorMask = glColorMask;
 
