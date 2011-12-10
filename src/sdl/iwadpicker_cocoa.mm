@@ -35,7 +35,12 @@
 
 #include "d_main.h"
 #include "version.h"
+#include "c_cvars.h"
+#include "m_argv.h"
+#include "m_misc.h"
 #include <Cocoa/Cocoa.h>
+
+CVAR( String, macosx_additional_parameters, "", CVAR_ARCHIVE | CVAR_NOSET | CVAR_GLOBALCONFIG );
 
 enum
 {
@@ -111,6 +116,7 @@ static const char* const tableHeaders[NUM_COLUMNS] = { "IWAD", "Game" };
 	NSWindow *window;
 	NSButton *okButton;
 	NSButton *cancelButton;
+	NSTextField *parametersTextField;
 	bool cancelled;
 }
 
@@ -118,6 +124,7 @@ static const char* const tableHeaders[NUM_COLUMNS] = { "IWAD", "Game" };
 - (void)doubleClicked:(id) sender;
 - (void)makeLabel:(NSTextField *)label:(const char*) str;
 - (int)pickIWad:(WadStuff *)wads:(int) numwads:(bool) showwin:(int) defaultiwad;
+- (NSString*)commandLineParameters;
 @end
 
 @implementation IWADPicker
@@ -162,14 +169,14 @@ static const char* const tableHeaders[NUM_COLUMNS] = { "IWAD", "Game" };
 	window = [[NSWindow alloc] initWithContentRect:frame styleMask:NSTitledWindowMask backing:NSBackingStoreBuffered defer:NO];
 	[window setTitle:windowTitle];
 
-	NSTextField *description = [[NSTextField alloc] initWithFrame:NSMakeRect(22, 379, 412, 50)];
+	NSTextField *description = [[NSTextField alloc] initWithFrame:NSMakeRect(18, 384, 402, 50)];
 	[self makeLabel:description:"ZDoom found more than one IWAD\nSelect from the list below to determine which one to use:"];
 	[[window contentView] addSubview:description];
 	[description release];
 
 	// Commented out version would account for an additional parameters box.
-	//NSScrollView *iwadScroller = [[NSScrollView alloc] initWithFrame:NSMakeRect(20, 103, 412, 288)];
-	NSScrollView *iwadScroller = [[NSScrollView alloc] initWithFrame:NSMakeRect(20, 50, 412, 341)];
+	NSScrollView *iwadScroller = [[NSScrollView alloc] initWithFrame:NSMakeRect(20, 103, 402, 288)];
+	//NSScrollView *iwadScroller = [[NSScrollView alloc] initWithFrame:NSMakeRect(20, 50, 412, 341)];
 	NSTableView *iwadTable = [[NSTableView alloc] initWithFrame:[iwadScroller bounds]];
 	IWADTableData *tableData = [[IWADTableData alloc] init:wads:numwads];
 	for(int i = 0;i < NUM_COLUMNS;i++)
@@ -197,11 +204,12 @@ static const char* const tableHeaders[NUM_COLUMNS] = { "IWAD", "Game" };
 	[iwadTable release];
 	[iwadScroller release];
 
-	/*NSTextField *additionalParametersLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(17, 78, 144, 17)];
+	NSTextField *additionalParametersLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(18, 76, 144, 17)];
 	[self makeLabel:additionalParametersLabel:"Additional Parameters"];
 	[[window contentView] addSubview:additionalParametersLabel];
-	NSTextField *additionalParameters = [[NSTextField alloc] initWithFrame:NSMakeRect(20, 48, 360, 22)];
-	[[window contentView] addSubview:additionalParameters];*/
+	parametersTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(20, 48, 402, 22)];
+	[parametersTextField setStringValue:[NSString stringWithUTF8String:macosx_additional_parameters]];
+	[[window contentView] addSubview:parametersTextField];
 
 	// Doesn't look like the SDL version implements this so lets not show it.
 	/*NSButton *dontAsk = [[NSButton alloc] initWithFrame:NSMakeRect(18, 18, 178, 18)];
@@ -210,16 +218,16 @@ static const char* const tableHeaders[NUM_COLUMNS] = { "IWAD", "Game" };
 	[dontAsk setState:(showwin ? NSOffState : NSOnState)];
 	[[window contentView] addSubview:dontAsk];*/
 
-	okButton = [[NSButton alloc] initWithFrame:NSMakeRect(236, 12, 96, 32)];
-	[okButton setTitle:[NSString stringWithUTF8String:"OK"]];
+	okButton = [[NSButton alloc] initWithFrame:NSMakeRect(236, 8, 96, 32)];
+	[okButton setTitle:@"OK"];
 	[okButton setBezelStyle:NSRoundedBezelStyle];
 	[okButton setAction:@selector(buttonPressed:)];
 	[okButton setTarget:self];
 	[okButton setKeyEquivalent:@"\r"];
 	[[window contentView] addSubview:okButton];
 
-	cancelButton = [[NSButton alloc] initWithFrame:NSMakeRect(332, 12, 96, 32)];
-	[cancelButton setTitle:[NSString stringWithUTF8String:"Cancel"]];
+	cancelButton = [[NSButton alloc] initWithFrame:NSMakeRect(332, 8, 96, 32)];
+	[cancelButton setTitle:@"Cancel"];
 	[cancelButton setBezelStyle:NSRoundedBezelStyle];
 	[cancelButton setAction:@selector(buttonPressed:)];
 	[cancelButton setTarget:self];
@@ -236,13 +244,80 @@ static const char* const tableHeaders[NUM_COLUMNS] = { "IWAD", "Game" };
 	return cancelled ? -1 : [iwadTable selectedRow];
 }
 
+- (NSString*)commandLineParameters
+{
+	return [parametersTextField stringValue];
+}
+
 @end
+
+
+static void RestartWithParameters( const char* iwadPath, NSString* parameters )
+{
+	assert( nil != parameters );
+	
+	M_SaveDefaults( NULL );
+	
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+
+	@try
+	{
+		const int commandLineParametersCount = Args->NumArgs();
+		assert( commandLineParametersCount > 0 );
+		
+		NSString* executablePath = [NSString stringWithUTF8String:Args->GetArg(0)];
+		
+		NSMutableArray* arguments = [NSMutableArray arrayWithCapacity:commandLineParametersCount + 2];
+		[arguments addObject:@"-iwad"];
+		[arguments addObject:[NSString stringWithUTF8String:iwadPath]];
+		
+		for ( int i = 1; i < commandLineParametersCount; ++i )
+		{
+			NSString* currentParameter = [NSString stringWithUTF8String:Args->GetArg(i)];
+			[arguments addObject:currentParameter];
+		}
+		
+		NSArray* additionalParameters = [parameters componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+		[arguments addObjectsFromArray:additionalParameters];
+	
+#if 0
+		NSTask* task = [[NSTask alloc] init];
+		[task setLaunchPath:executablePath];
+		[task setArguments:arguments];
+		
+		[task launch];
+		[task waitUntilExit];		
+#else
+		[NSTask launchedTaskWithLaunchPath:executablePath arguments:arguments];
+#endif
+		
+		_exit(0); // to avoid atexit()'s functions
+	}
+	@catch ( NSException* e )
+	{
+		NSLog( @"Cannot restart: %@", [e reason] );
+	}
+	
+	[pool release];
+}
 
 // Simple wrapper so we can call this from outside.
 int I_PickIWad_Cocoa (WadStuff *wads, int numwads, bool showwin, int defaultiwad)
 {
 	IWADPicker *picker = [IWADPicker alloc];
 	int ret = [picker pickIWad:wads:numwads:showwin:defaultiwad];
+	
+	NSString* parametersToAppend = [picker commandLineParameters];
+	macosx_additional_parameters = [parametersToAppend UTF8String];
+	
+	if ( ret >= 0 )
+	{
+		if ( 0 != [parametersToAppend length] )
+		{
+			RestartWithParameters( wads[ ret ].Path, parametersToAppend );
+		}
+	}
+	
 	[picker release];
 	return ret;
 }
