@@ -92,17 +92,6 @@
 		49E92496139523FB00CCEBBC /* c_expr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D20139126C00095D9A0 /* c_expr.cpp */; };
 		49E9287813978BF600CCEBBC /* doom.icns in Resources */ = {isa = PBXBuildFile; fileRef = 49E9287713978BF600CCEBBC /* doom.icns */; };
 		49E9287913978BF600CCEBBC /* doom.icns in Resources */ = {isa = PBXBuildFile; fileRef = 49E9287713978BF600CCEBBC /* doom.icns */; };
-		8A3AEE4313C9E170003AC5B8 /* ANSIString.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3AEE3013C9E170003AC5B8 /* ANSIString.m */; };
-		8A3AEE4413C9E170003AC5B8 /* ConsoleController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3AEE3213C9E170003AC5B8 /* ConsoleController.m */; };
-		8A3AEE4513C9E170003AC5B8 /* DrawerButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3AEE3413C9E170003AC5B8 /* DrawerButton.m */; };
-		8A3AEE4613C9E170003AC5B8 /* FileButtonController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3AEE3613C9E170003AC5B8 /* FileButtonController.m */; };
-		8A3AEE4713C9E170003AC5B8 /* LauncherApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3AEE3813C9E170003AC5B8 /* LauncherApp.m */; };
-		8A3AEE4813C9E170003AC5B8 /* LauncherMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3AEE3913C9E170003AC5B8 /* LauncherMain.m */; };
-		8A3AEE4913C9E170003AC5B8 /* ResolutionDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3AEE3B13C9E170003AC5B8 /* ResolutionDataSource.m */; };
-		8A3AEE4A13C9E170003AC5B8 /* UKKQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3AEE3E13C9E170003AC5B8 /* UKKQueue.m */; };
-		8A3AEE4B13C9E170003AC5B8 /* UKMainThreadProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3AEE4013C9E170003AC5B8 /* UKMainThreadProxy.m */; };
-		8A3AEE4C13C9E170003AC5B8 /* WadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3AEE4213C9E170003AC5B8 /* WadViewController.m */; };
-		8A3C759513C89942002608BC /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8A3C759313C89942002608BC /* MainMenu.nib */; };
 		8A74F2A2139235E0001F54B0 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2A1139235E0001F54B0 /* OpenGL.framework */; };
 		8A74F2BA1392360F001F54B0 /* libfmodex.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2B91392360F001F54B0 /* libfmodex.dylib */; };
 		8A74F38F13925284001F54B0 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F38E13925284001F54B0 /* IOKit.framework */; };
@@ -938,29 +927,6 @@
 		49E9242213951E5F00CCEBBC /* blob_src_1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_src_1.cpp; sourceTree = "<group>"; };
 		49E924681395222500CCEBBC /* blob_src_2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_src_2.cpp; sourceTree = "<group>"; };
 		49E9287713978BF600CCEBBC /* doom.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = doom.icns; sourceTree = "<group>"; };
-		8A3AEE2F13C9E170003AC5B8 /* ANSIString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANSIString.h; sourceTree = "<group>"; };
-		8A3AEE3013C9E170003AC5B8 /* ANSIString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANSIString.m; sourceTree = "<group>"; };
-		8A3AEE3113C9E170003AC5B8 /* ConsoleController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConsoleController.h; sourceTree = "<group>"; };
-		8A3AEE3213C9E170003AC5B8 /* ConsoleController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConsoleController.m; sourceTree = "<group>"; };
-		8A3AEE3313C9E170003AC5B8 /* DrawerButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawerButton.h; sourceTree = "<group>"; };
-		8A3AEE3413C9E170003AC5B8 /* DrawerButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawerButton.m; sourceTree = "<group>"; };
-		8A3AEE3513C9E170003AC5B8 /* FileButtonController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileButtonController.h; sourceTree = "<group>"; };
-		8A3AEE3613C9E170003AC5B8 /* FileButtonController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileButtonController.m; sourceTree = "<group>"; };
-		8A3AEE3713C9E170003AC5B8 /* LauncherApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LauncherApp.h; sourceTree = "<group>"; };
-		8A3AEE3813C9E170003AC5B8 /* LauncherApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LauncherApp.m; sourceTree = "<group>"; };
-		8A3AEE3913C9E170003AC5B8 /* LauncherMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LauncherMain.m; sourceTree = "<group>"; };
-		8A3AEE3A13C9E170003AC5B8 /* ResolutionDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResolutionDataSource.h; sourceTree = "<group>"; };
-		8A3AEE3B13C9E170003AC5B8 /* ResolutionDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResolutionDataSource.m; sourceTree = "<group>"; };
-		8A3AEE3C13C9E170003AC5B8 /* UKFileWatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UKFileWatcher.h; sourceTree = "<group>"; };
-		8A3AEE3D13C9E170003AC5B8 /* UKKQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UKKQueue.h; sourceTree = "<group>"; };
-		8A3AEE3E13C9E170003AC5B8 /* UKKQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UKKQueue.m; sourceTree = "<group>"; };
-		8A3AEE3F13C9E170003AC5B8 /* UKMainThreadProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UKMainThreadProxy.h; sourceTree = "<group>"; };
-		8A3AEE4013C9E170003AC5B8 /* UKMainThreadProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UKMainThreadProxy.m; sourceTree = "<group>"; };
-		8A3AEE4113C9E170003AC5B8 /* WadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WadViewController.h; sourceTree = "<group>"; };
-		8A3AEE4213C9E170003AC5B8 /* WadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WadViewController.m; sourceTree = "<group>"; };
-		8A3C755213C897E6002608BC /* Launcher.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Launcher.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		8A3C755413C897E6002608BC /* Launcher-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Launcher-Info.plist"; sourceTree = "<group>"; };
-		8A3C759413C89942002608BC /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		8A44602813BF0306007FA8E1 /* gzdoom_sdl.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = gzdoom_sdl.xcconfig; sourceTree = "<group>"; };
 		8A6BE7BF142F539000AFCF10 /* make_backup */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = make_backup; sourceTree = "<group>"; };
 		8A6BE7C0142F539000AFCF10 /* make_image */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = make_image; sourceTree = "<group>"; };
@@ -2063,13 +2029,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		8A3C755013C897E6002608BC /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		8AF279BA1390F2540095D9A0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -2122,7 +2081,6 @@
 			isa = PBXGroup;
 			children = (
 				8AF27CFC139126C00095D9A0 /* GZDoom */,
-				8A3C756113C898A8002608BC /* Launcher */,
 				8AF27B281390F5EE0095D9A0 /* dumb */,
 				8AF27C84139121F90095D9A0 /* gdtoa */,
 				8AF27A571390F51A0095D9A0 /* gme */,
@@ -2148,7 +2106,6 @@
 				8AF279BC1390F2540095D9A0 /* lemon */,
 				8D1107320486CEB800E47090 /* GZDoom.app */,
 				49E921C01394CE6000CCEBBC /* GZDoom.app */,
-				8A3C755213C897E6002608BC /* Launcher.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2171,8 +2128,6 @@
 				49E9287713978BF600CCEBBC /* doom.icns */,
 				8D1107310486CEB800E47090 /* GZDoom-Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
-				8A3C755413C897E6002608BC /* Launcher-Info.plist */,
-				8A3C759313C89942002608BC /* MainMenu.nib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -2226,33 +2181,6 @@
 				49E9201B1394CC9B00CCEBBC /* blob_sound.cpp */,
 			);
 			path = blobs;
-			sourceTree = "<group>";
-		};
-		8A3C756113C898A8002608BC /* Launcher */ = {
-			isa = PBXGroup;
-			children = (
-				8A3AEE2F13C9E170003AC5B8 /* ANSIString.h */,
-				8A3AEE3013C9E170003AC5B8 /* ANSIString.m */,
-				8A3AEE3113C9E170003AC5B8 /* ConsoleController.h */,
-				8A3AEE3213C9E170003AC5B8 /* ConsoleController.m */,
-				8A3AEE3313C9E170003AC5B8 /* DrawerButton.h */,
-				8A3AEE3413C9E170003AC5B8 /* DrawerButton.m */,
-				8A3AEE3513C9E170003AC5B8 /* FileButtonController.h */,
-				8A3AEE3613C9E170003AC5B8 /* FileButtonController.m */,
-				8A3AEE3713C9E170003AC5B8 /* LauncherApp.h */,
-				8A3AEE3813C9E170003AC5B8 /* LauncherApp.m */,
-				8A3AEE3913C9E170003AC5B8 /* LauncherMain.m */,
-				8A3AEE3A13C9E170003AC5B8 /* ResolutionDataSource.h */,
-				8A3AEE3B13C9E170003AC5B8 /* ResolutionDataSource.m */,
-				8A3AEE3C13C9E170003AC5B8 /* UKFileWatcher.h */,
-				8A3AEE3D13C9E170003AC5B8 /* UKKQueue.h */,
-				8A3AEE3E13C9E170003AC5B8 /* UKKQueue.m */,
-				8A3AEE3F13C9E170003AC5B8 /* UKMainThreadProxy.h */,
-				8A3AEE4013C9E170003AC5B8 /* UKMainThreadProxy.m */,
-				8A3AEE4113C9E170003AC5B8 /* WadViewController.h */,
-				8A3AEE4213C9E170003AC5B8 /* WadViewController.m */,
-			);
-			path = Launcher;
 			sourceTree = "<group>";
 		};
 		8A6BE7B7142F539000AFCF10 /* misc */ = {
@@ -3796,23 +3724,6 @@
 			productReference = 49E921C01394CE6000CCEBBC /* GZDoom.app */;
 			productType = "com.apple.product-type.application";
 		};
-		8A3C755113C897E6002608BC /* Launcher */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 8A3C755713C897E7002608BC /* Build configuration list for PBXNativeTarget "Launcher" */;
-			buildPhases = (
-				8A3C754E13C897E6002608BC /* Resources */,
-				8A3C754F13C897E6002608BC /* Sources */,
-				8A3C755013C897E6002608BC /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = Launcher;
-			productName = Launcher;
-			productReference = 8A3C755213C897E6002608BC /* Launcher.app */;
-			productType = "com.apple.product-type.application";
-		};
 		8AF278C91390F0370095D9A0 /* jpeg */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8AF279091390F05D0095D9A0 /* Build configuration list for PBXNativeTarget "jpeg" */;
@@ -4007,7 +3918,6 @@
 				8AF27A531390F4F40095D9A0 /* gme */,
 				8AF27B241390F5DC0095D9A0 /* dumb */,
 				8AF27C1B1390F7E20095D9A0 /* gdtoa */,
-				8A3C755113C897E6002608BC /* Launcher */,
 				8A6BE7A3142F529D00AFCF10 /* Make Backup */,
 				8A6BE7A7142F52AA00AFCF10 /* Make Disk Image */,
 			);
@@ -4060,14 +3970,6 @@
 				49E9203E1394CE6000CCEBBC /* InfoPlist.strings in Resources */,
 				49E9287813978BF600CCEBBC /* doom.icns in Resources */,
 				8AD870F2140A4EC5007A06A9 /* Credits.html in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8A3C754E13C897E6002608BC /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				8A3C759513C89942002608BC /* MainMenu.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4194,23 +4096,6 @@
 				8A7C81C713BF3C5A000B654E /* SDLMain.m in Sources */,
 				49E921521394CE6000CCEBBC /* iwadpicker_cocoa.mm in Sources */,
 				49E921A71394CE6000CCEBBC /* autozend.cpp in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8A3C754F13C897E6002608BC /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				8A3AEE4313C9E170003AC5B8 /* ANSIString.m in Sources */,
-				8A3AEE4413C9E170003AC5B8 /* ConsoleController.m in Sources */,
-				8A3AEE4513C9E170003AC5B8 /* DrawerButton.m in Sources */,
-				8A3AEE4613C9E170003AC5B8 /* FileButtonController.m in Sources */,
-				8A3AEE4713C9E170003AC5B8 /* LauncherApp.m in Sources */,
-				8A3AEE4813C9E170003AC5B8 /* LauncherMain.m in Sources */,
-				8A3AEE4913C9E170003AC5B8 /* ResolutionDataSource.m in Sources */,
-				8A3AEE4A13C9E170003AC5B8 /* UKKQueue.m in Sources */,
-				8A3AEE4B13C9E170003AC5B8 /* UKMainThreadProxy.m in Sources */,
-				8A3AEE4C13C9E170003AC5B8 /* WadViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4991,14 +4876,6 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		8A3C759313C89942002608BC /* MainMenu.nib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				8A3C759413C89942002608BC /* English */,
-			);
-			name = MainMenu.nib;
-			sourceTree = "<group>";
-		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -5058,54 +4935,6 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = sc_man_scanner.re;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
-		8A3C755513C897E7002608BC /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
-				INFOPLIST_FILE = "Launcher-Info.plist";
-				INSTALL_PATH = "$(HOME)/Applications";
-				OTHER_LDFLAGS = (
-					"-framework",
-					Foundation,
-					"-framework",
-					AppKit,
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = Launcher;
-			};
-			name = Debug;
-		};
-		8A3C755613C897E7002608BC /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
-				INFOPLIST_FILE = "Launcher-Info.plist";
-				INSTALL_PATH = "$(HOME)/Applications";
-				OTHER_LDFLAGS = (
-					"-framework",
-					Foundation,
-					"-framework",
-					AppKit,
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = Launcher;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -5380,15 +5209,6 @@
 			buildConfigurations = (
 				49E92B3313991F2900CCEBBC /* Debug */,
 				49E92B3413991F2900CCEBBC /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		8A3C755713C897E7002608BC /* Build configuration list for PBXNativeTarget "Launcher" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				8A3C755513C897E7002608BC /* Debug */,
-				8A3C755613C897E7002608BC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
