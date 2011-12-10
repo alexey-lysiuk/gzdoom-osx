@@ -445,7 +445,7 @@ private:
 
 	// Per-instance variables. There are four.
 private:
-	PClass *Class;				// This object's type
+	PClass *ObjectClass;		// This object's type
 public:
 	DObject *ObjNext;			// Keep track of all allocated objects
 	DObject *GCNext;			// Next object in this collection list
@@ -476,18 +476,18 @@ public:
 	
 	PClass *GetClass() const
 	{
-		if (Class == NULL)
+		if (ObjectClass == NULL)
 		{
 			// Save a little time the next time somebody wants this object's type
 			// by recording it now.
-			const_cast<DObject *>(this)->Class = StaticType();
+			const_cast<DObject *>(this)->ObjectClass = StaticType();
 		}
-		return Class;
+		return ObjectClass;
 	}
 
 	void SetClass (PClass *inClass)
 	{
-		Class = inClass;
+		ObjectClass = inClass;
 	}
 
 	void *operator new(size_t len)
