@@ -125,6 +125,7 @@ static const char* const tableHeaders[NUM_COLUMNS] = { "IWAD", "Game" };
 - (void)makeLabel:(NSTextField *)label:(const char*) str;
 - (int)pickIWad:(WadStuff *)wads:(int) numwads:(bool) showwin:(int) defaultiwad;
 - (NSString*)commandLineParameters;
+- (void)menuActionSent:(NSNotification*)notification;
 @end
 
 @implementation IWADPicker
@@ -163,14 +164,14 @@ static const char* const tableHeaders[NUM_COLUMNS] = { "IWAD", "Game" };
 	cancelled = false;
 
 	app = [NSApplication sharedApplication];
-	id windowTitle = [NSString stringWithUTF8String:GAMESIG " " DOTVERSIONSTR ": Select an IWAD to use"];
+	id windowTitle = [NSString stringWithUTF8String:GAMESIG " " DOTVERSIONSTR];
 
 	NSRect frame = NSMakeRect(0, 0, 440, 450);
 	window = [[NSWindow alloc] initWithContentRect:frame styleMask:NSTitledWindowMask backing:NSBackingStoreBuffered defer:NO];
 	[window setTitle:windowTitle];
 
 	NSTextField *description = [[NSTextField alloc] initWithFrame:NSMakeRect(18, 384, 402, 50)];
-	[self makeLabel:description:"ZDoom found more than one IWAD\nSelect from the list below to determine which one to use:"];
+	[self makeLabel:description:"GZDoom found more than one IWAD\nSelect from the list below to determine which one to use:"];
 	[[window contentView] addSubview:description];
 	[description release];
 
@@ -234,8 +235,12 @@ static const char* const tableHeaders[NUM_COLUMNS] = { "IWAD", "Game" };
 	[cancelButton setKeyEquivalent:@"\033"];
 	[[window contentView] addSubview:cancelButton];
 
-	[window center];
+	NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
+	[center addObserver:self selector:@selector(menuActionSent:) name:NSMenuDidSendActionNotification object:nil];
+
 	[app runModalForWindow:window];
+
+	[center removeObserver:self name:NSMenuDidSendActionNotification object:nil];
 
 	[window release];
 	[okButton release];
@@ -247,6 +252,17 @@ static const char* const tableHeaders[NUM_COLUMNS] = { "IWAD", "Game" };
 - (NSString*)commandLineParameters
 {
 	return [parametersTextField stringValue];
+}
+
+- (void)menuActionSent:(NSNotification*)notification
+{
+	NSDictionary* userInfo = [notification userInfo];
+	NSMenuItem* menuItem = [userInfo valueForKey:@"MenuItem"];
+
+	if ( @selector(terminate:) == [menuItem action] )
+	{
+		exit(0);
+	}
 }
 
 @end
