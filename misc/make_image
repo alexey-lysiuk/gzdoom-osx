@@ -16,6 +16,7 @@ strip ${DEPLOY_IMAGE_DIR}/GZDoom.app/Contents/MacOS/GZDoom
 echo "Copying documentation..."
 mkdir ${DEPLOY_IMAGE_DIR}/Documentation
 cp -R docs/ ${DEPLOY_IMAGE_DIR}/Documentation
+cp ReadMe.rtf ${DEPLOY_IMAGE_DIR}
 
 echo "Building image..."
 hdiutil create -srcfolder ${DEPLOY_IMAGE_DIR} -volname GZDoom ${DEPLOY_IMAGE_DIR}/GZDoom.dmg
