@@ -10,7 +10,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#ifndef __APPLE__
 #include <malloc.h>
+#endif // __APPLE__
 #include <stdio.h>
 #include <assert.h>
 
