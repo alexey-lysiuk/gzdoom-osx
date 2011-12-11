@@ -217,7 +217,7 @@ void I_ClosestResolution (int *width, int *height, int bits)
 
 extern int NewWidth, NewHeight, NewBits, DisplayBits;
 
-CUSTOM_CVAR (Bool, fullscreen, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
+CUSTOM_CVAR (Bool, fullscreen, false, CVAR_ARCHIVE|CVAR_NOINITCALL|CVAR_GLOBALCONFIG)
 {
 	NewWidth = screen->GetWidth();
 	NewHeight = screen->GetHeight();
