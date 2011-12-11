@@ -172,6 +172,56 @@ static void setApplicationMenu(void)
     [menuItem release];
 }
 
+/* Create an edit menu */
+static void setupEditMenu(void)
+{
+	NSMenu      *editMenu;
+    NSMenuItem  *editMenuItem;
+    NSMenuItem  *menuItem;
+	
+    editMenu = [[NSMenu alloc] initWithTitle:@"Edit"];
+
+	/* "Undo" item */
+    menuItem = [[NSMenuItem alloc] initWithTitle:@"Undo" action:@selector(undo:) keyEquivalent:@"z"];
+    [editMenu addItem:menuItem];
+
+	/* "Redo" item */
+    menuItem = [[NSMenuItem alloc] initWithTitle:@"Redo" action:@selector(redo:) keyEquivalent:@"Z"];
+    [editMenu addItem:menuItem];
+
+	[editMenu addItem:[NSMenuItem separatorItem]];
+
+	/* "Cut" item */
+    menuItem = [[NSMenuItem alloc] initWithTitle:@"Cut" action:@selector(cut:) keyEquivalent:@"x"];
+    [editMenu addItem:menuItem];
+
+	/* "Copy" item */
+    menuItem = [[NSMenuItem alloc] initWithTitle:@"Copy" action:@selector(copy:) keyEquivalent:@"c"];
+    [editMenu addItem:menuItem];
+
+    /* "Paste" item */
+    menuItem = [[NSMenuItem alloc] initWithTitle:@"Paste" action:@selector(paste:) keyEquivalent:@"v"];
+    [editMenu addItem:menuItem];
+
+    /* "Delete" item */
+    menuItem = [[NSMenuItem alloc] initWithTitle:@"Delete" action:@selector(delete:) keyEquivalent:@""];
+    [editMenu addItem:menuItem];
+
+	/* "Select All" item */
+    menuItem = [[NSMenuItem alloc] initWithTitle:@"Select All" action:@selector(selectAll:) keyEquivalent:@"a"];
+    [editMenu addItem:menuItem];	
+
+    /* Put menu into the menubar */
+    editMenuItem = [[NSMenuItem alloc] initWithTitle:@"Edit" action:nil keyEquivalent:@""];
+    [editMenuItem setSubmenu:editMenu];
+    [[NSApp mainMenu] addItem:editMenuItem];
+    	
+    /* Finally give up our references to the objects */
+	[menuItem release];
+    [editMenu release];
+    [editMenuItem release];
+}
+
 /* Create a window menu */
 static void setupWindowMenu(void)
 {
@@ -222,6 +272,7 @@ static void CustomApplicationMain (int argc, char **argv)
     /* Set up the menubar */
     [NSApp setMainMenu:[[NSMenu alloc] init]];
     setApplicationMenu();
+	setupEditMenu();
     setupWindowMenu();
 
     /* Create SDLMain and make it the app delegate */
