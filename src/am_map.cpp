@@ -1728,15 +1728,19 @@ void AM_drawSubsectors()
 		}
 
 		// Draw the polygon.
-		screen->FillSimplePoly(TexMan(maptex),
-			&points[0], points.Size(),
-			originx, originy,
-			scale / (FIXED2FLOAT(sec->GetXScale(sector_t::floor)) * float(1 << MAPBITS)),
-			scale / (FIXED2FLOAT(sec->GetYScale(sector_t::floor)) * float(1 << MAPBITS)),
-			rotation,
-			colormap,
-			floorlight
-			);
+		FTexture *pic = TexMan(maptex);
+		if (pic != NULL && pic->UseType != FTexture::TEX_Null)
+		{
+			screen->FillSimplePoly(TexMan(maptex),
+				&points[0], points.Size(),
+				originx, originy,
+				scale / (FIXED2FLOAT(sec->GetXScale(sector_t::floor)) * float(1 << MAPBITS)),
+				scale / (FIXED2FLOAT(sec->GetYScale(sector_t::floor)) * float(1 << MAPBITS)),
+				rotation,
+				colormap,
+				floorlight
+				);
+		}
 	}
 }
 
@@ -1916,6 +1920,7 @@ void AM_drawWalls (bool allmap)
 {
 	int i;
 	static mline_t l;
+	int lock, color;
 
 	for (i = 0; i < numlines; i++)
 	{
@@ -1951,8 +1956,16 @@ void AM_drawWalls (bool allmap)
 					AM_drawMline(&l, SecretWallColor);
 			    else
 					AM_drawMline(&l, WallColor);
-			}
-			else if ((lines[i].special == Teleport ||
+			} else if (lines[i].locknumber > 0) { // [Dusk] specials w/ locknumbers
+				lock = lines[i].locknumber;
+				color = P_GetMapColorForLock(lock);
+				
+				AMColor c;
+				if (color >= 0)	c.FromRGB(RPART(color), GPART(color), BPART(color));
+				else c = LockedColor;
+				
+				AM_drawMline (&l, c);
+			} else if ((lines[i].special == Teleport ||
 				lines[i].special == Teleport_NoFog ||
 				lines[i].special == Teleport_ZombieChanger ||
 				lines[i].special == Teleport_Line) &&
@@ -1978,13 +1991,12 @@ void AM_drawWalls (bool allmap)
 				if (am_colorset == 0 || am_colorset == 3)	// Raven games show door colors
 				{
 					int P_GetMapColorForLock(int lock);
-					int lock;
 
 					if (lines[i].special==Door_LockedRaise || lines[i].special==Door_Animated)
 						lock=lines[i].args[3];
 					else lock=lines[i].args[4];
 
-					int color = P_GetMapColorForLock(lock);
+					color = P_GetMapColorForLock(lock);
 
 					AMColor c;
 
