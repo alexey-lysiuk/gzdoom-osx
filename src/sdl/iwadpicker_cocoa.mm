@@ -175,9 +175,7 @@ static const char* const tableHeaders[NUM_COLUMNS] = { "IWAD", "Game" };
 	[[window contentView] addSubview:description];
 	[description release];
 
-	// Commented out version would account for an additional parameters box.
-	NSScrollView *iwadScroller = [[NSScrollView alloc] initWithFrame:NSMakeRect(20, 103, 402, 288)];
-	//NSScrollView *iwadScroller = [[NSScrollView alloc] initWithFrame:NSMakeRect(20, 50, 412, 341)];
+	NSScrollView *iwadScroller = [[NSScrollView alloc] initWithFrame:NSMakeRect(20, 135, 402, 256)];
 	NSTableView *iwadTable = [[NSTableView alloc] initWithFrame:[iwadScroller bounds]];
 	IWADTableData *tableData = [[IWADTableData alloc] init:wads:numwads];
 	for(int i = 0;i < NUM_COLUMNS;i++)
@@ -205,10 +203,10 @@ static const char* const tableHeaders[NUM_COLUMNS] = { "IWAD", "Game" };
 	[iwadTable release];
 	[iwadScroller release];
 
-	NSTextField *additionalParametersLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(18, 76, 144, 17)];
-	[self makeLabel:additionalParametersLabel:"Additional Parameters"];
+	NSTextField *additionalParametersLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(18, 108, 144, 17)];
+	[self makeLabel:additionalParametersLabel:"Additional Parameters:"];
 	[[window contentView] addSubview:additionalParametersLabel];
-	parametersTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(20, 48, 402, 22)];
+	parametersTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(20, 48, 402, 54)];
 	[parametersTextField setStringValue:[NSString stringWithUTF8String:macosx_additional_parameters]];
 	[[window contentView] addSubview:parametersTextField];
 
