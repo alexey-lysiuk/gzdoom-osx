@@ -1,6 +1,6 @@
 /*
     SDL - Simple DirectMedia Layer
-    Copyright (C) 1997-2009 Sam Lantinga
+    Copyright (C) 1997-2012 Sam Lantinga
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -573,6 +573,10 @@ static void SDL_CreateShadowSurface(int depth)
     #include <sys/neutrino.h>
 #endif /* __QNXNTO__ */
 
+#ifdef WIN32
+	extern int sysevents_mouse_pressed;
+#endif
+
 /*
  * Set the requested video mode, allocating a shadow buffer if necessary.
  */
@@ -585,6 +589,10 @@ SDL_Surface * SDL_SetVideoMode (int width, int height, int bpp, Uint32 flags)
 	int video_bpp;
 	int is_opengl;
 	SDL_GrabMode saved_grab;
+
+	#ifdef WIN32
+		sysevents_mouse_pressed = 0;
+	#endif
 
 	/* Start up the video driver, if necessary..
 	   WARNING: This is the only function protected this way!
@@ -979,6 +987,11 @@ SDL_Surface *SDL_DisplayFormatAlpha(SDL_Surface *surface)
 		if ( (vf->Rmask == 0xff) && (vf->Bmask == 0xff0000) ) {
 			rmask = 0xff;
 			bmask = 0xff0000;
+		} else if ( vf->Rmask == 0xFF00 && (vf->Bmask = 0xFF000000) ) {
+			amask = 0x000000FF;
+			rmask = 0x0000FF00;
+			gmask = 0x00FF0000;
+			bmask = 0xFF000000;
 		}
 		break;
 

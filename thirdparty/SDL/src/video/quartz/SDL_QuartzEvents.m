@@ -1,6 +1,6 @@
 /*
     SDL - Simple DirectMedia Layer
-    Copyright (C) 1997-2009  Sam Lantinga
+    Copyright (C) 1997-2012  Sam Lantinga
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -721,6 +721,8 @@ void QZ_DoActivate (_THIS) {
         QZ_GetMouseLocation (this, &p);
         SDL_PrivateMouseMotion (0, 0, p.x, p.y);
     }
+
+    QZ_UpdateCursor(this);
 }
 
 void QZ_DoDeactivate (_THIS) {

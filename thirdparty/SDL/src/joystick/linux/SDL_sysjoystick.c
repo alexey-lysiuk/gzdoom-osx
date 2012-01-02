@@ -1,6 +1,6 @@
 /*
     SDL - Simple DirectMedia Layer
-    Copyright (C) 1997-2009 Sam Lantinga
+    Copyright (C) 1997-2012 Sam Lantinga
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -581,7 +581,7 @@ static SDL_bool JS_ConfigJoystick(SDL_Joystick *joystick, int fd)
 {
 	SDL_bool handled;
 	unsigned char n;
-	int old_axes, tmp_naxes, tmp_nhats, tmp_nballs;
+	int tmp_naxes, tmp_nhats, tmp_nballs;
 	const char *name;
 	char *env, env_name[128];
 	int i;
@@ -601,7 +601,6 @@ static SDL_bool JS_ConfigJoystick(SDL_Joystick *joystick, int fd)
 	}
 
 	name = SDL_SYS_JoystickName(joystick->index);
-	old_axes = joystick->naxes;
 
 	/* Generic analog joystick support */
 	if ( SDL_strstr(name, "Analog") == name && SDL_strstr(name, "-hat") ) {
@@ -936,6 +935,10 @@ void HandleHat(SDL_Joystick *stick, Uint8 hat, int axis, int value)
 	SDL_logical_joydecl(SDL_Joystick *logicaljoy = NULL);
 	SDL_logical_joydecl(struct joystick_logical_mapping* hats = NULL);
 
+	if (stick->nhats <= hat) {
+		return;  /* whoops, that shouldn't happen! */
+	}
+
 	the_hat = &stick->hwdata->hats[hat];
 	if ( value < 0 ) {
 		value = 0;
@@ -974,6 +977,9 @@ void HandleHat(SDL_Joystick *stick, Uint8 hat, int axis, int value)
 static __inline__
 void HandleBall(SDL_Joystick *stick, Uint8 ball, int axis, int value)
 {
+	if ((stick->nballs <= ball) || (axis >= 2)) {
+		return;  /* whoops, that shouldn't happen! */
+	}
 	stick->hwdata->balls[ball].axis[axis] += value;
 }
 

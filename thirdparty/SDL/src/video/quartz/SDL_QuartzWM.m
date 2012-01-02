@@ -1,6 +1,6 @@
 /*
     SDL - Simple DirectMedia Layer
-    Copyright (C) 1997-2009  Sam Lantinga
+    Copyright (C) 1997-2012  Sam Lantinga
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -124,16 +124,14 @@ int QZ_ShowWMCursor (_THIS, WMcursor *cursor) {
         QZ_UpdateCursor(this);
     }
     else {
-        if (qz_window ==nil || (mode_flags & SDL_FULLSCREEN)) {
-            [ cursor->nscursor set ];
-        }
-        else {
+        if ( qz_window != nil && !(mode_flags & SDL_FULLSCREEN) ) {
             [ qz_window invalidateCursorRectsForView: [ qz_window contentView ] ];
         }
         if ( ! cursor_should_be_visible ) {
             cursor_should_be_visible = YES;
             QZ_ChangeGrabState (this, QZ_SHOWCURSOR);
         }
+        [ cursor->nscursor performSelectorOnMainThread:@selector(set) withObject:nil waitUntilDone:NO ];
         QZ_UpdateCursor(this);
     }
 
@@ -438,6 +436,7 @@ SDL_GrabMode QZ_GrabInput (_THIS, SDL_GrabMode grab_mode) {
             QZ_ChangeGrabState (this, QZ_DISABLE_GRAB);
         
         current_grab_mode = doGrab ? SDL_GRAB_ON : SDL_GRAB_OFF;
+        QZ_UpdateCursor(this);
     }
 
     return current_grab_mode;

@@ -1,6 +1,6 @@
 /*
     SDL - Simple DirectMedia Layer
-    Copyright (C) 1997-2009 Sam Lantinga
+    Copyright (C) 1997-2012 Sam Lantinga
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -243,13 +243,14 @@ static BOOL WINAPI WIN_TrackMouseEvent(TRACKMOUSEEVENT *ptme)
 }
 #endif /* WM_MOUSELEAVE */
 
+int sysevents_mouse_pressed = 0;
+
 /* The main Win32 event handler
 DJM: This is no longer static as (DX5/DIB)_CreateWindow needs it
 */
 LRESULT CALLBACK WinMessage(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	SDL_VideoDevice *this = current_video;
-	static int mouse_pressed = 0;
+	SDL_VideoDevice *this = current_video;	
 #ifdef WMMSG_DEBUG
 	fprintf(stderr, "Received windows message:  ");
 	if ( msg > MAX_WMMSG ) {
@@ -309,6 +310,8 @@ LRESULT CALLBACK WinMessage(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 					if ( WINDIB_FULLSCREEN() ) {
 						appstate |= SDL_APPMOUSEFOCUS;
 						SDL_RestoreDesktopMode();
+						/* A fullscreen app gets hidden but will not get a minimize event */
+						appstate |= (SDL_APPACTIVE | SDL_APPMOUSEFOCUS);
 #if defined(_WIN32_WCE)
 						LoadAygshell();
 						if( SHFullScreen ) 
@@ -424,14 +427,14 @@ LRESULT CALLBACK WinMessage(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				}
 				if ( state == SDL_PRESSED ) {
 					/* Grab mouse so we get up events */
-					if ( ++mouse_pressed > 0 ) {
+					if ( ++sysevents_mouse_pressed > 0 ) {
 						SetCapture(hwnd);
 					}
 				} else {
 					/* Release mouse after all up events */
-					if ( --mouse_pressed <= 0 ) {
+					if ( --sysevents_mouse_pressed <= 0 ) {
 						ReleaseCapture();
-						mouse_pressed = 0;
+						sysevents_mouse_pressed = 0;
 					}
 				}
 				if ( mouse_relative ) {

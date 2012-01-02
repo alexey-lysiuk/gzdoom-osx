@@ -1,6 +1,6 @@
 /*
     SDL - Simple DirectMedia Layer
-    Copyright (C) 1997-2009  Sam Lantinga
+    Copyright (C) 1997-2012  Sam Lantinga
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -36,7 +36,7 @@ CG_EXTERN size_t CGDisplayBytesPerRow(CGDirectDisplayID display)
     __IPHONE_NA, __IPHONE_NA);
 #endif
 
-#if (MAC_OS_X_VERSION_MIN_REQUIRED < 1060) && !__x86_64__ /* Fixed in Snow Leopard */
+#if (MAC_OS_X_VERSION_MAX_ALLOWED < 1060) && !__x86_64__ /* Fixed in Snow Leopard */
 /*
     Add methods to get at private members of NSScreen. 
     Since there is a bug in Apple's screen switching code
@@ -834,7 +834,7 @@ static SDL_Surface* QZ_SetVideoFullScreen (_THIS, SDL_Surface *current, int widt
 
         /* Apparently Lion checks some version flag set by the linker
            and changes API behavior. Annoying. */
-#if (MAC_OS_X_VERSION_MAX_ALLOWED < 1070)
+#if (MAC_OS_X_VERSION_MIN_REQUIRED < 1070)
         {
             CGLError err;
             CGLContextObj ctx;
@@ -1209,7 +1209,12 @@ static SDL_Surface* QZ_SetVideoMode(_THIS, SDL_Surface *current,
                                     Uint32 flags)
 {
     /* Don't throw away the GL context if we can just resize the current one. */
+#if 0  /* !!! FIXME: half-finished side project. Reenable this if you ever debug the corner cases. */
     const BOOL save_gl = ( (video_set == SDL_TRUE) && ((flags & SDL_OPENGL) == (current->flags & SDL_OPENGL)) && (bpp == current->format->BitsPerPixel) );
+#else
+    const BOOL save_gl = NO;
+#endif
+
     NSOpenGLContext *glctx = gl_context;
     SDL_Surface* retval = NULL;
 
