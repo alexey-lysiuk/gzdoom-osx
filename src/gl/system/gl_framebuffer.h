@@ -15,6 +15,11 @@ class OpenGLFrameBuffer : public Win32GLFrameBuffer
 {
 	typedef Win32GLFrameBuffer Super;
 	DECLARE_CLASS(OpenGLFrameBuffer, Win32GLFrameBuffer)
+#elif defined __APPLE__ && defined NO_SDL
+#include "cocoaglvideo.h"
+	class OpenGLFrameBuffer : public CocoaGLFB
+	{
+		DECLARE_CLASS(OpenGLFrameBuffer, CocoaGLFB)		
 #else
 #include "sdlglvideo.h"
 class OpenGLFrameBuffer : public SDLGLFB

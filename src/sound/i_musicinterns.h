@@ -18,7 +18,11 @@
 #include <windows.h>
 #include <mmsystem.h>
 #else
+#ifdef NO_SDL
+#include <string.h>
+#else // !NO_SDL
 #include <SDL.h>
+#endif // NO_SDL
 #define FALSE 0
 #define TRUE 1
 #endif

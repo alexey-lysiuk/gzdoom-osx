@@ -45,8 +45,18 @@
 #include "gl/system/gl_cvars.h"
 
 #if defined (unix) || defined (__APPLE__)
+#ifdef NO_SDL
+
+static void* wglGetProcAddress( const char* proc )
+{
+	assert( !"Implement wglGetProcAddress()" );
+	return NULL;
+}
+
+#else // !NO_SDL
 #include <SDL.h>
 #define wglGetProcAddress(x) (*SDL_GL_GetProcAddress)(x)
+#endif // NO_SDL
 #endif
 static void APIENTRY glBlendEquationDummy (GLenum mode);
 
@@ -697,6 +707,14 @@ static bool SetupPixelFormat(HDC hDC, bool allowsoftware, bool nostencil, int mu
 	}
 	return true;
 }
+#elif defined NO_SDL
+
+static bool SetupPixelFormat(bool allowsoftware, bool nostencil, int multisample)
+{
+	assert( !"Implement SetupPixelFormat()" );
+	return true;
+}
+
 #else
 
 static bool SetupPixelFormat(bool allowsoftware, bool nostencil, int multisample)
@@ -855,6 +873,8 @@ static void APIENTRY iSwapBuffers()
 {
 #if !defined (unix) && !defined (__APPLE__)
 	SwapBuffers(m_hDC);
+#elif defined NO_SDL
+	assert( !"Implement iSwapBuffers()" );
 #else
 	SDL_GL_SwapBuffers ();
 #endif

@@ -89,7 +89,9 @@ inline T max( T a, T b) { return (((a)>(b)) ? (a) : (b)); }
 #endif
 #ifndef _WIN32
 #include "platform.h"
+#ifndef NO_SDL
 #include <SDL.h>
+#endif // NO_SDL
 #endif
 #include "gl/system/gl_interface.h"
 

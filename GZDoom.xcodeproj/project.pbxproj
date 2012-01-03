@@ -85,13 +85,18 @@
 		49E921C51394CEAD00CCEBBC /* blob_menu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E920191394CC3700CCEBBC /* blob_menu.cpp */; };
 		49E921C61394CEAE00CCEBBC /* blob_opengl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E920171394CAC300CCEBBC /* blob_opengl.cpp */; };
 		49E921C71394CEAE00CCEBBC /* blob_resources.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E9201E1394CDB500CCEBBC /* blob_resources.cpp */; };
-		49E921C81394CEAF00CCEBBC /* blob_sdl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E920251394CE0B00CCEBBC /* blob_sdl.cpp */; };
 		49E921C91394CEB000CCEBBC /* blob_sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E9201B1394CC9B00CCEBBC /* blob_sound.cpp */; };
 		49E9242313951E5F00CCEBBC /* blob_src_1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E9242213951E5F00CCEBBC /* blob_src_1.cpp */; };
 		49E924691395222500CCEBBC /* blob_src_2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E924681395222500CCEBBC /* blob_src_2.cpp */; };
 		49E92496139523FB00CCEBBC /* c_expr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D20139126C00095D9A0 /* c_expr.cpp */; };
 		49E9287813978BF600CCEBBC /* doom.icns in Resources */ = {isa = PBXBuildFile; fileRef = 49E9287713978BF600CCEBBC /* doom.icns */; };
 		49E9287913978BF600CCEBBC /* doom.icns in Resources */ = {isa = PBXBuildFile; fileRef = 49E9287713978BF600CCEBBC /* doom.icns */; };
+		8A45FF1914B33C8F00EC6103 /* gzdoom_cocoa.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 8A45FF1814B33C8F00EC6103 /* gzdoom_cocoa.xcconfig */; };
+		8A45FF1A14B33C8F00EC6103 /* gzdoom_cocoa.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 8A45FF1814B33C8F00EC6103 /* gzdoom_cocoa.xcconfig */; };
+		8A45FF3814B33F9300EC6103 /* iwadpicker_cocoa.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3B139126C00095D9A0 /* iwadpicker_cocoa.mm */; };
+		8A45FF8E14B349DB00EC6103 /* i_cd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F32139126C00095D9A0 /* i_cd.cpp */; };
+		8A45FF9B14B34A0D00EC6103 /* st_start.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F41139126C00095D9A0 /* st_start.cpp */; };
+		8A45FF9E14B34A1800EC6103 /* i_movie.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F37139126C00095D9A0 /* i_movie.cpp */; };
 		8A4D6BC51494F7DC003DC1CB /* blockmapbuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A4D6BA31494F7DC003DC1CB /* blockmapbuilder.cpp */; };
 		8A4D6BC81494F7DC003DC1CB /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A4D6BA91494F7DC003DC1CB /* main.cpp */; };
 		8A4D6BC91494F7DC003DC1CB /* nodebuild.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A4D6BAA1494F7DC003DC1CB /* nodebuild.cpp */; };
@@ -121,7 +126,6 @@
 		8A74F38F13925284001F54B0 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F38E13925284001F54B0 /* IOKit.framework */; };
 		8A74F451139252F9001F54B0 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F450139252F9001F54B0 /* AudioUnit.framework */; };
 		8A74F4671392532C001F54B0 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F4661392532C001F54B0 /* Carbon.framework */; };
-		8A7C81C613BF3C0B000B654E /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3E139126C00095D9A0 /* SDLMain.m */; };
 		8A7C81C713BF3C5A000B654E /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3E139126C00095D9A0 /* SDLMain.m */; };
 		8A8D68B713C84344001D368F /* r_swrenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D68B313C84344001D368F /* r_swrenderer.cpp */; };
 		8A8D68B813C84344001D368F /* r_utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D68B513C84344001D368F /* r_utility.cpp */; };
@@ -605,18 +609,6 @@
 		8AF28169139126C10095D9A0 /* s_sndseq.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F23139126C00095D9A0 /* s_sndseq.cpp */; };
 		8AF2816A139126C10095D9A0 /* s_sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F25139126C00095D9A0 /* s_sound.cpp */; };
 		8AF2816B139126C10095D9A0 /* sc_man.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F27139126C00095D9A0 /* sc_man.cpp */; };
-		8AF2816D139126C10095D9A0 /* crashcatcher.c in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F2D139126C00095D9A0 /* crashcatcher.c */; };
-		8AF2816E139126C10095D9A0 /* hardware.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F30139126C00095D9A0 /* hardware.cpp */; };
-		8AF2816F139126C10095D9A0 /* i_cd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F32139126C00095D9A0 /* i_cd.cpp */; };
-		8AF28170139126C10095D9A0 /* i_input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F33139126C00095D9A0 /* i_input.cpp */; };
-		8AF28171139126C10095D9A0 /* i_joystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F35139126C00095D9A0 /* i_joystick.cpp */; };
-		8AF28172139126C10095D9A0 /* i_main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F36139126C00095D9A0 /* i_main.cpp */; };
-		8AF28173139126C10095D9A0 /* i_movie.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F37139126C00095D9A0 /* i_movie.cpp */; };
-		8AF28174139126C10095D9A0 /* i_system.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F38139126C00095D9A0 /* i_system.cpp */; };
-		8AF28175139126C10095D9A0 /* iwadpicker_cocoa.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3B139126C00095D9A0 /* iwadpicker_cocoa.mm */; };
-		8AF28176139126C10095D9A0 /* sdlglvideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3C139126C00095D9A0 /* sdlglvideo.cpp */; };
-		8AF28178139126C10095D9A0 /* sdlvideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3F139126C00095D9A0 /* sdlvideo.cpp */; };
-		8AF28179139126C10095D9A0 /* st_start.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F41139126C00095D9A0 /* st_start.cpp */; };
 		8AF2817B139126C10095D9A0 /* SFMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F51139126C00095D9A0 /* SFMT.cpp */; };
 		8AF2817C139126C10095D9A0 /* skins.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F53139126C00095D9A0 /* skins.cpp */; };
 		8AF2817D139126C10095D9A0 /* fmodsound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F57139126C00095D9A0 /* fmodsound.cpp */; };
@@ -698,8 +690,6 @@
 		8AF281F0139126C10095D9A0 /* parse_xlat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF28003139126C00095D9A0 /* parse_xlat.cpp */; };
 		8AF281F2139126C10095D9A0 /* zstrformat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF28007139126C00095D9A0 /* zstrformat.cpp */; };
 		8AF281F3139126C10095D9A0 /* zstring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF28008139126C00095D9A0 /* zstring.cpp */; };
-		8AF62EBD142F25C5003F3556 /* libSDL_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF62EB3142F259E003F3556 /* libSDL_gzdoom.a */; };
-		8AF62EBE142F25D0003F3556 /* libSDL_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF62EB3142F259E003F3556 /* libSDL_gzdoom.a */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
@@ -824,20 +814,6 @@
 			remoteGlobalIDString = 49E92B3213991F2900CCEBBC;
 			remoteInfo = sc_man_scanner.re;
 		};
-		8A2AD154142F27FA00149995 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8AF62EA6142F259E003F3556 /* SDL.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = BECDF66D0761BA81005FE872;
-			remoteInfo = "Static Library";
-		};
-		8A2AD157142F281400149995 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8AF62EA6142F259E003F3556 /* SDL.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = BECDF66D0761BA81005FE872;
-			remoteInfo = "Static Library";
-		};
 		8A6BE7AA142F52C000AFCF10 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
@@ -887,41 +863,6 @@
 			remoteGlobalIDString = 8AF279591390F1200095D9A0;
 			remoteInfo = lzma;
 		};
-		8AF62EB2142F259E003F3556 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8AF62EA6142F259E003F3556 /* SDL.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = BECDF6B30761BA81005FE872;
-			remoteInfo = "Static Library";
-		};
-		8AF62EB4142F259E003F3556 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8AF62EA6142F259E003F3556 /* SDL.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = BECDF66C0761BA81005FE872;
-			remoteInfo = Framework;
-		};
-		8AF62EB6142F259E003F3556 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8AF62EA6142F259E003F3556 /* SDL.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = BECDF6BA0761BA81005FE872;
-			remoteInfo = "Main Library";
-		};
-		8AF62EB8142F259E003F3556 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8AF62EA6142F259E003F3556 /* SDL.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = BECDF6BE0761BA81005FE872;
-			remoteInfo = "Standard DMG";
-		};
-		8AF62EBA142F259E003F3556 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8AF62EA6142F259E003F3556 /* SDL.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = BECDF6C30761BA81005FE872;
-			remoteInfo = "Developer Extras Package";
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -952,6 +893,13 @@
 		49E924681395222500CCEBBC /* blob_src_2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_src_2.cpp; sourceTree = "<group>"; };
 		49E9287713978BF600CCEBBC /* doom.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = doom.icns; sourceTree = "<group>"; };
 		8A44602813BF0306007FA8E1 /* gzdoom_sdl.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = gzdoom_sdl.xcconfig; sourceTree = "<group>"; };
+		8A45FF1814B33C8F00EC6103 /* gzdoom_cocoa.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = gzdoom_cocoa.xcconfig; sourceTree = "<group>"; };
+		8A45FF4F14B3408400EC6103 /* critsec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = critsec.h; sourceTree = "<group>"; };
+		8A45FF5014B3408400EC6103 /* i_system.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = i_system.h; sourceTree = "<group>"; };
+		8A45FF5A14B343AF00EC6103 /* hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hardware.h; sourceTree = "<group>"; };
+		8A45FF5B14B343AF00EC6103 /* i_input.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = i_input.h; sourceTree = "<group>"; };
+		8A45FF5C14B343AF00EC6103 /* i_video.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = i_video.h; sourceTree = "<group>"; };
+		8A45FF7614B345FD00EC6103 /* cocoaglvideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cocoaglvideo.h; sourceTree = "<group>"; };
 		8A4D6B9E1494F7BE003DC1CB /* zdbsp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = zdbsp; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A4D6BA31494F7DC003DC1CB /* blockmapbuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blockmapbuilder.cpp; sourceTree = "<group>"; };
 		8A4D6BA41494F7DC003DC1CB /* blockmapbuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blockmapbuilder.h; sourceTree = "<group>"; };
@@ -2074,7 +2022,6 @@
 		8AF28007139126C00095D9A0 /* zstrformat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zstrformat.cpp; sourceTree = "<group>"; };
 		8AF28008139126C00095D9A0 /* zstring.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zstring.cpp; sourceTree = "<group>"; };
 		8AF28009139126C00095D9A0 /* zstring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zstring.h; sourceTree = "<group>"; };
-		8AF62EA6142F259E003F3556 /* SDL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL.xcodeproj; path = thirdparty/SDL/Xcode/SDL/SDL.xcodeproj; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* GZDoom-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GZDoom-Info.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* GZDoom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GZDoom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -2092,7 +2039,6 @@
 				49E921B21394CE6000CCEBBC /* libbz2.dylib in Frameworks */,
 				49E921B31394CE6000CCEBBC /* libz.dylib in Frameworks */,
 				49E921B91394CE6000CCEBBC /* libfmodex.dylib in Frameworks */,
-				8AF62EBD142F25C5003F3556 /* libSDL_gzdoom.a in Frameworks */,
 				49E921B41394CE6000CCEBBC /* libjpeg_gzdoom.a in Frameworks */,
 				49E921B51394CE6000CCEBBC /* liblzma_gzdoom.a in Frameworks */,
 				49E921B61394CE6000CCEBBC /* libgme_gzdoom.a in Frameworks */,
@@ -2152,7 +2098,6 @@
 				8AF2794A1390F0C20095D9A0 /* libbz2.dylib in Frameworks */,
 				8AF27A491390F4910095D9A0 /* libz.dylib in Frameworks */,
 				8A74F2BA1392360F001F54B0 /* libfmodex.dylib in Frameworks */,
-				8AF62EBE142F25D0003F3556 /* libSDL_gzdoom.a in Frameworks */,
 				8AC81C411391321300F49DC3 /* libjpeg_gzdoom.a in Frameworks */,
 				8AC81C421391321300F49DC3 /* liblzma_gzdoom.a in Frameworks */,
 				8AC81C431391321300F49DC3 /* libgme_gzdoom.a in Frameworks */,
@@ -2175,6 +2120,7 @@
 				8AF2795F1390F1410095D9A0 /* lzma */,
 				8A6BE7B7142F539000AFCF10 /* misc */,
 				8AF279C01390F26E0095D9A0 /* tools */,
+				8A45FF1814B33C8F00EC6103 /* gzdoom_cocoa.xcconfig */,
 				8A44602813BF0306007FA8E1 /* gzdoom_sdl.xcconfig */,
 			);
 			name = Sources;
@@ -2224,7 +2170,6 @@
 		29B97323FDCFA39411CA2CEA /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
-				8AF62EA6142F259E003F3556 /* SDL.xcodeproj */,
 				8A74F450139252F9001F54B0 /* AudioUnit.framework */,
 				8A74F4661392532C001F54B0 /* Carbon.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
@@ -2270,6 +2215,19 @@
 				49E9201B1394CC9B00CCEBBC /* blob_sound.cpp */,
 			);
 			path = blobs;
+			sourceTree = "<group>";
+		};
+		8A45FF4E14B3408400EC6103 /* cocoa */ = {
+			isa = PBXGroup;
+			children = (
+				8A45FF7614B345FD00EC6103 /* cocoaglvideo.h */,
+				8A45FF4F14B3408400EC6103 /* critsec.h */,
+				8A45FF5A14B343AF00EC6103 /* hardware.h */,
+				8A45FF5B14B343AF00EC6103 /* i_input.h */,
+				8A45FF5014B3408400EC6103 /* i_system.h */,
+				8A45FF5C14B343AF00EC6103 /* i_video.h */,
+			);
+			path = cocoa;
 			sourceTree = "<group>";
 		};
 		8A4D6BA21494F7DC003DC1CB /* zdbsp */ = {
@@ -2836,6 +2794,7 @@
 				8AF27D02139126C00095D9A0 /* asm_ia32 */,
 				8AF27D08139126C00095D9A0 /* asm_x86_64 */,
 				49E920081394C83300CCEBBC /* blobs */,
+				8A45FF4E14B3408400EC6103 /* cocoa */,
 				8AF27D55139126C00095D9A0 /* fragglescript */,
 				8AF27D62139126C00095D9A0 /* g_doom */,
 				8AF27D78139126C00095D9A0 /* g_heretic */,
@@ -3830,18 +3789,6 @@
 			path = xlat;
 			sourceTree = "<group>";
 		};
-		8AF62EA7142F259E003F3556 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				8AF62EB3142F259E003F3556 /* libSDL_gzdoom.a */,
-				8AF62EB5142F259E003F3556 /* SDL.framework */,
-				8AF62EB7142F259E003F3556 /* libSDLmain.a */,
-				8AF62EB9142F259E003F3556 /* Standard DMG */,
-				8AF62EBB142F259E003F3556 /* Developer Extras Package */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -3857,7 +3804,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				8A2AD155142F27FA00149995 /* PBXTargetDependency */,
 				49E92B3813991F4900CCEBBC /* PBXTargetDependency */,
 				49E9202B1394CE6000CCEBBC /* PBXTargetDependency */,
 				49E9202D1394CE6000CCEBBC /* PBXTargetDependency */,
@@ -4043,7 +3989,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				8A2AD158142F281400149995 /* PBXTargetDependency */,
 				49440B1113C1BFDA00646B56 /* PBXTargetDependency */,
 				49E91DE71393BFB000CCEBBC /* PBXTargetDependency */,
 				49E91DED1393BFC800CCEBBC /* PBXTargetDependency */,
@@ -4081,12 +4026,6 @@
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* GZDoom */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 8AF62EA7142F259E003F3556 /* Products */;
-					ProjectRef = 8AF62EA6142F259E003F3556 /* SDL.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				49E9202A1394CE6000CCEBBC /* GZDoom_BLOB */,
@@ -4109,44 +4048,6 @@
 		};
 /* End PBXProject section */
 
-/* Begin PBXReferenceProxy section */
-		8AF62EB3142F259E003F3556 /* libSDL_gzdoom.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libSDL_gzdoom.a;
-			remoteRef = 8AF62EB2142F259E003F3556 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		8AF62EB5142F259E003F3556 /* SDL.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = SDL.framework;
-			remoteRef = 8AF62EB4142F259E003F3556 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		8AF62EB7142F259E003F3556 /* libSDLmain.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libSDLmain.a;
-			remoteRef = 8AF62EB6142F259E003F3556 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		8AF62EB9142F259E003F3556 /* Standard DMG */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.executable";
-			path = "Standard DMG";
-			remoteRef = 8AF62EB8142F259E003F3556 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		8AF62EBB142F259E003F3556 /* Developer Extras Package */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.executable";
-			path = "Developer Extras Package";
-			remoteRef = 8AF62EBA142F259E003F3556 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
-
 /* Begin PBXResourcesBuildPhase section */
 		49E9203D1394CE6000CCEBBC /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
@@ -4155,6 +4056,7 @@
 				49E9203E1394CE6000CCEBBC /* InfoPlist.strings in Resources */,
 				49E9287813978BF600CCEBBC /* doom.icns in Resources */,
 				8AD870F2140A4EC5007A06A9 /* Credits.html in Resources */,
+				8A45FF1A14B33C8F00EC6103 /* gzdoom_cocoa.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4165,6 +4067,7 @@
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				49E9287913978BF600CCEBBC /* doom.icns in Resources */,
 				8AD870F3140A4EC5007A06A9 /* Credits.html in Resources */,
+				8A45FF1914B33C8F00EC6103 /* gzdoom_cocoa.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4273,7 +4176,6 @@
 				49E921C51394CEAD00CCEBBC /* blob_menu.cpp in Sources */,
 				49E921C61394CEAE00CCEBBC /* blob_opengl.cpp in Sources */,
 				49E921C71394CEAE00CCEBBC /* blob_resources.cpp in Sources */,
-				49E921C81394CEAF00CCEBBC /* blob_sdl.cpp in Sources */,
 				49E921C91394CEB000CCEBBC /* blob_sound.cpp in Sources */,
 				49E9242313951E5F00CCEBBC /* blob_src_1.cpp in Sources */,
 				49E924691395222500CCEBBC /* blob_src_2.cpp in Sources */,
@@ -4847,17 +4749,6 @@
 				8AF28169139126C10095D9A0 /* s_sndseq.cpp in Sources */,
 				8AF2816A139126C10095D9A0 /* s_sound.cpp in Sources */,
 				8AF2816B139126C10095D9A0 /* sc_man.cpp in Sources */,
-				8AF2816D139126C10095D9A0 /* crashcatcher.c in Sources */,
-				8AF2816E139126C10095D9A0 /* hardware.cpp in Sources */,
-				8AF2816F139126C10095D9A0 /* i_cd.cpp in Sources */,
-				8AF28170139126C10095D9A0 /* i_input.cpp in Sources */,
-				8AF28171139126C10095D9A0 /* i_joystick.cpp in Sources */,
-				8AF28172139126C10095D9A0 /* i_main.cpp in Sources */,
-				8AF28173139126C10095D9A0 /* i_movie.cpp in Sources */,
-				8AF28174139126C10095D9A0 /* i_system.cpp in Sources */,
-				8AF28176139126C10095D9A0 /* sdlglvideo.cpp in Sources */,
-				8AF28178139126C10095D9A0 /* sdlvideo.cpp in Sources */,
-				8AF28179139126C10095D9A0 /* st_start.cpp in Sources */,
 				8AF2817B139126C10095D9A0 /* SFMT.cpp in Sources */,
 				8AF2817C139126C10095D9A0 /* skins.cpp in Sources */,
 				8AF2817D139126C10095D9A0 /* fmodsound.cpp in Sources */,
@@ -4948,9 +4839,11 @@
 				497C93F013C5A6F800E6B4A8 /* voxels.cpp in Sources */,
 				8A8D68B713C84344001D368F /* r_swrenderer.cpp in Sources */,
 				8A8D68B813C84344001D368F /* r_utility.cpp in Sources */,
-				8AF28175139126C10095D9A0 /* iwadpicker_cocoa.mm in Sources */,
-				8A7C81C613BF3C0B000B654E /* SDLMain.m in Sources */,
+				8A45FF3814B33F9300EC6103 /* iwadpicker_cocoa.mm in Sources */,
 				8AF28013139126C00095D9A0 /* autozend.cpp in Sources */,
+				8A45FF8E14B349DB00EC6103 /* i_cd.cpp in Sources */,
+				8A45FF9B14B34A0D00EC6103 /* st_start.cpp in Sources */,
+				8A45FF9E14B34A1800EC6103 /* i_movie.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5042,16 +4935,6 @@
 			target = 49E92B3213991F2900CCEBBC /* sc_man_scanner.re */;
 			targetProxy = 49E92B3713991F4900CCEBBC /* PBXContainerItemProxy */;
 		};
-		8A2AD155142F27FA00149995 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "Static Library";
-			targetProxy = 8A2AD154142F27FA00149995 /* PBXContainerItemProxy */;
-		};
-		8A2AD158142F281400149995 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "Static Library";
-			targetProxy = 8A2AD157142F281400149995 /* PBXContainerItemProxy */;
-		};
 		8A6BE7AB142F52C000AFCF10 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 49E9202A1394CE6000CCEBBC /* GZDoom_BLOB */;
@@ -5124,7 +5007,7 @@
 		};
 		49E921BE1394CE6000CCEBBC /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8A44602813BF0306007FA8E1 /* gzdoom_sdl.xcconfig */;
+			baseConfigurationReference = 8A45FF1814B33C8F00EC6103 /* gzdoom_cocoa.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = "GZDoom-Info.plist";
 				PRODUCT_NAME = GZDoom;
@@ -5133,7 +5016,7 @@
 		};
 		49E921BF1394CE6000CCEBBC /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8A44602813BF0306007FA8E1 /* gzdoom_sdl.xcconfig */;
+			baseConfigurationReference = 8A45FF1814B33C8F00EC6103 /* gzdoom_cocoa.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = "GZDoom-Info.plist";
 				PRODUCT_NAME = GZDoom;
@@ -5419,7 +5302,7 @@
 		};
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8A44602813BF0306007FA8E1 /* gzdoom_sdl.xcconfig */;
+			baseConfigurationReference = 8A45FF1814B33C8F00EC6103 /* gzdoom_cocoa.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = "GZDoom-Info.plist";
 				PRODUCT_NAME = GZDoom;
@@ -5428,7 +5311,7 @@
 		};
 		C01FCF4C08A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8A44602813BF0306007FA8E1 /* gzdoom_sdl.xcconfig */;
+			baseConfigurationReference = 8A45FF1814B33C8F00EC6103 /* gzdoom_cocoa.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = "GZDoom-Info.plist";
 				PRODUCT_NAME = GZDoom;
