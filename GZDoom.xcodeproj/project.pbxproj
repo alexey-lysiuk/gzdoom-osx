@@ -97,6 +97,7 @@
 		8A45FF8E14B349DB00EC6103 /* i_cd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F32139126C00095D9A0 /* i_cd.cpp */; };
 		8A45FF9B14B34A0D00EC6103 /* st_start.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F41139126C00095D9A0 /* st_start.cpp */; };
 		8A45FF9E14B34A1800EC6103 /* i_movie.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F37139126C00095D9A0 /* i_movie.cpp */; };
+		8A45FFAD14B34D2000EC6103 /* i_system.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A45FFAC14B34D2000EC6103 /* i_system.cpp */; };
 		8A4D6BC51494F7DC003DC1CB /* blockmapbuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A4D6BA31494F7DC003DC1CB /* blockmapbuilder.cpp */; };
 		8A4D6BC81494F7DC003DC1CB /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A4D6BA91494F7DC003DC1CB /* main.cpp */; };
 		8A4D6BC91494F7DC003DC1CB /* nodebuild.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A4D6BAA1494F7DC003DC1CB /* nodebuild.cpp */; };
@@ -900,6 +901,7 @@
 		8A45FF5B14B343AF00EC6103 /* i_input.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = i_input.h; sourceTree = "<group>"; };
 		8A45FF5C14B343AF00EC6103 /* i_video.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = i_video.h; sourceTree = "<group>"; };
 		8A45FF7614B345FD00EC6103 /* cocoaglvideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cocoaglvideo.h; sourceTree = "<group>"; };
+		8A45FFAC14B34D2000EC6103 /* i_system.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = i_system.cpp; sourceTree = "<group>"; };
 		8A4D6B9E1494F7BE003DC1CB /* zdbsp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = zdbsp; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A4D6BA31494F7DC003DC1CB /* blockmapbuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blockmapbuilder.cpp; sourceTree = "<group>"; };
 		8A4D6BA41494F7DC003DC1CB /* blockmapbuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blockmapbuilder.h; sourceTree = "<group>"; };
@@ -2224,6 +2226,7 @@
 				8A45FF4F14B3408400EC6103 /* critsec.h */,
 				8A45FF5A14B343AF00EC6103 /* hardware.h */,
 				8A45FF5B14B343AF00EC6103 /* i_input.h */,
+				8A45FFAC14B34D2000EC6103 /* i_system.cpp */,
 				8A45FF5014B3408400EC6103 /* i_system.h */,
 				8A45FF5C14B343AF00EC6103 /* i_video.h */,
 			);
@@ -4839,11 +4842,12 @@
 				497C93F013C5A6F800E6B4A8 /* voxels.cpp in Sources */,
 				8A8D68B713C84344001D368F /* r_swrenderer.cpp in Sources */,
 				8A8D68B813C84344001D368F /* r_utility.cpp in Sources */,
-				8A45FF3814B33F9300EC6103 /* iwadpicker_cocoa.mm in Sources */,
-				8AF28013139126C00095D9A0 /* autozend.cpp in Sources */,
 				8A45FF8E14B349DB00EC6103 /* i_cd.cpp in Sources */,
 				8A45FF9B14B34A0D00EC6103 /* st_start.cpp in Sources */,
 				8A45FF9E14B34A1800EC6103 /* i_movie.cpp in Sources */,
+				8A45FFAD14B34D2000EC6103 /* i_system.cpp in Sources */,
+				8A45FF3814B33F9300EC6103 /* iwadpicker_cocoa.mm in Sources */,
+				8AF28013139126C00095D9A0 /* autozend.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
