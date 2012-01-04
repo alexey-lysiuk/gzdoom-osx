@@ -45,14 +45,10 @@
 #include "gl/system/gl_cvars.h"
 
 #if defined (unix) || defined (__APPLE__)
-#ifdef NO_SDL
-
-static void* wglGetProcAddress( const char* proc )
-{
-	assert( !"Implement wglGetProcAddress()" );
-	return NULL;
-}
-
+#if defined NO_SDL
+#include <dlfcn.h>
+#include "cocoa_application.h"
+#define wglGetProcAddress(x) dlsym( RTLD_DEFAULT, x )
 #else // !NO_SDL
 #include <SDL.h>
 #define wglGetProcAddress(x) (*SDL_GL_GetProcAddress)(x)
@@ -711,7 +707,7 @@ static bool SetupPixelFormat(HDC hDC, bool allowsoftware, bool nostencil, int mu
 
 static bool SetupPixelFormat(bool allowsoftware, bool nostencil, int multisample)
 {
-	assert( !"Implement SetupPixelFormat()" );
+	//assert( !"Implement SetupPixelFormat()" );
 	return true;
 }
 
@@ -874,7 +870,7 @@ static void APIENTRY iSwapBuffers()
 #if !defined (unix) && !defined (__APPLE__)
 	SwapBuffers(m_hDC);
 #elif defined NO_SDL
-	assert( !"Implement iSwapBuffers()" );
+	CocoaApplication::SwapVideoBuffers();
 #else
 	SDL_GL_SwapBuffers ();
 #endif

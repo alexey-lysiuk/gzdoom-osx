@@ -881,6 +881,6 @@ unsigned int I_MakeRNGSeed()
 
 bool I_SetCursor(FTexture *cursorpic)
 {
-	assert( !"Implement I_SetCursor()" );
+	//assert( !"Implement I_SetCursor()" );
 	return false;
 }

@@ -15,23 +15,25 @@ FRenderer *gl_CreateInterface();
 
 class CocoaGLVideo : public IVideo
 {
- public:
-	CocoaGLVideo (int parm);
-	~CocoaGLVideo ();
+public:
+	CocoaGLVideo( int parm );
+	~CocoaGLVideo();
 
 	EDisplayType GetDisplayType () { return DISPLAY_Both; }
-	void SetWindowedScale (float scale);
+	void SetWindowedScale( float scale );
 
-	DFrameBuffer *CreateFrameBuffer (int width, int height, bool fs, DFrameBuffer *old);
+	DFrameBuffer *CreateFrameBuffer( int width, int height, bool fs, DFrameBuffer *old );
 
-	void StartModeIterator (int bits, bool fs);
-	bool NextMode (int *width, int *height, bool *letterbox);
-	bool SetResolution (int width, int height, int bits);
+	void StartModeIterator( int bits, bool fs );
+	bool NextMode( int *width, int *height, bool *letterbox );
+	bool SetResolution( int width, int height, int bits );
 
-//private:
-//	int IteratorMode;
-//	int IteratorBits;
-//	bool IteratorFS;
+private:
+	int IteratorMode;
+	int IteratorBits;
+	bool IteratorFS;
+	
+	size_t m_highestFullscreenMode;
 };
 
 
@@ -56,7 +58,7 @@ public:
 	
 	void NewRefreshRate ();
 
-	friend class SDLGLVideo;
+	friend class CocoaGLVideo;
 
 //[C]
 	int GetTrueHeight() { return GetHeight();}
@@ -66,17 +68,14 @@ protected:
 	void SetGammaTable(WORD *tbl);
 	void InitializeState();
 
-	CocoaGLFB () {}
-//	BYTE GammaTable[3][256];
-//	bool UpdatePending;
-//	
-//	SDL_Surface *Screen;
-//	
-//	void UpdateColors ();
-//
-//	int m_Lock;
-//	Uint16 m_origGamma[3][256];
-	bool m_supportsGamma;
+	CocoaGLFB() { }
+
+	bool m_updatePending;
+	int  m_lock;
+	
+	uint16_t m_originalGamma[3][256];
+	bool     m_supportsGamma;
+	
 };
 
 
