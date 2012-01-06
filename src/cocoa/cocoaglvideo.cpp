@@ -143,8 +143,6 @@ CocoaGLVideo::CocoaGLVideo( int parm )
 	IteratorFS = false;
     
 	GetContext(gl);
-
-	CocoaApplication::SetCursorVisible( false );
 }
 
 CocoaGLVideo::~CocoaGLVideo()

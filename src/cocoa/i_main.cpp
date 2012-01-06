@@ -286,8 +286,6 @@ int main (int argc, char **argv)
 	}
 	atterm( CocoaApplication::Shutdown );
 	
-	CocoaApplication::SetWindowTitle( GAMESIG " " DOTVERSIONSTR " (" __DATE__ ")" );
-
 	EXTERN_CVAR(  Int, vid_defwidth  )
 	EXTERN_CVAR(  Int, vid_defheight )
 	EXTERN_CVAR(  Int, vid_defbits   )

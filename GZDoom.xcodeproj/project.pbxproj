@@ -96,8 +96,6 @@
 		8A37DBD714B4447900D259AE /* cocoa_application.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A37DBD514B4447900D259AE /* cocoa_application.mm */; };
 		8A37DCB214B4713000D259AE /* cocoaglvideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A37DCB114B4713000D259AE /* cocoaglvideo.cpp */; };
 		8A37DE6D14B48EF700D259AE /* hardware.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A37DE6C14B48EF700D259AE /* hardware.cpp */; };
-		8A37DE9614B496C000D259AE /* i_input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A37DE9514B496C000D259AE /* i_input.cpp */; };
-		8A37DEB314B4987F00D259AE /* i_joystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A37DEB214B4987F00D259AE /* i_joystick.cpp */; };
 		8A37DF2314B49F0300D259AE /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A37DF2214B49F0300D259AE /* MainMenu.xib */; };
 		8A37DF2414B49F0300D259AE /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A37DF2214B49F0300D259AE /* MainMenu.xib */; };
 		8A45FF3814B33F9300EC6103 /* iwadpicker_cocoa.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3B139126C00095D9A0 /* iwadpicker_cocoa.mm */; };
@@ -904,9 +902,7 @@
 		8A37DBD514B4447900D259AE /* cocoa_application.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = cocoa_application.mm; sourceTree = "<group>"; };
 		8A37DCB114B4713000D259AE /* cocoaglvideo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cocoaglvideo.cpp; sourceTree = "<group>"; };
 		8A37DE6C14B48EF700D259AE /* hardware.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hardware.cpp; sourceTree = "<group>"; };
-		8A37DE9514B496C000D259AE /* i_input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = i_input.cpp; sourceTree = "<group>"; };
 		8A37DE9C14B4970400D259AE /* dikeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dikeys.h; sourceTree = "<group>"; };
-		8A37DEB214B4987F00D259AE /* i_joystick.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = i_joystick.cpp; sourceTree = "<group>"; };
 		8A37DF2214B49F0300D259AE /* MainMenu.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
 		8A44602813BF0306007FA8E1 /* gzdoom_sdl.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = gzdoom_sdl.xcconfig; sourceTree = "<group>"; };
 		8A45FF1814B33C8F00EC6103 /* gzdoom_cocoa.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = gzdoom_cocoa.xcconfig; sourceTree = "<group>"; };
@@ -2139,7 +2135,6 @@
 				8AF279C01390F26E0095D9A0 /* tools */,
 				8A45FF1814B33C8F00EC6103 /* gzdoom_cocoa.xcconfig */,
 				8A44602813BF0306007FA8E1 /* gzdoom_sdl.xcconfig */,
-				8A37DF2214B49F0300D259AE /* MainMenu.xib */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -2181,6 +2176,7 @@
 				49E9287713978BF600CCEBBC /* doom.icns */,
 				8D1107310486CEB800E47090 /* GZDoom-Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
+				8A37DF2214B49F0300D259AE /* MainMenu.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -2246,9 +2242,7 @@
 				8A37DE9C14B4970400D259AE /* dikeys.h */,
 				8A37DE6C14B48EF700D259AE /* hardware.cpp */,
 				8A45FF5A14B343AF00EC6103 /* hardware.h */,
-				8A37DE9514B496C000D259AE /* i_input.cpp */,
 				8A45FF5B14B343AF00EC6103 /* i_input.h */,
-				8A37DEB214B4987F00D259AE /* i_joystick.cpp */,
 				8A37DBC114B43EE000D259AE /* i_main.cpp */,
 				8A45FFAC14B34D2000EC6103 /* i_system.cpp */,
 				8A45FF5014B3408400EC6103 /* i_system.h */,
@@ -4871,8 +4865,6 @@
 				8A45FF9E14B34A1800EC6103 /* i_movie.cpp in Sources */,
 				8A45FF9B14B34A0D00EC6103 /* st_start.cpp in Sources */,
 				8A37DCB214B4713000D259AE /* cocoaglvideo.cpp in Sources */,
-				8A37DE9614B496C000D259AE /* i_input.cpp in Sources */,
-				8A37DEB314B4987F00D259AE /* i_joystick.cpp in Sources */,
 				8A45FFAD14B34D2000EC6103 /* i_system.cpp in Sources */,
 				8A37DE6D14B48EF700D259AE /* hardware.cpp in Sources */,
 				8A37DBD614B4447900D259AE /* cocoa_application.mm in Sources */,

@@ -42,8 +42,6 @@ namespace CocoaApplication
 	
 	void ProcessEvents();
 	
-	void SetWindowTitle( const char* const title );
-	
 	void SetCursorVisible( const bool visible );
 	
 	void SetVideoResolution( const int width, const int height, const bool fullscreen );
@@ -53,6 +51,7 @@ namespace CocoaApplication
 	ScreenSize GetScreenSize();
 	
 	bool IsFullscreen();
+	bool IsActive();
 	
 	bool GetGammaRamp( uint16_t* red, uint16_t* green, uint16_t* blue );
 	bool SetGammaRamp( const uint16_t* red, const uint16_t* green, const uint16_t* blue );
