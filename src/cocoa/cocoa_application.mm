@@ -738,8 +738,15 @@ namespace CocoaApplication
 		FullscreenWindow* window = [s_applicationDelegate window];
 		[window setFullscreen:fullscreen];
 		
+		CGLContextObj context = CGLGetCurrentContext();
+		
 		if ( fullscreen )
 		{
+			GLint resolution[2] = { width, height };
+			
+			CGLSetParameter( context, kCGLCPSurfaceBackingSize, resolution );
+			CGLEnable( context, kCGLCESurfaceBackingSize );			
+			
 			const NSRect mainDisplayRect = [[NSScreen mainScreen] frame];
 			
 			[window setLevel:NSMainMenuWindowLevel + 1];
@@ -750,6 +757,8 @@ namespace CocoaApplication
 		}
 		else
 		{
+			CGLDisable( context, kCGLCESurfaceBackingSize );
+			
 			[window setLevel:NSNormalWindowLevel];
 			[window setStyleMask:NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask];
 			[window setHidesOnDeactivate:NO];
