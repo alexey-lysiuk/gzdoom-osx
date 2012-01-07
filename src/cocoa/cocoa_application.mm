@@ -44,6 +44,7 @@
 #include "doomdef.h"
 #include "doomstat.h"
 #include "m_joy.h"
+#include "s_sound.h"
 #include "version.h"
 
 
@@ -597,6 +598,9 @@ static void ProcessMouseMoveEvent( NSEvent* theEvent )
 - (void)keyDown:(NSEvent*)theEvent;
 - (void)keyUp:(NSEvent*)theEvent;
 
+- (void)applicationDidBecomeActive:(NSNotification*)aNotification;
+- (void)applicationWillResignActive:(NSNotification*)aNotification;
+
 - (FullscreenWindow*)window;
 
 - (void)processEvents:(NSTimer*)timer;
@@ -675,6 +679,17 @@ static ApplicationDelegate* s_applicationDelegate;
 - (void)keyUp:(NSEvent*)theEvent;
 {
 	// Empty but present to avoid playing of 'beep' alert sound
+}
+
+
+- (void)applicationDidBecomeActive:(NSNotification*)aNotification
+{
+	S_SetSoundPaused(1);
+}
+
+- (void)applicationWillResignActive:(NSNotification*)aNotification
+{
+	S_SetSoundPaused(0);
 }
 
 
