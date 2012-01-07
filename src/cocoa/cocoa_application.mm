@@ -134,7 +134,8 @@ CUSTOM_CVAR( Int, mouse_capturemode, 1, CVAR_GLOBALCONFIG | CVAR_ARCHIVE )
 
 bool GUICapture;
 
-static bool   s_nativeMouse = true;
+static bool  s_nativeMouse      = true;
+static float s_pixelScaleFactor = 1.0f;
 
 // TODO: remove this magic!
 static size_t s_skipMouseMoves;
@@ -436,6 +437,19 @@ static void ProcessKeyboardEvent( NSEvent* theEvent )
 }
 
 
+static void NSEventToGameMousePosition( NSEvent* inEvent, event_t* outEvent )
+{
+	NSWindow* window = [inEvent window];
+	NSView*     view = [window contentView];
+	
+	const NSPoint screenPos = [NSEvent mouseLocation];
+	const NSPoint windowPos = [window convertScreenToBase:screenPos];
+	const NSPoint   viewPos = [view convertPointFromBase:windowPos];
+	
+	outEvent->data1 = static_cast< int >( (                            viewPos.x ) / s_pixelScaleFactor );
+	outEvent->data2 = static_cast< int >( ( [view frame].size.height - viewPos.y ) / s_pixelScaleFactor );
+}
+
 static void ProcessMouseButtonEvent( NSEvent* theEvent )
 {
 	event_t event;
@@ -446,15 +460,29 @@ static void ProcessMouseButtonEvent( NSEvent* theEvent )
 	
 	if ( GUICapture )
 	{
-		// TODO ...
+		event.type = EV_GUI_Event;
+		
+		switch ( cocoaEventType )
+		{
+			case NSLeftMouseDown:  event.subtype = EV_GUI_LButtonDown; break;
+			case NSRightMouseDown: event.subtype = EV_GUI_RButtonDown; break;
+			case NSOtherMouseDown: event.subtype = EV_GUI_MButtonDown; break;
+			case NSLeftMouseUp:    event.subtype = EV_GUI_LButtonUp;   break;
+			case NSRightMouseUp:   event.subtype = EV_GUI_LButtonUp;   break;
+			case NSOtherMouseUp:   event.subtype = EV_GUI_LButtonUp;   break;
+		}
+		
+		NSEventToGameMousePosition( theEvent, &event );
+		
+		D_PostEvent( &event );
 	}
 	else
 	{
 		switch ( cocoaEventType )
 		{
 			case NSLeftMouseDown:
-			case NSOtherMouseDown:
 			case NSRightMouseDown:
+			case NSOtherMouseDown:
 				event.type = EV_KeyDown;
 				break;
 				
@@ -472,13 +500,21 @@ static void ProcessMouseButtonEvent( NSEvent* theEvent )
 }
 
 
-static void ProcessMouseMoveEvent( NSEvent* theEvent )
+static void ProcessMouseMoveInMenu( NSEvent* theEvent )
 {
-	if ( !use_mouse )
-	{
-		return;
-	}
+	event_t event;
+	memset( &event, 0, sizeof( event ) );
 	
+	event.type = EV_GUI_Event;
+	event.subtype = EV_GUI_MouseMove;
+	
+	NSEventToGameMousePosition( theEvent, &event );
+	
+	D_PostEvent( &event );
+}
+
+static void ProcessMouseMoveInGame( NSEvent* theEvent )
+{
 	// TODO: remove this magic!
 	
 	if ( s_skipMouseMoves > 0 )
@@ -525,6 +561,23 @@ static void ProcessMouseMoveEvent( NSEvent* theEvent )
 		event.type = EV_Mouse;
 		
 		D_PostEvent( &event );
+	}	
+}
+
+static void ProcessMouseMoveEvent( NSEvent* theEvent )
+{
+	if ( !use_mouse )
+	{
+		return;
+	}
+	
+	if ( GUICapture )
+	{
+		ProcessMouseMoveInMenu( theEvent );
+	}
+	else
+	{
+		ProcessMouseMoveInGame( theEvent );
 	}
 }
 
@@ -747,17 +800,21 @@ namespace CocoaApplication
 			CGLSetParameter( context, kCGLCPSurfaceBackingSize, resolution );
 			CGLEnable( context, kCGLCESurfaceBackingSize );			
 			
-			const NSRect mainDisplayRect = [[NSScreen mainScreen] frame];
+			const NSRect displayRect = [[window screen] frame];
+			
+			s_pixelScaleFactor = displayRect.size.width / static_cast< float >( width );
 			
 			[window setLevel:NSMainMenuWindowLevel + 1];
 			[window setStyleMask:NSBorderlessWindowMask];
 			[window setHidesOnDeactivate:YES];
-			[window setFrame:mainDisplayRect display:YES];
+			[window setFrame:displayRect display:YES];
 			[window setFrameOrigin:NSMakePoint( 0.0f, 0.0f )];
 		}
 		else
 		{
 			CGLDisable( context, kCGLCESurfaceBackingSize );
+			
+			s_pixelScaleFactor = 1.0f;
 			
 			[window setLevel:NSNormalWindowLevel];
 			[window setStyleMask:NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask];
