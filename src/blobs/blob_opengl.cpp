@@ -60,6 +60,8 @@
 #include "gl/utility/gl_cycler.cpp"
 #include "gl/utility/gl_geometric.cpp"
 
-#if defined (unix) || defined (__APPLE__)
+#ifdef NO_SDL
+#include "cocoa/cocoaglvideo.cpp"
+#else // !NO_SDL
 #include "sdl/sdlglvideo.cpp"
-#endif
+#endif // NO_SDL

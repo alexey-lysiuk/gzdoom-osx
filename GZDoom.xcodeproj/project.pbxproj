@@ -91,6 +91,7 @@
 		49E92496139523FB00CCEBBC /* c_expr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D20139126C00095D9A0 /* c_expr.cpp */; };
 		49E9287813978BF600CCEBBC /* doom.icns in Resources */ = {isa = PBXBuildFile; fileRef = 49E9287713978BF600CCEBBC /* doom.icns */; };
 		49E9287913978BF600CCEBBC /* doom.icns in Resources */ = {isa = PBXBuildFile; fileRef = 49E9287713978BF600CCEBBC /* doom.icns */; };
+		8A34622014B88AB20010F18E /* blob_system.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E920251394CE0B00CCEBBC /* blob_system.cpp */; };
 		8A37DBC214B43EE000D259AE /* i_main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A37DBC114B43EE000D259AE /* i_main.cpp */; };
 		8A37DBD614B4447900D259AE /* cocoa_application.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A37DBD514B4447900D259AE /* cocoa_application.mm */; };
 		8A37DBD714B4447900D259AE /* cocoa_application.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A37DBD514B4447900D259AE /* cocoa_application.mm */; };
@@ -892,7 +893,7 @@
 		49E920191394CC3700CCEBBC /* blob_menu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_menu.cpp; sourceTree = "<group>"; };
 		49E9201B1394CC9B00CCEBBC /* blob_sound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_sound.cpp; sourceTree = "<group>"; };
 		49E9201E1394CDB500CCEBBC /* blob_resources.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_resources.cpp; sourceTree = "<group>"; };
-		49E920251394CE0B00CCEBBC /* blob_sdl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_sdl.cpp; sourceTree = "<group>"; };
+		49E920251394CE0B00CCEBBC /* blob_system.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_system.cpp; sourceTree = "<group>"; };
 		49E921C01394CE6000CCEBBC /* GZDoom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GZDoom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49E9242213951E5F00CCEBBC /* blob_src_1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_src_1.cpp; sourceTree = "<group>"; };
 		49E924681395222500CCEBBC /* blob_src_2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob_src_2.cpp; sourceTree = "<group>"; };
@@ -2225,7 +2226,7 @@
 				49E920171394CAC300CCEBBC /* blob_opengl.cpp */,
 				49E920191394CC3700CCEBBC /* blob_menu.cpp */,
 				49E9201E1394CDB500CCEBBC /* blob_resources.cpp */,
-				49E920251394CE0B00CCEBBC /* blob_sdl.cpp */,
+				49E920251394CE0B00CCEBBC /* blob_system.cpp */,
 				49E9201B1394CC9B00CCEBBC /* blob_sound.cpp */,
 			);
 			path = blobs;
@@ -4198,6 +4199,7 @@
 				49E921C61394CEAE00CCEBBC /* blob_opengl.cpp in Sources */,
 				49E921C71394CEAE00CCEBBC /* blob_resources.cpp in Sources */,
 				49E921C91394CEB000CCEBBC /* blob_sound.cpp in Sources */,
+				8A34622014B88AB20010F18E /* blob_system.cpp in Sources */,
 				49E9242313951E5F00CCEBBC /* blob_src_1.cpp in Sources */,
 				49E924691395222500CCEBBC /* blob_src_2.cpp in Sources */,
 				49E92496139523FB00CCEBBC /* c_expr.cpp in Sources */,
