@@ -88,6 +88,8 @@ IJoystickConfig *I_UpdateDeviceList()
 
 - (bool)canBecomeKeyWindow;
 
+- (void)close;
+
 - (bool)fullscreen;
 - (void)setFullscreen:(bool)on;
 
@@ -100,6 +102,15 @@ IJoystickConfig *I_UpdateDeviceList()
 {
 	return true;
 }
+
+
+- (void)close
+{
+	[super close];
+	
+	exit(0);
+}
+
 
 - (bool)fullscreen
 {
