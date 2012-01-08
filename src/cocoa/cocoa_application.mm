@@ -381,9 +381,7 @@ static void ProcessKeyboardFlagsEvent( NSEvent* theEvent )
 
 static void ProcessKeyboardEventInMenu( NSEvent* theEvent )
 {
-	const NSEventType cocoaEventType = [theEvent type];
-	
-	NSString* characters = [theEvent characters];
+	const NSString* characters = [theEvent characters];
 	const unichar character = [characters length] > 0
 		? [characters characterAtIndex:0]
 		: '\0';
@@ -391,7 +389,7 @@ static void ProcessKeyboardEventInMenu( NSEvent* theEvent )
 	event_t event = EmptyEvent();
 	
 	event.type    = EV_GUI_Event;
-	event.subtype = NSKeyDown == cocoaEventType ? EV_GUI_KeyDown : EV_GUI_KeyUp;
+	event.subtype = NSKeyDown == [theEvent type] ? EV_GUI_KeyDown : EV_GUI_KeyUp;
 	event.data2   = character & 0xFF;
 	event.data3   = ModifierFlagsToGUIKeyModifiers( theEvent );
 	
@@ -442,11 +440,9 @@ static void ProcessKeyboardEventInMenu( NSEvent* theEvent )
 	
 	if ( !iscntrl( event.data2 ) && EV_GUI_KeyUp != event.subtype )
 	{
-		const uint32_t modifiers = [theEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask;
-		
 		event.subtype = EV_GUI_Char;
 		event.data1   = event.data2;
-		event.data2   = modifiers & NSAlternateKeyMask;
+		event.data2   = [theEvent modifierFlags] & NSAlternateKeyMask;
 		
 		D_PostEvent( &event );
 	}	
@@ -467,12 +463,9 @@ static void ProcessKeyboardEvent( NSEvent* theEvent )
 	}
 	else
 	{
-		const NSEventType cocoaEventType = [theEvent type];
-		const uint32_t    modifiers      = [theEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask;
-		
 		event_t event = EmptyEvent();
 		
-		event.type  = NSKeyDown == cocoaEventType ? EV_KeyDown : EV_KeyUp;
+		event.type  = NSKeyDown == [theEvent type] ? EV_KeyDown : EV_KeyUp;
 		event.data1 = KEYCODE_TO_DIK[ keyCode ];
 		
 		if ( 0 != event.data1 )
@@ -487,8 +480,8 @@ static void ProcessKeyboardEvent( NSEvent* theEvent )
 
 static void NSEventToGameMousePosition( NSEvent* inEvent, event_t* outEvent )
 {
-	NSWindow* window = [inEvent window];
-	NSView*     view = [window contentView];
+	const NSWindow* window = [inEvent window];
+	const NSView*     view = [window contentView];
 	
 	const NSPoint screenPos = [NSEvent mouseLocation];
 	const NSPoint windowPos = [window convertScreenToBase:screenPos];
@@ -503,7 +496,6 @@ static void ProcessMouseButtonEvent( NSEvent* theEvent )
 	event_t event = EmptyEvent();
 	
 	const NSEventType cocoaEventType = [theEvent type];
-	const NSInteger cocoaMouseButton = [theEvent buttonNumber];
 	
 	if ( GUICapture )
 	{
@@ -540,7 +532,7 @@ static void ProcessMouseButtonEvent( NSEvent* theEvent )
 				break;
 		}
 		
-		event.data1 = std::min( KEY_MOUSE1 + cocoaMouseButton, KEY_MOUSE8 );
+		event.data1 = std::min( KEY_MOUSE1 + [theEvent buttonNumber], KEY_MOUSE8 );
 		
 		D_PostEvent( &event );
 	}
@@ -551,7 +543,7 @@ static void ProcessMouseMoveInMenu( NSEvent* theEvent )
 {
 	event_t event = EmptyEvent();
 	
-	event.type = EV_GUI_Event;
+	event.type    = EV_GUI_Event;
 	event.subtype = EV_GUI_MouseMove;
 	
 	NSEventToGameMousePosition( theEvent, &event );
