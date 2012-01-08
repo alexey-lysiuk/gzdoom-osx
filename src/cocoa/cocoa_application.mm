@@ -321,6 +321,14 @@ static uint8_t ModifierToDIK( const uint32_t modifier )
 	return 0;
 }
 
+static SWORD ModifierFlagsToGUIKeyModifiers( NSEvent* theEvent )
+{
+	const SWORD modifiers( [theEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask );
+	return ( ( modifiers & NSShiftKeyMask )     ? GKM_SHIFT : 0 )
+		 | ( ( modifiers & NSControlKeyMask )   ? GKM_CTRL  : 0 )
+		 | ( ( modifiers & NSAlternateKeyMask ) ? GKM_ALT   : 0 );
+}
+
 static void ProcessKeyboardEvent( NSEvent* theEvent )
 {
 	event_t event;
@@ -367,9 +375,7 @@ static void ProcessKeyboardEvent( NSEvent* theEvent )
 		event.subtype = NSKeyDown == cocoaEventType ? EV_GUI_KeyDown : EV_GUI_KeyUp;
 		
 		event.data2 = character & 0xFF;
-		event.data3 = ( ( modifiers & NSShiftKeyMask )     ? GKM_SHIFT : 0 ) |
-					  ( ( modifiers & NSControlKeyMask )   ? GKM_CTRL  : 0 ) |
-					  ( ( modifiers & NSAlternateKeyMask ) ? GKM_ALT   : 0 );
+		event.data3 = ModifierFlagsToGUIKeyModifiers( theEvent );
 		
 		if ( EV_GUI_KeyDown == event.subtype && [theEvent isARepeat] )
 		{
@@ -516,6 +522,11 @@ static void ProcessMouseMoveInMenu( NSEvent* theEvent )
 
 static void ProcessMouseMoveInGame( NSEvent* theEvent )
 {
+	if ( !use_mouse )
+	{
+		return;
+	}	
+	
 	// TODO: remove this magic!
 	
 	if ( s_skipMouseMoves > 0 )
@@ -566,12 +577,7 @@ static void ProcessMouseMoveInGame( NSEvent* theEvent )
 }
 
 static void ProcessMouseMoveEvent( NSEvent* theEvent )
-{
-	if ( !use_mouse )
-	{
-		return;
-	}
-	
+{	
 	if ( GUICapture )
 	{
 		ProcessMouseMoveInMenu( theEvent );
@@ -580,6 +586,36 @@ static void ProcessMouseMoveEvent( NSEvent* theEvent )
 	{
 		ProcessMouseMoveInGame( theEvent );
 	}
+}
+
+
+static void ProcessMouseWheelEvent( NSEvent* theEvent )
+{
+	const CGFloat delta    = [theEvent deltaY];
+	const bool isZeroDelta = fabs( delta ) < 1.0E-5;
+
+	if ( isZeroDelta && GUICapture )
+	{
+		return;
+	}
+	
+	event_t event;
+	memset( &event, 0, sizeof( event ) );
+	
+	if ( GUICapture )
+	{
+		event.type    = EV_GUI_Event;
+		event.subtype = delta > 0.0f ? EV_GUI_WheelUp : EV_GUI_WheelDown;
+		event.data3   = delta;
+		event.data3   = ModifierFlagsToGUIKeyModifiers( theEvent );
+	}
+	else
+	{
+		event.type  = isZeroDelta  ? EV_KeyUp     : EV_KeyDown;
+		event.data1 = delta > 0.0f ? KEY_MWHEELUP : KEY_MWHEELDOWN;
+	}
+	
+	D_PostEvent( &event );
 }
 
 
@@ -734,6 +770,10 @@ static ApplicationDelegate* s_applicationDelegate;
 			case NSOtherMouseDragged:
 				ProcessMouseButtonEvent( event );
 				ProcessMouseMoveEvent( event );
+				break;
+				
+			case NSScrollWheel:
+				ProcessMouseWheelEvent( event );
 				break;
 				
 			case NSKeyDown:
