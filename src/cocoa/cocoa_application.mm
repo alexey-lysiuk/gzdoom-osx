@@ -318,6 +318,16 @@ static const uint8_t KEYCODE_TO_ASCII[ TABLE_SIZE ] =
 };
 
 
+inline event_t EmptyEvent()
+{
+	event_t result;
+	
+	memset( &result, 0, sizeof( result ) );
+	
+	return result;
+}
+
+
 static uint8_t ModifierToDIK( const uint32_t modifier )
 {
 	switch ( modifier )
@@ -340,34 +350,110 @@ static SWORD ModifierFlagsToGUIKeyModifiers( NSEvent* theEvent )
 		 | ( ( modifiers & NSAlternateKeyMask ) ? GKM_ALT   : 0 );
 }
 
-static void ProcessKeyboardEvent( NSEvent* theEvent )
+static void ProcessKeyboardFlagsEvent( NSEvent* theEvent )
 {
-	event_t event;
-	memset( &event, 0, sizeof( event ) );
+	const  uint32_t      modifiers = [theEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask;
+	static uint32_t   oldModifiers = 0;
+	const  uint32_t deltaModifiers = modifiers ^ oldModifiers;
 	
-	const NSEventType cocoaEventType = [theEvent type];
-	const uint32_t    modifiers      = [theEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask;
-	
-	if ( NSFlagsChanged == cocoaEventType )
+	if ( 0 == deltaModifiers )
 	{
-		// TODO: add support simultaneous changes of several modifiers
-		
-		static uint32_t   oldModifiers = 0;
-		const  uint32_t deltaModifiers = modifiers ^ oldModifiers;
-		
-		if ( 0 != deltaModifiers )
-		{
-			event.type  = modifiers > oldModifiers ? EV_KeyDown : EV_KeyUp;
-			event.data1 = ModifierToDIK( deltaModifiers );
-			
-			D_PostEvent( &event );
-			
-			oldModifiers = modifiers;
-		}
-		
 		return;
 	}
 	
+	event_t event = EmptyEvent();
+	
+	event.type  = modifiers > oldModifiers ? EV_KeyDown : EV_KeyUp;
+	event.data1 = ModifierToDIK( deltaModifiers );
+
+	// Caps Lock will generate one per state change not per actual key press
+	// So treat any event as key down
+	
+	if ( DIK_CAPITAL == event.data1 )
+	{
+		event.type = EV_KeyDown;
+	}
+	
+	D_PostEvent( &event );
+	
+	oldModifiers = modifiers;
+}
+
+static void ProcessKeyboardEventInMenu( NSEvent* theEvent )
+{
+	const NSEventType cocoaEventType = [theEvent type];
+	
+	NSString* characters = [theEvent characters];
+	const unichar character = [characters length] > 0
+		? [characters characterAtIndex:0]
+		: '\0';
+
+	event_t event = EmptyEvent();
+	
+	event.type    = EV_GUI_Event;
+	event.subtype = NSKeyDown == cocoaEventType ? EV_GUI_KeyDown : EV_GUI_KeyUp;
+	event.data2   = character & 0xFF;
+	event.data3   = ModifierFlagsToGUIKeyModifiers( theEvent );
+	
+	if ( EV_GUI_KeyDown == event.subtype && [theEvent isARepeat] )
+	{
+		event.subtype = EV_GUI_KeyRepeat;
+	}
+	
+	const unsigned short keyCode = [theEvent keyCode];
+	
+	switch ( keyCode )
+	{
+		case kVK_Return:        event.data1 = GK_RETURN;    break;
+		case kVK_PageUp:        event.data1 = GK_PGUP;      break;
+		case kVK_PageDown:      event.data1 = GK_PGDN;      break;
+		case kVK_End:           event.data1 = GK_END;       break;
+		case kVK_Home:          event.data1 = GK_HOME;      break;
+		case kVK_LeftArrow:     event.data1 = GK_LEFT;      break;
+		case kVK_RightArrow:    event.data1 = GK_RIGHT;     break;
+		case kVK_UpArrow:       event.data1 = GK_UP;        break;
+		case kVK_DownArrow:     event.data1 = GK_DOWN;      break;
+		case kVK_Delete:        event.data1 = GK_BACKSPACE; break;
+		case kVK_ForwardDelete: event.data1 = GK_DEL;       break;
+		case kVK_Escape:        event.data1 = GK_ESCAPE;    break;
+		case kVK_F1:            event.data1 = GK_F1;        break;
+		case kVK_F2:            event.data1 = GK_F2;        break;
+		case kVK_F3:            event.data1 = GK_F3;        break;
+		case kVK_F4:            event.data1 = GK_F4;        break;
+		case kVK_F5:            event.data1 = GK_F5;        break;
+		case kVK_F6:            event.data1 = GK_F6;        break;
+		case kVK_F7:            event.data1 = GK_F7;        break;
+		case kVK_F8:            event.data1 = GK_F8;        break;
+		case kVK_F9:            event.data1 = GK_F9;        break;
+		case kVK_F10:           event.data1 = GK_F10;       break;
+		case kVK_F11:           event.data1 = GK_F11;       break;
+		case kVK_F12:           event.data1 = GK_F12;       break;
+		default:
+			event.data1 = KEYCODE_TO_ASCII[ keyCode ];
+			break;
+	}
+	
+	if ( event.data1 < 128 )
+	{
+		event.data1 = toupper( event.data1 );
+		
+		D_PostEvent( &event );
+	}
+	
+	if ( !iscntrl( event.data2 ) && EV_GUI_KeyUp != event.subtype )
+	{
+		const uint32_t modifiers = [theEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask;
+		
+		event.subtype = EV_GUI_Char;
+		event.data1   = event.data2;
+		event.data2   = modifiers & NSAlternateKeyMask;
+		
+		D_PostEvent( &event );
+	}	
+}
+
+static void ProcessKeyboardEvent( NSEvent* theEvent )
+{
 	const unsigned short keyCode = [theEvent keyCode];
 	if ( keyCode >= TABLE_SIZE )
 	{
@@ -377,71 +463,15 @@ static void ProcessKeyboardEvent( NSEvent* theEvent )
 		
 	if ( GUICapture )
 	{
-		NSString* characters = [theEvent charactersIgnoringModifiers];
-		const unichar character = [characters length] > 0
-			? [characters characterAtIndex:0]
-			: '\0';
-		
-		event.type = EV_GUI_Event;
-		event.subtype = NSKeyDown == cocoaEventType ? EV_GUI_KeyDown : EV_GUI_KeyUp;
-		
-		event.data2 = character & 0xFF;
-		event.data3 = ModifierFlagsToGUIKeyModifiers( theEvent );
-		
-		if ( EV_GUI_KeyDown == event.subtype && [theEvent isARepeat] )
-		{
-			event.subtype = EV_GUI_KeyRepeat;
-		}
-
-		switch ( keyCode )
-		{
-			case kVK_Return:        event.data1 = GK_RETURN;    break;
-			case kVK_PageUp:        event.data1 = GK_PGUP;      break;
-			case kVK_PageDown:      event.data1 = GK_PGDN;      break;
-			case kVK_End:           event.data1 = GK_END;       break;
-			case kVK_Home:          event.data1 = GK_HOME;      break;
-			case kVK_LeftArrow:     event.data1 = GK_LEFT;      break;
-			case kVK_RightArrow:    event.data1 = GK_RIGHT;     break;
-			case kVK_UpArrow:       event.data1 = GK_UP;        break;
-			case kVK_DownArrow:     event.data1 = GK_DOWN;      break;
-			case kVK_Delete:        event.data1 = GK_BACKSPACE; break;
-			case kVK_ForwardDelete: event.data1 = GK_DEL;       break;
-			case kVK_Escape:        event.data1 = GK_ESCAPE;    break;
-			case kVK_F1:            event.data1 = GK_F1;        break;
-			case kVK_F2:            event.data1 = GK_F2;        break;
-			case kVK_F3:            event.data1 = GK_F3;        break;
-			case kVK_F4:            event.data1 = GK_F4;        break;
-			case kVK_F5:            event.data1 = GK_F5;        break;
-			case kVK_F6:            event.data1 = GK_F6;        break;
-			case kVK_F7:            event.data1 = GK_F7;        break;
-			case kVK_F8:            event.data1 = GK_F8;        break;
-			case kVK_F9:            event.data1 = GK_F9;        break;
-			case kVK_F10:           event.data1 = GK_F10;       break;
-			case kVK_F11:           event.data1 = GK_F11;       break;
-			case kVK_F12:           event.data1 = GK_F12;       break;
-			default:
-				event.data1 = KEYCODE_TO_ASCII[ keyCode ];
-				break;
-		}
-		
-		if ( event.data1 < 128 )
-		{
-			event.data1 = toupper( event.data1 );
-			
-			D_PostEvent( &event );
-		}
-		
-		if ( !iscntrl( event.data2 ) && EV_GUI_KeyUp != event.subtype )
-		{
-			event.subtype = EV_GUI_Char;
-			event.data1 = event.data2;
-			event.data2 = modifiers & NSAlternateKeyMask;
-			
-			D_PostEvent( &event );
-		}
+		ProcessKeyboardEventInMenu( theEvent );
 	}
 	else
 	{
+		const NSEventType cocoaEventType = [theEvent type];
+		const uint32_t    modifiers      = [theEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask;
+		
+		event_t event = EmptyEvent();
+		
 		event.type  = NSKeyDown == cocoaEventType ? EV_KeyDown : EV_KeyUp;
 		event.data1 = KEYCODE_TO_DIK[ keyCode ];
 		
@@ -470,8 +500,7 @@ static void NSEventToGameMousePosition( NSEvent* inEvent, event_t* outEvent )
 
 static void ProcessMouseButtonEvent( NSEvent* theEvent )
 {
-	event_t event;
-	memset( &event, 0, sizeof( event ) );
+	event_t event = EmptyEvent();
 	
 	const NSEventType cocoaEventType = [theEvent type];
 	const NSInteger cocoaMouseButton = [theEvent buttonNumber];
@@ -520,8 +549,7 @@ static void ProcessMouseButtonEvent( NSEvent* theEvent )
 
 static void ProcessMouseMoveInMenu( NSEvent* theEvent )
 {
-	event_t event;
-	memset( &event, 0, sizeof( event ) );
+	event_t event = EmptyEvent();
 	
 	event.type = EV_GUI_Event;
 	event.subtype = EV_GUI_MouseMove;
@@ -560,8 +588,7 @@ static void ProcessMouseMoveInGame( NSEvent* theEvent )
 		y *= 2;
 	}	
 	
-	event_t event;
-	memset( &event, 0, sizeof( event ) );
+	event_t event = EmptyEvent();
 	
 	static int lastX = 0, lastY = 0;
 	
@@ -610,8 +637,7 @@ static void ProcessMouseWheelEvent( NSEvent* theEvent )
 		return;
 	}
 	
-	event_t event;
-	memset( &event, 0, sizeof( event ) );
+	event_t event = EmptyEvent();
 	
 	if ( GUICapture )
 	{
@@ -798,8 +824,11 @@ static ApplicationDelegate* s_applicationDelegate;
 				
 			case NSKeyDown:
 			case NSKeyUp:
-			case NSFlagsChanged:
 				ProcessKeyboardEvent( event );
+				break;
+				
+			case NSFlagsChanged:
+				ProcessKeyboardFlagsEvent( event );
 				break;
 		}
 		
