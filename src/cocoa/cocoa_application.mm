@@ -146,8 +146,9 @@ CUSTOM_CVAR( Int, mouse_capturemode, 1, CVAR_GLOBALCONFIG | CVAR_ARCHIVE )
 
 bool GUICapture;
 
-static bool  s_nativeMouse      = true;
-static float s_pixelScaleFactor = 1.0f;
+static bool  s_nativeMouse       = true;
+static float s_pixelScaleFactorX = 1.0f;
+static float s_pixelScaleFactorY = 1.0f;
 
 // TODO: remove this magic!
 static size_t s_skipMouseMoves;
@@ -487,8 +488,8 @@ static void NSEventToGameMousePosition( NSEvent* inEvent, event_t* outEvent )
 	const NSPoint windowPos = [window convertScreenToBase:screenPos];
 	const NSPoint   viewPos = [view convertPointFromBase:windowPos];
 	
-	outEvent->data1 = static_cast< int >( (                            viewPos.x ) / s_pixelScaleFactor );
-	outEvent->data2 = static_cast< int >( ( [view frame].size.height - viewPos.y ) / s_pixelScaleFactor );
+	outEvent->data1 = static_cast< int >( (                            viewPos.x ) / s_pixelScaleFactorX );
+	outEvent->data2 = static_cast< int >( ( [view frame].size.height - viewPos.y ) / s_pixelScaleFactorY );
 }
 
 static void ProcessMouseButtonEvent( NSEvent* theEvent )
@@ -903,7 +904,8 @@ namespace CocoaApplication
 			
 			const NSRect displayRect = [[window screen] frame];
 			
-			s_pixelScaleFactor = displayRect.size.width / static_cast< float >( width );
+			s_pixelScaleFactorX = displayRect.size.width  / static_cast< float >( width  );
+			s_pixelScaleFactorY = displayRect.size.height / static_cast< float >( height );
 			
 			[window setLevel:NSMainMenuWindowLevel + 1];
 			[window setStyleMask:NSBorderlessWindowMask];
@@ -915,7 +917,8 @@ namespace CocoaApplication
 		{
 			CGLDisable( context, kCGLCESurfaceBackingSize );
 			
-			s_pixelScaleFactor = 1.0f;
+			s_pixelScaleFactorX = 1.0f;
+			s_pixelScaleFactorY = 1.0f;
 			
 			[window setLevel:NSNormalWindowLevel];
 			[window setStyleMask:NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask];
