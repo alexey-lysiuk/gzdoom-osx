@@ -648,6 +648,8 @@ static void ProcessMouseWheelEvent( NSEvent* theEvent )
 - (void)applicationDidBecomeActive:(NSNotification*)aNotification;
 - (void)applicationWillResignActive:(NSNotification*)aNotification;
 
+- (void)applicationWillTerminate:(NSNotification *)aNotification;
+
 - (FullscreenWindow*)window;
 
 - (void)processEvents:(NSTimer*)timer;
@@ -737,6 +739,13 @@ static ApplicationDelegate* s_applicationDelegate;
 - (void)applicationWillResignActive:(NSNotification*)aNotification
 {
 	S_SetSoundPaused(0);
+}
+
+
+- (void)applicationWillTerminate:(NSNotification *)aNotification
+{
+	// Hide window as nothing will be rendered at this point
+	[m_window orderOut:nil];
 }
 
 
