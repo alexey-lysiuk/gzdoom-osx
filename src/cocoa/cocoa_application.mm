@@ -824,6 +824,11 @@ namespace CocoaApplication
 		
 		[NSApp finishLaunching];
 		
+		// When starting from command line with real executable path, e.g. GZDoom.app/Contents/MacOS/GZDoom
+		// application remains deactivated for an unknown reason.
+		// The following call resolves this issue
+		[NSApp activateIgnoringOtherApps:YES];
+		
 		return true;		
 	}
 	
