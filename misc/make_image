@@ -8,7 +8,7 @@ rm -r ${DEPLOY_IMAGE_DIR} 2>/dev/null
 mkdir ${DEPLOY_IMAGE_DIR}
 
 echo "Copying game..."
-cp -R build/Release/GZDoom.app ${DEPLOY_IMAGE_DIR}
+cp -R build/Release_SDL/GZDoom.app ${DEPLOY_IMAGE_DIR}
 
 echo "Stripping executable..."
 strip ${DEPLOY_IMAGE_DIR}/GZDoom.app/Contents/MacOS/GZDoom
