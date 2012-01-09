@@ -2,10 +2,6 @@
 "POLYMOST" code written by Ken Silverman
 **************************************************************************************************/
 
-#ifndef SRC_R_POLYMOST_H_INCLUDED
-#define SRC_R_POLYMOST_H_INCLUDED
-
-
 #include "c_cvars.h"
 
 typedef void (*pmostcallbacktype)(double *dpx, double *dpy, int n, void *userdata);
@@ -57,6 +53,3 @@ private:
 
 extern void drawpolymosttest();
 struct event_t; void Polymost_Responder (event_t *ev);
-
-
-#endif // SRC_R_POLYMOST_H_INCLUDED

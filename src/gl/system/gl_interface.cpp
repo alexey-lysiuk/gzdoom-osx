@@ -1079,6 +1079,6 @@ void APIENTRY GetContext(RenderContext & gl)
 
 }
 
-#undef gl
+
 
 //} // extern "C"

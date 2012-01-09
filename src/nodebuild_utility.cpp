@@ -761,5 +761,3 @@ int FNodeBuilder::FVertexMapSimple::InsertVertex (FNodeBuilder::FPrivVert &vert)
 	vert.segs2 = DWORD_MAX;
 	return (int)MyBuilder.Vertices.Push (vert);
 }
-
-#undef D

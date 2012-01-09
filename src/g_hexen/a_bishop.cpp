@@ -10,7 +10,7 @@
 */
 
 static FRandom pr_boom ("BishopBoom");
-static FRandom pr_atkb ("BishopAttack");
+static FRandom pr_atk ("BishopAttack");
 static FRandom pr_decide ("BishopDecide");
 static FRandom pr_doblur ("BishopDoBlur");
 static FRandom pr_sblur ("BishopSpawnBlur");
@@ -31,12 +31,12 @@ DEFINE_ACTION_FUNCTION(AActor, A_BishopAttack)
 	S_Sound (self, CHAN_BODY, self->AttackSound, 1, ATTN_NORM);
 	if (self->CheckMeleeRange())
 	{
-		int damage = pr_atkb.HitDice (4);
+		int damage = pr_atk.HitDice (4);
 		P_DamageMobj (self->target, self, self, damage, NAME_Melee);
 		P_TraceBleed (damage, self->target, self);
 		return;
 	}
-	self->special1 = (pr_atkb() & 3) + 5;
+	self->special1 = (pr_atk() & 3) + 5;
 }
 
 //============================================================================

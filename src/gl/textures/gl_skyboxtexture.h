@@ -1,7 +1,4 @@
 
-#ifndef SRC_GL_TEXTURES_GL_SKYBOXTEXTURE_H_INCLUDED
-#define SRC_GL_TEXTURES_GL_SKYBOXTEXTURE_H_INCLUDED
-
 
 //-----------------------------------------------------------------------------
 //
@@ -46,6 +43,3 @@ public:
 		return fliptop;
 	}
 };
-
-
-#endif // SRC_GL_TEXTURES_GL_SKYBOXTEXTURE_H_INCLUDED

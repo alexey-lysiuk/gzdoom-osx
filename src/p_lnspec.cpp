@@ -1878,7 +1878,7 @@ struct FThinkerCollection
 	DThinker *Obj;
 };
 
-static TArray<FThinkerCollection> ThinkerCollection;
+static TArray<FThinkerCollection> Collection;
 
 void AdjustPusher (int tag, int magnitude, int angle, DPusher::EPusher type)
 {
@@ -1892,12 +1892,12 @@ void AdjustPusher (int tag, int magnitude, int angle, DPusher::EPusher type)
 			if ((collect.RefNum = ((DPusher *)collect.Obj)->CheckForSectorMatch (type, tag)) >= 0)
 			{
 				((DPusher *)collect.Obj)->ChangeValues (magnitude, angle);
-				ThinkerCollection.Push (collect);
+				Collection.Push (collect);
 			}
 		}
 	}
 
-	size_t numcollected = ThinkerCollection.Size ();
+	size_t numcollected = Collection.Size ();
 	int secnum = -1;
 
 	// Now create pushers for any sectors that don't already have them.
@@ -1906,7 +1906,7 @@ void AdjustPusher (int tag, int magnitude, int angle, DPusher::EPusher type)
 		unsigned int i;
 		for (i = 0; i < numcollected; i++)
 		{
-			if (ThinkerCollection[i].RefNum == sectors[secnum].sectornum)
+			if (Collection[i].RefNum == sectors[secnum].sectornum)
 				break;
 		}
 		if (i == numcollected)
@@ -1914,7 +1914,7 @@ void AdjustPusher (int tag, int magnitude, int angle, DPusher::EPusher type)
 			new DPusher (type, NULL, magnitude, angle, NULL, secnum);
 		}
 	}
-	ThinkerCollection.Clear ();
+	Collection.Clear ();
 }
 
 FUNC(LS_Sector_SetWind)
@@ -2015,12 +2015,12 @@ static void SetWallScroller (int id, int sidechoice, fixed_t dx, fixed_t dy, int
 					Where == ((DScroller *)collect.Obj)->GetScrollParts())
 				{
 					((DScroller *)collect.Obj)->SetRate (dx, dy);
-					ThinkerCollection.Push (collect);
+					Collection.Push (collect);
 				}
 			}
 		}
 
-		size_t numcollected = ThinkerCollection.Size ();
+		size_t numcollected = Collection.Size ();
 		int linenum = -1;
 
 		// Now create scrollers for any walls that don't already have them.
@@ -2032,7 +2032,7 @@ static void SetWallScroller (int id, int sidechoice, fixed_t dx, fixed_t dy, int
 				unsigned int i;
 				for (i = 0; i < numcollected; i++)
 				{
-					if (ThinkerCollection[i].RefNum == sidenum)
+					if (Collection[i].RefNum == sidenum)
 						break;
 				}
 				if (i == numcollected)
@@ -2041,7 +2041,7 @@ static void SetWallScroller (int id, int sidechoice, fixed_t dx, fixed_t dy, int
 				}
 			}
 		}
-		ThinkerCollection.Clear ();
+		Collection.Clear ();
 	}
 }
 

@@ -1,8 +1,4 @@
 
-#ifndef SRC_G_SHARED_A_WEAPONPIECE_H_INCLUDED
-#define SRC_G_SHARED_A_WEAPONPIECE_H_INCLUDED
-
-
 class AWeaponPiece : public AInventory
 {
 	DECLARE_CLASS (AWeaponPiece, AInventory)
@@ -34,6 +30,3 @@ public:
 
 	void Serialize (FArchive &arc);
 };
-
-
-#endif // SRC_G_SHARED_A_WEAPONPIECE_H_INCLUDED

@@ -375,5 +375,3 @@ void FSharedStringArena::FreeAll()
 	memset(Buckets, 0, sizeof(Buckets));
 	TopBlock = NULL;
 }
-
-#undef BLOCK_SIZE

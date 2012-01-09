@@ -145,5 +145,3 @@ DEFINE_ACTION_FUNCTION(AActor, A_Tracer2)
 		}
 	}
 }
-
-#undef TRACEANGLE

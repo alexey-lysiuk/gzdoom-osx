@@ -11,7 +11,7 @@
 #include "g_level.h"
 */
 
-static FRandom pr_ilwwd ("WhirlwindDamage");
+static FRandom pr_foo ("WhirlwindDamage");
 static FRandom pr_atk ("LichAttack");
 static FRandom pr_seek ("WhirlwindSeek");
 
@@ -28,12 +28,12 @@ int AWhirlwind::DoSpecialDamage (AActor *target, int damage)
 {
 	int randVal;
 
-	target->angle += pr_ilwwd.Random2() << 20;
-	target->velx += pr_ilwwd.Random2() << 10;
-	target->vely += pr_ilwwd.Random2() << 10;
+	target->angle += pr_foo.Random2() << 20;
+	target->velx += pr_foo.Random2() << 10;
+	target->vely += pr_foo.Random2() << 10;
 	if ((level.time & 16) && !(target->flags2 & MF2_BOSS))
 	{
-		randVal = pr_ilwwd();
+		randVal = pr_foo();
 		if (randVal > 160)
 		{
 			randVal = 160;

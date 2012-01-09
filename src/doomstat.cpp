@@ -39,11 +39,7 @@ FStringTable	GStrings;
 EGameSpeed		GameSpeed = SPEED_Normal;
 
 // Show developer messages if true.
-#ifdef _DEBUG
-CVAR (Bool, developer, true, 0)
-#else // !_DEBUG
 CVAR (Bool, developer, false, 0)
-#endif // _DEBUG
 
 // [RH] Feature control cvars
 CVAR (Bool, var_friction, true, CVAR_SERVERINFO);

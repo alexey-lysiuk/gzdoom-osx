@@ -101,7 +101,6 @@ private:
 
 #endif // __APPLE__
 
-
 extern glcycle_t RenderWall,SetupWall,ClipWall,SplitWall;
 extern glcycle_t RenderFlat,SetupFlat;
 extern glcycle_t RenderSprite,SetupSprite;

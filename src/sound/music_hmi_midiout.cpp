@@ -1023,5 +1023,3 @@ HMISong::HMISong(const HMISong *original, const char *filename, EMidiDevice type
 		newtrack->MaxTrackP = oldtrack->MaxTrackP;
 	}
 }
-
-#undef CHECK_FINISHED

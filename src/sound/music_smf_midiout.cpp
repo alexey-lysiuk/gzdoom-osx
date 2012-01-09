@@ -824,5 +824,3 @@ MIDISong2::MIDISong2(const MIDISong2 *original, const char *filename, EMidiDevic
 		newtrack->MaxTrackP = oldtrack->MaxTrackP;
 	}
 }
-
-#undef CHECK_FINISHED
