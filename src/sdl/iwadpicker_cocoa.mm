@@ -53,7 +53,10 @@ enum
 static const char* const tableHeaders[NUM_COLUMNS] = { "IWAD", "Game" };
 
 // Class to convert the IWAD data into a form that Cocoa can use.
-@interface IWADTableData : NSObject// <NSTableViewDataSource>
+@interface IWADTableData : NSObject 
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+<NSTableViewDataSource>
+#endif
 {
 	NSMutableArray *data;
 }
