@@ -253,6 +253,13 @@ static void unprotect_rtext()
 void I_StartupJoysticks();
 void I_ShutdownJoysticks();
 
+#ifdef  COCOA_NO_SDL
+#	undef  main
+#	define VERSION_STRING "Native Cocoa version"
+#else   // !COCOA_NO_SDL
+#	define VERSION_STRING "SDL version"
+#endif  // COCOA_NO_SDL
+
 int main (int argc, char **argv)
 {
 #if !defined (__APPLE__)
@@ -262,7 +269,7 @@ int main (int argc, char **argv)
 	}
 #endif // !__APPLE__
 
-	printf(GAMENAME" v%s - SVN revision %s - SDL version\nCompiled on %s\n",
+	printf(GAMENAME" v%s - SVN revision %s - " VERSION_STRING "\nCompiled on %s\n",
 		DOTVERSIONSTR_NOREV,SVN_REVISION_STRING,__DATE__);
 
 	seteuid (getuid ());

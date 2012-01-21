@@ -64,6 +64,7 @@
 		497C93EF13C5A6F800E6B4A8 /* sprites.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 497C93E713C5A6F800E6B4A8 /* sprites.cpp */; };
 		497C93F013C5A6F800E6B4A8 /* voxels.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 497C93E913C5A6F800E6B4A8 /* voxels.cpp */; };
 		49E9287913978BF600CCEBBC /* doom.icns in Resources */ = {isa = PBXBuildFile; fileRef = 49E9287713978BF600CCEBBC /* doom.icns */; };
+		8A3AC15B14BE294E000D402B /* GZDoom.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A3AC15A14BE294E000D402B /* GZDoom.xib */; };
 		8A4D6BC51494F7DC003DC1CB /* blockmapbuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A4D6BA31494F7DC003DC1CB /* blockmapbuilder.cpp */; };
 		8A4D6BC81494F7DC003DC1CB /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A4D6BA91494F7DC003DC1CB /* main.cpp */; };
 		8A4D6BC91494F7DC003DC1CB /* nodebuild.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A4D6BAA1494F7DC003DC1CB /* nodebuild.cpp */; };
@@ -94,6 +95,7 @@
 		8A74F451139252F9001F54B0 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F450139252F9001F54B0 /* AudioUnit.framework */; };
 		8A74F4671392532C001F54B0 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F4661392532C001F54B0 /* Carbon.framework */; };
 		8A7C81C613BF3C0B000B654E /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3E139126C00095D9A0 /* SDLMain.m */; };
+		8A7FF48014BB2B220069731E /* cocoa_no_sdl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A7FF47F14BB2B220069731E /* cocoa_no_sdl.mm */; };
 		8A8D68B713C84344001D368F /* r_swrenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D68B313C84344001D368F /* r_swrenderer.cpp */; };
 		8A8D68B813C84344001D368F /* r_utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D68B513C84344001D368F /* r_utility.cpp */; };
 		8A938D1113B6039F002627DE /* actorptrselect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A938D0F13B6039F002627DE /* actorptrselect.cpp */; };
@@ -1278,6 +1280,7 @@
 		497C93EA13C5A6F800E6B4A8 /* voxels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = voxels.h; sourceTree = "<group>"; };
 		497C941213C5AA2500E6B4A8 /* errors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = errors.h; sourceTree = "<group>"; };
 		49E9287713978BF600CCEBBC /* doom.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = doom.icns; sourceTree = "<group>"; };
+		8A3AC15A14BE294E000D402B /* GZDoom.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GZDoom.xib; sourceTree = "<group>"; };
 		8A44602813BF0306007FA8E1 /* gzdoom.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = gzdoom.xcconfig; sourceTree = "<group>"; };
 		8A4D6B9E1494F7BE003DC1CB /* zdbsp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = zdbsp; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A4D6BA31494F7DC003DC1CB /* blockmapbuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blockmapbuilder.cpp; sourceTree = "<group>"; };
@@ -1335,6 +1338,7 @@
 		8A74F450139252F9001F54B0 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		8A74F4661392532C001F54B0 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		8A7C819913BF38FE000B654E /* svnrevision_gz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = svnrevision_gz.h; sourceTree = "<group>"; };
+		8A7FF47F14BB2B220069731E /* cocoa_no_sdl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = cocoa_no_sdl.mm; sourceTree = "<group>"; };
 		8A8D68B213C84344001D368F /* r_renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = r_renderer.h; sourceTree = "<group>"; };
 		8A8D68B313C84344001D368F /* r_swrenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = r_swrenderer.cpp; sourceTree = "<group>"; };
 		8A8D68B413C84344001D368F /* r_swrenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = r_swrenderer.h; sourceTree = "<group>"; };
@@ -2544,6 +2548,7 @@
 				49E9287713978BF600CCEBBC /* doom.icns */,
 				8D1107310486CEB800E47090 /* GZDoom-Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
+				8A3AC15A14BE294E000D402B /* GZDoom.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -3942,6 +3947,7 @@
 		8AF27F2C139126C00095D9A0 /* sdl */ = {
 			isa = PBXGroup;
 			children = (
+				8A7FF47F14BB2B220069731E /* cocoa_no_sdl.mm */,
 				8AF27F2D139126C00095D9A0 /* crashcatcher.c */,
 				8AF27F2E139126C00095D9A0 /* critsec.h */,
 				8AF27F2F139126C00095D9A0 /* dikeys.h */,
@@ -4464,6 +4470,7 @@
 				8A9F530014BB0F2900F3369B /* InfoPlist.strings in Resources */,
 				8A9F530114BB0F2900F3369B /* doom.icns in Resources */,
 				8A9F530214BB0F2900F3369B /* Credits.html in Resources */,
+				8A3AC15B14BE294E000D402B /* GZDoom.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4972,6 +4979,7 @@
 				8A9F546C14BB0F2900F3369B /* r_swrenderer.cpp in Sources */,
 				8A9F546D14BB0F2900F3369B /* r_utility.cpp in Sources */,
 				8A9F546E14BB0F2900F3369B /* iwadpicker_cocoa.mm in Sources */,
+				8A7FF48014BB2B220069731E /* cocoa_no_sdl.mm in Sources */,
 				8A9F547014BB0F2900F3369B /* autozend.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5926,6 +5934,7 @@
 				);
 				INFOPLIST_FILE = "GZDoom-Info.plist";
 				PRODUCT_NAME = GZDoom;
+				SDKROOT = macosx10.6;
 			};
 			name = Debug;
 		};
@@ -5941,6 +5950,7 @@
 				);
 				INFOPLIST_FILE = "GZDoom-Info.plist";
 				PRODUCT_NAME = GZDoom;
+				SDKROOT = macosx10.6;
 			};
 			name = Release;
 		};
@@ -6085,6 +6095,10 @@
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)_SDL";
 				CONFIGURATION_TEMP_DIR = "$(PROJECT_TEMP_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)_SDL";
 				INFOPLIST_FILE = "GZDoom-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					thirdparty/SDL/lib,
+				);
 				PRODUCT_NAME = GZDoom;
 			};
 			name = Debug;
@@ -6096,6 +6110,10 @@
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)_SDL";
 				CONFIGURATION_TEMP_DIR = "$(PROJECT_TEMP_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)_SDL";
 				INFOPLIST_FILE = "GZDoom-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					thirdparty/SDL/lib,
+				);
 				PRODUCT_NAME = GZDoom;
 			};
 			name = Release;

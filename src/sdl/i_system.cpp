@@ -925,6 +925,10 @@ SDL_Surface *cursorSurface = NULL;
 SDL_Rect cursorBlit = {0, 0, 32, 32};
 bool I_SetCursor(FTexture *cursorpic)
 {
+#ifdef COCOA_NO_SDL
+	return false;
+#else // !COCOA_NO_SDL
+	
 	if (cursorpic != NULL && cursorpic->UseType != FTexture::TEX_Null)
 	{
 		// Must be no larger than 32x32.
@@ -979,6 +983,8 @@ bool I_SetCursor(FTexture *cursorpic)
 #endif
 	}
 	return true;
+	
+#endif // COCOA_NO_SDL
 }
 
 #ifdef __APPLE__
