@@ -33,6 +33,7 @@
  **
  */
 
+#include "cmdlib.h"
 #include "d_main.h"
 #include "version.h"
 #include "c_cvars.h"
@@ -269,9 +270,13 @@ static const char* const tableHeaders[NUM_COLUMNS] = { "IWAD", "Game" };
 @end
 
 
+EXTERN_CVAR( String, defaultiwad )
+
 static void RestartWithParameters( const char* iwadPath, NSString* parameters )
 {
 	assert( nil != parameters );
+	
+	defaultiwad = ExtractFileBase( iwadPath );
 	
 	M_SaveDefaults( NULL );
 	
