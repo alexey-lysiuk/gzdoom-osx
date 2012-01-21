@@ -36,7 +36,18 @@ CG_EXTERN size_t CGDisplayBytesPerRow(CGDirectDisplayID display)
     __IPHONE_NA, __IPHONE_NA);
 #endif
 
-#if (MAC_OS_X_VERSION_MAX_ALLOWED < 1060) && !__x86_64__ /* Fixed in Snow Leopard */
+
+static inline BOOL IS_LION_OR_LATER(_THIS)
+{
+    return (system_version >= 0x1070);
+}
+
+static inline BOOL IS_SNOW_LEOPARD_OR_LATER(_THIS)
+{
+    return (system_version >= 0x1060);
+}
+
+#if (MAC_OS_X_VERSION_MAX_ALLOWED < 1060) && !defined(__LP64__)  /* Fixed in Snow Leopard */
 /*
     Add methods to get at private members of NSScreen. 
     Since there is a bug in Apple's screen switching code
@@ -54,12 +65,14 @@ CG_EXTERN size_t CGDisplayBytesPerRow(CGDirectDisplayID display)
     _frame = frame;
 }
 @end
-static inline void QZ_SetFrame(NSScreen *nsscreen, NSRect frame)
+static inline void QZ_SetFrame(_THIS, NSScreen *nsscreen, NSRect frame)
 {
-    [nsscreen setFrame:frame];
+    if (!IS_SNOW_LEOPARD_OR_LATER(this)) {
+        [nsscreen setFrame:frame];
+    }
 }
 #else
-static inline void QZ_SetFrame(NSScreen *nsscreen, NSRect frame)
+static inline void QZ_SetFrame(_THIS, NSScreen *nsscreen, NSRect frame)
 {
 }
 #endif
@@ -124,16 +137,6 @@ VideoBootStrap QZ_bootstrap = {
 #    pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #  endif
 #endif
-
-static inline BOOL IS_LION_OR_LATER(_THIS)
-{
-    return (system_version >= 0x1070);
-}
-
-static inline BOOL IS_SNOW_LEOPARD_OR_LATER(_THIS)
-{
-    return (system_version >= 0x1060);
-}
 
 static void QZ_ReleaseDisplayMode(_THIS, const void *moderef)
 {
@@ -607,7 +610,7 @@ static void QZ_UnsetVideoMode (_THIS, BOOL to_desktop, BOOL save_gl)
                 See comment in QZ_SetVideoFullscreen for why we do this
             */
             screen_rect = NSMakeRect(0,0,device_width,device_height);
-            QZ_SetFrame([ NSScreen mainScreen ], screen_rect);
+            QZ_SetFrame(this, [ NSScreen mainScreen ], screen_rect);
         }
     }
     /* Release window mode resources */
@@ -834,8 +837,15 @@ static SDL_Surface* QZ_SetVideoFullScreen (_THIS, SDL_Surface *current, int widt
 
         /* Apparently Lion checks some version flag set by the linker
            and changes API behavior. Annoying. */
+        if ( isLion ) {
+            [ qz_window setLevel:CGShieldingWindowLevel() ];
+            [ gl_context setView: window_view ];
+            //[ gl_context setFullScreen ];
+            [ gl_context update ];
+        }
+
 #if (MAC_OS_X_VERSION_MIN_REQUIRED < 1070)
-        {
+        if ( !isLion ) {
             CGLError err;
             CGLContextObj ctx;
 
@@ -848,11 +858,6 @@ static SDL_Surface* QZ_SetVideoFullScreen (_THIS, SDL_Surface *current, int widt
                 goto ERR_NO_GL;
             }
         }
-#else
-        [ qz_window setLevel:CGShieldingWindowLevel() ];
-        [ gl_context setView: window_view ];
-        [ gl_context setFullScreen ];
-        [ gl_context update ];
 #endif
 
         [ window_view release ];
@@ -907,7 +912,7 @@ static SDL_Surface* QZ_SetVideoFullScreen (_THIS, SDL_Surface *current, int widt
      *  we can just simply do without it on newer OSes...
      */
     #if (MAC_OS_X_VERSION_MIN_REQUIRED < 1070) && !defined(__LP64__)
-    if ( !IS_LION_OR_LATER(this) ) {
+    if ( !isLion ) {
         /* If we don't hide menu bar, it will get events and interrupt the program */
         HideMenuBar ();
     }
@@ -927,7 +932,7 @@ static SDL_Surface* QZ_SetVideoFullScreen (_THIS, SDL_Surface *current, int widt
         ourselves. This hack should be removed if/when the bug is fixed.
     */
     screen_rect = NSMakeRect(0,0,width,height);
-    QZ_SetFrame([ NSScreen mainScreen ], screen_rect);
+    QZ_SetFrame(this, [ NSScreen mainScreen ], screen_rect);
 
     /* Save the flags to ensure correct tear-down */
     mode_flags = current->flags;
@@ -1149,9 +1154,8 @@ static SDL_Surface* QZ_SetVideoModeInternal (_THIS, SDL_Surface *current,
     }
 
     if (qz_window != nil) {
-        NSGraphicsContext *ctx;
-        ctx = [NSGraphicsContext graphicsContextWithWindow:qz_window];
-        [NSGraphicsContext setCurrentContext:ctx];
+        nsgfx_context = [NSGraphicsContext graphicsContextWithWindow:qz_window];
+        [NSGraphicsContext setCurrentContext:nsgfx_context];
     }
 
     /* Setup the new pixel format */
@@ -1507,8 +1511,12 @@ static void QZ_UpdateRects (_THIS, int numRects, SDL_Rect *rects)
     }
     
     else {
-        CGContextRef cgc = (CGContextRef)
-            [[NSGraphicsContext currentContext] graphicsPort];
+        NSGraphicsContext *ctx = [NSGraphicsContext currentContext];
+        if (ctx != nsgfx_context) { /* uhoh, you might be rendering from another thread... */
+            [NSGraphicsContext setCurrentContext:nsgfx_context];
+            ctx = nsgfx_context;
+        }
+        CGContextRef cgc = (CGContextRef) [ctx graphicsPort];
         QZ_DrawResizeIcon (this);
         CGContextFlush (cg_context);
         CGImageRef image = CGBitmapContextCreateImage (cg_context);
@@ -1653,7 +1661,7 @@ int QZ_SetGammaRamp (_THIS, Uint16 *ramp)
 
 int QZ_GetGammaRamp (_THIS, Uint16 *ramp)
 {
-    const uint32_t tableSize = 255;
+    const uint32_t tableSize = 256;
     CGGammaValue redTable[tableSize];
     CGGammaValue greenTable[tableSize];
     CGGammaValue blueTable[tableSize];

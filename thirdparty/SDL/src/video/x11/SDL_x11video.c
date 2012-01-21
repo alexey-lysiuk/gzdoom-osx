@@ -417,6 +417,22 @@ static void create_aux_windows(_THIS)
 	}
     }
 
+	{
+		pid_t pid = getpid();
+		char hostname[256];
+
+		if (pid > 0 && gethostname(hostname, sizeof(hostname)) > -1) {
+			Atom _NET_WM_PID = XInternAtom(SDL_Display, "_NET_WM_PID", False);
+			Atom WM_CLIENT_MACHINE = XInternAtom(SDL_Display, "WM_CLIENT_MACHINE", False);
+			
+			hostname[sizeof(hostname)-1] = '\0';
+			XChangeProperty(SDL_Display, WMwindow, _NET_WM_PID, XA_CARDINAL, 32,
+					PropModeReplace, (unsigned char *)&pid, 1);
+			XChangeProperty(SDL_Display, WMwindow, WM_CLIENT_MACHINE, XA_STRING, 8,
+					PropModeReplace, (unsigned char *)hostname, SDL_strlen(hostname));
+		}
+	}
+
 	/* Setup the communication with the IM server */
 	/* create_aux_windows may be called several times against the same
 	   Display.  We should reuse the SDL_IM if one has been opened for
