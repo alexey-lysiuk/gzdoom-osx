@@ -1,0 +1,265 @@
+# Yadex game definition file version 4
+#
+#	hexen.ygd
+#	Yadex Game Definitions for Hexen
+#	See doc/ygd.html for the specs.
+#	AYM 1999-02-25
+#
+
+# FIXME lots of things are missing, some are even wrong.
+
+level_format    hexen
+level_name      map01
+picture_format  normal 
+sky_flat        f_sky
+texture_format  normal
+texture_lumps   normal
+
+#
+#	Definition of linedef type groups
+#	Format is : ldtgroup <ldtgroup> <description>
+#
+
+ldtgroup d "Door"
+ldtgroup l "Lift"
+ldtgroup e "Elevator"
+ldtgroup f "Floor"
+ldtgroup c "Ceiling"
+ldtgroup t "Teleport"
+ldtgroup L "Light"
+ldtgroup p "Polyobj"
+ldtgroup P "Pillar"
+ldtgroup q "Quake"
+ldtgroup t "Teleport"
+ldtgroup T "Things"
+ldtgroup s "Stairs"
+ldtgroup a "ACS"
+ldtgroup x "Misc."
+
+#
+#	Definition of linedef types
+#	Format is : ldt <number> <ldtgroup> <shortdesc> <longdesc>
+#	<shortdesc> must not exceed 16 characters.
+#
+
+ldt   0 x "-- Normal"        "--  Normal"
+ldt   1 p "?? Polyobj start" "??  Polyobj_StartLine"
+ldt   2 p "?? Rol polyobj"   "??  Polyobj_RotateLeft"
+ldt   3 p "?? Ror polyobj"   "??  Polyobj_RotateRight"
+ldt   4 p "?? Move poly"     "??  Polyobj_Move"
+ldt   5 p "?? Poly explicit" "??  Polyobj_ExplicitLine"
+ldt   6 p "?? Move8x poly"   "??  Polyobj_MoveTimes8"
+ldt   7 p "?? Polyobj swing" "??  Polyobj_DoorSwing"
+ldt   8 p "?? Polyobj slide" "??  Polyobj_DoorSlide"
+ldt  10 d "?? Close door"    "??  Door_Close"
+ldt  11 d "?? Open door"     "??  Door_Open"
+ldt  12 d "?? Raise door"    "??  Door_Raise"
+ldt  13 d "?? Raise locked"  "??  Door_LockedRaise"
+ldt  20 f "?? Lower floor"   "??  Floor_LowerByValue"
+ldt  21 f "?? Lower floor L" "??  Floor_LowerToLowest"
+ldt  22 f "?? Lower fl nl"   "??  Floor_LowerToNearest"
+ldt  23 f "?? Raise floor"   "??  Floor_RaiseByValue"
+ldt  24 f "?? Raise floor H" "??  Floor_RaiseToHighest"
+ldt  25 f "?? Raise fl nh"   "??  Floor_RaiseToNearest"
+ldt  26 s "?? Stairs down"   "??  Stairs_BuildDown"
+ldt  27 s "?? Stairs up"     "??  Stairs_BuildUp"
+ldt  28 f "?? Raise f crush" "??  Floor_RaiseAndCrush"
+ldt  29 P "?? Build pillar"  "??  Pillar_Build"
+ldt  30 P "?? Open pillar"   "??  Pillar_Open"
+ldt  31 s "?? Stairs dn syn" "??  Stairs_BuildDownSync"
+ldt  32 s "?? Stairs up syn" "??  Stairs_BuildUpSync"
+ldt  35 f "?? Raise8x floor" "??  Floor_RaiseByValueTimes8"
+ldt  36 f "?? Lower8x floor" "??  Floor_LowerByValueTimes8"
+ldt  40 c "?? Lower ceil va" "??  Ceiling_LowerByValue"
+ldt  41 c "?? Raise ceil va" "??  Ceiling_RaiseByValue"
+ldt  42 c "?? Ceil crush 1"  "??  Ceiling_CrushAndRaise"
+ldt  43 c "?? Ceil crush 2"  "??  Ceiling_LowerAndCrush"
+ldt  44 c "?? Stop ceilcrsh" "??  Ceiling_CrushStop"
+ldt  45 c "?? Ceil crush 3"  "??  Ceiling_CrushRaiseAndStay"
+ldt  46 f "?? Stop fl crush" "??  Floor_CrushStop"
+ldt  60 l "?? Raise plat"    "??  Plat_PerpetualRaise"
+ldt  61 l "?? Stop plat"     "??  Plat_Stop"
+ldt  62 l "?? Lower lift"    "??  Plat_DownWaitUpStay"
+ldt  63 l "?? Plat down"     "??  Plat_DownByValue"
+ldt  64 l "?? Raise lift"    "??  Plat_UpWaitDownStay"
+ldt  65 l "?? Plat up"       "??  Plat_UpByValue"
+ldt  66 f "?? Lower F insta" "??  Floor_LowerInstant"
+ldt  67 f "?? Raise F insta" "??  Floor_RaiseInstant"
+ldt  68 f "?? Move8x floor"  "??  Floor_MoveToValueTimes8"
+ldt  69 c "?? Move8x ceilng" "??  Ceiling_MoveToValueTimes8"
+ldt  70 t "?? Teleport"      "??  Teleport"
+ldt  71 t "?? Telept no fog" "??  Teleport_NoFog"
+ldt  72 T "?? Thrush thing"  "??  ThrustThing"
+ldt  73 T "?? Damage thing"  "??  DamageThing"
+ldt  74 x "?? Teleport map"  "??  Teleport_NewMap"
+ldt  75 x "?? Teleport end"  "??  Teleport_EndGame"
+ldt  80 a "?? Execute ACS"   "??  ACS_Execute"
+ldt  81 a "?? Suspend ACS"   "??  ACS_Suspend"
+ldt  82 a "?? Terminate ACS" "??  ACS_Terminate"
+ldt  83 a "?? Lock-exec ACS" "??  ACS_LockedExecute"
+ldt  90 p "?? Rol poly OR"   "??  Polyobj_OR_RotateLeft"
+ldt  91 p "?? Ror poly OR"   "??  Polyobj_OR_RotateRight"
+ldt  92 p "?? Move poly OR"  "??  Polyobj_OR_Move"
+ldt  93 p "?? Mov8x poly OR" "??  Polyobj_OR_MoveTimes8"
+ldt  94 P "?? Crush pillar"  "??  Pillar_BuildAndCrush"
+ldt  95 e "?? Lower fl+ceil" "??  FloorAndCeiling_LowerByValue"
+ldt  96 e "?? Raise fl+ceil" "??  FloorAndCeiling_RaiseByValue"
+ldt 100 x "?? Scroll left"   "??  Scroll_Texture_Left"
+ldt 101 x "?? Scroll right"  "??  Scroll_Texture_Right"
+ldt 102 x "?? Scroll up"     "??  Scroll_Texture_Up"
+ldt 103 x "?? Scroll down"   "??  Scroll_Texture_Down"
+ldt 110 L "?? Raise light"   "??  Light_RaiseByValue"
+ldt 111 L "?? Lower light"   "??  Light_LowerByValue"
+ldt 112 L "?? Set light"     "??  Light_ChangeToValue"
+ldt 113 L "?? Fade light"    "??  Light_Fade"
+ldt 114 L "?? Glow light"    "??  Light_Glow"
+ldt 115 L "?? Flicker light" "??  Light_Flicker"
+ldt 116 L "?? Strobe light"  "??  Light_Strobe"
+ldt 120 q "?? Radius quake"  "??  Radius_Quake"
+ldt 121 x "?? Set line id"   "??  Line_SetIdentification"
+ldt 129 x "?? Use pzzl item" "??  UsePuzzleItem"
+ldt 130 T "?? Activate thng" "??  Thing_Activate"
+ldt 131 T "?? Deact. thing"  "??  Thing_Deactivate"
+ldt 132 T "?? Remove thing"  "??  Thing_Remove"
+ldt 133 T "?? Destroy thing" "??  Thing_Destroy"
+ldt 134 T "?? Projectile th" "??  Thing_Projectile"
+ldt 135 T "?? Spawn thing"   "??  Thing_Spawn"
+ldt 136 T "?? Gravity thing" "??  Thing_ProjectileGravity"
+ldt 137 T "?? Spawn no fog"  "??  Thing_SpawnNoFog"
+ldt 138 q "?? Waggle floor"  "??  Floor_Waggle"
+ldt 140 x "?? Change sound"  "??  Sector_ChangeSound"
+
+#
+#	Definition of sector types
+#	Format is : st <number> <shortdesc> <longdesc>
+#	<shortdesc> must not exceed 14 characters.
+#
+
+st   0 "  Normal"       "Normal"
+st   1 "  Phased light" "light phased"           # FIXME
+st   2 "  Light start"  "lightsequencestart"     # FIXME
+st   3 "  Light specl1" "lightsequencespecial1"  # FIXME
+st   4 "  Light specl2" "lightsequencespecial2"  # FIXME
+st   9 "  Secret"       "Sector counts toward secret count"
+st  26 "  Stairs1"      "Stairs special 1"
+st  27 "  Stairs2"      "Stairs special 2"
+st  40 "  Wind east 1"  "Wind east force 1"
+st  41 "  Wind east 2"  "Wind east force 2"
+st  42 "  Wind east 3"  "Wind east force 3"
+st  43 "  Wind north 1" "Wind north force 1"
+st  44 "  Wind north 2" "Wind north force 2"
+st  45 "  Wind north 3" "Wind north force 3"
+st  46 "  Wind south 1" "Wind south force 1"
+st  47 "  Wind south 2" "Wind south force 2"
+st  48 "  Wind south 3" "Wind south force 3"
+st  49 "  Wind west 1"  "Wind west force 1"
+st  50 "  Wind west 2"  "Wind west force 2"
+st  51 "  Wind west 3"  "Wind west force 3"
+st 198 "  Lightning 64" "Indoor lightning, +64 units"
+st 199 "  Lightning 32" "Indoor lightning, +32 units"
+st 200 "  Sky2"         "Use MAPINFO sky2"
+st 201 "  Scroll N slo" "Scroll north slow"
+st 202 "  Scroll N med" "Scroll north medium"
+st 203 "  Scroll N fas" "Scroll north fast"
+st 204 "  Scroll E slo" "Scroll east slow"
+st 205 "  Scroll E med" "Scroll east medium"
+st 206 "  Scroll E fas" "Scroll east fast"
+st 207 "  Scroll S slo" "Scroll south slow"
+st 208 "  Scroll S med" "Scroll south medium"
+st 209 "  Scroll S fas" "Scroll south fast"
+st 210 "  Scroll W slo" "Scroll west slow"
+st 211 "  Scroll W med" "Scroll west medium"
+st 212 "  Scroll W fas" "Scroll west fast"
+st 213 "  Scroll NW S"  "Scroll northwest slow"
+st 214 "  Scroll NW M"  "Scroll northwest medium"
+st 215 "  Scroll NW F"  "Scroll northwest fast"
+st 216 "  Scroll NE S"  "Scroll northeast slow"
+st 217 "  Scroll NE M"  "Scroll northeast medium"
+st 218 "  Scroll NE F"  "Scroll northeast fast"
+st 219 "  Scroll SE S"  "Scroll southeast slow"
+st 220 "  Scroll SE M"  "Scroll southeast medium"
+st 221 "  Scroll SE F"  "Scroll southeast fast"
+st 222 "  Scroll SW S"  "Scroll southwest slow"
+st 223 "  Scroll SW M"  "Scroll southwest medium"
+st 224 "  Scroll SW F"  "Scroll southwest fast"
+
+#
+#	Definition of thing groups
+#	Format is : thinggroup <thinggroup> <colour> <description>
+#
+
+thinggroup p rgb:4/f/4 "Player"
+thinggroup m rgb:f/0/0 "Monster"
+thinggroup w rgb:f/a/0 "Weapon"
+thinggroup a rgb:8/5/0 "Ammunition"
+thinggroup h rgb:2/8/0 "Health & armour"
+thinggroup b rgb:2/8/0 "Misc. bonus"
+thinggroup k rgb:f/0/f "Key"
+thinggroup P rgb:6/6/c "Plants"
+thinggroup d rgb:6/6/c "Misc. decoration"
+thinggroup l rgb:6/6/c "Light source"
+#thinggroup g rgb:6/6/c "Gory decoration"
+#thinggroup c rgb:6/6/c "Corpse"
+thinggroup e rgb:0/b/d "Environment sound"
+thinggroup s rgb:0/b/d "Ambient sound"
+
+#
+#	Definition of things
+#	Format is :
+#	thing <number> <thinggroup> <flags> <radius> <desc> [<sprite>]
+#	<desc> must not exceed 19 characters.
+#
+
+thing     1 p -   16 "Player 1 start"		PLAY
+thing     2 p -   16 "Player 2 start"		PLAY
+thing     3 p -   16 "Player 3 start"		PLAY
+thing     4 p -   16 "Player 4 start"		PLAY
+thing    11 p -   16 "Deathmatch start"		PLAYF1
+thing    14 p -   16 "Teleport exit"		TELE
+
+thing    31 m -   32 "Demon"			DEMN
+thing   107 m -   20 "Centaur"			CENT
+thing   115 m -   20 "Centaur leader"		CENTF
+thing   120 m -   17 "Serpent leader"		SSPTK	# Not too sure...
+thing   121 m -   17 "Serpent"			SSDV	# Not too sure...
+thing  8020 m -   22 "Ice guy"			ICEY
+thing 10030 m -   25 "Ettin"			ETTN
+thing 10060 m -   20 "Fire demon"		FDMN
+
+thing    10 w -   17 "Serpent staff"		WCSS   # Cleric
+thing    53 w -   17 "Frost chards"		WMCS   # Mage
+thing  8010 w -   17 "Timon's axe"		WFAX   # Fighter
+
+thing   122 a -   17 "Blue manna"		MAN1
+thing   124 a -   17 "Green manna"		MAN2
+thing  8004 a -   17 "Combined manna"		MAN3
+
+thing    81 h -   17 "Crystal vial"		PTN1
+thing    82 h -   17 "Quartz flask"		PTN2
+thing  8000 h -   17 "Flechette"		PSBG
+thing  8007 h -   17 "Platinum helmet"		ARM3
+
+thing   314 k -   17 "Stone (?) key"		KEY7
+
+thing    26 P -   17 "Swamp tree tall"		TRE2
+thing    27 P -   17 "Swamp tree short"		TRE3
+thing    78 P -   17 "Tree leaning right"	TRE4
+thing    79 P -   17 "Tree leaning left"	TRE5
+thing    80 P -   17 "Gnarled tree right"	TRE6
+thing    87 P -   17 "Gnarled tree left"	TRE7
+thing  8062 P -   17 "Dead tree"		TRDT
+thing  8068 P -   17 "Conic tree"		XMAS
+
+thing    48 d -   17 "Stalactite+gmite"		SGMP
+thing    72 d -   17 "Statue"			STT2
+thing    74 d -   17 "Short statue"		STT4
+thing    77 d -   17 "Banner"			BNR1
+
+thing    54 l -   17 "Torch"			WLTR
+thing  8061 l -   17 "FIXME"			BRTR
+
+thing   314 e -   17 "Bogus sound"
+
+thing   314 s -   17 "Bogus sound"
+
+
