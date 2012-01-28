@@ -127,6 +127,21 @@ game_colours = alloc_colours (rgb_values, DOOM_COLOURS);
   }
   verbmsg ("colours: colour %d remapped to %d (delta %d)\n",
     IMG_TRANSP, colour0, smallest_delta);
+   
+   rgb_c med_blue (0, 0, 128);
+   sky_colour = 0;
+   smallest_delta = INT_MAX;
+ 
+   for (size_t n = 0; n < DOOM_COLOURS; n++)
+   {
+     int delta = med_blue - rgb_values[n];
+     if (delta < smallest_delta)
+     {
+       sky_colour = n;
+       smallest_delta = delta;
+     }
+   }
+   verbmsg ("Sky Colour remapped to %d (delta %d)\n", sky_colour, smallest_delta);
 }
 
 #endif

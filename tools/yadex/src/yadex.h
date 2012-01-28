@@ -479,6 +479,7 @@ void SetLinedefLength (SelPtr obj, int length, int move_2nd_vertex);
 
 // l_prop.cc (previously in editobj.cc)
 void LinedefProperties (int x0, int y0, SelPtr obj);
+void TransferLinedefProperties (int src_linedef, SelPtr linedefs);
 
 // l_unlink.cc
 void unlink_sidedef (SelPtr linedefs, int side1, int side2);
@@ -541,13 +542,16 @@ void DistributeSectorFloors (SelPtr); /* SWAP! */
 void DistributeSectorCeilings (SelPtr); /* SWAP! */
 void RaiseOrLowerSectors (SelPtr obj);
 void BrightenOrDarkenSectors (SelPtr obj);
+void SuperSectorSelector (int map_x, int map_y, int new_sec);
 
 // s_prop.cc (previously in editobj.cc)
 void SectorProperties (int x0, int y0, SelPtr obj);
+void TransferSectorProperties (int src_sector, SelPtr sectors);
 
 // s_split.cc (previously in objects.cc)
 void SplitSector (int, int); /* SWAP! */
 void SplitLineDefsAndSector (int, int); /* SWAP! */
+void MultiSplitLineDefsAndSector (int, int); /* SWAP! */
 
 // swapmem.cc
 void InitSwap (void);
@@ -560,6 +564,7 @@ void ScreenShot (void);
 // selrect.cc
 // t_prop.c (previously in editobj.c)
 void ThingProperties (int x0, int y0, SelPtr obj);
+void TransferThingProperties (int src_thing, SelPtr things);
 
 // v_merge.cc
 void DeleteVerticesJoinLineDefs (SelPtr ); /* SWAP! */

@@ -105,7 +105,7 @@ const char *Menu_data_ldt::operator[] (size_t n) const
  *	Prototypes of private functions
  */
 static char *GetTaggedLineDefFlag (int linedefnum, int flagndx);
-static int InputLinedefType (int x0, int y0, int *number);
+int InputLinedefType (int x0, int y0, int *number);
 static const char *PrintLdtgroup (void *ptr);
 
 
@@ -475,7 +475,7 @@ static char *GetTaggedLineDefFlag (int linedefnum, int flagndx)
  *	Let the user select a linedef type number and return it.
  *	Returns 0 if OK, <>0 if cancelled
  */
-static int InputLinedefType (int x0, int y0, int *number)
+int InputLinedefType (int x0, int y0, int *number)
 {
   int         r;
   int         ldtgno = 0;
@@ -545,5 +545,39 @@ static const char *PrintLdtgroup (void *ptr)
   if (! ptr)
     return "PrintLdtgroup: (null)";
   return ((ldtgroup_t *)ptr)->desc;
+}
+
+/*
+ *   TransferLinedefProperties
+ *
+ *   Note: right now nothing is done about sidedefs.  Being able to
+ *   (intelligently) transfer sidedef properties from source line to
+ *   destination linedefs could be a useful feature -- though it is
+ *   unclear the best way to do it.  OTOH not touching sidedefs might
+ *   be useful too.
+ *
+ *   -AJA- 2001-05-27
+ */
+#define LINEDEF_FLAG_KEEP  (1 + 4)
+
+void TransferLinedefProperties (int src_linedef, SelPtr linedefs)
+{
+   SelPtr cur;
+   wad_ldflags_t src_flags = LineDefs[src_linedef].flags & ~LINEDEF_FLAG_KEEP;
+
+   for (cur=linedefs; cur; cur=cur->next)
+   {
+      if (! is_obj(cur->objnum))
+         continue;
+
+      // don't transfer certain flags
+      LineDefs[cur->objnum].flags &= LINEDEF_FLAG_KEEP;
+      LineDefs[cur->objnum].flags |= src_flags;
+
+      LineDefs[cur->objnum].type = LineDefs[src_linedef].type;
+      LineDefs[cur->objnum].tag  = LineDefs[src_linedef].tag;
+
+      MadeChanges = 1;
+   }
 }
 

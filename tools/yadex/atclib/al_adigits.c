@@ -29,5 +29,11 @@ Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 #include "atclib.h"
 
 
-const char al_adigits[36] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const char al_adigits[36] =
+{
+'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+'U', 'V', 'W', 'X', 'Y', 'Z'
+};
 

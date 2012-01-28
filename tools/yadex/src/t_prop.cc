@@ -36,16 +36,17 @@ Place, Suite 330, Boston, MA 02111-1307, USA.
 #include "gfx.h"
 #include "levels.h"
 #include "oldmenus.h"
+#include "objid.h"
+#include "objects.h"
 #include "selectn.h"
 #include "things.h"
-
 
 /*
  *	Private functions prototypes
  */
-static int InputThingType (int x0, int y0, int *number);
 static const char *PrintThinggroup (void *ptr);
 static const char *PrintThingdef (void *ptr);
+int InputThingType (int x0, int y0, int *number);
 
 
 /*
@@ -250,7 +251,7 @@ switch (val)
  *	Let the user select a thing number and return it.
  *	Returns 0 if OK, <>0 if cancelled
  */
-static int InputThingType (int x0, int y0, int *number)
+int InputThingType (int x0, int y0, int *number)
 {
 int         r;
 int         tgno = 0;
@@ -328,6 +329,32 @@ static const char *PrintThingdef (void *ptr)
 if (ptr == NULL)
    return "PrintThingdef: (null)";
 return (*((thingdef_t **)ptr))->desc;
+}
+
+
+/*
+ *   TransferThingProperties
+ *
+ *   -AJA- 2001-05-27
+ */
+void TransferThingProperties (int src_thing, SelPtr things)
+{
+   SelPtr cur;
+
+   for (cur=things; cur; cur=cur->next)
+   {
+      if (! is_obj(cur->objnum))
+         continue;
+
+      Things[cur->objnum].angle = Things[src_thing].angle;
+      Things[cur->objnum].type  = Things[src_thing].type;
+      Things[cur->objnum].when  = Things[src_thing].when;
+
+      MadeChanges = 1;
+
+      things_types++;
+      things_angles++;
+   }
 }
 
 

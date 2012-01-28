@@ -1,0 +1,2825 @@
+diff -u -r -N yadex-1.7.0/atclib/al_adigits.c yadex-1.7.0-all/atclib/al_adigits.c
+--- yadex-1.7.0/atclib/al_adigits.c	1999-08-02 00:52:00.000000000 +1000
++++ yadex-1.7.0-all/atclib/al_adigits.c	2005-01-10 14:30:53.000000000 +1100
+@@ -29,5 +29,11 @@
+ #include "atclib.h"
+ 
+ 
+-const char al_adigits[36] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
++const char al_adigits[36] =
++{
++'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
++'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
++'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
++'U', 'V', 'W', 'X', 'Y', 'Z'
++};
+ 
+diff -u -r -N yadex-1.7.0/docsrc/index.html yadex-1.7.0-all/docsrc/index.html
+--- yadex-1.7.0/docsrc/index.html	2002-05-09 23:36:06.000000000 +1000
++++ yadex-1.7.0-all/docsrc/index.html	2005-01-10 14:30:53.000000000 +1100
+@@ -34,6 +34,7 @@
+ 
+ <ul>
+ <li><a href="palette.html">Palette viewer</a>
++<li><a href="preview.html">3D Level Preview</a>
+ <li><a href="advanced.html">Advanced user's guide</a>
+ <li><a href="../TODO"><code>TODO</code></a>
+ <li><a href="yadex.6">The man page for Yadex</a>
+diff -u -r -N yadex-1.7.0/docsrc/preview.html yadex-1.7.0-all/docsrc/preview.html
+--- yadex-1.7.0/docsrc/preview.html	1970-01-01 10:00:00.000000000 +1000
++++ yadex-1.7.0-all/docsrc/preview.html	2005-01-10 14:34:20.000000000 +1100
+@@ -0,0 +1,108 @@
++<html>
++<head>
++<title>Yadex 3D level preview</title>
++</head>
++<body>
++
++<div align="center">
++<img src="logo_small.png" alt="Fancy logo">
++<br>Yadex $VERSION ($SOURCE_DATE)
++<h1>3D Level Preview</h1>
++</div>
++<br>
++<br>
++<br>
++
++	<h2>What's it for</h2>
++
++<p>The 3D level preview function lets you get a rough idea of what
++your level looks like, quickly, without all the hassle of saving,
++building nodes and starting DOOM. It is activated by pressing the
++`R' key while editing a level, and draws the player's view that
++you would see within DOOM (with some limitations). While the
++rendering window is up, you can move around the level using the
++cursor keys and toggle things like texturing and sprites on/off.
++
++	<h2>Key bindings</h2>
++
++<dl>
++<dt>[<kbd>Left</kbd>]
++<br>[<kbd>Right</kbd>]
++<dd>Turn the view left or right. Use the SHIFT key to
++turn a greater amount.
++
++<dt>[<kbd>Up</kbd>]
++<br>[<kbd>Down</kbd>]
++<dd>Move the view forward or back. Use the SHIFT key to
++move a greater distance.
++
++<dt>[<kbd>n</kbd>]
++<br>[<kbd>m</kbd>]
++<dd>Move the view sideways left or right (strafing). Uppercase `N'
++and `M' (i.e. with the SHIFT key) will move a greater distance.
++
++<dt>[<kbd>c</kbd>]
++<br>[<kbd>d</kbd>]
++<dd>Move the view upwards or downwards (flying). Uppercase `C' and
++`D' (i.e. with the SHIFT key) will move a greater distance. Note
++that you cannot move up or down when "walking" mode is enabled.
++
++<dt>[<kbd>t</kbd>]
++<dd>Toggle texture mapping. When disabled (the default), all walls,
++ceilings and floors are drawn with solid (somewhat random) colours.
++
++<dt>[<kbd>s</kbd>]
++<dd>Toggle sprites.
++
++<dt>[<kbd>w</kbd>]
++<dd>Toggle walking mode. When enabled, the view height is always
++above the current floor. For example, if you move forward over a
++cliff, the view will drop down.  When disabled (the default), you can
++fly about the level at any height.
++
++<dt>[<kbd>Esc</kbd>]
++<br>[<kbd>q</kbd>]
++<dd>Exit the 3D level preview. The current viewing state (position,
++direction, etc) are remembered, and will be used next time the 3D
++preview is activated (unless the player object has been moved, or a
++different level was loaded).
++
++</dl>
++
++	<h2>Features</h2>
++
++<ul>
++<li>No BSP (nodes) required !
++<li>Textures and flats are drawn exactly like DOOM, including X/Y
++offsets and upper/lower unpegging flags.
++<li>Sky is handled just like in DOOM (but drawn in solid blue).
++</ul>
++
++	<h2>Limitations</h2>
++
++<ul>
++<li>No lighting, the level appears full-bright all the time.
++<li>No mid-masked textures (rails, gratings) are drawn.
++<li>Thing sprites (especially monsters) are always drawn facing
++you, even when their direction is away from you.
++<li>Sprite positioning may be inaccurate, because their X and
++Y offsets are not honoured.
++<li>Things that are supposed to hang from the ceiling
++(hanging body parts, chandeliers, etc) will appear on the floor.
++<li>There are some glitches in the current renderer, which look like
++"slimetrails" (vertical lines).
++</ul>
++
++	<h2>Caveats</h2>
++
++One last thing. The 3D preview function can use a huge amount of
++memory when texturing and sprites are both enabled (and a large amount
++even when texturing and sprites are both disabled). If your computer
++has a very low amount of memory (e.g. less than 16 MB), then Yadex may
++crash with an out of memory error. I think you are unlikely to hit
++this problem, but if in doubt, save your work first.
++
++
++<p><hr>AJA $SELF_DATE
++</body>
++</html>
+diff -u -r -N yadex-1.7.0/GNUmakefile yadex-1.7.0-all/GNUmakefile
+--- yadex-1.7.0/GNUmakefile	2003-12-29 04:23:56.000000000 +1100
++++ yadex-1.7.0-all/GNUmakefile	2005-01-10 14:30:53.000000000 +1100
+@@ -160,6 +160,7 @@
+ 	s_swapf		s_vertices	sanity		scrnshot	\
+ 	selbox		selectn		selpath		selrect		\
+ 	serialnum	spritdir	sticker		swapmem		\
++ 	r_render	r_images					\
+ 	t_centre	t_flags		t_prop		t_spin		\
+ 	textures	things		trace		v_centre	\
+ 	v_merge		v_polyg		vectext		verbmsg		\
+@@ -237,6 +238,7 @@
+ 	docsrc/legal.html		\
+ 	docsrc/packagers_guide.html	\
+ 	docsrc/palette.html		\
++	docsrc/preview.html		\
+ 	docsrc/reporting.html		\
+ 	docsrc/tips.html		\
+ 	docsrc/trivia.html		\
+@@ -609,8 +611,9 @@
+ #
+ ########################################################################
+ 
+-# If Makefile.config doesn't exist, give a hint...
++# If Makefile.config or config.h don't exist, give a hint...
+ $(OBJDIR)/Makefile.config:
++$(OBJDIR)/config.h:
+ 	@echo "Sorry guv'nor, but... did you run ./configure ?" >&2
+ 	@false
+ 
+@@ -637,7 +640,7 @@
+ # Note: the modules of Atclib are not scanned as they all
+ # depend on $(HEADERS_ATCLIB) and nothing else.
+ 
+-yadex.dep: $(SRC_NON_GEN)
++yadex.dep: $(SRC_NON_GEN) src/config.h
+ 	@echo "Generating $@"
+ 	@makedepend -f- -Y -Iatclib $(SRC_NON_GEN) 2>/dev/null	\
+ 		| awk 'sub (/^src/, "") == 1 {				\
+diff -u -r -N yadex-1.7.0/src/editloop.cc yadex-1.7.0-all/src/editloop.cc
+--- yadex-1.7.0/src/editloop.cc	2003-07-05 21:12:32.000000000 +1000
++++ yadex-1.7.0-all/src/editloop.cc	2005-01-10 14:30:53.000000000 +1100
+@@ -70,6 +70,7 @@
+ #include "x_exchng.h"
+ #include "x_hover.h"
+ #include "xref.h"
++#include "r_render.h"
+ 
+ #ifdef Y_X11
+ #include <X11/Xlib.h>
+@@ -304,8 +305,8 @@
+ 
+ e.mb_menu[MBM_EDIT] = new Menu (NULL,
+    "~Copy object(s)",          'o',    0,
+-   "~Add object",              YK_INS, 0,
+-   "~Delete object(s)",        YK_DEL, 0,
++   "~Add object",              'I', 0,
++   "~Delete object(s)",        '\b', 0,
+    "~Exchange object numbers", 24,     0,
+    "~Preferences...",          YK_F5,  0,
+    "~Snap to grid",            'y',    MIF_VTICK, &e.grid_snap,		     0,
+@@ -342,6 +343,7 @@
+    "~Next object",       'n',   0,
+    "~Prev object",       'p',   0,
+    "~Jump to object...", 'j',   0,
++   "~Find by type",	 'f',	0,
+    NULL);
+ 
+ e.mb_menu[MBM_MISC_L] = new Menu ("Misc. operations",
+@@ -1344,8 +1346,8 @@
+             }
+          }
+ 
+-      // [F8]: pop up the "Misc. operations" menu
+-      else if (is.key == YK_F8
++      // [M]: pop up the "Misc. operations" menu
++      else if (is.key == 'M'
+          && e.menubar->highlighted () < 0)
+          {
+          e.modpopup->set (e.menubar->get_menu (MBI_MISC), 1);
+@@ -1706,7 +1708,15 @@
+ 	 select_linedefs_path (&e.Selected, e.highlighted.num, YS_TOGGLE);
+ 	 RedrawMap = 1;
+ 	 }
+-
++      // [E]: add linedef and split sector -- [AJA]
++      else if (is.key == 'E' && e.obj_type == OBJ_VERTICES)
++        {
++        if (e.Selected)
++          {
++          MiscOperations (e.obj_type, &e.Selected, 5);
++          RedrawMap = 1;
++          }
++        }
+       // [E]: Select/unselect all 1s linedefs in path
+       else if (is.key == 'E' && e.highlighted._is_linedef ())
+ 	 {
+@@ -1834,6 +1844,56 @@
+ 	 RedrawMap = 1;
+ 	 }
+ 
++      // [f]: find object by type
++      else if (is.key == 'f' && (! e.global || e.highlighted ())) 
++	 {
++	 Objid find_obj;
++	 int otype;
++	 obj_no_t omax,onum;
++	 find_obj.type = e.highlighted () ? e.highlighted.type : e.obj_type;
++	 onum = find_obj.num  = e.highlighted () ? e.highlighted.num  : 0;
++	 omax = GetMaxObjectNum(find_obj.type);
++         switch (find_obj.type)
++            {
++	    case OBJ_SECTORS:
++               if ( ! InputSectorType( 84, 21, &otype))
++		  {
++	          for (onum = e.highlighted () ? onum + 1 : onum; onum <= omax; onum++)
++	             if (Sectors[onum].special == (wad_stype_t) otype)
++			{
++		        find_obj.num = onum;
++	                GoToObject(find_obj);
++		        break;
++		        }
++		  }
++	    break;
++	    case OBJ_THINGS:
++	       if ( ! InputThingType( 42, 21, &otype))
++	 	  {
++                  for (onum = e.highlighted () ? onum + 1 : onum; onum <= omax; onum++)
++	             if (Things[onum].type == (wad_ttype_t) otype)
++                        {
++		        find_obj.num = onum;
++	                GoToObject(find_obj);
++		        break;
++		        }
++		  }
++	    break;
++	    case OBJ_LINEDEFS:
++	       if ( ! InputLinedefType( 0, 21, &otype))
++		  {
++	          for (onum = e.highlighted () ? onum + 1 : onum; onum <= omax; onum++)
++		     if (LineDefs[onum].type == (wad_ldtype_t) otype)
++			{
++		        find_obj.num = onum;
++	                GoToObject(find_obj);
++			break;
++		        }
++		  }
++	    break;
++	    }
++         RedrawMap = 1;
++         }
+ #if 0
+       // [c]: clear selection and redraw the map
+       else if (is.key == 'c')
+@@ -1921,6 +1981,17 @@
+          StretchSelBox = false;
+          }
+ 
++      // [w]: split sector between vertices
++      else if (is.key == 'w' && e.obj_type == OBJ_VERTICES
++         && e.Selected && e.Selected->next && ! e.Selected->next->next)
++         {
++         SplitSector (e.Selected->next->objnum, e.Selected->objnum);
++         ForgetSelection (&e.Selected);
++         RedrawMap = 1;
++         DragObject = false;
++         StretchSelBox = false;
++         }
++
+       // [x]: spin things 1/8 turn clockwise
+       else if (is.key == 'x' && e.obj_type == OBJ_THINGS
+          && (e.Selected || e.highlighted ()))
+@@ -1987,7 +2058,7 @@
+       }
+       
+       // [Del]: delete the current object
+-      else if (is.key == YK_DEL
++      else if (is.key == '\b'
+          && (e.Selected || e.highlighted ())) /* 'Del' */
+ 	 {
+ 	 if (e.obj_type == OBJ_THINGS
+@@ -2015,7 +2086,7 @@
+ 	 }
+ 
+       // [Ins]: insert a new object
+-      else if (is.key == YK_INS || is.key == YK_INS + YK_SHIFT) /* 'Ins' */
++      else if (is.key == 'I' || is.key == YK_INS + YK_SHIFT) /* 'Ins' */
+ 	 {
+ 	 SelPtr cur;
+          int prev_obj_type = e.obj_type;
+@@ -2201,12 +2272,34 @@
+ 	 RedrawMap = 1;
+ 	 }
+ 
++      // [Z] Set sector on surrounding linedefs (AJA)
++      else if (is.key == 'Z' && e.pointer_in_window) 
++         {
++         if (e.obj_type == OBJ_SECTORS && e.Selected)
++            {
++            SuperSectorSelector (e.pointer_x, e.pointer_y,
++               e.Selected->objnum);
++            }
++         else
++            {
++            SuperSectorSelector (e.pointer_x, e.pointer_y, OBJ_NO_NONE);
++            }
++         RedrawMap = 1;
++         }
++
+       // [!] Debug info (not documented)
+       else if (is.key == '!')
+          {
+          DumpSelection (e.Selected);
+          }
+ 
++      // [R] Render 3D view (AJA)
++      else if (is.key == 'R')
++        {
++        Render3D ();
++        RedrawMap = 1;
++        }
++
+       // [@] Show font (not documented)
+       else if (is.key == '@')
+          {
+@@ -2214,6 +2307,30 @@
+ 	 RedrawMap = 1;
+          }
+ 
++      // [T] Transfer properties to selected objects (AJA)
++      else if (is.key == 'T' && e.Selected 
++            && e.highlighted.num >= 0)
++         {
++         switch (e.obj_type)
++            {
++            case OBJ_SECTORS:
++               TransferSectorProperties (e.highlighted.num, e.Selected);
++               RedrawMap = 1;
++               break;
++            case OBJ_THINGS:
++               TransferThingProperties (e.highlighted.num, e.Selected);
++               RedrawMap = 1;
++               break;
++            case OBJ_LINEDEFS:
++               TransferLinedefProperties (e.highlighted.num, e.Selected);
++               RedrawMap = 1;
++               break;
++            default:
++               Beep ();
++               break;
++            }
++         }
++
+       // [|] Show colours (not documented)
+       else if (is.key == '|')
+          {
+diff -u -r -N yadex-1.7.0/src/editloop.h yadex-1.7.0-all/src/editloop.h
+--- yadex-1.7.0/src/editloop.h	2000-01-11 00:40:12.000000000 +1100
++++ yadex-1.7.0-all/src/editloop.h	2005-01-10 14:30:53.000000000 +1100
+@@ -6,6 +6,9 @@
+ 
+ void EditorLoop (const char *); /* SWAP! */
+ const char *SelectLevel (int levelno);
++extern int InputSectorType(int x0, int y0, int *number);
++extern int InputLinedefType(int x0, int y0, int *number);
++extern int InputThingType(int x0, int y0, int *number);
+ 
+ 
+ 
+diff -u -r -N yadex-1.7.0/src/gcolour1.cc yadex-1.7.0-all/src/gcolour1.cc
+--- yadex-1.7.0/src/gcolour1.cc	2003-03-28 23:37:32.000000000 +1100
++++ yadex-1.7.0-all/src/gcolour1.cc	2005-01-10 14:30:53.000000000 +1100
+@@ -127,6 +127,21 @@
+   }
+   verbmsg ("colours: colour %d remapped to %d (delta %d)\n",
+     IMG_TRANSP, colour0, smallest_delta);
++   
++   rgb_c med_blue (0, 0, 128);
++   sky_colour = 0;
++   smallest_delta = INT_MAX;
++ 
++   for (size_t n = 0; n < DOOM_COLOURS; n++)
++   {
++     int delta = med_blue - rgb_values[n];
++     if (delta < smallest_delta)
++     {
++       sky_colour = n;
++       smallest_delta = delta;
++     }
++   }
++   verbmsg ("Sky Colour remapped to %d (delta %d)\n", sky_colour, smallest_delta);
+ }
+ 
+ #endif
+diff -u -r -N yadex-1.7.0/src/gcolour2.cc yadex-1.7.0-all/src/gcolour2.cc
+--- yadex-1.7.0/src/gcolour2.cc	2003-03-28 23:37:32.000000000 +1100
++++ yadex-1.7.0-all/src/gcolour2.cc	2005-01-10 14:30:53.000000000 +1100
+@@ -35,4 +35,5 @@
+ 
+ pcolour_t *game_colour = 0;	// Pixel values for the DOOM_COLOURS game clrs.
+ int colour0;			// Game colour to which g. colour 0 is remapped
++int sky_colour;			// Game colour for a medium sky blue
+ 
+diff -u -r -N yadex-1.7.0/src/gcolour2.h yadex-1.7.0-all/src/gcolour2.h
+--- yadex-1.7.0/src/gcolour2.h	2000-08-11 07:18:16.000000000 +1000
++++ yadex-1.7.0-all/src/gcolour2.h	2005-01-10 14:30:53.000000000 +1100
+@@ -10,4 +10,5 @@
+ 
+ extern pcolour_t *game_colour;  // Pixel values for the DOOM_COLOURS game clrs.
+ extern int colour0;		// Game colour to which g. colour 0 is remapped
++extern int sky_colour;		// Game colour for a medium blue sky
+ 
+diff -u -r -N yadex-1.7.0/src/l_prop.cc yadex-1.7.0-all/src/l_prop.cc
+--- yadex-1.7.0/src/l_prop.cc	2003-03-28 23:37:32.000000000 +1100
++++ yadex-1.7.0-all/src/l_prop.cc	2005-01-10 14:30:53.000000000 +1100
+@@ -105,7 +105,7 @@
+  *	Prototypes of private functions
+  */
+ static char *GetTaggedLineDefFlag (int linedefnum, int flagndx);
+-static int InputLinedefType (int x0, int y0, int *number);
++int InputLinedefType (int x0, int y0, int *number);
+ static const char *PrintLdtgroup (void *ptr);
+ 
+ 
+@@ -475,7 +475,7 @@
+  *	Let the user select a linedef type number and return it.
+  *	Returns 0 if OK, <>0 if cancelled
+  */
+-static int InputLinedefType (int x0, int y0, int *number)
++int InputLinedefType (int x0, int y0, int *number)
+ {
+   int         r;
+   int         ldtgno = 0;
+@@ -547,3 +547,37 @@
+   return ((ldtgroup_t *)ptr)->desc;
+ }
+ 
++/*
++ *   TransferLinedefProperties
++ *
++ *   Note: right now nothing is done about sidedefs.  Being able to
++ *   (intelligently) transfer sidedef properties from source line to
++ *   destination linedefs could be a useful feature -- though it is
++ *   unclear the best way to do it.  OTOH not touching sidedefs might
++ *   be useful too.
++ *
++ *   -AJA- 2001-05-27
++ */
++#define LINEDEF_FLAG_KEEP  (1 + 4)
++
++void TransferLinedefProperties (int src_linedef, SelPtr linedefs)
++{
++   SelPtr cur;
++   wad_ldflags_t src_flags = LineDefs[src_linedef].flags & ~LINEDEF_FLAG_KEEP;
++
++   for (cur=linedefs; cur; cur=cur->next)
++   {
++      if (! is_obj(cur->objnum))
++         continue;
++
++      // don't transfer certain flags
++      LineDefs[cur->objnum].flags &= LINEDEF_FLAG_KEEP;
++      LineDefs[cur->objnum].flags |= src_flags;
++
++      LineDefs[cur->objnum].type = LineDefs[src_linedef].type;
++      LineDefs[cur->objnum].tag  = LineDefs[src_linedef].tag;
++
++      MadeChanges = 1;
++   }
++}
++
+diff -u -r -N yadex-1.7.0/src/r_images.cc yadex-1.7.0-all/src/r_images.cc
+--- yadex-1.7.0/src/r_images.cc	1970-01-01 10:00:00.000000000 +1000
++++ yadex-1.7.0-all/src/r_images.cc	2005-01-10 14:30:53.000000000 +1100
+@@ -0,0 +1,400 @@
++/*
++ *	r_images.cc
++ *	AJA 2002-04-23 (based on textures.cc and flats.cc)
++ */
++
++
++/*
++This file is part of Yadex.
++
++Yadex incorporates code from DEU 5.21 that was put in the public domain in
++1994 by Raphaël Quinet and Brendon Wyber.
++
++The rest of Yadex is Copyright © 1997-2000 André Majorel.
++
++This program is free software; you can redistribute it and/or modify it under
++the terms of the GNU General Public License as published by the Free Software
++Foundation; either version 2 of the License, or (at your option) any later
++version.
++
++This program is distributed in the hope that it will be useful, but WITHOUT
++ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
++FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
++
++You should have received a copy of the GNU General Public License along with
++this program; if not, write to the Free Software Foundation, Inc., 59 Temple
++Place, Suite 330, Boston, MA 02111-1307, USA.
++*/
++
++
++#include "yadex.h"
++#ifdef Y_X11
++#include <X11/Xlib.h>
++#endif
++#include "dialog.h"
++#include "game.h"      /* yg_picture_format */
++#include "gfx.h"
++#include "levels.h"
++#include "lists.h"
++#include "patchdir.h"
++#include "pic2img.h"
++#include "sticker.h"
++#include "flats.h"
++#include "textures.h"
++#include "wadfile.h"
++#include "wads.h"
++#include "wadres.h"
++#include "wstructs.h"
++
++#include "r_images.h"
++
++
++/*
++ *	flat_list_entry_match
++ *	Function used by bsearch() to locate a particular 
++ *	flat in the FTexture.
++ */
++static int flat_list_entry_match (const void *key, const void *flat_list_entry)
++{
++return y_strnicmp ((const char *) key,
++      ((const flat_list_entry_t *) flat_list_entry)->name,
++      WAD_FLAT_NAME);
++}
++
++
++/*
++ *  load a flat into a new image.  NULL if not found.
++ */
++
++Img * Flat2Img (const wad_flat_name_t& fname)
++{
++char name[WAD_FLAT_NAME + 1];
++strncpy (name, fname, WAD_FLAT_NAME);
++name[WAD_FLAT_NAME] = 0;
++
++flat_list_entry_t *flat = (flat_list_entry_t *)
++   bsearch (name, flat_list, NumFTexture, sizeof *flat_list,
++         flat_list_entry_match);
++
++if (! flat)  // Not found in list
++   return 0;
++
++int width  = DOOM_FLAT_WIDTH;  // Big deal !
++int height = DOOM_FLAT_HEIGHT;
++
++const Wad_file *wadfile = flat->wadfile;
++wadfile->seek (flat->offset);
++
++Img *img = new Img (width, height, false);
++
++wadfile->read_bytes (img->wbuf (), (long) width * height);
++
++return img;
++}
++
++
++/*
++ * load a wall texture ("TEXTURE1" or "TEXTURE2" object) into an image.
++ * Returns NULL if not found or error.
++ */
++
++Img * Tex2Img (const wad_tex_name_t& texname)
++{
++MDirPtr  dir = 0;	/* main directory pointer to the TEXTURE* entries */
++i32     *offsets;	/* array of offsets to texture names */
++int      n;		/* general counter */
++i16      width, height;	/* size of the texture */
++i16      npatches;	/* number of wall patches used to build this texture */
++i32      numtex;	/* number of texture names in TEXTURE* list */
++i32      texofs;	/* offset in the wad file to the texture data */
++char     tname[WAD_TEX_NAME + 1];	/* texture name */
++char     picname[WAD_PIC_NAME + 1];	/* wall patch name */
++bool     have_dummy_bytes;
++int      header_size;
++int      item_size;
++
++char name[WAD_TEX_NAME + 1];
++strncpy (name, texname, WAD_TEX_NAME);
++name[WAD_TEX_NAME] = 0;
++
++// Iwad-dependant details
++if (yg_texture_format == YGTF_NAMELESS)
++   {
++   have_dummy_bytes = true;
++   header_size      = 14;
++   item_size        = 10;
++   }
++else if (yg_texture_format == YGTF_NORMAL)
++   {
++   have_dummy_bytes = true;
++   header_size      = 14;
++   item_size        = 10;
++   }
++else if (yg_texture_format == YGTF_STRIFE11)
++   {
++   have_dummy_bytes = false;
++   header_size      = 10;
++   item_size        = 6;
++   }
++else
++   {
++   nf_bug ("Bad texture format %d.", (int) yg_texture_format);
++   return 0;
++   }
++
++/* offset for texture we want. */
++texofs = 0;
++// Doom alpha 0.4 : "TEXTURES", no names
++if (yg_texture_lumps == YGTL_TEXTURES && yg_texture_format == YGTF_NAMELESS)
++   {
++   dir = FindMasterDir (MasterDir, "TEXTURES");
++   if (dir != NULL)
++      {
++      dir->wadfile->seek (dir->dir.start);
++      dir->wadfile->read_i32 (&numtex);
++      if (WAD_TEX_NAME < 7) nf_bug ("WAD_TEX_NAME too small");  // Sanity
++      if (! y_strnicmp (name, "TEX", 3)
++            && isdigit (name[3])
++            && isdigit (name[4])
++            && isdigit (name[5])
++            && isdigit (name[6])
++            && name[7] == '\0')
++         {
++         long num;
++         if (sscanf (name + 3, "%4ld", &num) == 1
++               && num >= 0 && num < numtex)
++            {
++            dir->wadfile->seek (dir->dir.start + 4 + 4 * num);
++            dir->wadfile->read_i32 (&texofs);
++            texofs += dir->dir.start;
++            }
++         }
++      }
++   }
++// Doom alpha 0.5 : only "TEXTURES"
++else if (yg_texture_lumps == YGTL_TEXTURES
++      && (yg_texture_format == YGTF_NORMAL || yg_texture_format == YGTF_STRIFE11))
++   {
++   // Is it in TEXTURES ?
++   dir = FindMasterDir (MasterDir, "TEXTURES");
++   if (dir != NULL)  // (Theoretically, it should always exist)
++      {
++      dir->wadfile->seek (dir->dir.start);
++      dir->wadfile->read_i32 (&numtex);
++      /* read in the offsets for texture1 names and info. */
++      offsets = (i32 *) GetMemory ((long) numtex * 4);
++      dir->wadfile->read_i32 (offsets, numtex);
++      for (n = 0; n < numtex && !texofs; n++)
++         {
++         dir->wadfile->seek (dir->dir.start + offsets[n]);
++         dir->wadfile->read_bytes (&tname, WAD_TEX_NAME);
++         if (!y_strnicmp (tname, name, WAD_TEX_NAME))
++            texofs = dir->dir.start + offsets[n];
++         }
++      FreeMemory (offsets);
++      }
++   }
++// Other iwads : "TEXTURE1" and "TEXTURE2"
++else if (yg_texture_lumps == YGTL_NORMAL
++      && (yg_texture_format == YGTF_NORMAL || yg_texture_format == YGTF_STRIFE11))
++   {
++   // Is it in TEXTURE1 ?
++   dir = FindMasterDir (MasterDir, "TEXTURE1");
++   if (dir != NULL)  // (Theoretically, it should always exist)
++      {
++      dir->wadfile->seek (dir->dir.start);
++      dir->wadfile->read_i32 (&numtex);
++      /* read in the offsets for texture1 names and info. */
++      offsets = (i32 *) GetMemory ((long) numtex * 4);
++      dir->wadfile->read_i32 (offsets, numtex);
++      for (n = 0; n < numtex && !texofs; n++)
++         {
++         dir->wadfile->seek (dir->dir.start + offsets[n]);
++         dir->wadfile->read_bytes (&tname, WAD_TEX_NAME);
++         if (!y_strnicmp (tname, name, WAD_TEX_NAME))
++            texofs = dir->dir.start + offsets[n];
++         }
++      FreeMemory (offsets);
++      }
++   // Well, then is it in TEXTURE2 ?
++   if (texofs == 0)
++      {
++      dir = FindMasterDir (MasterDir, "TEXTURE2");
++      if (dir != NULL)  // Doom II has no TEXTURE2
++         {
++         dir->wadfile->seek (dir->dir.start);
++         dir->wadfile->read_i32 (&numtex);
++         /* read in the offsets for texture2 names */
++         offsets = (i32 *) GetMemory ((long) numtex * 4);
++         dir->wadfile->read_i32 (offsets, numtex);
++         for (n = 0; n < numtex && !texofs; n++)
++            {
++            dir->wadfile->seek (dir->dir.start + offsets[n]);
++            dir->wadfile->read_bytes (&tname, WAD_TEX_NAME);
++            if (!y_strnicmp (tname, name, WAD_TEX_NAME))
++               texofs = dir->dir.start + offsets[n];
++            }
++         FreeMemory (offsets);
++         }
++      }
++   }
++else
++   nf_bug ("Invalid texture_format/texture_lumps combination.");
++
++/* texture name not found */
++if (texofs == 0)
++   return 0;
++
++/* read the info for this texture */
++i32 header_ofs;
++if (yg_texture_format == YGTF_NAMELESS)
++   header_ofs = texofs;
++else
++   header_ofs = texofs + WAD_TEX_NAME;
++dir->wadfile->seek (header_ofs + 4);
++dir->wadfile->read_i16 (&width);
++dir->wadfile->read_i16 (&height);
++if (have_dummy_bytes)
++   {
++   i16 dummy;
++   dir->wadfile->read_i16 (&dummy);
++   dir->wadfile->read_i16 (&dummy);
++   }
++dir->wadfile->read_i16 (&npatches);
++
++/* Compose the texture */
++Img *texbuf = new Img (width, height, false);
++
++/* Paste onto the buffer all the patches that the texture is
++   made of. */
++for (n = 0; n < npatches; n++)
++   {
++   i16 xofs, yofs;	// offset in texture space for the patch
++   i16 pnameind;	// index of patch in PNAMES
++
++   dir->wadfile->seek (header_ofs + header_size + (long) n * item_size);
++   dir->wadfile->read_i16 (&xofs);
++   dir->wadfile->read_i16 (&yofs);
++   dir->wadfile->read_i16 (&pnameind);
++
++   if (have_dummy_bytes)
++      {
++      i16 stepdir;
++      i16 colormap;
++      dir->wadfile->read_i16 (&stepdir);   // Always 1, unused.
++      dir->wadfile->read_i16 (&colormap);  // Always 0, unused.
++      }
++
++   /* AYM 1998-08-08: Yes, that's weird but that's what Doom
++      does. Without these two lines, the few textures that have
++      patches with negative y-offsets (BIGDOOR7, SKY1, TEKWALL1,
++      TEKWALL5 and a few others) would not look in the texture
++      viewer quite like in Doom. This should be mentioned in
++      the UDS, by the way. */
++   if (yofs < 0)
++      yofs = 0;
++
++   Lump_loc loc;
++      {
++      wad_pic_name_t *wname = patch_dir.name_for_num (pnameind);
++      if (wname == 0)
++         {
++         warn ("texture \"%.*s\": patch %2d has bad index %d.\n",
++               WAD_TEX_NAME, tname, (int) n, (int) pnameind);
++         continue;
++         }
++      patch_dir.loc_by_name ((const char *) *wname, loc);
++      *picname = '\0';
++      strncat (picname, (const char *) *wname, sizeof picname - 1);
++      }
++
++   if (LoadPicture (*texbuf, picname, loc, xofs, yofs, 0, 0))
++      warn ("texture \"%.*s\": patch \"%.*s\" not found.\n",
++            WAD_TEX_NAME, tname, WAD_PIC_NAME, picname);
++   }
++
++return texbuf;
++}
++
++
++/* --- ImageCache methods --- */
++
++
++Img *ImageCache::GetFlat (const wad_flat_name_t& fname)
++{
++std::string f_str = WadToString(fname);
++
++flat_map_t::iterator P = flats.find (f_str);
++
++if (P != flats.end ())
++   return P->second;
++
++// flat not in the list yet.  Add it.
++
++Img *result = Flat2Img (fname);
++flats[f_str] = result;
++
++// note that a NULL return from Flat2Img is OK, it means that no
++// such flat exists.  Our renderer will revert to using a solid
++// colour.
++
++return result;
++}
++
++
++Img *ImageCache::GetTex (const wad_tex_name_t& tname)
++{
++if (tname[0] == 0 || tname[0] == '-')
++   return 0;
++
++std::string t_str = WadToString(tname);
++
++tex_map_t::iterator P = textures.find (t_str);
++
++if (P != textures.end ())
++   return P->second;
++
++// texture not in the list yet.  Add it.
++
++Img *result = Tex2Img (tname);
++textures[t_str] = result;
++
++// note that a NULL return from Tex2Img is OK, it means that no
++// such texture exists.  Our renderer will revert to using a solid
++// colour.
++
++return result;
++}
++
++
++Img *ImageCache::GetSprite (const wad_ttype_t& type)
++{
++sprite_map_t::iterator P = sprites.find (type);
++
++if (P != sprites.end ())
++   return P->second;
++
++// sprite not in the list yet.  Add it.
++
++Img *result = 0;
++
++const char *sprite_root = get_thing_sprite (type);
++if (sprite_root)
++   {
++   Lump_loc loc;
++   wad_res.sprites.loc_by_root (sprite_root, loc);
++   result = new Img ();
++
++   if (LoadPicture (*result, sprite_root, loc, 0, 0) != 0)
++      {
++      delete result;
++      result = 0;
++      }
++   }
++
++// note that a NULL image is OK.  Our renderer will just ignore the
++// missing sprite.
++
++sprites[type] = result;
++return result;
++}
+diff -u -r -N yadex-1.7.0/src/r_images.h yadex-1.7.0-all/src/r_images.h
+--- yadex-1.7.0/src/r_images.h	1970-01-01 10:00:00.000000000 +1000
++++ yadex-1.7.0-all/src/r_images.h	2005-01-10 14:30:53.000000000 +1100
+@@ -0,0 +1,69 @@
++/*
++ *	r_images.h
++ *	AJA 2002-04-27
++ */
++
++
++#ifndef YH_R_IMAGES  /* DO NOT INSERT ANYTHING BEFORE THIS LINE */
++#define YH_R_IMAGES
++
++
++#include <map>
++#include <algorithm>
++#include <string>
++
++
++struct ImageCache
++{
++public:
++   typedef std::map<std::string, Img *> flat_map_t;
++   typedef std::map<std::string, Img *> tex_map_t;
++   typedef std::map<wad_ttype_t, Img *> sprite_map_t;
++
++   flat_map_t   flats;
++   tex_map_t    textures;
++   sprite_map_t sprites;
++
++   static std::string WadToString(const wad_flat_name_t& fname)
++   {
++      int len;
++
++      for (len = 0; len < WAD_NAME && fname[len]; len++)
++      { }
++        
++      return std::string(fname, len);
++   }
++
++   static void DeleteFlat(const flat_map_t::value_type& P)
++      {
++      delete P.second;
++      }
++
++   static void DeleteTex(const tex_map_t::value_type& P)
++      {
++      delete P.second;
++      }
++
++   static void DeleteSprite(const sprite_map_t::value_type& P)
++      {
++      delete P.second;
++      }
++
++   ~ImageCache ()
++      {
++      std::for_each (flats.begin (), flats.end (), DeleteFlat);
++      std::for_each (textures.begin (), textures.end (), DeleteTex);
++      std::for_each (sprites.begin (), sprites.end (), DeleteSprite);
++
++      flats.clear ();
++      textures.clear ();
++      sprites.clear ();
++      }
++
++   Img *GetFlat   (const wad_flat_name_t& fname);
++   Img *GetTex    (const wad_tex_name_t& tname);
++   Img *GetSprite (const wad_ttype_t& type);
++};
++
++
++#endif  /* DO NOT ADD ANYTHING AFTER THIS LINE */
+diff -u -r -N yadex-1.7.0/src/r_render.cc yadex-1.7.0-all/src/r_render.cc
+--- yadex-1.7.0/src/r_render.cc	1970-01-01 10:00:00.000000000 +1000
++++ yadex-1.7.0-all/src/r_render.cc	2005-01-10 14:30:53.000000000 +1100
+@@ -0,0 +1,1275 @@
++/*
++ *	r_render.cc
++ *	3D Rendering
++ *	AJA 2002-04-21
++ */
++
++
++/*
++This file is part of Yadex.
++
++Yadex incorporates code from DEU 5.21 that was put in the public domain in
++1994 by Raphaël Quinet and Brendon Wyber.
++
++The rest of Yadex is Copyright © 1997-2000 André Majorel.
++
++This program is free software; you can redistribute it and/or modify it under
++the terms of the GNU General Public License as published by the Free Software
++Foundation; either version 2 of the License, or (at your option) any later
++version.
++
++This program is distributed in the hope that it will be useful, but WITHOUT
++ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
++FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
++
++You should have received a copy of the GNU General Public License along with
++this program; if not, write to the Free Software Foundation, Inc., 59 Temple
++Place, Suite 330, Boston, MA 02111-1307, USA.
++*/
++
++
++#include "yadex.h"
++
++#include <math.h>
++#include <vector>
++#include <map>
++#include <algorithm>
++
++#ifdef Y_X11
++#include <X11/Xlib.h>
++#include <X11/Xutil.h>
++#endif
++#include "levels.h"
++#include "wstructs.h"
++#include "gfx.h"
++#include "img.h"
++#include "sticker.h"
++#include "gamesky.h"
++#include "things.h"
++#include "wadres.h"
++#include "objid.h"
++#include "objects.h"
++#include "pic2img.h"
++#include "rgb.h"
++#include "gcolour2.h"
++
++#include "r_render.h"
++#include "r_images.h"
++
++
++#define ML_UPPER_UNPEGGED  0x08
++#define ML_LOWER_UNPEGGED  0x10
++
++
++struct Y_View
++{
++public:
++   int p_type, px, py;
++   // player type and position.
++
++   float x, y; 
++   int z;
++   // view position.
++
++   static const int EYE_HEIGHT = 41;
++   // standard height above the floor.
++
++   float angle;
++   float Sin, Cos;
++   // view direction.
++
++   int sw, sh;
++   Img *screen;
++   // screen image.
++
++   bool texturing;
++   bool sprites;
++   bool walking;
++
++   ImageCache *im_ch;
++
++   int *thing_floors;
++
++   Y_View () { memset (this, 0, sizeof *this); }
++
++   void SetAngle (float new_ang)
++      {
++      angle = new_ang;
++
++      if (angle >= TWOPI)
++         angle -= TWOPI;
++      else if (angle < 0)
++         angle += TWOPI;
++
++      Sin = sin (angle);
++      Cos = cos (angle);
++      }
++
++   void CalcViewZ ()
++      {
++        Objid o;
++        GetCurObject (o, OBJ_SECTORS, int (x), int (y));
++      int secnum = o.num;
++      if (secnum >= 0)
++         z = Sectors[secnum].floorh + EYE_HEIGHT;
++      }
++
++   void ClearScreen ()
++      {
++      memset (screen->wbuf (), colour0, sw * sh);
++      }
++
++   void PutScreen (int x, int y)
++      {
++      DrawScreenBox3D (x, y, x + BOX_BORDER*2 + sw, y + BOX_BORDER*2 + sh);
++
++      Sticker sticker (*screen, true);
++
++      sticker.draw (drw, 't', x + BOX_BORDER, y + BOX_BORDER);
++      }
++
++   void FindThingFloors ()
++   {
++   thing_floors = new int[NumThings];
++
++   for (int i = 0; i < NumThings; i++)
++      {
++        Objid o;
++        GetCurObject (o, OBJ_SECTORS, Things[i].xpos, 
++            Things[i].ypos);
++      int secnum = o.num;
++      
++      if (secnum < 0)
++         thing_floors[i] = 0;
++      else
++         thing_floors[i] = Sectors[secnum].floorh;
++      }
++   }
++};
++
++
++static Y_View view;
++
++
++struct DrawSurf
++{
++public:
++   enum
++      {
++      K_INVIS = 0,
++      K_FLAT,
++      K_TEXTURE
++      };
++   int kind;  
++
++   int h1, h2, tex_h;
++   // heights for the surface (h1 is above h2).
++
++   Img *img;
++   img_pixel_t col;  /* used if img is zero */
++
++   enum
++      {
++      SOLID_ABOVE = 1,
++      SOLID_BELOW = 2
++      };
++   int y_clip;
++
++   /* CTor */
++
++   DrawSurf () { kind = K_INVIS; img = 0; }
++
++   void FindFlat (const wad_flat_name_t& fname, Sector *sec)
++      {
++      if (view.texturing)
++         {
++         img = view.im_ch->GetFlat (fname);
++
++         if (img != 0)
++            return;
++         }
++      col = 0x70 + ((sec - Sectors) % 48);
++      }
++
++   void FindTex (const wad_tex_name_t& tname, LineDef *ld)
++      {
++      if (view.texturing)
++         {
++         img = view.im_ch->GetTex (tname);
++
++         if (img != 0)
++            return;
++         }
++      col = 0x30 + ((ld - LineDefs) % 64);
++
++      if (col >= 0x60)
++         col += 0x70;
++      }
++};
++
++
++struct DrawWall
++{
++public:
++   typedef std::vector<struct DrawWall *> vec_t;
++
++   Thing *th;
++   // when `th' is non-zero, this is actually a sprite, and `ld' and
++   // `sd' will be zero.  Sprites use the info in the `ceil' surface.
++
++   LineDef *ld;
++   SideDef *sd;
++   Sector *sec;
++
++   int side;
++   // which side this wall faces (0 right, 1 left)
++
++   float ang1, dang, cur_ang;
++   float base_ang;
++   // clipped angles
++
++   float dist, t_dist;
++   float normal;
++   // line constants
++
++   double iz1, diz, cur_iz; 
++   double mid_iz;
++   // distance values (inverted, so they can be lerped)
++
++   float spr_tx1;
++   // translate coord, for sprite
++
++   int sx1, sx2;
++   // screen X coordinates
++ 
++   int oy1, oy2;
++   // for sprites, the remembered open space to clip to
++
++   /* surfaces */
++   
++   DrawSurf ceil;
++   DrawSurf upper;
++   DrawSurf lower;
++   DrawSurf floor;
++
++   static const double IZ_EPSILON = 0.000001;
++
++   /* PREDICATES */
++
++   struct MidDistCmp
++      {
++      inline bool operator() (const DrawWall * A, const DrawWall * B) const
++         {
++         return A->mid_iz > B->mid_iz;
++         }
++      };
++
++   struct DistCmp
++      {
++      inline bool operator() (const DrawWall * A, const DrawWall * B) const
++         {
++         if (fabs (A->cur_iz - B->cur_iz) < IZ_EPSILON)
++            return A->diz > B->diz;
++
++         return A->cur_iz > B->cur_iz;
++         }
++      };
++
++   struct SX1Cmp
++      {
++      inline bool operator() (const DrawWall * A, const DrawWall * B) const
++         {
++         return A->sx1 < B->sx1;
++         }
++
++      inline bool operator() (const DrawWall * A, int x) const
++         {
++         return A->sx1 < x;
++         }
++
++      inline bool operator() (int x, const DrawWall * A) const
++         {
++         return x < A->sx1;
++         }
++      };
++
++   struct SX2Less
++      {
++      int x;
++
++      SX2Less (int _x) : x (_x) { }
++
++      inline bool operator() (const DrawWall * A) const
++         {
++         return A->sx2 < x;
++         }
++      };
++
++   /* methods */
++
++   void ComputeWallSurface ()
++      {
++      Sector *front = sec;
++      Sector *back  = 0;
++
++      if (is_obj (side ? ld->sidedef1 : ld->sidedef2))
++         {
++         SideDef *bsd = SideDefs + (side ? ld->sidedef1 : ld->sidedef2);
++
++         if (is_obj (bsd->sector))
++            back = Sectors + bsd->sector;
++         }
++
++      bool sky_upper = back && is_sky (front->ceilt) && is_sky (back->ceilt);
++
++      if ((front->ceilh > view.z || is_sky (front->ceilt)) && ! sky_upper) 
++         {
++         ceil.kind = DrawSurf::K_FLAT;
++         ceil.h1 = +99999;
++         ceil.h2 = front->ceilh;
++         ceil.tex_h = ceil.h2;
++         ceil.y_clip = DrawSurf::SOLID_ABOVE;
++
++         if (is_sky (front->ceilt))
++            ceil.col = sky_colour;
++         else
++            ceil.FindFlat (front->ceilt, front);
++         }
++
++      if (front->floorh < view.z)
++         {
++         floor.kind = DrawSurf::K_FLAT;
++         floor.h1 = front->floorh;
++         floor.h2 = -99999;
++         floor.tex_h = floor.h1;
++         floor.y_clip = DrawSurf::SOLID_BELOW;
++
++         if (is_sky (front->floort))
++            floor.col = sky_colour;
++         else
++            floor.FindFlat (front->floort, front);
++         }
++
++      if (! back)
++         {
++         /* ONE-sided line */
++
++         lower.kind = DrawSurf::K_TEXTURE;
++         lower.h1 = front->ceilh;
++         lower.h2 = front->floorh;
++         lower.y_clip = DrawSurf::SOLID_ABOVE | DrawSurf::SOLID_BELOW;
++
++         lower.FindTex (sd->tex3, ld);
++
++         if (lower.img && (ld->flags & ML_LOWER_UNPEGGED))
++            lower.tex_h = lower.h2 + lower.img->height ();
++         else
++            lower.tex_h = lower.h1;
++         }
++      else
++         {
++         /* TWO-sided line */
++
++         if (back->ceilh < front->ceilh && ! sky_upper)
++            {
++            upper.kind = DrawSurf::K_TEXTURE;
++            upper.h1 = front->ceilh;
++            upper.h2 = back->ceilh;
++            upper.tex_h = upper.h1;
++            upper.y_clip = DrawSurf::SOLID_ABOVE;
++
++            upper.FindTex (sd->tex1, ld);
++
++            if (upper.img && ! (ld->flags & ML_UPPER_UNPEGGED))
++               upper.tex_h = upper.h2 + upper.img->height ();
++            else
++               upper.tex_h = upper.h1;
++            }
++
++         if (back->floorh > front->floorh)
++            {
++            lower.kind = DrawSurf::K_TEXTURE;
++            lower.h1 = back->floorh;
++            lower.h2 = front->floorh;
++            lower.y_clip = DrawSurf::SOLID_BELOW;
++
++            lower.FindTex (sd->tex2, ld);
++
++            if (ld->flags & ML_LOWER_UNPEGGED)
++               lower.tex_h = front->ceilh;
++            else
++               lower.tex_h = lower.h1;
++            }
++         }
++      }
++};
++
++
++struct RendInfo
++{
++public:
++   DrawWall::vec_t walls;
++   // complete set of walls/sprites to draw.
++
++   DrawWall::vec_t active;
++   // the active list.  Pointers here are always duplicates of ones in
++   // the walls list (no need to `delete' any of them).
++
++   std::vector<double> depth_x;  
++   // inverse distances over X range, 0 when empty.
++
++   int open_y1;
++   int open_y2;
++
++   static const double Y_SLOPE = 1.70;
++
++   static void DeleteWall (DrawWall *P)
++      {
++      delete P;
++      }
++
++   ~RendInfo ()
++      {
++      std::for_each (walls.begin (), walls.end (), DeleteWall);
++      
++      walls.clear ();
++      active.clear ();
++      }
++
++   void InitDepthBuf (int width)
++      {
++      depth_x.resize (width);
++
++      std::fill_n (depth_x.begin (), width, 0);
++      }
++
++   static inline float PointToAngle (float x, float y)
++      {
++      if (-0.01 < x && x < 0.01)
++         return (y > 0) ? HALFPI : (3 * HALFPI);
++
++      float angle = atan2(y, x);
++
++      if (angle < 0)
++         angle += TWOPI;
++
++      return angle;
++      }
++
++   static inline int AngleToX (float ang)
++      {
++      float t = tan (HALFPI - ang);
++
++      int x = int (view.sw * t);
++
++      x = (view.sw + x) / 2;
++
++      if (x < 0)
++         x = 0;
++      else if (x > view.sw)
++         x = view.sw;
++
++      return x;
++      }
++
++   static inline float XToAngle (int x)
++      {
++      x = x * 2 - view.sw;
++
++      float ang = HALFPI + atan (x / float (view.sw));
++
++      if (ang < 0)
++         ang = 0;
++      else if (ang > ONEPI)
++         ang = ONEPI;
++
++      return ang;
++      }
++
++   static inline int DeltaToX (double iz, float tx)
++      {
++      int x = int (view.sw * tx * iz);
++
++      x = (x + view.sw) / 2;
++
++      return x;
++      }
++
++   static inline float XToDelta (int x, double iz)
++      {
++      x = x * 2 - view.sw;
++
++      float tx = x / iz / view.sw;
++
++      return tx;
++      }
++
++   static inline int DistToY (double iz, int sec_h)
++      {
++      if (sec_h > 32770)
++         return -9999;
++
++      if (sec_h < -32770)
++         return +9999;
++
++      sec_h -= view.z;
++
++      int y = int (view.sh * sec_h * iz * Y_SLOPE);
++
++      y = (view.sh - y) / 2;
++
++      return y;
++      }
++
++   static inline float YToDist (int y, int sec_h)
++      {
++      sec_h -= view.z;
++
++      y = y * 2 - view.sh;
++
++      if (y == 0)
++         return 999999;
++
++      return view.sh * sec_h * Y_SLOPE / y;
++      }
++
++   static inline float YToSecH (int y, double iz)
++      {
++      y = y * 2 - view.sh;
++
++      return view.z - (float (y) / view.sh / iz / Y_SLOPE);
++      }
++
++   void AddLine (int linenum)
++      {
++      LineDef *ld = LineDefs + linenum;
++
++      if (! is_obj (ld->start) || ! is_obj (ld->end))
++         return;
++
++      float x1 = Vertices[ld->start].x - view.x;
++      float y1 = Vertices[ld->start].y - view.y;
++      float x2 = Vertices[ld->end].x - view.x;
++      float y2 = Vertices[ld->end].y - view.y;
++
++      float tx1 = x1 * view.Sin - y1 * view.Cos;
++      float ty1 = x1 * view.Cos + y1 * view.Sin;
++      float tx2 = x2 * view.Sin - y2 * view.Cos;
++      float ty2 = x2 * view.Cos + y2 * view.Sin;
++
++      // reject line if complete behind viewplane
++      if (ty1 <= 0 && ty2 <= 0)
++         return;
++
++      float angle1 = PointToAngle (tx1, ty1);
++      float angle2 = PointToAngle (tx2, ty2);
++      float span = angle1 - angle2;
++
++      if (span < 0)
++         span += TWOPI;
++
++      int side = 0;
++      SideDef *sd;
++
++      if (span >= ONEPI)
++         side = 1;
++
++      // ignore the line when there is no facing sidedef
++      if (! is_obj (side ? ld->sidedef2 : ld->sidedef1))
++         return;
++
++      sd = SideDefs + (side ? ld->sidedef2 : ld->sidedef1);
++
++      if (! is_obj (sd->sector))
++         return;
++
++      if (side == 1)
++         {
++         float tmp = angle1;
++         angle1 = angle2;
++         angle2 = tmp;
++         }
++
++      // clip angles to view volume
++
++      float base_ang = angle1;
++
++      float leftclip  = (3 * ONEPI / 4);
++      float rightclip = ONEPI / 4;
++
++      float tspan1 = angle1 - rightclip;
++      float tspan2 = leftclip - angle2;
++
++      if (tspan1 < 0) tspan1 += TWOPI;
++      if (tspan2 < 0) tspan2 += TWOPI;
++
++      if (tspan1 > HALFPI)
++         {
++         // Totally off the left edge?
++         if (tspan2 >= ONEPI)
++            return;
++
++         angle1 = leftclip;
++         }
++
++      if (tspan2 > HALFPI)
++         {
++         // Totally off the left edge?
++         if (tspan1 >= ONEPI)
++            return;
++
++         angle2 = rightclip;
++         }
++
++      // convert angles to on-screen X positions
++      int sx1 = AngleToX (angle1);
++      int sx2 = AngleToX (angle2) - 1;
++
++      if (sx1 > sx2)
++         return;
++
++      // compute distance from eye to wall
++      float wdx = x2 - x1;
++      float wdy = y2 - y1;
++
++      float wlen = sqrt (wdx * wdx + wdy * wdy);
++      float dist = fabs ((y1 * wdx / wlen) - (x1 * wdy / wlen));
++
++      if (dist < 0.01)
++         return;
++
++      // compute normal of wall (translated coords)
++      float normal;
++
++      if (side == 1)
++         normal = PointToAngle (ty2 - ty1, tx1 - tx2);
++      else
++         normal = PointToAngle (ty1 - ty2, tx2 - tx1);
++
++      // compute inverse distances
++      double iz1 = cos (normal - angle1) / dist / cos (HALFPI - angle1);
++      double iz2 = cos (normal - angle2) / dist / cos (HALFPI - angle2);
++
++      double diz = (iz2 - iz1) / y_max (1, sx2 - sx1);
++
++      // create drawwall structure
++
++      DrawWall *dw = new DrawWall;
++
++      dw->th = 0;
++      dw->ld = ld;
++      dw->sd = sd;
++      dw->sec = Sectors + sd->sector;
++
++      dw->side = side;
++
++      dw->base_ang = base_ang;
++      dw->ang1 = angle1;
++      dw->dang = (angle2 - angle1) / y_max (1, sx2 - sx1);
++
++      dw->dist = dist;
++      dw->normal = normal;
++      dw->t_dist = tan (base_ang - normal) * dist;
++
++      dw->iz1 = iz1;
++      dw->diz = diz;
++      dw->mid_iz = iz1 + (sx2 - sx1 + 1) * diz / 2;
++
++      dw->sx1 = sx1;  dw->sx2 = sx2;
++
++      walls.push_back (dw);
++      }
++
++   void AddThing (int thingnum)
++      {
++      Thing *th = Things + thingnum;
++
++      float x = th->xpos - view.x;
++      float y = th->ypos - view.y;
++
++      float tx = x * view.Sin - y * view.Cos;
++      float ty = x * view.Cos + y * view.Sin;
++
++      // reject sprite if complete behind viewplane
++      if (ty < 4)
++         return;
++
++      Img *sprite = view.im_ch->GetSprite (th->type);
++      if (! sprite)
++         return;
++
++      float tx1 = tx - sprite->width () / 2.0;
++      float tx2 = tx + sprite->width () / 2.0;
++
++      double iz = 1 / ty;
++
++      int sx1 = DeltaToX (iz, tx1);
++      int sx2 = DeltaToX (iz, tx2) - 1;
++
++      if (sx1 < 0)
++         sx1 = 0;
++
++      if (sx2 >= view.sw)
++         sx2 = view.sw - 1;
++
++      if (sx1 > sx2)
++         return;
++
++      int h2 = view.thing_floors[thingnum];
++      int h1 = h2 + sprite->height ();
++
++      // create drawwall structure
++
++      DrawWall *dw = new DrawWall;
++
++      dw->th = th;
++      dw->ld = 0;
++      dw->sd = 0;
++      dw->sec = 0;
++
++      dw->spr_tx1 = tx1;
++
++      dw->ang1 = dw->dang = 0;
++
++      dw->iz1 = dw->mid_iz = iz;
++      dw->diz = 0;
++
++      dw->sx1 = sx1;  dw->sx2 = sx2;
++
++      dw->ceil.img = sprite;
++      dw->ceil.h1  = h1;
++      dw->ceil.h2  = h2;
++
++      walls.push_back (dw);
++      }
++
++   void ComputeSurfaces ()
++      {
++      DrawWall::vec_t::iterator S;
++
++      for (S = walls.begin (); S != walls.end (); S++)
++         if ((*S)->ld)
++            (*S)->ComputeWallSurface ();
++      }
++
++   void ClipSolids ()
++      {
++      // perform a rough depth sort of the walls and sprites.
++
++      std::sort (walls.begin (), walls.end (), DrawWall::MidDistCmp ());
++
++      // go forwards, from closest to furthest away
++
++      DrawWall::vec_t::iterator S;
++
++      for (S = walls.begin (); S != walls.end (); S++)
++         {
++         DrawWall *dw = (*S);
++
++         if (! dw)
++            continue;
++
++         int one_sided = dw->ld && ! is_obj (dw->ld->sidedef2);
++         int vis_count = dw->sx2 - dw->sx1 + 1;
++
++         for (int x = dw->sx1; x <= dw->sx2; x++)
++            {
++            double iz = dw->iz1 + (dw->diz * (x - dw->sx1));
++
++            if (iz < depth_x[x])
++               vis_count--;
++            else if (one_sided)
++               depth_x[x] = iz;
++            }
++
++         if (vis_count == 0)
++            {
++            delete dw;
++            (*S) = 0;
++            }
++         }
++
++      // remove null pointers
++
++      S = std::remove (walls.begin (), walls.end (), (DrawWall *) 0);
++
++      walls.erase (S, walls.end ());
++      }
++
++   void RenderFlatColumn (DrawWall *dw, DrawSurf& surf,
++         int x, int y1, int y2)
++      {
++      img_pixel_t *buf = view.screen->wbuf ();
++      img_pixel_t *wbuf = surf.img->wbuf ();
++
++      int tw = surf.img->width ();
++      int th = surf.img->height ();
++
++      float ang = XToAngle (x);
++      float modv = cos (ang - HALFPI);
++
++      float t_cos = cos (ONEPI + -view.angle + ang) / modv;
++      float t_sin = sin (ONEPI + -view.angle + ang) / modv;
++
++      buf += x + y1 * view.sw;
++
++      for (; y1 <= y2; y1++, buf += view.sw)
++         {
++         float dist = YToDist (y1, surf.tex_h);
++
++         int tx = int ( view.x + t_sin * dist) & (tw - 1);
++         int ty = int (-view.y - t_cos * dist) & (th - 1);
++
++         *buf = wbuf[ty * tw + tx];
++         }
++      }
++
++   void RenderTexColumn (DrawWall *dw, DrawSurf& surf,
++         int x, int y1, int y2)
++      {
++      img_pixel_t *buf = view.screen->wbuf ();
++      img_pixel_t *wbuf = surf.img->wbuf ();
++
++      int tw = surf.img->width ();
++      int th = surf.img->height ();
++
++      /* compute texture X coord */
++
++      int tx = int (dw->t_dist - tan (dw->cur_ang - dw->normal) * dw->dist);
++
++      tx = (dw->sd->xoff + tx) & (tw - 1);
++
++      /* compute texture Y coords */
++
++      float base_h = surf.tex_h + dw->sd->yoff;
++
++      float h1 = base_h - YToSecH (y1, dw->cur_iz);
++      float dh = base_h - YToSecH (y2, dw->cur_iz);
++
++      dh = (dh - h1) / y_max (1, y2 - y1);
++       
++      buf  += x + y1 * view.sw;
++      wbuf += tx;
++
++      for (; y1 <= y2; y1++, h1 += dh, buf += view.sw)
++         {
++         int ty = int (h1) % th;
++
++         // handle negative values (use % twice)
++         ty = (ty + th) % th;
++
++         *buf = wbuf[ty * tw];
++         }
++      }
++
++   void RenderSolidColumn (DrawWall *w, DrawSurf& surf,
++         int x, int y1, int y2)
++      {
++      img_pixel_t *buf = view.screen->wbuf ();
++
++      buf += x + y1 * view.sw;
++       
++      for (; y1 <= y2; y1++, buf += view.sw)
++         {
++         *buf = surf.col;
++         }
++      }
++
++   inline void RenderWallSurface (DrawWall *dw, DrawSurf& surf, 
++         int x)
++      {
++      if (surf.kind == DrawSurf::K_INVIS)
++         return;
++
++      int y1 = DistToY (dw->cur_iz, surf.h1);
++      int y2 = DistToY (dw->cur_iz, surf.h2) - 1;
++
++      if (y1 < open_y1)
++         y1 = open_y1;
++
++      if (y2 > open_y2)
++         y2 = open_y2;
++
++      if (y1 > y2)
++         return;
++
++      /* clip the open region */
++
++      if (surf.y_clip & DrawSurf::SOLID_ABOVE)
++         if (y2 > open_y1)
++            open_y1 = y2;
++
++      if (surf.y_clip & DrawSurf::SOLID_BELOW)
++         if (y1 < open_y2)
++            open_y2 = y1;
++
++      /* fill pixels */
++
++      if (! surf.img)
++         {
++         RenderSolidColumn (dw, surf, x, y1, y2);
++         }
++      else switch (surf.kind)
++         {
++         case DrawSurf::K_FLAT:
++            RenderFlatColumn (dw, surf, x, y1, y2);
++            break;
++
++         case DrawSurf::K_TEXTURE:
++            RenderTexColumn  (dw, surf, x, y1, y2);
++            break;
++         }
++      }
++
++   inline void RenderSprite (DrawWall *dw, int x)
++      {
++      int y1 = DistToY (dw->cur_iz, dw->ceil.h1);
++      int y2 = DistToY (dw->cur_iz, dw->ceil.h2) - 1;
++
++      if (y1 < dw->oy1)
++         y1 = dw->oy1;
++
++      if (y2 > dw->oy2)
++         y2 = dw->oy2;
++
++      if (y1 > y2)
++         return;
++
++      /* fill pixels */
++
++      img_pixel_t *buf = view.screen->wbuf ();
++      img_pixel_t *wbuf = dw->ceil.img->wbuf ();
++
++      int tw = dw->ceil.img->width ();
++      int th = dw->ceil.img->height ();
++
++      int tx = int (XToDelta (x, dw->cur_iz) - dw->spr_tx1);
++
++      if (tx < 0 || tx >= tw)
++         return;
++
++      float h1 = dw->ceil.h1 - YToSecH (y1, dw->cur_iz);
++      float dh = dw->ceil.h1 - YToSecH (y2, dw->cur_iz);
++
++      dh = (dh - h1) / y_max (1, y2 - y1);
++       
++      buf  += x + y1 * view.sw;
++      wbuf += tx;
++
++      for (; y1 <= y2; y1++, h1 += dh, buf += view.sw)
++         {
++         int ty = int (h1);
++
++         if (ty < 0 || ty >= th)
++            continue;
++
++         img_pixel_t pix = wbuf[ty * tw];
++
++         if (pix != IMG_TRANSP)
++            *buf = pix;
++         }
++      }
++
++   void UpdateActiveList (int x)
++      {
++      DrawWall::vec_t::iterator S, E, P;
++
++      bool changes = false;
++
++      // remove walls that have finished.
++
++      S = active.begin ();
++      E = active.end ();
++
++      S = std::remove_if (S, E, DrawWall::SX2Less (x));
++
++      if (S != E)
++         {
++         active.erase (S, E);
++         changes = true;
++         }
++
++      // add new walls that start in this column.
++
++      S = walls.begin ();
++      E = walls.end ();
++
++      S = std::lower_bound (S, E, x, DrawWall::SX1Cmp ());
++      E = std::upper_bound (S, E, x, DrawWall::SX1Cmp ());
++
++      if (S != E)
++         changes = true;
++
++      for (; S != E; S++)
++         {
++         active.push_back (*S);
++         }
++
++      // calculate new depth values
++
++      S = active.begin ();
++      E = active.end ();
++
++      for (P=S; (P != E); P++)
++         {
++         DrawWall *dw = (*P);
++
++         dw->cur_iz = dw->iz1 + dw->diz * (x - dw->sx1);
++
++         if (P != S && (*(P-1))->cur_iz < dw->cur_iz)
++            changes = true;
++
++         dw->cur_ang = dw->ang1 + dw->dang * (x - dw->sx1);
++         }
++
++      // if there are changes, re-sort the active list...
++
++      if (changes)
++         {
++         std::sort (active.begin (), active.end (), DrawWall::DistCmp ());
++         }
++      }
++
++   void RenderWalls ()
++      {
++      // sort walls by their starting column, to allow binary search.
++
++      std::sort (walls.begin (), walls.end (), DrawWall::SX1Cmp ());
++
++      active.clear ();
++
++      for (int x=0; x < view.sw; x++)
++         {
++         // clear vertical depth buffer
++
++         open_y1 = 0;
++         open_y2 = view.sh - 1;
++
++         UpdateActiveList (x);
++
++         // render, front to back
++
++         DrawWall::vec_t::iterator S, E, P;
++
++         S = active.begin ();
++         E = active.end ();
++
++         for (P=S; P != E; P++)
++            {
++            DrawWall *dw = (*P);
++
++            // for things, just remember the open space
++            if (dw->th)
++               {
++               dw->oy1 = open_y1;
++               dw->oy2 = open_y2;
++               continue;
++               }
++
++            RenderWallSurface (dw, dw->ceil,  x);
++            RenderWallSurface (dw, dw->floor, x);
++            RenderWallSurface (dw, dw->upper, x);
++            RenderWallSurface (dw, dw->lower, x);
++
++            if (open_y1 >= open_y2)
++               break;
++            }
++
++         // now render things, back to front
++
++         if (P == E)
++            P--;
++
++         for (; P != (S-1); P--)
++            {
++            DrawWall *dw = (*P);
++
++            if (dw->th)
++               RenderSprite (dw, x);
++            }
++         }
++      }
++
++   void DoRender3D ()
++      {
++      view.ClearScreen ();
++
++      InitDepthBuf (view.sw);
++
++      for (int i=0; i < NumLineDefs; i++)
++         AddLine (i);
++
++      if (view.sprites)
++         for (int j=0; j < NumThings; j++)
++            AddThing (j);
++
++      ClipSolids ();
++      ComputeSurfaces ();
++      RenderWalls ();
++      }
++};
++
++
++static Thing *FindPlayer (int typenum)
++{
++for (int i=0; i < NumThings; i++)
++   if (Things[i].type == typenum)
++      return Things + i;
++
++return 0;
++}
++
++
++/*
++ *  Render a 3D view from the player's position. 
++ */
++
++void Render3D ()
++{
++if (! view.p_type)
++   {
++   view.p_type = THING_PLAYER1;
++   view.px = 99999;
++   }
++
++Thing *player = FindPlayer (view.p_type);
++
++if (! player)
++   {
++   if (view.p_type != THING_DEATHMATCH)
++      view.p_type = THING_DEATHMATCH;
++
++   player = FindPlayer (view.p_type);
++
++   if (! player)
++      return;
++   }
++
++if (view.px != player->xpos || view.py != player->ypos)
++   {
++   // if player moved, re-create view parameters
++
++   view.x = view.px = player->xpos;
++   view.y = view.py = player->ypos;
++
++   view.CalcViewZ ();
++   view.SetAngle (player->angle * ONEPI / 180.0);
++   }
++
++/* create image */
++
++view.sw = 320;
++view.sh = 200;
++
++view.screen = new Img ((unsigned short int) view.sw, (unsigned short int) view.sh, false);
++view.im_ch = new ImageCache;
++
++view.FindThingFloors ();
++
++bool Redraw = true;
++
++/* input loop */
++
++for (;;)
++   {
++   /* render image */
++
++   if (Redraw)
++      {
++      if (view.walking)
++         view.CalcViewZ ();
++
++      RendInfo rend;
++
++      rend.DoRender3D ();
++
++      view.PutScreen (40, 40);
++
++      Redraw = false;
++      }
++
++   /* handle keypress */
++
++   int key = get_key ();
++
++   if (key == YK_ESC || key == 'q')
++      break;
++
++   if ((key & ~YK_SHIFT) == YK_LEFT)
++      {
++      view.SetAngle (view.angle + ONEPI / ((key & YK_SHIFT) ? 4 : 8));
++      Redraw = true;
++      }
++   else if ((key & ~YK_SHIFT) == YK_RIGHT)
++      {
++      view.SetAngle (view.angle -ONEPI / ((key & YK_SHIFT) ? 4 : 8));
++      Redraw = true;
++      }
++   else if ((key & ~YK_SHIFT) == YK_UP)
++      {
++      view.x += view.Cos * ((key & YK_SHIFT) ? 192 : 32);
++      view.y += view.Sin * ((key & YK_SHIFT) ? 192 : 32);
++      Redraw = true;
++      }
++   else if ((key & ~YK_SHIFT) == YK_DOWN)
++      {
++      view.x -= view.Cos * ((key & YK_SHIFT) ? 192 : 32);
++      view.y -= view.Sin * ((key & YK_SHIFT) ? 192 : 32);
++      Redraw = true;
++      }
++   else if (key == 'n' || key == 'N')
++      {
++      view.x -= view.Sin * ((key == 'N') ? 192 : 32);
++      view.y += view.Cos * ((key == 'N') ? 192 : 32);
++      Redraw = true;
++      }
++   else if (key == 'm' || key == 'M')
++      {
++      view.x += view.Sin * ((key == 'M') ? 192 : 32);
++      view.y -= view.Cos * ((key == 'M') ? 192 : 32);
++      Redraw = true;
++      }
++   else if (key == 'd' || key == 'D')
++      {
++      view.z += (key == 'D') ? 128 : 32;
++      Redraw = true;
++      }
++   else if (key == 'c' || key == 'C')
++      {
++      view.z -= (key == 'C') ? 128 : 32;
++      Redraw = true;
++      }
++   else if (key == 't')
++      {
++      view.texturing = ! view.texturing;
++      Redraw = true;
++      }
++   else if (key == 's')
++      {
++      view.sprites = ! view.sprites;
++      Redraw = true;
++      }
++   else if (key == 'w')
++      {
++      view.walking = ! view.walking;
++      Redraw = true;
++      }
++   else if (key)
++      {
++      // key no good, get another one
++      Beep ();
++      }
++   }
++
++/* all done */
++
++delete view.screen;
++view.screen = 0;
++
++delete view.im_ch;
++view.im_ch = 0;
++
++delete[] view.thing_floors;
++view.thing_floors = 0;
++}
++
+diff -u -r -N yadex-1.7.0/src/r_render.h yadex-1.7.0-all/src/r_render.h
+--- yadex-1.7.0/src/r_render.h	1970-01-01 10:00:00.000000000 +1000
++++ yadex-1.7.0-all/src/r_render.h	2005-01-10 14:30:53.000000000 +1100
+@@ -0,0 +1,14 @@
++/*
++ *	r_render.h
++ *	AJA 2002-04-27
++ */
++
++
++#ifndef YH_R_RENDER  /* DO NOT INSERT ANYTHING BEFORE THIS LINE */
++#define YH_R_RENDER
++
++
++void Render3D ();
++
++
++#endif  /* DO NOT ADD ANYTHING AFTER THIS LINE */
+diff -u -r -N yadex-1.7.0/src/s_misc.cc yadex-1.7.0-all/src/s_misc.cc
+--- yadex-1.7.0/src/s_misc.cc	2003-03-28 23:37:32.000000000 +1100
++++ yadex-1.7.0-all/src/s_misc.cc	2005-01-10 14:30:53.000000000 +1100
+@@ -29,11 +29,15 @@
+ 
+ 
+ #include "yadex.h"
++#include <math.h>
++
+ #include "entry.h"
+ #include "gfx.h"
+ #include "levels.h"
+ #include "objid.h"
+ #include "selectn.h"
++#include "objects.h"
++#include "dialog.h"
+ 
+ 
+ /*
+@@ -179,4 +183,340 @@
+ MadeChanges = 1;
+ }
+ 
++
++static int find_linedef_for_area (int x, int y, int& side)
++{
++   int n, m, curx;
++   int best_match = -1;
++
++   curx = 32767;  // Oh yes, one more hard-coded constant!
++
++   for (n = 0; n < NumLineDefs; n++)
++      if ((Vertices[LineDefs[n].start].y > y)
++       != (Vertices[LineDefs[n].end].y > y))
++      {
++         int lx0 = Vertices[LineDefs[n].start].x;
++         int ly0 = Vertices[LineDefs[n].start].y;
++         int lx1 = Vertices[LineDefs[n].end].x;
++         int ly1 = Vertices[LineDefs[n].end].y;
++         m = lx0 + (int) ((long) (y - ly0) * (long) (lx1 - lx0)
++                                           / (long) (ly1 - ly0));
++         if (m >= x && m < curx)
++         {
++            curx = m;
++            best_match = n;
++         }
++      }
++
++   /* now look if this linedef has a sidedef bound to one sector */
++   if (best_match < 0)
++      return OBJ_NO_NONE;
++
++   if (Vertices[LineDefs[best_match].start].y
++     > Vertices[LineDefs[best_match].end].y)
++      side = 1;
++   else
++      side = 2;
++
++   return best_match;
++}
++
++/*
++   compute the angle between lines AB and BC, going anticlockwise.
++   result is in degrees 0 - 359.  A, B and C are vertex indices.
++   -AJA- 2001-05-09
++ */
++#define DEBUG_ANGLE  0
++
++static double angle_between_linedefs (int A, int B, int C)
++{
++   int a_dx = Vertices[B].x - Vertices[A].x;
++   int a_dy = Vertices[B].y - Vertices[A].y;
++   
++   int c_dx = Vertices[B].x - Vertices[C].x;
++   int c_dy = Vertices[B].y - Vertices[C].y;
++   
++   double AB_angle = (a_dx == 0) ? (a_dy >= 0 ? 90 : -90) :
++      atan2 (a_dy, a_dx) * 180 / M_PI;
++
++   double CB_angle = (c_dx == 0) ? (c_dy >= 0 ? 90 : -90) :
++      atan2 (c_dy, c_dx) * 180 / M_PI;
++
++   double result = CB_angle - AB_angle;
++
++   if (result >= 360)
++      result -= 360;
++   
++   while (result < 0)
++      result += 360;
++
++#if (DEBUG_ANGLE)
++   fprintf(stderr, "ANGLE %1.6f  (%d,%d) -> (%d,%d) -> (%d,%d)\n",
++      result, Vertices[A].x, Vertices[A].y,
++      Vertices[B].x, Vertices[B].y, Vertices[C].x, Vertices[C].y);
++#endif
++
++   return result;
++}
++
++/*
++   follows the path clockwise from the given start line, adding each
++   line into the appropriate set.  If the path is not closed, zero is
++   returned.  
++   
++   -AJA- 2001-05-09
++ */
++#define DEBUG_PATH  0
++
++static int select_sides_in_closed_path (bitvec_c& ld_side1,
++    bitvec_c& ld_side2, int line, int side)
++{
++   int cur_vert, prev_vert, final_vert;
++   
++   if (side == 1)
++   {
++      ld_side1.set (line);
++      cur_vert = LineDefs[line].end;
++      prev_vert = final_vert = LineDefs[line].start;
++   }
++   else
++   {
++      ld_side2.set (line);
++      cur_vert = LineDefs[line].start;
++      prev_vert = final_vert = LineDefs[line].end;
++   }
++
++#if (DEBUG_PATH)
++      fprintf(stderr, "PATH: line %d  side %d  cur %d  final %d\n",
++         line, side, cur_vert, final_vert);
++#endif
++
++   while (cur_vert != final_vert)
++   {
++      int next_line = OBJ_NO_NONE;
++      int next_vert = OBJ_NO_NONE;
++      int next_side;
++      double best_angle = 999;
++
++      // Look for the next linedef in the path.  It's the linedef that
++      // uses the current vertex and is not the current one.
++
++      for (int n = 0; n < NumLineDefs; n++)
++      {
++         if (n == line)
++            continue;
++
++         int other_vert;
++         int which_side;
++
++         if (LineDefs[n].start == cur_vert)
++         {
++            other_vert = LineDefs[n].end;
++            which_side = 1;
++         }
++         else if (LineDefs[n].end == cur_vert)
++         {
++            other_vert = LineDefs[n].start;
++            which_side = 2;
++         }
++         else
++            continue;
++
++         // found adjoining linedef
++         
++         double angle = angle_between_linedefs (prev_vert, cur_vert,
++            other_vert);
++         
++         if (! is_obj (next_line) || angle < best_angle)
++         {
++            next_line = n;
++            next_vert = other_vert;
++            next_side = which_side;
++            
++            best_angle = angle;
++         }
++
++         // Continue the search
++      }
++ 
++      line = next_line;
++      side = next_side;
++
++#if (DEBUG_PATH)
++      fprintf(stderr, "PATH NEXT: line %d  side %d  vert %d  angle %1.6f\n",
++         line, side, next_vert, best_angle);
++#endif
++
++      // None ?  Path cannot be closed
++      if (! is_obj (line))
++         return 0;
++
++      // Line already seen ?  Under normal circumstances this won't
++      // happen, but it _can_ happen and indicates a non-closed
++      // structure
++      if (ld_side1.get (line) || ld_side2.get (line))
++         return 0;
++
++      if (side == 1)
++         ld_side1.set (line);
++      else
++         ld_side2.set (line);
++       
++      prev_vert = cur_vert;
++      cur_vert = next_vert;
++   }
++
++#if (DEBUG_PATH)
++      fprintf(stderr, "PATH CLOSED !\n");
++#endif
++
++   return 1;
++}
++
++/*
++   update the side on a single linedef, using the given sector
++   reference.  Will create a new sidedef if necessary.
++ */
++static void super_set_sector_on_side (int line, wad_sdn_t& side,
++   wad_sdn_t& other, int side_no, int sector)
++{
++   if (is_obj (side) && SideDefs[side].sector == sector)
++   {
++      // there was no change.
++      return;
++   }
++   
++   int must_flip = 0;
++
++   if (! is_obj (side))
++   {
++      // if we're adding a sidedef to a line that has no sides, and
++      // the sidedef would be the 2nd one, then flip the linedef.
++      // Thus we don't end up with invalid lines -- i.e. ones with a
++      // left side but no right side.
++
++      if (! is_obj (other) && side_no == 2)
++         must_flip = 1;
++
++      InsertObject (OBJ_SIDEDEFS, OBJ_NO_NONE, 0, 0);
++      side = NumSideDefs - 1;
++
++      // if we're adding a second side to the linedef, clear out some
++      // of the properties that aren't needed anymore: middle texture,
++      // two-sided flag, and impassible flag.
++      
++      if (is_obj (other))
++      {
++         strncpy (SideDefs[side].tex3,  "-", WAD_TEX_NAME);
++         strncpy (SideDefs[other].tex3, "-", WAD_TEX_NAME);
++
++         LineDefs[line].flags |=  4;  // Set the 2S bit
++         LineDefs[line].flags &= ~1;  // Clear the Im bit
++      }
++   }
++
++   SideDefs[side].sector = sector;
++   
++   if (must_flip)
++   {
++      int temp = LineDefs[line].start;
++      LineDefs[line].start = LineDefs[line].end;
++      LineDefs[line].end = temp;
++
++      temp = side; 
++      side = other; 
++      other = temp;
++   }
++
++   MadeChanges = 1;
++   MadeMapChanges = 1;
++}
++
++static int super_find_sector_model (bitvec_c& ld_side1,
++    bitvec_c& ld_side2)
++{
++   for (int line=0; line < NumLineDefs; line++)
++   {
++      int side1 = LineDefs[line].sidedef1;
++      int side2 = LineDefs[line].sidedef2;
++
++      if (ld_side1.get (line))
++         if (is_obj (side2))
++            return SideDefs[side2].sector;
++
++      if (ld_side2.get (line))
++         if (is_obj (side1))
++            return SideDefs[side1].sector;
++   }
++
++   return OBJ_NO_NONE;
++}
++
++
++/*
++   Change the closed sector at the pointer
++
++   "sector" here really means a bunch of sidedefs that all face
++   inward to the current area under the mouse cursor.  Two basic
++   operations: (a) set the sidedef sector references to a completely
++   new sector, or (b) set them to an existing sector.  This is
++   controlled by the `new_sec' parameter.
++
++   -AJA- 2001-05-08
++ */
++
++void SuperSectorSelector (int map_x, int map_y, int new_sec)
++{
++   int line, side;
++   char msg_buf[200];
++
++   line = find_linedef_for_area (map_x, map_y, side);
++
++   if (! is_obj (line))
++   {
++      Beep ();
++      sprintf (msg_buf, "Chosen area is not closed");
++      Notify (-1, -1, msg_buf, NULL);
++      return;
++   }
++
++   bitvec_c ld_side1 (NumLineDefs);
++   bitvec_c ld_side2 (NumLineDefs);
++   
++   int closed = select_sides_in_closed_path (ld_side1, ld_side2,
++      line, side);
++
++   if (! closed)
++   {
++      Beep ();
++      sprintf (msg_buf, "Area chosen is not closed");
++      Notify (-1, -1, msg_buf, NULL);
++      return;
++   }
++
++   // -AJA- FIXME: look for "islands", closed linedef paths that lie
++   // completely inside the area, i.e. not connected to the main path.
++   // Example: the two pillars at the start of MAP01 of DOOM 2.  See
++   // GetOppositeSector() and the end of SplitSector() for a possible
++   // algorithm.
++   
++   if (! is_obj (new_sec))
++   {
++      int model = super_find_sector_model (ld_side1, ld_side2);
++      InsertObject (OBJ_SECTORS, model, 0, 0);
++      new_sec = NumSectors - 1;
++   }
++   
++   for (line=0; line < NumLineDefs; line++)
++   {
++      if (ld_side1.get (line))
++         super_set_sector_on_side (line, LineDefs[line].sidedef1,
++            LineDefs[line].sidedef2, 1, new_sec);
++
++      else if (ld_side2.get (line))
++         super_set_sector_on_side (line, LineDefs[line].sidedef2,
++            LineDefs[line].sidedef1, 2, new_sec);
++   }
++}
++
+ /* end of file */
+diff -u -r -N yadex-1.7.0/src/s_prop.cc yadex-1.7.0-all/src/s_prop.cc
+--- yadex-1.7.0/src/s_prop.cc	2003-03-28 23:37:32.000000000 +1100
++++ yadex-1.7.0-all/src/s_prop.cc	2005-01-10 14:30:53.000000000 +1100
+@@ -259,4 +259,67 @@
+   }
+ }
+ 
++/*
++ * 	InputSectorType
++ * 	Let the user select a sector type number and return it
++ * 	Returns 0 if OK, <>0 if cancelled
++ */
++int InputSectorType (int x0, int y0, int *number)
++{
++  int	val;
++  val = 0;
++  *number = 0;
++  Menu_data_st menudata (stdef);
++	if (DisplayMenuList (x0 , y0, "Select type", menudata, &val)
++	  < 0)
++	  return 1;
++  // KLUDGE last element of stdef means "enter value"
++  if (val == al_lcount (stdef) - 1)
++  	{
++	  val = InputIntegerValue (x0 + 84,
++	    y0 + BOX_BORDER + (3 + val) * FONTH,
++	    -32768, 32767, 0);
++	  if (val == IIV_CANCEL)  // [Esc]
++	    return 1;
++	}
++	else
++	{
++	  if (al_lseek (stdef, val, SEEK_SET))
++	    fatal_error ("%s SP1 (%s)\n",
++	      msg_unexpected, al_astrerror (al_aerrno));
++	  val = CUR_STDEF->number;
++	}
++  if (val < 0) return 1;  //unsuccessful
++  *number = val;
++  return 0;               //successful
++}
++
++/*
++ *   TransferSectorProperties
++ *
++ *   -AJA- 2001-05-27
++ */
++void TransferSectorProperties (int src_sector, SelPtr sectors)
++{
++   SelPtr cur;
++
++   for (cur=sectors; cur; cur=cur->next)
++   {
++      if (! is_obj(cur->objnum))
++         continue;
++
++      strncpy (Sectors[cur->objnum].floort, Sectors[src_sector].floort,
++            WAD_FLAT_NAME);
++      strncpy (Sectors[cur->objnum].ceilt, Sectors[src_sector].ceilt,
++            WAD_FLAT_NAME);
++
++      Sectors[cur->objnum].floorh  = Sectors[src_sector].floorh;
++      Sectors[cur->objnum].ceilh   = Sectors[src_sector].ceilh;
++      Sectors[cur->objnum].light   = Sectors[src_sector].light;
++      Sectors[cur->objnum].special = Sectors[src_sector].special;
++      Sectors[cur->objnum].tag     = Sectors[src_sector].tag;
++
++      MadeChanges = 1;
++   }
++}
+ 
+diff -u -r -N yadex-1.7.0/src/s_split.cc yadex-1.7.0-all/src/s_split.cc
+--- yadex-1.7.0/src/s_split.cc	2003-03-28 23:37:32.000000000 +1100
++++ yadex-1.7.0-all/src/s_split.cc	2005-01-10 14:30:53.000000000 +1100
+@@ -36,6 +36,7 @@
+ #include "s_linedefs.h"
+ #include "selectn.h"
+ #include "x_hover.h"
++#include "entry.h"
+ 
+ 
+ /*
+diff -u -r -N yadex-1.7.0/src/t_prop.cc yadex-1.7.0-all/src/t_prop.cc
+--- yadex-1.7.0/src/t_prop.cc	2003-03-28 23:37:32.000000000 +1100
++++ yadex-1.7.0-all/src/t_prop.cc	2005-01-10 14:30:53.000000000 +1100
+@@ -36,16 +36,17 @@
+ #include "gfx.h"
+ #include "levels.h"
+ #include "oldmenus.h"
++#include "objid.h"
++#include "objects.h"
+ #include "selectn.h"
+ #include "things.h"
+ 
+-
+ /*
+  *	Private functions prototypes
+  */
+-static int InputThingType (int x0, int y0, int *number);
+ static const char *PrintThinggroup (void *ptr);
+ static const char *PrintThingdef (void *ptr);
++int InputThingType (int x0, int y0, int *number);
+ 
+ 
+ /*
+@@ -250,7 +251,7 @@
+  *	Let the user select a thing number and return it.
+  *	Returns 0 if OK, <>0 if cancelled
+  */
+-static int InputThingType (int x0, int y0, int *number)
++int InputThingType (int x0, int y0, int *number)
+ {
+ int         r;
+ int         tgno = 0;
+@@ -331,4 +332,30 @@
+ }
+ 
+ 
++/*
++ *   TransferThingProperties
++ *
++ *   -AJA- 2001-05-27
++ */
++void TransferThingProperties (int src_thing, SelPtr things)
++{
++   SelPtr cur;
++
++   for (cur=things; cur; cur=cur->next)
++   {
++      if (! is_obj(cur->objnum))
++         continue;
++
++      Things[cur->objnum].angle = Things[src_thing].angle;
++      Things[cur->objnum].type  = Things[src_thing].type;
++      Things[cur->objnum].when  = Things[src_thing].when;
++
++      MadeChanges = 1;
++
++      things_types++;
++      things_angles++;
++   }
++}
++
++
+ /* end of file */
+diff -u -r -N yadex-1.7.0/src/yadex.h yadex-1.7.0-all/src/yadex.h
+--- yadex-1.7.0/src/yadex.h	2003-12-15 11:37:45.000000000 +1100
++++ yadex-1.7.0-all/src/yadex.h	2005-01-10 14:30:53.000000000 +1100
+@@ -479,6 +479,7 @@
+ 
+ // l_prop.cc (previously in editobj.cc)
+ void LinedefProperties (int x0, int y0, SelPtr obj);
++void TransferLinedefProperties (int src_linedef, SelPtr linedefs);
+ 
+ // l_unlink.cc
+ void unlink_sidedef (SelPtr linedefs, int side1, int side2);
+@@ -541,13 +542,16 @@
+ void DistributeSectorCeilings (SelPtr); /* SWAP! */
+ void RaiseOrLowerSectors (SelPtr obj);
+ void BrightenOrDarkenSectors (SelPtr obj);
++void SuperSectorSelector (int map_x, int map_y, int new_sec);
+ 
+ // s_prop.cc (previously in editobj.cc)
+ void SectorProperties (int x0, int y0, SelPtr obj);
++void TransferSectorProperties (int src_sector, SelPtr sectors);
+ 
+ // s_split.cc (previously in objects.cc)
+ void SplitSector (int, int); /* SWAP! */
+ void SplitLineDefsAndSector (int, int); /* SWAP! */
++void MultiSplitLineDefsAndSector (int, int); /* SWAP! */
+ 
+ // swapmem.cc
+ void InitSwap (void);
+@@ -560,6 +564,7 @@
+ // selrect.cc
+ // t_prop.c (previously in editobj.c)
+ void ThingProperties (int x0, int y0, SelPtr obj);
++void TransferThingProperties (int src_thing, SelPtr things);
+ 
+ // v_merge.cc
+ void DeleteVerticesJoinLineDefs (SelPtr ); /* SWAP! */

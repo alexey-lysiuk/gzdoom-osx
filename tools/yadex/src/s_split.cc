@@ -36,6 +36,7 @@ Place, Suite 330, Boston, MA 02111-1307, USA.
 #include "s_linedefs.h"
 #include "selectn.h"
 #include "x_hover.h"
+#include "entry.h"
 
 
 /*

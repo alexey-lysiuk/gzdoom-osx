@@ -35,4 +35,5 @@ Place, Suite 330, Boston, MA 02111-1307, USA.
 
 pcolour_t *game_colour = 0;	// Pixel values for the DOOM_COLOURS game clrs.
 int colour0;			// Game colour to which g. colour 0 is remapped
+int sky_colour;			// Game colour for a medium sky blue
 

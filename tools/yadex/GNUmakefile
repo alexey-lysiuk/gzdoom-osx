@@ -160,6 +160,7 @@ MODULES_YADEX =								\
 	s_swapf		s_vertices	sanity		scrnshot	\
 	selbox		selectn		selpath		selrect		\
 	serialnum	spritdir	sticker		swapmem		\
+ 	r_render	r_images					\
 	t_centre	t_flags		t_prop		t_spin		\
 	textures	things		trace		v_centre	\
 	v_merge		v_polyg		vectext		verbmsg		\
@@ -237,6 +238,7 @@ DOC2_SRC_HTML =				\
 	docsrc/legal.html		\
 	docsrc/packagers_guide.html	\
 	docsrc/palette.html		\
+	docsrc/preview.html		\
 	docsrc/reporting.html		\
 	docsrc/tips.html		\
 	docsrc/trivia.html		\
@@ -609,8 +611,9 @@ showconf:
 #
 ########################################################################
 
-# If Makefile.config doesn't exist, give a hint...
+# If Makefile.config or config.h don't exist, give a hint...
 $(OBJDIR)/Makefile.config:
+$(OBJDIR)/config.h:
 	@echo "Sorry guv'nor, but... did you run ./configure ?" >&2
 	@false
 
@@ -637,7 +640,7 @@ $(OBJDIR)/files_share.man: $(OBJDIR)/config.share $(MAKEFILE)
 # Note: the modules of Atclib are not scanned as they all
 # depend on $(HEADERS_ATCLIB) and nothing else.
 
-yadex.dep: $(SRC_NON_GEN)
+yadex.dep: $(SRC_NON_GEN) src/config.h
 	@echo "Generating $@"
 	@makedepend -f- -Y -Iatclib $(SRC_NON_GEN) 2>/dev/null	\
 		| awk 'sub (/^src/, "") == 1 {				\

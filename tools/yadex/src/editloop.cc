@@ -70,6 +70,7 @@ Place, Suite 330, Boston, MA 02111-1307, USA.
 #include "x_exchng.h"
 #include "x_hover.h"
 #include "xref.h"
+#include "r_render.h"
 
 #ifdef Y_X11
 #include <X11/Xlib.h>
@@ -304,8 +305,8 @@ e.mb_menu[MBM_FILE] = new Menu (NULL,
 
 e.mb_menu[MBM_EDIT] = new Menu (NULL,
    "~Copy object(s)",          'o',    0,
-   "~Add object",              YK_INS, 0,
-   "~Delete object(s)",        YK_DEL, 0,
+   "~Add object",              'I', 0,
+   "~Delete object(s)",        '\b', 0,
    "~Exchange object numbers", 24,     0,
    "~Preferences...",          YK_F5,  0,
    "~Snap to grid",            'y',    MIF_VTICK, &e.grid_snap,		     0,
@@ -342,6 +343,7 @@ e.mb_menu[MBM_SEARCH] = new Menu (NULL,
    "~Next object",       'n',   0,
    "~Prev object",       'p',   0,
    "~Jump to object...", 'j',   0,
+   "~Find by type",	 'f',	0,
    NULL);
 
 e.mb_menu[MBM_MISC_L] = new Menu ("Misc. operations",
@@ -1344,8 +1346,8 @@ cancel_save_as:
             }
          }
 
-      // [F8]: pop up the "Misc. operations" menu
-      else if (is.key == YK_F8
+      // [M]: pop up the "Misc. operations" menu
+      else if (is.key == 'M'
          && e.menubar->highlighted () < 0)
          {
          e.modpopup->set (e.menubar->get_menu (MBI_MISC), 1);
@@ -1706,7 +1708,15 @@ cancel_save_as:
 	 select_linedefs_path (&e.Selected, e.highlighted.num, YS_TOGGLE);
 	 RedrawMap = 1;
 	 }
-
+      // [E]: add linedef and split sector -- [AJA]
+      else if (is.key == 'E' && e.obj_type == OBJ_VERTICES)
+        {
+        if (e.Selected)
+          {
+          MiscOperations (e.obj_type, &e.Selected, 5);
+          RedrawMap = 1;
+          }
+        }
       // [E]: Select/unselect all 1s linedefs in path
       else if (is.key == 'E' && e.highlighted._is_linedef ())
 	 {
@@ -1834,6 +1844,56 @@ cancel_save_as:
 	 RedrawMap = 1;
 	 }
 
+      // [f]: find object by type
+      else if (is.key == 'f' && (! e.global || e.highlighted ())) 
+	 {
+	 Objid find_obj;
+	 int otype;
+	 obj_no_t omax,onum;
+	 find_obj.type = e.highlighted () ? e.highlighted.type : e.obj_type;
+	 onum = find_obj.num  = e.highlighted () ? e.highlighted.num  : 0;
+	 omax = GetMaxObjectNum(find_obj.type);
+         switch (find_obj.type)
+            {
+	    case OBJ_SECTORS:
+               if ( ! InputSectorType( 84, 21, &otype))
+		  {
+	          for (onum = e.highlighted () ? onum + 1 : onum; onum <= omax; onum++)
+	             if (Sectors[onum].special == (wad_stype_t) otype)
+			{
+		        find_obj.num = onum;
+	                GoToObject(find_obj);
+		        break;
+		        }
+		  }
+	    break;
+	    case OBJ_THINGS:
+	       if ( ! InputThingType( 42, 21, &otype))
+	 	  {
+                  for (onum = e.highlighted () ? onum + 1 : onum; onum <= omax; onum++)
+	             if (Things[onum].type == (wad_ttype_t) otype)
+                        {
+		        find_obj.num = onum;
+	                GoToObject(find_obj);
+		        break;
+		        }
+		  }
+	    break;
+	    case OBJ_LINEDEFS:
+	       if ( ! InputLinedefType( 0, 21, &otype))
+		  {
+	          for (onum = e.highlighted () ? onum + 1 : onum; onum <= omax; onum++)
+		     if (LineDefs[onum].type == (wad_ldtype_t) otype)
+			{
+		        find_obj.num = onum;
+	                GoToObject(find_obj);
+			break;
+		        }
+		  }
+	    break;
+	    }
+         RedrawMap = 1;
+         }
 #if 0
       // [c]: clear selection and redraw the map
       else if (is.key == 'c')
@@ -1921,6 +1981,17 @@ cancel_save_as:
          StretchSelBox = false;
          }
 
+      // [w]: split sector between vertices
+      else if (is.key == 'w' && e.obj_type == OBJ_VERTICES
+         && e.Selected && e.Selected->next && ! e.Selected->next->next)
+         {
+         SplitSector (e.Selected->next->objnum, e.Selected->objnum);
+         ForgetSelection (&e.Selected);
+         RedrawMap = 1;
+         DragObject = false;
+         StretchSelBox = false;
+         }
+
       // [x]: spin things 1/8 turn clockwise
       else if (is.key == 'x' && e.obj_type == OBJ_THINGS
          && (e.Selected || e.highlighted ()))
@@ -1987,7 +2058,7 @@ cancel_save_as:
       }
       
       // [Del]: delete the current object
-      else if (is.key == YK_DEL
+      else if (is.key == '\b'
          && (e.Selected || e.highlighted ())) /* 'Del' */
 	 {
 	 if (e.obj_type == OBJ_THINGS
@@ -2015,7 +2086,7 @@ cancel_save_as:
 	 }
 
       // [Ins]: insert a new object
-      else if (is.key == YK_INS || is.key == YK_INS + YK_SHIFT) /* 'Ins' */
+      else if (is.key == 'I' || is.key == YK_INS + YK_SHIFT) /* 'Ins' */
 	 {
 	 SelPtr cur;
          int prev_obj_type = e.obj_type;
@@ -2201,17 +2272,63 @@ cancel_save_as:
 	 RedrawMap = 1;
 	 }
 
+      // [Z] Set sector on surrounding linedefs (AJA)
+      else if (is.key == 'Z' && e.pointer_in_window) 
+         {
+         if (e.obj_type == OBJ_SECTORS && e.Selected)
+            {
+            SuperSectorSelector (e.pointer_x, e.pointer_y,
+               e.Selected->objnum);
+            }
+         else
+            {
+            SuperSectorSelector (e.pointer_x, e.pointer_y, OBJ_NO_NONE);
+            }
+         RedrawMap = 1;
+         }
+
       // [!] Debug info (not documented)
       else if (is.key == '!')
          {
          DumpSelection (e.Selected);
          }
 
+      // [R] Render 3D view (AJA)
+      else if (is.key == 'R')
+        {
+        Render3D ();
+        RedrawMap = 1;
+        }
+
       // [@] Show font (not documented)
       else if (is.key == '@')
          {
          show_font ();
 	 RedrawMap = 1;
+         }
+
+      // [T] Transfer properties to selected objects (AJA)
+      else if (is.key == 'T' && e.Selected 
+            && e.highlighted.num >= 0)
+         {
+         switch (e.obj_type)
+            {
+            case OBJ_SECTORS:
+               TransferSectorProperties (e.highlighted.num, e.Selected);
+               RedrawMap = 1;
+               break;
+            case OBJ_THINGS:
+               TransferThingProperties (e.highlighted.num, e.Selected);
+               RedrawMap = 1;
+               break;
+            case OBJ_LINEDEFS:
+               TransferLinedefProperties (e.highlighted.num, e.Selected);
+               RedrawMap = 1;
+               break;
+            default:
+               Beep ();
+               break;
+            }
          }
 
       // [|] Show colours (not documented)
