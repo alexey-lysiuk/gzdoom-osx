@@ -300,8 +300,24 @@ static void RestartWithParameters( const char* iwadPath, NSString* parameters )
 		}
 		
 		NSArray* additionalParameters = [parameters componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-		[arguments addObjectsFromArray:additionalParameters];
-	
+		bool previousParameterWasFile = false;
+		
+		for ( NSUInteger i = 0, ei = [additionalParameters count]; i < ei; ++i )
+		{
+			NSString* currentParameter = [additionalParameters objectAtIndex:i];
+			unichar firstChar = [currentParameter characterAtIndex:0];
+			
+			if ( !previousParameterWasFile 
+				&& '-' != firstChar && '+' != firstChar )
+			{
+				[arguments addObject:@"-file"];
+			}
+			
+			[arguments addObject:currentParameter];
+			
+			previousParameterWasFile = NSOrderedSame == [currentParameter compare:@"-file"];
+		}		
+		
 #if 0
 		NSTask* task = [[NSTask alloc] init];
 		[task setLaunchPath:executablePath];
