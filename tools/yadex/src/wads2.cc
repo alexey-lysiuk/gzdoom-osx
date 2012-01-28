@@ -28,6 +28,8 @@ Place, Suite 330, Boston, MA 02111-1307, USA.
 */
 
 
+#include <wordexp.h>
+
 #include "yadex.h"
 #include "game.h"	/* yg_picture_format */
 #include "serialnum.h"
@@ -434,6 +436,13 @@ bool fail = false;
 	 }
 }
 
+// Get real filename
+wordexp_t exp_filename;
+if (wordexp (filename, &exp_filename, 0) == 0)
+{
+    filename = exp_filename.we_wordv[0];
+}
+
 // Create a new Wad_file
 Wad_file *wf = new Wad_file;
 wf->pic_format_ = pic_format;
@@ -495,6 +504,9 @@ if (fail)
   delete wf;
   return 0;
   }
+
+wordfree (&exp_filename);
+
 return wf;
 }
 
