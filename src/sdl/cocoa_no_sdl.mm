@@ -318,9 +318,9 @@ uint8_t ModifierToDIK( const uint32_t modifier )
 
 SWORD ModifierFlagsToGUIKeyModifiers( NSEvent* theEvent )
 {
-	const SWORD modifiers( [theEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask );
-	return ( ( modifiers & NSShiftKeyMask )     ? GKM_SHIFT : 0 )
-		 | ( ( modifiers & NSControlKeyMask )   ? GKM_CTRL  : 0 )
+	const NSUInteger modifiers( [theEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask );
+	return ( ( modifiers & NSShiftKeyMask     ) ? GKM_SHIFT : 0 )
+		 | ( ( modifiers & NSControlKeyMask   ) ? GKM_CTRL  : 0 )
 		 | ( ( modifiers & NSAlternateKeyMask ) ? GKM_ALT   : 0 );
 }
 
@@ -340,7 +340,7 @@ void ProcessKeyboardFlagsEvent( NSEvent* theEvent )
 	event.type  = modifiers > oldModifiers ? EV_KeyDown : EV_KeyUp;
 	event.data1 = ModifierToDIK( deltaModifiers );
 
-	// Caps Lock will generate one per state change not per actual key press
+	// Caps Lock will generate one event per state change but not per actual key press or release
 	// So treat any event as key down
 	
 	if ( DIK_CAPITAL == event.data1 )
@@ -481,8 +481,8 @@ void ProcessMouseButtonEvent( NSEvent* theEvent )
 			case NSRightMouseDown: event.subtype = EV_GUI_RButtonDown; break;
 			case NSOtherMouseDown: event.subtype = EV_GUI_MButtonDown; break;
 			case NSLeftMouseUp:    event.subtype = EV_GUI_LButtonUp;   break;
-			case NSRightMouseUp:   event.subtype = EV_GUI_LButtonUp;   break;
-			case NSOtherMouseUp:   event.subtype = EV_GUI_LButtonUp;   break;
+			case NSRightMouseUp:   event.subtype = EV_GUI_RButtonUp;   break;
+			case NSOtherMouseUp:   event.subtype = EV_GUI_MButtonUp;   break;
 		}
 		
 		NSEventToGameMousePosition( theEvent, &event );
