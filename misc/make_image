@@ -1,26 +1,28 @@
 #!/bin/sh
 
+SOURCE_BUNDLE_NAME=GZDoom.app
+BUNDLE_EXECUTABLE_PATH=Contents/MacOS/GZDoom
+
 DEPLOY_IMAGE_DIR=.deploy_image
-DEPLOY_IMAGE_DIR_SDL=${DEPLOY_IMAGE_DIR}/SDL
-DEPLOY_IMAGE_DIR_COCOA=${DEPLOY_IMAGE_DIR}/Cocoa
+DEPLOY_SDL_DIR=${DEPLOY_IMAGE_DIR}/GZDoom_SDL.app
+DEPLOY_COCOA_DIR=${DEPLOY_IMAGE_DIR}/GZDoom_Cocoa.app
 
 cd `dirname $0`/..
 
 echo "Preparing directories..."
 rm -r ${DEPLOY_IMAGE_DIR} 2>/dev/null
-mkdir -p ${DEPLOY_IMAGE_DIR_SDL}
-mkdir -p ${DEPLOY_IMAGE_DIR_COCOA}
+mkdir ${DEPLOY_IMAGE_DIR}
 
 echo "Copying game..."
-cp -R build/Release_SDL/GZDoom.app ${DEPLOY_IMAGE_DIR_SDL}
-cp -R build/Release_Cocoa/GZDoom.app ${DEPLOY_IMAGE_DIR_COCOA}
+cp -R build/Release_SDL/${SOURCE_BUNDLE_NAME}/ ${DEPLOY_SDL_DIR}
+cp -R build/Release_Cocoa/${SOURCE_BUNDLE_NAME}/ ${DEPLOY_COCOA_DIR}
 
 echo "Stripping executables..."
-strip ${DEPLOY_IMAGE_DIR_SDL}/GZDoom.app/Contents/MacOS/GZDoom
-strip ${DEPLOY_IMAGE_DIR_COCOA}/GZDoom.app/Contents/MacOS/GZDoom
+strip ${DEPLOY_SDL_DIR}/${BUNDLE_EXECUTABLE_PATH}
+strip ${DEPLOY_COCOA_DIR}/${BUNDLE_EXECUTABLE_PATH}
 
 echo "Removing duplicate files..."
-misc/trimtrees.pl ${DEPLOY_IMAGE_DIR_SDL} ${DEPLOY_IMAGE_DIR_COCOA} > /dev/null
+misc/trimtrees.pl ${DEPLOY_SDL_DIR} ${DEPLOY_COCOA_DIR} > /dev/null
 
 echo "Copying documentation..."
 mkdir ${DEPLOY_IMAGE_DIR}/Documentation
