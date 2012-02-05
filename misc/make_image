@@ -1,17 +1,26 @@
 #!/bin/sh
 
+DEPLOY_IMAGE_DIR=.deploy_image
+DEPLOY_IMAGE_DIR_SDL=${DEPLOY_IMAGE_DIR}/SDL
+DEPLOY_IMAGE_DIR_COCOA=${DEPLOY_IMAGE_DIR}/Cocoa
+
 cd `dirname $0`/..
 
-DEPLOY_IMAGE_DIR=.deploy_image
-
+echo "Preparing directories..."
 rm -r ${DEPLOY_IMAGE_DIR} 2>/dev/null
-mkdir ${DEPLOY_IMAGE_DIR}
+mkdir -p ${DEPLOY_IMAGE_DIR_SDL}
+mkdir -p ${DEPLOY_IMAGE_DIR_COCOA}
 
 echo "Copying game..."
-cp -R build/Release_SDL/GZDoom.app ${DEPLOY_IMAGE_DIR}
+cp -R build/Release_SDL/GZDoom.app ${DEPLOY_IMAGE_DIR_SDL}
+cp -R build/Release_Cocoa/GZDoom.app ${DEPLOY_IMAGE_DIR_COCOA}
 
-echo "Stripping executable..."
-strip ${DEPLOY_IMAGE_DIR}/GZDoom.app/Contents/MacOS/GZDoom
+echo "Stripping executables..."
+strip ${DEPLOY_IMAGE_DIR_SDL}/GZDoom.app/Contents/MacOS/GZDoom
+strip ${DEPLOY_IMAGE_DIR_COCOA}/GZDoom.app/Contents/MacOS/GZDoom
+
+echo "Removing duplicate files..."
+misc/trimtrees.pl ${DEPLOY_IMAGE_DIR_SDL} ${DEPLOY_IMAGE_DIR_COCOA} > /dev/null
 
 echo "Copying documentation..."
 mkdir ${DEPLOY_IMAGE_DIR}/Documentation
@@ -19,4 +28,4 @@ cp -R docs/ ${DEPLOY_IMAGE_DIR}/Documentation
 cp ReadMe.rtf ${DEPLOY_IMAGE_DIR}
 
 echo "Building image..."
-hdiutil create -srcfolder ${DEPLOY_IMAGE_DIR} -volname GZDoom ${DEPLOY_IMAGE_DIR}/GZDoom.dmg
+hdiutil create -srcfolder ${DEPLOY_IMAGE_DIR} -volname GZDoom -format UDBZ ${DEPLOY_IMAGE_DIR}/GZDoom.dmg
