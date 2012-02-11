@@ -215,6 +215,10 @@ public:
 
 	// 2D Text drawing
 	void STACK_ARGS DrawText (FFont *font, int normalcolor, int x, int y, const char *string, ...);
+#ifndef DrawText	// See WinUser.h for the definition of DrawText as a macro
+	void STACK_ARGS DrawTextA (FFont *font, int normalcolor, int x, int y, const char *string, ...);
+#endif
+	void DrawTextV (FFont *font, int normalcolor, int x, int y, const char *string, va_list tags);
 	void STACK_ARGS DrawChar (FFont *font, int normalcolor, int x, int y, BYTE character, ...);
 
 	struct DrawParms
