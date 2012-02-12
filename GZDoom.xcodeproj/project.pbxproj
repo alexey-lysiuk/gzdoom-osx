@@ -4404,8 +4404,8 @@
 			);
 			projectRoot = "";
 			targets = (
-				8D1107260486CEB800E47090 /* GZDoom_SDL */,
 				8A9F52E814BB0F2900F3369B /* GZDoom_Cocoa */,
+				8D1107260486CEB800E47090 /* GZDoom_SDL */,
 				49E92B3213991F2900CCEBBC /* sc_man_scanner.re */,
 				49E91DDE1393BF3900CCEBBC /* xlat_parser.y */,
 				8AF279BB1390F2540095D9A0 /* lemon */,
@@ -6122,10 +6122,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = (
-					i386,
-					x86_64,
-				);
+				ARCHS = i386;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
