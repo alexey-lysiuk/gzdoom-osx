@@ -198,7 +198,7 @@ static const FEnumList SpeakerModeNames[] =
 	{ "Surround",				FMOD_SPEAKERMODE_SURROUND },
 	{ "5.1",					FMOD_SPEAKERMODE_5POINT1 },
 	{ "7.1",					FMOD_SPEAKERMODE_7POINT1 },
-	{ "Prologic",				FMOD_SPEAKERMODE_SRS5_1_MATRIX },
+	{ "Prologic",				FMOD_SPEAKERMODE_PROLOGIC },
 	{ "1",						FMOD_SPEAKERMODE_MONO },
 	{ "2",						FMOD_SPEAKERMODE_STEREO },
 	{ "4",						FMOD_SPEAKERMODE_QUAD },
