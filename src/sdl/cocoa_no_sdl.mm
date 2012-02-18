@@ -52,6 +52,7 @@
 #include "doomstat.h"
 #include "m_joy.h"
 #include "s_sound.h"
+#include "st_start.h"
 #include "version.h"
 
 
@@ -651,7 +652,7 @@ void ProcessMouseWheelEvent( NSEvent* theEvent )
 {
 	[super close];
 	
-	exit(0);
+	ST_Endoom();
 }
 
 @end
