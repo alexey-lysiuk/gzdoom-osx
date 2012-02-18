@@ -65,6 +65,7 @@ class CommandDrawImage : public SBarInfoCommand
 		}
 		void	Parse(FScanner &sc, bool fullScreenOffsets)
 		{
+			bool parenthesized = false;
 			bool getImage = true;
 			if(sc.CheckToken(TK_Identifier))
 			{
@@ -83,6 +84,8 @@ class CommandDrawImage : public SBarInfoCommand
 					type = SIGIL;
 				else if(sc.Compare("hexenarmor"))
 				{
+					parenthesized = sc.CheckToken('(');
+
 					sc.MustGetToken(TK_Identifier);
 					if(sc.Compare("armor"))
 						type = HEXENARMOR_ARMOR;
@@ -125,6 +128,8 @@ class CommandDrawImage : public SBarInfoCommand
 				sc.MustGetToken(TK_StringConst);
 				image = script->newImage(sc.String);
 				sprite.SetInvalid();
+
+				if(parenthesized) sc.MustGetToken(')');
 			}
 			sc.MustGetToken(',');
 			GetCoordinates(sc, fullScreenOffsets, imgx, imgy);
@@ -636,19 +641,27 @@ class CommandDrawString : public SBarInfoCommand
 					strValue = LOGTEXT;
 				else if(sc.Compare("globalvar"))
 				{
+					bool parenthesized = sc.CheckToken('(');
+
 					strValue = GLOBALVAR;
 					sc.MustGetToken(TK_IntConst);
 					if(sc.Number < 0 || sc.Number >= NUM_GLOBALVARS)
 						sc.ScriptError("Global variable number out of range: %d", sc.Number);
 					valueArgument = sc.Number;
+
+					if(parenthesized) sc.MustGetToken(')');
 				}
 				else if(sc.Compare("globalarray"))
 				{
+					bool parenthesized = sc.CheckToken('(');
+
 					strValue = GLOBALARRAY;
 					sc.MustGetToken(TK_IntConst);
 					if(sc.Number < 0 || sc.Number >= NUM_GLOBALVARS)
 						sc.ScriptError("Global variable number out of range: %d", sc.Number);
 					valueArgument = sc.Number;
+
+					if(parenthesized) sc.MustGetToken(')');
 				}
 				else
 					sc.ScriptError("Unknown string '%s'.", sc.String);
@@ -899,6 +912,8 @@ class CommandDrawNumber : public CommandDrawString
 					value = SCORE;
 				else if(sc.Compare("ammo")) //request the next string to be an ammo type
 				{
+					bool parenthesized = sc.CheckToken('(');
+
 					value = AMMO;
 					sc.MustGetToken(TK_Identifier);
 					inventoryItem = PClass::FindClass(sc.String);
@@ -907,9 +922,13 @@ class CommandDrawNumber : public CommandDrawString
 						sc.ScriptMessage("'%s' is not a type of ammo.", sc.String);
 						inventoryItem = RUNTIME_CLASS(AAmmo);
 					}
+
+					if(parenthesized) sc.MustGetToken(')');
 				}
 				else if(sc.Compare("ammocapacity"))
 				{
+					bool parenthesized = sc.CheckToken('(');
+
 					value = AMMOCAPACITY;
 					sc.MustGetToken(TK_Identifier);
 					inventoryItem = PClass::FindClass(sc.String);
@@ -918,6 +937,8 @@ class CommandDrawNumber : public CommandDrawString
 						sc.ScriptMessage("'%s' is not a type of ammo.", sc.String);
 						inventoryItem = RUNTIME_CLASS(AAmmo);
 					}
+
+					if(parenthesized) sc.MustGetToken(')');
 				}
 				else if(sc.Compare("frags"))
 					value = FRAGS;
@@ -947,22 +968,32 @@ class CommandDrawNumber : public CommandDrawString
 					value = KEYS;
 				else if(sc.Compare("globalvar"))
 				{
+					bool parenthesized = sc.CheckToken('(');
+
 					value = GLOBALVAR;
 					sc.MustGetToken(TK_IntConst);
 					if(sc.Number < 0 || sc.Number >= NUM_GLOBALVARS)
 						sc.ScriptError("Global variable number out of range: %d", sc.Number);
 					valueArgument = sc.Number;
+
+					if(parenthesized) sc.MustGetToken(')');
 				}
 				else if(sc.Compare("globalarray")) //acts like variable[playernumber()]
 				{
+					bool parenthesized = sc.CheckToken('(');
+
 					value = GLOBALARRAY;
 					sc.MustGetToken(TK_IntConst);
 					if(sc.Number < 0 || sc.Number >= NUM_GLOBALVARS)
 						sc.ScriptError("Global variable number out of range: %d", sc.Number);
 					valueArgument = sc.Number;
+
+					if(parenthesized) sc.MustGetToken(')');
 				}
 				else if(sc.Compare("poweruptime"))
 				{
+					bool parenthesized = sc.CheckToken('(');
+
 					value = POWERUPTIME;
 					sc.MustGetToken(TK_Identifier);
 					inventoryItem = PClass::FindClass(sc.String);
@@ -971,6 +1002,8 @@ class CommandDrawNumber : public CommandDrawString
 						sc.ScriptMessage("'%s' is not a type of PowerupGiver.", sc.String);
 						inventoryItem = RUNTIME_CLASS(APowerupGiver);
 					}
+
+					if(parenthesized) sc.MustGetToken(')');
 				}
 				else
 				{
@@ -2235,8 +2268,8 @@ class CommandDrawBar : public SBarInfoCommand
 {
 	public:
 		CommandDrawBar(SBarInfo *script) : SBarInfoCommand(script),
-			border(0), horizontal(false), reverse(false), foreground(-1), background(-1),
-			type(HEALTH), inventoryItem(NULL), interpolationSpeed(0), drawValue(0)
+			border(0), horizontal(false), reverse(false), foreground(-1),
+			background(-1), type(HEALTH), interpolationSpeed(0), drawValue(0)
 		{
 		}
 
@@ -2297,28 +2330,12 @@ class CommandDrawBar : public SBarInfoCommand
 			if(sc.Compare("health"))
 			{
 				type = HEALTH;
-				if(sc.CheckToken(TK_Identifier)) //comparing reference
-				{
-					inventoryItem = PClass::FindClass(sc.String);
-					if(inventoryItem == NULL || !RUNTIME_CLASS(AInventory)->IsAncestorOf(inventoryItem)) //must be a kind of inventory
-					{
-						sc.ScriptMessage("'%s' is not a type of inventory item.", sc.String);
-						inventoryItem = RUNTIME_CLASS(AInventory);
-					}
-				}
+				ParseComparator(sc);
 			}
 			else if(sc.Compare("armor"))
 			{
 				type = ARMOR;
-				if(sc.CheckToken(TK_Identifier))
-				{
-					inventoryItem = PClass::FindClass(sc.String);
-					if(inventoryItem == NULL || !RUNTIME_CLASS(AInventory)->IsAncestorOf(inventoryItem)) //must be a kind of inventory
-					{
-						sc.ScriptMessage("'%s' is not a type of inventory item.", sc.String);
-						inventoryItem = RUNTIME_CLASS(AInventory);
-					}
-				}
+				ParseComparator(sc);
 			}
 			else if(sc.Compare("ammo1"))
 				type = AMMO1;
@@ -2326,14 +2343,18 @@ class CommandDrawBar : public SBarInfoCommand
 				type = AMMO2;
 			else if(sc.Compare("ammo")) //request the next string to be an ammo type
 			{
+				bool parenthesized = sc.CheckToken('(');
+
 				sc.MustGetToken(TK_Identifier);
 				type = AMMO;
-				inventoryItem = PClass::FindClass(sc.String);
-				if(inventoryItem == NULL || !RUNTIME_CLASS(AAmmo)->IsAncestorOf(inventoryItem)) //must be a kind of ammo
+				data.inventoryItem = PClass::FindClass(sc.String);
+				if(data.inventoryItem == NULL || !RUNTIME_CLASS(AAmmo)->IsAncestorOf(data.inventoryItem)) //must be a kind of ammo
 				{
 					sc.ScriptMessage("'%s' is not a type of ammo.", sc.String);
-					inventoryItem = RUNTIME_CLASS(AAmmo);
+					data.inventoryItem = RUNTIME_CLASS(AAmmo);
 				}
+
+				if(parenthesized) sc.MustGetToken(')');
 			}
 			else if(sc.Compare("frags"))
 				type = FRAGS;
@@ -2351,21 +2372,21 @@ class CommandDrawBar : public SBarInfoCommand
 			{
 				type = POWERUPTIME;
 				sc.MustGetToken(TK_Identifier);
-				inventoryItem = PClass::FindClass(sc.String);
-				if(inventoryItem == NULL || !RUNTIME_CLASS(APowerupGiver)->IsAncestorOf(inventoryItem))
+				data.inventoryItem = PClass::FindClass(sc.String);
+				if(data.inventoryItem == NULL || !RUNTIME_CLASS(APowerupGiver)->IsAncestorOf(data.inventoryItem))
 				{
 					sc.ScriptMessage("'%s' is not a type of PowerupGiver.", sc.String);
-					inventoryItem = RUNTIME_CLASS(APowerupGiver);
+					data.inventoryItem = RUNTIME_CLASS(APowerupGiver);
 				}
 			}
 			else
 			{
 				type = INVENTORY;
-				inventoryItem = PClass::FindClass(sc.String);
-				if(inventoryItem == NULL || !RUNTIME_CLASS(AInventory)->IsAncestorOf(inventoryItem))
+				data.inventoryItem = PClass::FindClass(sc.String);
+				if(data.inventoryItem == NULL || !RUNTIME_CLASS(AInventory)->IsAncestorOf(data.inventoryItem))
 				{
 					sc.ScriptMessage("'%s' is not a type of inventory item.", sc.String);
-					inventoryItem = RUNTIME_CLASS(AInventory);
+					data.inventoryItem = RUNTIME_CLASS(AInventory);
 				}
 			}
 			sc.MustGetToken(',');
@@ -2423,9 +2444,11 @@ class CommandDrawBar : public SBarInfoCommand
 					if(value < 0) //health shouldn't display negatives
 						value = 0;
 		
-					if(inventoryItem != NULL)
+					if(data.useMaximumConstant)
+						max = data.value;
+					else if(data.inventoryItem != NULL)
 					{
-						AInventory *item = statusBar->CPlayer->mo->FindInventory(inventoryItem); //max comparer
+						AInventory *item = statusBar->CPlayer->mo->FindInventory(data.inventoryItem); //max comparer
 						if(item != NULL)
 							max = item->Amount;
 						else
@@ -2436,9 +2459,11 @@ class CommandDrawBar : public SBarInfoCommand
 					break;
 				case ARMOR:
 					value = statusBar->armor != NULL ? statusBar->armor->Amount : 0;
-					if(inventoryItem != NULL)
+					if(data.useMaximumConstant)
+						max = data.value;
+					else if(data.inventoryItem != NULL)
 					{
-						AInventory *item = statusBar->CPlayer->mo->FindInventory(inventoryItem);
+						AInventory *item = statusBar->CPlayer->mo->FindInventory(data.inventoryItem);
 						if(item != NULL)
 							max = item->Amount;
 						else
@@ -2469,7 +2494,7 @@ class CommandDrawBar : public SBarInfoCommand
 					break;
 				case AMMO:
 				{
-					AInventory *item = statusBar->CPlayer->mo->FindInventory(inventoryItem);
+					AInventory *item = statusBar->CPlayer->mo->FindInventory(data.inventoryItem);
 					if(item != NULL)
 					{
 						value = item->Amount;
@@ -2497,7 +2522,7 @@ class CommandDrawBar : public SBarInfoCommand
 					break;
 				case INVENTORY:
 				{
-					AInventory *item = statusBar->CPlayer->mo->FindInventory(inventoryItem);
+					AInventory *item = statusBar->CPlayer->mo->FindInventory(data.inventoryItem);
 					if(item != NULL)
 					{
 						value = item->Amount;
@@ -2514,7 +2539,7 @@ class CommandDrawBar : public SBarInfoCommand
 				case POWERUPTIME:
 				{
 					//Get the PowerupType and check to see if the player has any in inventory.
-					APowerupGiver *powerupGiver = (APowerupGiver*) GetDefaultByType(inventoryItem);
+					APowerupGiver *powerupGiver = (APowerupGiver*) GetDefaultByType(data.inventoryItem);
 					const PClass *powerupType = powerupGiver->PowerupType;
 					APowerup *powerup = (APowerup*) statusBar->CPlayer->mo->FindInventory(powerupType);
 					if(powerup != NULL && powerupType != NULL && powerupGiver != NULL)
@@ -2566,6 +2591,29 @@ class CommandDrawBar : public SBarInfoCommand
 				drawValue = value;
 		}
 	protected:
+		void	ParseComparator(FScanner &sc)
+		{
+			bool extendedSyntax = sc.CheckToken('(');
+
+			if(sc.CheckToken(TK_Identifier)) //comparing reference
+			{
+				data.inventoryItem = PClass::FindClass(sc.String);
+				if(data.inventoryItem == NULL || !RUNTIME_CLASS(AInventory)->IsAncestorOf(data.inventoryItem)) //must be a kind of inventory
+				{
+					sc.ScriptMessage("'%s' is not a type of inventory item.", sc.String);
+					data.inventoryItem = RUNTIME_CLASS(AInventory);
+				}
+			}
+			else if(extendedSyntax && sc.CheckToken(TK_IntConst))
+			{
+				data.useMaximumConstant = true;
+				data.value = sc.Number;
+			}
+
+			if(extendedSyntax)
+				sc.MustGetToken(')');
+		}
+
 		enum ValueType
 		{
 			HEALTH,
@@ -2584,13 +2632,29 @@ class CommandDrawBar : public SBarInfoCommand
 			SAVEPERCENT
 		};
 
+		struct AdditionalData
+		{
+		public:
+			AdditionalData() : useMaximumConstant(false)
+			{
+				inventoryItem = NULL;
+			}
+
+			bool	useMaximumConstant;
+			union
+			{
+				const PClass	*inventoryItem;
+				int				value;
+			};
+		};
+
 		unsigned int		border;
 		bool				horizontal;
 		bool				reverse;
 		int					foreground;
 		int					background;
 		ValueType			type;
-		const PClass		*inventoryItem;
+		AdditionalData		data;
 		SBarInfoCoordinate	x;
 		SBarInfoCoordinate	y;
 

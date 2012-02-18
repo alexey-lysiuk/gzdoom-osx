@@ -72,22 +72,23 @@ extern FWorldGlobalArray ACS_GlobalArrays[NUM_GLOBALVARS];
 void P_ReadACSVars(PNGHandle *);
 void P_WriteACSVars(FILE*);
 void P_ClearACSVars(bool);
+void P_SerializeACSScriptNumber(FArchive &arc, int &scriptnum, bool was2byte);
 
 // The in-memory version
 struct ScriptPtr
 {
-	WORD Number;
+	int Number;
+	DWORD Address;
 	BYTE Type;
 	BYTE ArgCount;
 	WORD VarCount;
 	WORD Flags;
-	DWORD Address;
 };
 
 // The present ZDoom version
 struct ScriptPtr3
 {
-	WORD Number;
+	SWORD Number;
 	BYTE Type;
 	BYTE ArgCount;
 	DWORD Address;
@@ -747,7 +748,8 @@ public:
 	void Serialize (FArchive &arc);
 	void Tick ();
 
-	DLevelScript *RunningScripts[1000];	// Array of all synchronous scripts
+	typedef TMap<int, DLevelScript *> ScriptMap;
+	ScriptMap RunningScripts;	// Array of all synchronous scripts
 	static TObjPtr<DACSThinker> ActiveThinker;
 
 	void DumpScriptStatus();
