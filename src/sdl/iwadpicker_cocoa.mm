@@ -113,6 +113,39 @@ static const char* const tableHeaders[NUM_COLUMNS] = { "IWAD", "Game" };
 
 @end
 
+@interface NSString(AppendKnownFileType)
+- (NSString*)stringByAppendKnownFileType:(NSString *)filePath;
+@end
+
+@implementation NSString(AppendKnownFileType)
+- (NSString*)stringByAppendKnownFileType:(NSString *)filePath
+{
+	NSDictionary* knownFileTypes = [NSDictionary dictionaryWithObjectsAndKeys:
+									@"-file "    , @"wad",
+									@"-file "    , @"pk3",
+									@"-deh "     , @"deh",
+									@"-bex "     , @"bex",
+									@"-exec "    , @"cfg",
+									@"-playdemo ", @"lmp",
+									nil];
+	
+	NSString* extension = [[filePath pathExtension] lowercaseString];
+	NSString* parameter = [knownFileTypes objectForKey:extension];
+	
+	if ( nil == parameter )
+	{
+		return self;
+	}
+	
+	NSString* result = [NSString stringWithString:self];
+	result = [result stringByAppendingString:parameter];
+	result = [result stringByAppendingString:filePath];
+	result = [result stringByAppendingString:@" "];
+	
+	return result;
+}
+@end
+
 // So we can listen for button actions and such we need to have an Obj-C class.
 @interface IWADPicker : NSObject
 {
@@ -120,11 +153,13 @@ static const char* const tableHeaders[NUM_COLUMNS] = { "IWAD", "Game" };
 	NSWindow *window;
 	NSButton *okButton;
 	NSButton *cancelButton;
+	NSButton *browseButton;
 	NSTextField *parametersTextField;
 	bool cancelled;
 }
 
 - (void)buttonPressed:(id) sender;
+- (void)browseButtonPressed:(id) sender;
 - (void)doubleClicked:(id) sender;
 - (void)makeLabel:(NSTextField *)label:(const char*) str;
 - (int)pickIWad:(WadStuff *)wads:(int) numwads:(bool) showwin:(int) defaultiwad;
@@ -141,6 +176,40 @@ static const char* const tableHeaders[NUM_COLUMNS] = { "IWAD", "Game" };
 
 	[window orderOut:self];
 	[app stopModal];
+}
+
+- (void)browseButtonPressed:(id) sender;
+{
+	NSOpenPanel* openPanel = [NSOpenPanel openPanel];
+	[openPanel setAllowsMultipleSelection:YES];
+	[openPanel setCanChooseFiles:YES];
+	[openPanel setResolvesAliases:YES];
+		
+	if ( NSOKButton == [openPanel runModalForDirectory:nil file:nil] )
+	{
+		NSArray* files = [openPanel URLs];
+		NSString* parameters = [NSString string];
+		
+		for ( NSUInteger i = 0, ei = [files count]; i < ei; i++ )
+		{
+			NSString* filePath = [[files objectAtIndex:i] path];
+			parameters = [parameters stringByAppendKnownFileType:filePath];
+		}
+		
+		if ( [parameters length] > 0 )
+		{
+			NSString* newParameters = [parametersTextField stringValue];
+			if ( [newParameters length] > 0
+				&& NO == [newParameters hasSuffix:@" "] )
+			{
+				newParameters = [newParameters stringByAppendingString:@" "];
+			}
+			
+			newParameters = [newParameters stringByAppendingString:parameters];
+			
+			[parametersTextField setStringValue: newParameters];
+		}
+	}
 }
 
 - (void)doubleClicked:(id) sender;
@@ -236,6 +305,13 @@ static const char* const tableHeaders[NUM_COLUMNS] = { "IWAD", "Game" };
 	[cancelButton setTarget:self];
 	[cancelButton setKeyEquivalent:@"\033"];
 	[[window contentView] addSubview:cancelButton];
+	
+	browseButton = [[NSButton alloc] initWithFrame:NSMakeRect(14, 8, 96, 32)];
+	[browseButton setTitle:@"Browse..."];
+	[browseButton setBezelStyle:NSRoundedBezelStyle];
+	[browseButton setAction:@selector(browseButtonPressed:)];
+	[browseButton setTarget:self];
+	[[window contentView] addSubview:browseButton];
 
 	NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
 	[center addObserver:self selector:@selector(menuActionSent:) name:NSMenuDidSendActionNotification object:nil];
@@ -247,6 +323,7 @@ static const char* const tableHeaders[NUM_COLUMNS] = { "IWAD", "Game" };
 	[window release];
 	[okButton release];
 	[cancelButton release];
+	[browseButton release];
 
 	return cancelled ? -1 : [iwadTable selectedRow];
 }
@@ -300,24 +377,8 @@ static void RestartWithParameters( const char* iwadPath, NSString* parameters )
 		}
 		
 		NSArray* additionalParameters = [parameters componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-		bool previousParameterWasFile = false;
-		
-		for ( NSUInteger i = 0, ei = [additionalParameters count]; i < ei; ++i )
-		{
-			NSString* currentParameter = [additionalParameters objectAtIndex:i];
-			unichar firstChar = [currentParameter characterAtIndex:0];
-			
-			if ( !previousParameterWasFile 
-				&& '-' != firstChar && '+' != firstChar )
-			{
-				[arguments addObject:@"-file"];
-			}
-			
-			[arguments addObject:currentParameter];
-			
-			previousParameterWasFile = NSOrderedSame == [currentParameter compare:@"-file"];
-		}		
-		
+		[arguments addObjectsFromArray:additionalParameters];
+	
 #if 0
 		NSTask* task = [[NSTask alloc] init];
 		[task setLaunchPath:executablePath];
