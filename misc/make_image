@@ -7,7 +7,7 @@ DEPLOY_IMAGE_DIR=.deploy_image
 DEPLOY_SDL_DIR=${DEPLOY_IMAGE_DIR}/GZDoom_SDL.app
 DEPLOY_COCOA_DIR=${DEPLOY_IMAGE_DIR}/GZDoom_Cocoa.app
 
-cd `dirname $0`/..
+cd "`dirname \"$0\"`/.."
 
 echo "Preparing directories..."
 rm -r ${DEPLOY_IMAGE_DIR} 2>/dev/null
