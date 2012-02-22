@@ -38,6 +38,14 @@
 #include <pthread.h>
 #include <dlfcn.h>
 
+#define BOOL BOOL_CPP_TYPE
+#include "gl/system/gl_backbuffer_fbo.h"
+#undef  BOOL
+
+#ifdef min
+#undef min
+#endif
+
 #include <AppKit/AppKit.h>
 #include <Carbon/Carbon.h>
 
@@ -114,10 +122,8 @@ extern constate_e ConsoleState;
 namespace
 {
 
-bool  s_nativeMouse       = true;
-float s_pixelScaleFactorX = 1.0f;
-float s_pixelScaleFactorY = 1.0f;
-
+bool s_nativeMouse = true;
+	
 // TODO: remove this magic!
 size_t s_skipMouseMoves;
 
@@ -462,8 +468,12 @@ void NSEventToGameMousePosition( NSEvent* inEvent, event_t* outEvent )
 	const NSPoint windowPos = [window convertScreenToBase:screenPos];
 	const NSPoint   viewPos = [view convertPointFromBase:windowPos];
 	
-	outEvent->data1 = static_cast< int >( (                            viewPos.x ) / s_pixelScaleFactorX );
-	outEvent->data2 = static_cast< int >( ( [view frame].size.height - viewPos.y ) / s_pixelScaleFactorY );
+	const OpenGLBackbufferFBO::Parameters& backbufferParameters = OpenGLBackbufferFBO::GetParameters();
+	const float posX = (                            viewPos.x - backbufferParameters.shiftX ) / backbufferParameters.pixelScale;
+	const float posY = ( [view frame].size.height - viewPos.y - backbufferParameters.shiftY ) / backbufferParameters.pixelScale;
+	
+	outEvent->data1 = static_cast< int >( posX );
+	outEvent->data2 = static_cast< int >( posY );
 }
 
 void ProcessMouseButtonEvent( NSEvent* theEvent )
@@ -824,17 +834,24 @@ static ApplicationDelegate* s_applicationDelegate;
 	
 	CGLContextObj context = CGLGetCurrentContext();
 	
+	OpenGLBackbufferFBO::Parameters& backbufferParameters = OpenGLBackbufferFBO::GetParameters();
+	
 	if ( fullscreen )
 	{
-		GLint resolution[2] = { width, height };
+		const NSRect displayRect   = [[m_window screen] frame];
+		const float  displayWidth  = displayRect.size.width;
+		const float  displayHeight = displayRect.size.height;
 		
-		CGLSetParameter( context, kCGLCPSurfaceBackingSize, resolution );
-		CGLEnable( context, kCGLCESurfaceBackingSize );			
+		const float pixelScaleFactorX = displayRect.size.width  / static_cast< float >( width  );
+		const float pixelScaleFactorY = displayRect.size.height / static_cast< float >( height );
 		
-		const NSRect displayRect = [[m_window screen] frame];
+		backbufferParameters.pixelScale = std::min( pixelScaleFactorX, pixelScaleFactorY );
 		
-		s_pixelScaleFactorX = displayRect.size.width  / static_cast< float >( width  );
-		s_pixelScaleFactorY = displayRect.size.height / static_cast< float >( height );
+		backbufferParameters.width  = width  * backbufferParameters.pixelScale;
+		backbufferParameters.height = height * backbufferParameters.pixelScale;
+		
+		backbufferParameters.shiftX = ( displayRect.size.width  - backbufferParameters.width  ) / 2.0f;
+		backbufferParameters.shiftY = ( displayRect.size.height - backbufferParameters.height ) / 2.0f;
 		
 		[m_window setLevel:NSMainMenuWindowLevel + 1];
 		[m_window setStyleMask:NSBorderlessWindowMask];
@@ -844,10 +861,13 @@ static ApplicationDelegate* s_applicationDelegate;
 	}
 	else
 	{
-		CGLDisable( context, kCGLCESurfaceBackingSize );
+		backbufferParameters.pixelScale = 1.0f;
 		
-		s_pixelScaleFactorX = 1.0f;
-		s_pixelScaleFactorY = 1.0f;
+		backbufferParameters.width  = static_cast< float >( width  );
+		backbufferParameters.height = static_cast< float >( height );
+		
+		backbufferParameters.shiftX = 0.0f;
+		backbufferParameters.shiftY = 0.0f;
 		
 		[m_window setLevel:NSNormalWindowLevel];
 		[m_window setStyleMask:NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask];
@@ -856,7 +876,10 @@ static ApplicationDelegate* s_applicationDelegate;
 		[m_window center];
 	}
 	
-	glClearColor( 0.5f, 0.5f, 0.5f, 1.0f );
+	const NSRect viewRect = [[m_window contentView] frame];
+	
+	glViewport( 0, 0, viewRect.size.width, viewRect.size.width );
+	glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
 	
 	CGLFlushDrawable( context );

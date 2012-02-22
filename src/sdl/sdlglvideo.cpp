@@ -27,6 +27,11 @@
 #include "gl/textures/gl_material.h"
 #include "gl/system/gl_cvars.h"
 
+#ifdef COCOA_NO_SDL
+#include "gl/system/gl_backbuffer_fbo.h"
+#endif // COCOA_NO_SDL
+
+
 // MACROS ------------------------------------------------------------------
 
 // TYPES -------------------------------------------------------------------
@@ -200,7 +205,12 @@ DFrameBuffer *SDLGLVideo::CreateFrameBuffer (int width, int height, bool fullscr
 //		flashAmount = 0;
 	}
 	
+#ifdef COCOA_NO_SDL
+	SDLGLFB *fb = new OpenGLBackbufferFBO( width, height, fullscreen );
+#else // !COCOA_NO_SDL
 	SDLGLFB *fb = new OpenGLFrameBuffer (0, width, height, 32, 60, fullscreen);
+#endif // COCOA_NO_SDL
+	
 	retry = 0;
 	
 	// If we could not create the framebuffer, try again with slightly
