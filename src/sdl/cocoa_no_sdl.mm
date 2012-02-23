@@ -1123,7 +1123,7 @@ SDL_Rect** SDL_ListModes( SDL_PixelFormat*, Uint32 flags )
 	return &resolutions[0];
 }
 
-SDL_Surface* SDL_SetVideoMode( int width, int height, int bpp, Uint32 flags )
+SDL_Surface* SDL_SetVideoMode( int width, int height, int, Uint32 flags )
 {
 	[s_applicationDelegate changeVideoResolution:( SDL_FULLSCREEN & flags ) width:width height:height];
 	
@@ -1215,49 +1215,26 @@ int SDL_GL_GetAttribute( SDL_GLattr attr, int* value )
 
 int SDL_GetGammaRamp( Uint16* red, Uint16* green, Uint16* blue )
 {
-	static const uint32_t    TABLE_SIZE = 256;
-	CGGammaValue   redTable[ TABLE_SIZE ];
-	CGGammaValue greenTable[ TABLE_SIZE ];
-	CGGammaValue  blueTable[ TABLE_SIZE ];
+	OpenGLBackbufferFBO* frameBuffer = static_cast< OpenGLBackbufferFBO* >( screen );
 	
-	uint32_t actual = 0;
-	
-	if ( CGDisplayNoErr != CGGetDisplayTransferByTable( kCGDirectMainDisplay, TABLE_SIZE, 
-			redTable, greenTable, blueTable, &actual )
-		|| actual != TABLE_SIZE )
+	if ( NULL != frameBuffer )
 	{
-		return -1;
+		frameBuffer->GetGammaTable( red, green, blue );
 	}
 	
-	for ( size_t i = 0; i < TABLE_SIZE; ++i )
-	{
-		red[i]   = Uint16(   redTable[i] * 65535.0f );
-		green[i] = Uint16( greenTable[i] * 65535.0f );
-		blue[i]  = Uint16(  blueTable[i] * 65535.0f );			
-	}
-	
-	return true;
+	return 0;
 }
 
 int SDL_SetGammaRamp( const Uint16* red, const Uint16* green, const Uint16* blue )
 {
-	static const uint32_t    TABLE_SIZE = 256;
-	CGGammaValue   redTable[ TABLE_SIZE ];
-	CGGammaValue greenTable[ TABLE_SIZE ];
-	CGGammaValue  blueTable[ TABLE_SIZE ];
+	OpenGLBackbufferFBO* frameBuffer = static_cast< OpenGLBackbufferFBO* >( screen );
 	
-	// Extract gamma values into separate tables
-	// Convert to floats between 0.0 and 1.0
-	
-	for ( size_t i = 0; i < TABLE_SIZE; ++i )
+	if ( NULL != frameBuffer )
 	{
-		redTable[i]   =   red[i] / 65535.0f;
-		greenTable[i] = green[i] / 65535.0f;
-		blueTable[i]  =  blue[i] / 65535.0f;
+		frameBuffer->SetGammaTable( red, green, blue );
 	}
 	
-	return CGDisplayNoErr == CGSetDisplayTransferByTable( kCGDirectMainDisplay, 
-		TABLE_SIZE, redTable, greenTable, blueTable ) ? 0 : -1;
+	return 0;
 }
 
 } // extern "C"

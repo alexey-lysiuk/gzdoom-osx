@@ -430,6 +430,7 @@ static void APIENTRY LoadExtensions()
 		gl->DeleteFramebuffers		= (PFNGLDELETEFRAMEBUFFERSPROC)wglGetProcAddress("glDeleteFramebuffers");
 		gl->BindFramebuffer			= (PFNGLBINDFRAMEBUFFERPROC)wglGetProcAddress("glBindFramebuffer");
 		gl->FramebufferTexture2D	= (PFNGLFRAMEBUFFERTEXTURE2DPROC)wglGetProcAddress("glFramebufferTexture2D");
+		gl->CheckFramebufferStatus  = (PFNGLCHECKFRAMEBUFFERSTATUSPROC)wglGetProcAddress("CheckFramebufferStatus");
 		gl->GenRenderbuffers		= (PFNGLGENRENDERBUFFERSPROC)wglGetProcAddress("glGenRenderbuffers");
 		gl->DeleteRenderbuffers		= (PFNGLDELETERENDERBUFFERSPROC)wglGetProcAddress("glDeleteRenderbuffers");
 		gl->BindRenderbuffer		= (PFNGLBINDRENDERBUFFERPROC)wglGetProcAddress("glBindRenderbuffer");
@@ -1057,6 +1058,7 @@ void APIENTRY GetContext(RenderContext & gl)
 	gl.DeleteTextures = glDeleteTextures;
 	gl.GenTextures = glGenTextures;
 	gl.BindTexture = glBindTexture;
+	gl.TexImage1D = glTexImage1D;
 	gl.TexImage2D = glTexImage2D;
 	gl.TexParameterf = glTexParameterf;
 	gl.TexParameteri = glTexParameteri;

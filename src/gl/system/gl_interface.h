@@ -132,6 +132,7 @@ struct RenderContext
 	void (APIENTRY * DeleteTextures) (GLsizei n, const GLuint *textures);
 	void (APIENTRY * GenTextures) (GLsizei n, GLuint *textures);
 	void (APIENTRY * BindTexture) (GLenum target, GLuint texture);
+	void (APIENTRY * TexImage1D) (GLenum target, GLint level, GLint internalformat, GLsizei width, GLint border, GLenum format, GLenum type, const GLvoid *pixels);
 	void (APIENTRY * TexImage2D) (GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *pixels);
 	void (APIENTRY * TexParameterf) (GLenum target, GLenum pname, GLfloat param);
 	void (APIENTRY * TexParameteri) (GLenum target, GLenum pname, GLint param);
@@ -224,6 +225,7 @@ struct RenderContext
 	PFNGLDELETEFRAMEBUFFERSPROC DeleteFramebuffers;
 	PFNGLBINDFRAMEBUFFERPROC BindFramebuffer;
 	PFNGLFRAMEBUFFERTEXTURE2DPROC FramebufferTexture2D;
+	PFNGLCHECKFRAMEBUFFERSTATUSPROC CheckFramebufferStatus;
 	PFNGLGENRENDERBUFFERSPROC GenRenderbuffers;
 	PFNGLDELETERENDERBUFFERSPROC DeleteRenderbuffers;
 	PFNGLBINDRENDERBUFFERPROC BindRenderbuffer;

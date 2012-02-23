@@ -60,14 +60,30 @@ public:
 	
 	static Parameters& GetParameters();
 	
+	void GetGammaTable(       uint16_t* red,       uint16_t* green,       uint16_t* blue );
+	void SetGammaTable( const uint16_t* red, const uint16_t* green, const uint16_t* blue );
+	
 private:
 	GLuint m_fboID;
 	GLuint m_colorID;
 	GLuint m_depthStencilID;
 	
+	GLuint m_gammaProgramID;
+	GLuint m_gammaShaderID;
+	
+	GLuint m_gammaTableID;
+	
+	static const size_t GAMMA_TABLE_SIZE = 256;
+	uint32_t m_gammaTable[ GAMMA_TABLE_SIZE ];
+	
+
 	static Parameters s_parameters;
 	
+	
 	void InitFBO();
+	void InitGammaCorrection();
+	
+	void SetTextureParameters( const GLenum target, const GLint filter );
 	
 	void DrawFBO();
 	
