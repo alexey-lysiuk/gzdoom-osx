@@ -403,6 +403,8 @@ static void RestartWithParameters( const char* iwadPath, NSString* parameters )
 // Simple wrapper so we can call this from outside.
 int I_PickIWad_Cocoa (WadStuff *wads, int numwads, bool showwin, int defaultiwad)
 {
+	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+	
 	IWADPicker *picker = [IWADPicker alloc];
 	int ret = [picker pickIWad:wads:numwads:showwin:defaultiwad];
 	
@@ -416,7 +418,8 @@ int I_PickIWad_Cocoa (WadStuff *wads, int numwads, bool showwin, int defaultiwad
 			RestartWithParameters( wads[ ret ].Path, parametersToAppend );
 		}
 	}
+
+	[pool release];
 	
-	[picker release];
 	return ret;
 }
