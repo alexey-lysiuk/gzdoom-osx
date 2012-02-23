@@ -177,7 +177,7 @@ void OpenGLBackbufferFBO::InitGammaCorrection()
 	
 	// Create gamma correction shader
 	
-	const int shaderLumpID = Wads.CheckNumForFullName( "shaders/glsl/gamma_correction.fs" );
+	const int shaderLumpID = Wads.CheckNumForFullName( "shaders/glsl/gamma_correction.fp" );
 	if ( -1 == shaderLumpID )
 	{
 		Printf( "Unable to load gamma correction shader.\n" );
