@@ -122,6 +122,25 @@ extern constate_e ConsoleState;
 namespace
 {
 
+class StackAutoreleasePool
+{
+public:
+	StackAutoreleasePool()
+	{
+		m_pool = [[NSAutoreleasePool alloc] init];
+	}
+	
+	~StackAutoreleasePool()
+	{
+		[m_pool release];
+	}
+	
+private:
+	NSAutoreleasePool* m_pool;
+	
+};
+	
+	
 bool s_nativeMouse = true;
 	
 // TODO: remove this magic!
@@ -220,6 +239,8 @@ void CheckNativeMouse()
 
 void I_GetEvent()
 {
+	StackAutoreleasePool pool;
+	
 	[[NSRunLoop mainRunLoop] limitDateForMode:NSDefaultRunLoopMode];
 }
 
@@ -709,6 +730,8 @@ static ApplicationDelegate* s_applicationDelegate;
 
 - (id)init
 {
+	StackAutoreleasePool pool;
+	
 	self = [super init];
 	
 	m_openGLInitialized = false;
@@ -782,6 +805,8 @@ static ApplicationDelegate* s_applicationDelegate;
 		return;
 	}
 	
+	StackAutoreleasePool pool;
+	
 	// Create window
 	
 	m_window = [[FullscreenWindow alloc] initWithContentRect:NSMakeRect(0, 0, 640, 480)
@@ -830,6 +855,8 @@ static ApplicationDelegate* s_applicationDelegate;
 
 - (void)changeVideoResolution:(bool)fullscreen width:(int)width height:(int)height
 {
+	StackAutoreleasePool pool;
+	
 	[self initializeOpenGL];
 	
 	CGLContextObj context = CGLGetCurrentContext();
@@ -1023,6 +1050,8 @@ int SDL_Init( Uint32 )
 {
 	if ( NULL == s_applicationDelegate )
 	{
+		StackAutoreleasePool pool;
+		
 		[NSApplication sharedApplication];
 		[NSBundle loadNibNamed:@"GZDoom" owner:NSApp];
 		
