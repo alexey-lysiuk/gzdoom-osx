@@ -100,6 +100,7 @@
 		8A8D68B713C84344001D368F /* r_swrenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D68B313C84344001D368F /* r_swrenderer.cpp */; };
 		8A8D68B813C84344001D368F /* r_utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D68B513C84344001D368F /* r_utility.cpp */; };
 		8A938D1113B6039F002627DE /* actorptrselect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A938D0F13B6039F002627DE /* actorptrselect.cpp */; };
+		8A9633AA14F90431000E4D55 /* sdlvideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3F139126C00095D9A0 /* sdlvideo.cpp */; };
 		8A9F530014BB0F2900F3369B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8A9F530114BB0F2900F3369B /* doom.icns in Resources */ = {isa = PBXBuildFile; fileRef = 49E9287713978BF600CCEBBC /* doom.icns */; };
 		8A9F530214BB0F2900F3369B /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = 8AD870F1140A4EC5007A06A9 /* Credits.html */; };
@@ -4891,6 +4892,7 @@
 				8A9F540E14BB0F2900F3369B /* i_main.cpp in Sources */,
 				8A9F540F14BB0F2900F3369B /* i_movie.cpp in Sources */,
 				8A9F541014BB0F2900F3369B /* i_system.cpp in Sources */,
+				8A9633AA14F90431000E4D55 /* sdlvideo.cpp in Sources */,
 				8A9F541114BB0F2900F3369B /* sdlglvideo.cpp in Sources */,
 				8A9F541314BB0F2900F3369B /* st_start.cpp in Sources */,
 				8A9F541414BB0F2900F3369B /* SFMT.cpp in Sources */,
@@ -4985,8 +4987,8 @@
 				8A9F546D14BB0F2900F3369B /* r_utility.cpp in Sources */,
 				8A9F546E14BB0F2900F3369B /* iwadpicker_cocoa.mm in Sources */,
 				8A7FF48014BB2B220069731E /* cocoa_no_sdl.mm in Sources */,
-				8A9F547014BB0F2900F3369B /* autozend.cpp in Sources */,
 				49A94D1614F4FCC8008312F3 /* gl_backbuffer_fbo.cpp in Sources */,
+				8A9F547014BB0F2900F3369B /* autozend.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

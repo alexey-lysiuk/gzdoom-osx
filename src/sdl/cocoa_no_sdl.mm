@@ -905,9 +905,9 @@ static ApplicationDelegate* s_applicationDelegate;
 	
 	const NSRect viewRect = [[m_window contentView] frame];
 	
-	glViewport( 0, 0, viewRect.size.width, viewRect.size.width );
+	glViewport( 0, 0, viewRect.size.width, viewRect.size.height );
 	glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
+	glClear( GL_COLOR_BUFFER_BIT );
 	
 	CGLFlushDrawable( context );
 	
@@ -1152,16 +1152,71 @@ SDL_Rect** SDL_ListModes( SDL_PixelFormat*, Uint32 flags )
 	return &resolutions[0];
 }
 
+
+static GLuint s_softwareTextureID;
+
+static const Uint16 BYTES_PER_PIXEL = 4;
+
+static SDL_PixelFormat* GetPixelFormat()
+{
+	static SDL_PixelFormat result;
+	
+	result.palette       = NULL;
+	result.BitsPerPixel  = BYTES_PER_PIXEL * 8;
+	result.BytesPerPixel = BYTES_PER_PIXEL;
+	result.Rloss         = 0;
+	result.Gloss         = 0;
+	result.Bloss         = 0;
+	result.Aloss         = 8;
+	result.Rshift        = 8;
+	result.Gshift        = 16;
+	result.Bshift        = 24;
+	result.Ashift        = 0;
+	result.Rmask         = 0x000000FF;
+	result.Gmask         = 0x0000FF00;
+	result.Bmask         = 0x00FF0000;
+	result.Amask         = 0xFF000000;	
+	result.colorkey      = 0;
+	result.alpha         = 0xFF;
+	
+	return &result;
+}
+
+
 SDL_Surface* SDL_SetVideoMode( int width, int height, int, Uint32 flags )
 {
 	[s_applicationDelegate changeVideoResolution:( SDL_FULLSCREEN & flags ) width:width height:height];
 	
 	static SDL_Surface result;
-	memset( &result, 0, sizeof( result ) );
 	
-	result.w     = width;
-	result.h     = height;
-	result.flags = flags;
+	const bool isSoftwareRenderer = !( SDL_OPENGL & flags );
+	
+	if ( isSoftwareRenderer )
+	{
+		if ( NULL != result.pixels )
+		{
+			free( result.pixels );
+		}
+		
+		if ( 0 != s_softwareTextureID )
+		{
+			glDeleteTextures( 1, &s_softwareTextureID );
+			s_softwareTextureID = 0;
+		}
+	}
+	
+	result.flags    = flags;
+	result.format   = GetPixelFormat();
+	result.w        = width;
+	result.h        = height;
+	result.pitch    = width * BYTES_PER_PIXEL;
+	result.pixels   = isSoftwareRenderer ? malloc( width * height * BYTES_PER_PIXEL ) : NULL;
+	result.refcount = 1;
+	
+	result.clip_rect.x = 0;
+	result.clip_rect.y = 0;
+	result.clip_rect.w = width;
+	result.clip_rect.h = height;
 	
 	return &result;
 }
@@ -1266,4 +1321,98 @@ int SDL_SetGammaRamp( const Uint16* red, const Uint16* green, const Uint16* blue
 	return 0;
 }
 
+
+int SDL_LockSurface( SDL_Surface* )
+{
+	return 0;
+}
+
+void SDL_UnlockSurface( SDL_Surface* )
+{
+	
+}
+
+int SDL_BlitSurface( SDL_Surface*, SDL_Rect*, SDL_Surface*, SDL_Rect* )
+{
+	return 0;
+}
+
+
+static void SetupSoftwareRendering( SDL_Surface* screen )
+{
+	glMatrixMode( GL_MODELVIEW );
+	glLoadIdentity();
+	glMatrixMode( GL_PROJECTION );
+	glLoadIdentity();
+	glOrtho( 0.0, screen->w, screen->h, 0.0, -1.0, 1.0 );
+	
+	// For an unknown reason the following call to glClear() is needed
+	// to avoid drawing of garbage in fullscreen mode 
+	// when game video resolution's aspect ratio is different from display one
+	
+	GLint viewport[2];
+	glGetIntegerv( GL_MAX_VIEWPORT_DIMS, viewport );
+	
+	glViewport( 0, 0, viewport[0], viewport[1] );
+	glClear( GL_COLOR_BUFFER_BIT );
+
+	const OpenGLBackbufferFBO::Parameters& viewportParameters = OpenGLBackbufferFBO::GetParameters();
+	glViewport( viewportParameters.shiftX, viewportParameters.shiftY, 
+			    viewportParameters.width,  viewportParameters.height );
+	
+	glEnable( GL_TEXTURE_2D );
+	
+	glGenTextures( 1, &s_softwareTextureID );
+	glBindTexture( GL_TEXTURE_2D, s_softwareTextureID );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );		
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+}
+
+
+int SDL_Flip( SDL_Surface* screen )
+{
+	assert( NULL != screen );
+	
+	if ( 0 == s_softwareTextureID )
+	{
+		SetupSoftwareRendering( screen );
+	}
+	
+	const int width  = screen->w;
+	const int height = screen->h;
+	
+	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, screen->pixels );
+	
+	static const GLfloat U0 = 0.0f, U1 = 1.0f;
+	static const GLfloat V0 = 1.0f, V1 = 0.0f;
+	
+	const GLfloat x1 = 0.0f,  y1 = 0.0f;
+	const GLfloat x2 = width, y2 = height;
+	
+	glBegin( GL_QUADS );
+	glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+	glTexCoord2f( U0, V1 );
+	glVertex2f( x1, y1 );
+	glTexCoord2f( U1, V1 );
+	glVertex2f( x2, y1 );
+	glTexCoord2f( U1, V0 );
+	glVertex2f( x2, y2 );
+	glTexCoord2f( U0, V0 );
+	glVertex2f( x1, y2 );
+	glEnd();
+	
+	glFlush();
+	
+	SDL_GL_SwapBuffers();
+	
+	return 0;	
+}
+
+int SDL_SetPalette( SDL_Surface* surface, int flags, SDL_Color* colors, int firstcolor, int ncolors )
+{
+	return 0;
+}
+	
 } // extern "C"

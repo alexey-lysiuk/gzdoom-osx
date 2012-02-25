@@ -105,15 +105,10 @@ void I_InitGraphics ()
 
 	val.Bool = !!Args->CheckParm ("-devparm");
 	ticker.SetGenericRepDefault (val, CVAR_Bool);
-
+	
 	//currentrenderer = vid_renderer;
-#ifndef COCOA_NO_SDL
-	if (currentrenderer==1)
-#endif // !COCOA_NO_SDL
-		Video = new SDLGLVideo(0);
-#ifndef COCOA_NO_SDL
+	if (currentrenderer==1) Video = new SDLGLVideo(0);
 	else Video = new SDLVideo (0);
-#endif // !COCOA_NO_SDL
 	
 	if (Video == NULL)
 		I_FatalError ("Failed to initialize display");
