@@ -63,6 +63,8 @@ public:
 	void GetGammaTable(       uint16_t* red,       uint16_t* green,       uint16_t* blue );
 	void SetGammaTable( const uint16_t* red, const uint16_t* green, const uint16_t* blue );
 	
+	static void SetTextureParameters( const GLenum target, const GLint filter );
+	
 private:
 	GLuint m_fboID;
 	GLuint m_colorID;
@@ -82,8 +84,6 @@ private:
 	
 	void InitFBO();
 	void InitGammaCorrection();
-	
-	void SetTextureParameters( const GLenum target, const GLint filter );
 	
 	void DrawFBO();
 	

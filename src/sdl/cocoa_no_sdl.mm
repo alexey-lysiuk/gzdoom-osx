@@ -882,6 +882,9 @@ static ApplicationDelegate* s_applicationDelegate;
 	[m_window setContentView:glView];
 	
 	m_openGLInitialized = true;
+	
+	GetContext( gl );
+	gl.LoadExtensions();
 }
 
 - (void)changeVideoResolution:(bool)fullscreen width:(int)width height:(int)height
@@ -936,9 +939,9 @@ static ApplicationDelegate* s_applicationDelegate;
 	
 	const NSRect viewRect = [[m_window contentView] frame];
 	
-	glViewport( 0, 0, viewRect.size.width, viewRect.size.height );
-	glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
-	glClear( GL_COLOR_BUFFER_BIT );
+	gl.Viewport( 0, 0, viewRect.size.width, viewRect.size.height );
+	gl.ClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+	gl.Clear( GL_COLOR_BUFFER_BIT );
 	
 	CGLFlushDrawable( context );
 	
@@ -1439,11 +1442,11 @@ int SDL_BlitSurface( SDL_Surface*, SDL_Rect*, SDL_Surface*, SDL_Rect* )
 
 static void SetupSoftwareRendering( SDL_Surface* screen )
 {
-	glMatrixMode( GL_MODELVIEW );
-	glLoadIdentity();
-	glMatrixMode( GL_PROJECTION );
-	glLoadIdentity();
-	glOrtho( 0.0, screen->w, screen->h, 0.0, -1.0, 1.0 );
+	gl.MatrixMode( GL_MODELVIEW );
+	gl.LoadIdentity();
+	gl.MatrixMode( GL_PROJECTION );
+	gl.LoadIdentity();
+	gl.Ortho( 0.0, screen->w, screen->h, 0.0, -1.0, 1.0 );
 	
 	// For an unknown reason the following call to glClear() is needed
 	// to avoid drawing of garbage in fullscreen mode 
@@ -1452,21 +1455,19 @@ static void SetupSoftwareRendering( SDL_Surface* screen )
 	GLint viewport[2];
 	glGetIntegerv( GL_MAX_VIEWPORT_DIMS, viewport );
 	
-	glViewport( 0, 0, viewport[0], viewport[1] );
-	glClear( GL_COLOR_BUFFER_BIT );
+	gl.Viewport( 0, 0, viewport[0], viewport[1] );
+	gl.Clear( GL_COLOR_BUFFER_BIT );
 
 	const OpenGLBackbufferFBO::Parameters& viewportParameters = OpenGLBackbufferFBO::GetParameters();
-	glViewport( viewportParameters.shiftX, viewportParameters.shiftY, 
-			    viewportParameters.width,  viewportParameters.height );
+	gl.Viewport( viewportParameters.shiftX, viewportParameters.shiftY, 
+				 viewportParameters.width,  viewportParameters.height );
 	
-	glEnable( GL_TEXTURE_2D );
+	gl.Enable( GL_TEXTURE_2D );
 	
-	glGenTextures( 1, &s_softwareTextureID );
-	glBindTexture( GL_TEXTURE_2D, s_softwareTextureID );
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );		
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+	gl.GenTextures( 1, &s_softwareTextureID );
+	gl.BindTexture( GL_TEXTURE_2D, s_softwareTextureID );
+	
+	OpenGLBackbufferFBO::SetTextureParameters( GL_TEXTURE_2D, GL_NEAREST );
 }
 
 
@@ -1482,7 +1483,7 @@ int SDL_Flip( SDL_Surface* screen )
 	const int width  = screen->w;
 	const int height = screen->h;
 	
-	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, screen->pixels );
+	gl.TexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, screen->pixels );
 	
 	static const GLfloat U0 = 0.0f, U1 = 1.0f;
 	static const GLfloat V0 = 1.0f, V1 = 0.0f;
@@ -1490,19 +1491,19 @@ int SDL_Flip( SDL_Surface* screen )
 	const GLfloat x1 = 0.0f,  y1 = 0.0f;
 	const GLfloat x2 = width, y2 = height;
 	
-	glBegin( GL_QUADS );
-	glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
-	glTexCoord2f( U0, V1 );
-	glVertex2f( x1, y1 );
-	glTexCoord2f( U1, V1 );
-	glVertex2f( x2, y1 );
-	glTexCoord2f( U1, V0 );
-	glVertex2f( x2, y2 );
-	glTexCoord2f( U0, V0 );
-	glVertex2f( x1, y2 );
-	glEnd();
+	gl.Begin( GL_QUADS );
+	gl.Color4f( 1.0f, 1.0f, 1.0f, 1.0f );
+	gl.TexCoord2f( U0, V1 );
+	gl.Vertex2f( x1, y1 );
+	gl.TexCoord2f( U1, V1 );
+	gl.Vertex2f( x2, y1 );
+	gl.TexCoord2f( U1, V0 );
+	gl.Vertex2f( x2, y2 );
+	gl.TexCoord2f( U0, V0 );
+	gl.Vertex2f( x1, y2 );
+	gl.End();
 	
-	glFlush();
+	gl.Flush();
 	
 	SDL_GL_SwapBuffers();
 	
