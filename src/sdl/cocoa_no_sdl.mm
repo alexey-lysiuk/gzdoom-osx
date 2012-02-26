@@ -51,6 +51,7 @@
 
 #include <SDL.h>
 
+#include "bitmap.h"
 #include "c_console.h"
 #include "c_cvars.h"
 #include "d_event.h"
@@ -61,6 +62,7 @@
 #include "m_joy.h"
 #include "s_sound.h"
 #include "st_start.h"
+#include "textures.h"
 #include "version.h"
 
 
@@ -145,6 +147,8 @@ bool s_nativeMouse = true;
 	
 // TODO: remove this magic!
 size_t s_skipMouseMoves;
+
+static NSCursor* s_cursor;
 
 
 void CheckGUICapture()
@@ -692,6 +696,31 @@ void ProcessMouseWheelEvent( NSEvent* theEvent )
 // ---------------------------------------------------------------------------
 
 
+@interface FullscreenView : NSOpenGLView
+{
+
+}
+
+- (void)resetCursorRects;
+
+@end
+
+
+@implementation FullscreenView
+
+- (void)resetCursorRects
+{
+	[super resetCursorRects];
+    [self addCursorRect: [self bounds]
+				 cursor: s_cursor];
+}
+
+@end
+
+
+// ---------------------------------------------------------------------------
+
+
 @interface ApplicationDelegate : NSResponder
 {
 @private
@@ -719,6 +748,8 @@ void ProcessMouseWheelEvent( NSEvent* theEvent )
 - (void)changeVideoResolution:(bool)fullscreen width:(int)width height:(int)height;
 
 - (void)processEvents:(NSTimer*)timer;
+
+- (void)invalidateCursorRects;
 
 @end
 
@@ -844,8 +875,8 @@ static ApplicationDelegate* s_applicationDelegate;
 	NSOpenGLPixelFormat *pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:attributes];
 	
 	const NSRect contentRect = [m_window contentRectForFrameRect:[m_window frame]];
-	NSOpenGLView *glView = [[NSOpenGLView alloc] initWithFrame:contentRect
-												   pixelFormat:pixelFormat];
+	NSOpenGLView* glView = [[FullscreenView alloc] initWithFrame:contentRect
+													 pixelFormat:pixelFormat];
 	[[glView openGLContext] makeCurrentContext];
 	
 	[m_window setContentView:glView];
@@ -979,7 +1010,75 @@ static ApplicationDelegate* s_applicationDelegate;
     [NSApp updateWindows];
 }
 
+
+- (void)invalidateCursorRects
+{
+	[m_window invalidateCursorRectsForView:[m_window contentView]];
+}
+
 @end
+
+
+// ---------------------------------------------------------------------------
+
+
+bool I_SetCursor( FTexture* cursorpic )
+{
+	if ( NULL == cursorpic || FTexture::TEX_Null == cursorpic->UseType )
+	{
+		s_cursor = [NSCursor arrowCursor];
+	}
+	else
+	{
+		// Create bitmap image representation
+		
+		const NSInteger imageWidth  = cursorpic->GetWidth();
+		const NSInteger imageHeight = cursorpic->GetHeight();
+		const NSInteger imagePitch  = imageWidth * 4;
+		
+		NSBitmapImageRep* bitmapImageRep = [NSBitmapImageRep alloc];
+		[bitmapImageRep initWithBitmapDataPlanes:NULL
+									  pixelsWide:imageWidth
+									  pixelsHigh:imageHeight
+								   bitsPerSample:8
+								 samplesPerPixel:4
+										hasAlpha:YES
+										isPlanar:NO
+								  colorSpaceName:NSDeviceRGBColorSpace
+									 bytesPerRow:imagePitch
+									bitsPerPixel:0];
+		
+		// Load bitmap data to representation
+		
+		BYTE* buffer = [bitmapImageRep bitmapData];
+		FBitmap bitmap( buffer, imagePitch, imageWidth, imageHeight );
+		cursorpic->CopyTrueColorPixels( &bitmap, 0, 0 );
+		
+		// Swap red and blue components in each pixel
+		
+		for ( size_t i = 0; i < imageWidth * imageHeight; ++i )
+		{
+			const size_t offset = i * 4;
+			
+			const BYTE temp      = buffer[ offset     ];
+			buffer[ offset     ] = buffer[ offset + 2 ];
+			buffer[ offset + 2 ] = temp;
+		}
+		
+		// Create image from representation and set it as cursor
+		
+		NSData* imageData = [bitmapImageRep representationUsingType: NSPNGFileType
+														 properties:nil];		
+		NSImage* cursorImage = [[NSImage alloc] initWithData:imageData];
+		
+		s_cursor = [[NSCursor alloc] initWithImage:cursorImage
+										   hotSpot:NSMakePoint( 0.0f, 0.0f )];
+	}
+	
+	[s_applicationDelegate invalidateCursorRects];
+	
+	return true;
+}
 
 
 // ---------------------------------------------------------------------------
