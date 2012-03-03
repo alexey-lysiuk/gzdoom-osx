@@ -135,6 +135,19 @@ void OpenGLBackbufferFBO::Update()
 }
 
 
+void OpenGLBackbufferFBO::GetScreenshotBuffer( const BYTE*& buffer, int& pitch, ESSType& color_type )
+{
+	GLint readFBO;
+	glGetIntegerv( GL_READ_FRAMEBUFFER_BINDING, &readFBO );
+	
+	gl.BindFramebuffer( GL_READ_FRAMEBUFFER, m_fboID );
+	
+	Super::GetScreenshotBuffer( buffer, pitch, color_type );
+	
+	gl.BindFramebuffer( GL_READ_FRAMEBUFFER, readFBO );
+}
+
+
 void OpenGLBackbufferFBO::InitFBO()
 {
 	const bool isScaled = fabsf( s_parameters.pixelScale - 1.0f ) > 0.01f;
@@ -157,7 +170,7 @@ void OpenGLBackbufferFBO::InitFBO()
 	gl.FramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,        GL_TEXTURE_2D, m_colorID,        0 );
 	gl.FramebufferTexture2D( GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_depthStencilID, 0 );
 
-	gl.BindFramebuffer( GL_FRAMEBUFFER_EXT, 0 );
+	gl.BindFramebuffer( GL_FRAMEBUFFER, 0 );
 }
 
 void OpenGLBackbufferFBO::InitGammaCorrection()

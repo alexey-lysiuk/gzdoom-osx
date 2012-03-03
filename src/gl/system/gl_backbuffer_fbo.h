@@ -46,6 +46,8 @@ public:
 	virtual bool Lock( bool buffered );
 	virtual void Update();
 
+	virtual void GetScreenshotBuffer( const BYTE*& buffer, int& pitch, ESSType& color_type );
+	
 	
 	struct Parameters
 	{
