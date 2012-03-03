@@ -1335,23 +1335,6 @@ int SDL_WM_ToggleFullScreen( SDL_Surface* )
 }
 
 
-int SDL_ShowCursor( int toggle )
-{
-	if ( SDL_DISABLE == toggle )
-	{
-		[NSCursor hide];
-		return SDL_DISABLE;
-	}
-	else if ( SDL_ENABLE == toggle )
-	{
-		[NSCursor hide];
-		return SDL_ENABLE;
-	}
-	
-	return -1;
-}
-
-
 void* SDL_GL_GetProcAddress( const char* name )
 {
 	return dlsym( RTLD_DEFAULT, name );
