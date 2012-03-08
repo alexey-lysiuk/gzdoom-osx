@@ -482,6 +482,8 @@ static void Outside(void)
 				{
 					MS_Message(MSG_DEBUG, "Strings will be encrypted\n");
 					pc_EncryptStrings = TRUE;
+					if(pc_NoShrink)
+						ERR_Error(ERR_HEXEN_COMPAT, YES);
 				}
 				TK_NextToken();
 				break;
@@ -562,6 +564,10 @@ static void OuterScript(void)
 	}
 	else if(tk_Token == TK_STRING)
 	{ // Named scripts start counting at -1 and go down from there.
+		if(strcasecmp("None", tk_String) == 0)
+		{
+			ERR_Error(ERR_SCRIPT_NAMED_NONE, YES, NULL);
+		}
 		scriptNumber = -1 - STR_FindInListInsensitive(STRLIST_NAMEDSCRIPTS, tk_String);
 		TK_NextToken();
 	}
@@ -602,7 +608,7 @@ static void OuterScript(void)
 			{
 				TK_NextTokenMustBe(TK_INT, ERR_BAD_VAR_TYPE);
 				TK_NextTokenMustBe(TK_IDENTIFIER, ERR_INVALID_IDENTIFIER);
-				if(ScriptVarCount == 3)
+				if(ScriptVarCount == 4)
 				{
 					ERR_Error(ERR_TOO_MANY_SCRIPT_ARGS, YES);
 				}
@@ -610,7 +616,7 @@ static void OuterScript(void)
 				{ // Redefined
 					ERR_Error(ERR_REDEFINED_IDENTIFIER, YES, tk_String);
 				}
-				else if(ScriptVarCount < 3)
+				else if(ScriptVarCount < 4)
 				{
 					sym = SY_InsertLocal(tk_String, SY_SCRIPTVAR);
 					sym->info.var.index = ScriptVarCount;
