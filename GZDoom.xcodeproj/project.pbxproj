@@ -464,8 +464,6 @@
 		8A9F546D14BB0F2900F3369B /* r_utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D68B513C84344001D368F /* r_utility.cpp */; };
 		8A9F546E14BB0F2900F3369B /* iwadpicker_cocoa.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3B139126C00095D9A0 /* iwadpicker_cocoa.mm */; };
 		8A9F547014BB0F2900F3369B /* autozend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D0D139126C00095D9A0 /* autozend.cpp */; };
-		8A9F547214BB0F2900F3369B /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F450139252F9001F54B0 /* AudioUnit.framework */; };
-		8A9F547314BB0F2900F3369B /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F4661392532C001F54B0 /* Carbon.framework */; };
 		8A9F547414BB0F2900F3369B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		8A9F547514BB0F2900F3369B /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F38E13925284001F54B0 /* IOKit.framework */; };
 		8A9F547614BB0F2900F3369B /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F2A1139235E0001F54B0 /* OpenGL.framework */; };
@@ -2435,8 +2433,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8A9F547214BB0F2900F3369B /* AudioUnit.framework in Frameworks */,
-				8A9F547314BB0F2900F3369B /* Carbon.framework in Frameworks */,
 				8A9F547414BB0F2900F3369B /* Cocoa.framework in Frameworks */,
 				8A9F547514BB0F2900F3369B /* IOKit.framework in Frameworks */,
 				8A9F547614BB0F2900F3369B /* OpenGL.framework in Frameworks */,
@@ -2526,10 +2522,10 @@
 				8AF27A311390F41F0095D9A0 /* zipdir */,
 				8AF27A0A1390F2B50095D9A0 /* re2c */,
 				8AF279BC1390F2540095D9A0 /* lemon */,
+				8A9F548414BB0F2900F3369B /* GZDoom.app */,
 				8D1107320486CEB800E47090 /* GZDoom.app */,
 				8A4D6B9E1494F7BE003DC1CB /* zdbsp */,
 				8A4D6C2C1494FD7A003DC1CB /* acc */,
-				8A9F548414BB0F2900F3369B /* GZDoom.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
