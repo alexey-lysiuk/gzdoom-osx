@@ -74,7 +74,7 @@ OpenGLBackbufferFBO::OpenGLBackbufferFBO( int width, int height, bool fullscreen
 , m_gammaTableID  (0)
 {
 	static const char ERROR_MESSAGE[] = 
-		"The graphics cards in your system does not support %s.\n"
+		"The graphics hardware in your system does not support %s.\n"
 		"It is required to run this version of " GAMENAME ".\n"
 		"You can try to use SDL-based version where this feature is not mandatory.";
 	
