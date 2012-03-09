@@ -80,7 +80,7 @@ void HIDReportErrorNum(const char *strError, int numError) {
 	// out as debug string
 #ifdef kVerboseErrors
 	{
-		fprintf(stderr, errMsgCStr);
+		fputs(errMsgCStr, stderr);
 	}
 #endif // kVerboseErrors
 } // HIDReportErrorNum
@@ -95,7 +95,7 @@ void HIDReportError(const char *strError) {
 	// out as debug string
 #ifdef kVerboseErrors
 	{
-		fprintf(stderr, errMsgCStr);
+		fputs(errMsgCStr, stderr);
 	}
 #endif // kVerboseErrors
 } // HIDReportError
