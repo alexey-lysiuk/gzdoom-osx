@@ -59,40 +59,10 @@
 #include "dikeys.h"
 #include "doomdef.h"
 #include "doomstat.h"
-#include "m_joy.h"
 #include "s_sound.h"
 #include "st_start.h"
 #include "textures.h"
 #include "version.h"
-
-
-void I_StartupJoysticks()
-{
-	
-}
-
-void I_ShutdownJoysticks()
-{
-	
-}
-
-void I_GetJoysticks( TArray< IJoystickConfig* >& sticks )
-{
-	sticks.Clear();
-}
-
-void I_GetAxes( float axes[ NUM_JOYAXIS ] )
-{
-	for ( size_t i = 0; i < NUM_JOYAXIS; ++i )
-	{
-		axes[i] = 0.0f;
-	}
-}
-
-IJoystickConfig *I_UpdateDeviceList()
-{
-	return NULL;
-}
 
 
 // ---------------------------------------------------------------------------
@@ -241,6 +211,10 @@ void CheckNativeMouse()
 } // unnamed namespace
 
 
+// from iokit_joystick.cpp
+void I_ProcessJoysticks();
+
+
 void I_GetEvent()
 {
 	StackAutoreleasePool pool;
@@ -253,6 +227,7 @@ void I_StartTic()
 	CheckGUICapture();
 	CheckNativeMouse();
 	
+	I_ProcessJoysticks();
 	I_GetEvent();
 }
 

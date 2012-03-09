@@ -65,7 +65,15 @@
 		497C93F013C5A6F800E6B4A8 /* voxels.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 497C93E913C5A6F800E6B4A8 /* voxels.cpp */; };
 		49A94D1614F4FCC8008312F3 /* gl_backbuffer_fbo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49A94D1414F4FCC8008312F3 /* gl_backbuffer_fbo.cpp */; };
 		49E9287913978BF600CCEBBC /* doom.icns in Resources */ = {isa = PBXBuildFile; fileRef = 49E9287713978BF600CCEBBC /* doom.icns */; };
+		8A19382C150A5F38003ED92C /* HID_Name_Lookup.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A422113150A0478001D28A0 /* HID_Name_Lookup.c */; };
+		8A19382D150A5F3B003ED92C /* HID_Error_Handler.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A422112150A0478001D28A0 /* HID_Error_Handler.c */; };
 		8A3AC15B14BE294E000D402B /* GZDoom.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A3AC15A14BE294E000D402B /* GZDoom.xib */; };
+		8A42210D150A0458001D28A0 /* libhid_utilities_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A422108150A0420001D28A0 /* libhid_utilities_gzdoom.a */; };
+		8A422121150A0478001D28A0 /* HID_Queue_Utilities.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A422114150A0478001D28A0 /* HID_Queue_Utilities.c */; };
+		8A422122150A0478001D28A0 /* HID_Utilities.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A422115150A0478001D28A0 /* HID_Utilities.c */; };
+		8A422126150A0478001D28A0 /* IOHIDDevice_.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A422119150A0478001D28A0 /* IOHIDDevice_.c */; };
+		8A422128150A0478001D28A0 /* IOHIDElement_.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A42211B150A0478001D28A0 /* IOHIDElement_.c */; };
+		8A422139150A0578001D28A0 /* iokit_joystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A422138150A0578001D28A0 /* iokit_joystick.cpp */; };
 		8A4D6BC51494F7DC003DC1CB /* blockmapbuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A4D6BA31494F7DC003DC1CB /* blockmapbuilder.cpp */; };
 		8A4D6BC81494F7DC003DC1CB /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A4D6BA91494F7DC003DC1CB /* main.cpp */; };
 		8A4D6BC91494F7DC003DC1CB /* nodebuild.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A4D6BAA1494F7DC003DC1CB /* nodebuild.cpp */; };
@@ -1107,6 +1115,13 @@
 			remoteGlobalIDString = BECDF66D0761BA81005FE872;
 			remoteInfo = "Static Library";
 		};
+		8A42210E150A0461001D28A0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8A422107150A0420001D28A0;
+			remoteInfo = hid_utilities;
+		};
 		8A9F52D814BB0E6500F3369B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
@@ -1283,6 +1298,21 @@
 		49A94D1514F4FCC8008312F3 /* gl_backbuffer_fbo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gl_backbuffer_fbo.h; sourceTree = "<group>"; };
 		49E9287713978BF600CCEBBC /* doom.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = doom.icns; sourceTree = "<group>"; };
 		8A3AC15A14BE294E000D402B /* GZDoom.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GZDoom.xib; sourceTree = "<group>"; };
+		8A422108150A0420001D28A0 /* libhid_utilities_gzdoom.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libhid_utilities_gzdoom.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A422111150A0478001D28A0 /* HID_Config_Utilities.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = HID_Config_Utilities.c; sourceTree = "<group>"; };
+		8A422112150A0478001D28A0 /* HID_Error_Handler.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = HID_Error_Handler.c; sourceTree = "<group>"; };
+		8A422113150A0478001D28A0 /* HID_Name_Lookup.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = HID_Name_Lookup.c; sourceTree = "<group>"; };
+		8A422114150A0478001D28A0 /* HID_Queue_Utilities.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = HID_Queue_Utilities.c; sourceTree = "<group>"; };
+		8A422115150A0478001D28A0 /* HID_Utilities.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = HID_Utilities.c; sourceTree = "<group>"; };
+		8A422116150A0478001D28A0 /* HID_Utilities_External.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HID_Utilities_External.h; sourceTree = "<group>"; };
+		8A422117150A0478001D28A0 /* ImmrHIDUtilAddOn.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ImmrHIDUtilAddOn.c; sourceTree = "<group>"; };
+		8A422118150A0478001D28A0 /* ImmrHIDUtilAddOn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImmrHIDUtilAddOn.h; sourceTree = "<group>"; };
+		8A422119150A0478001D28A0 /* IOHIDDevice_.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IOHIDDevice_.c; sourceTree = "<group>"; };
+		8A42211A150A0478001D28A0 /* IOHIDDevice_.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOHIDDevice_.h; sourceTree = "<group>"; };
+		8A42211B150A0478001D28A0 /* IOHIDElement_.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IOHIDElement_.c; sourceTree = "<group>"; };
+		8A42211C150A0478001D28A0 /* IOHIDElement_.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOHIDElement_.h; sourceTree = "<group>"; };
+		8A42211D150A0478001D28A0 /* IOHIDLib_.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOHIDLib_.h; sourceTree = "<group>"; };
+		8A422138150A0578001D28A0 /* iokit_joystick.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = iokit_joystick.cpp; sourceTree = "<group>"; };
 		8A44602813BF0306007FA8E1 /* gzdoom.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = gzdoom.xcconfig; sourceTree = "<group>"; };
 		8A4D6B9E1494F7BE003DC1CB /* zdbsp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = zdbsp; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A4D6BA31494F7DC003DC1CB /* blockmapbuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blockmapbuilder.cpp; sourceTree = "<group>"; };
@@ -2444,6 +2474,7 @@
 				8A9F547D14BB0F2900F3369B /* libgme_gzdoom.a in Frameworks */,
 				8A9F547E14BB0F2900F3369B /* libdumb_gzdoom.a in Frameworks */,
 				8A9F547F14BB0F2900F3369B /* libgdtoa_gzdoom.a in Frameworks */,
+				8A42210D150A0458001D28A0 /* libhid_utilities_gzdoom.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2502,6 +2533,7 @@
 				8AF27B281390F5EE0095D9A0 /* dumb */,
 				8AF27C84139121F90095D9A0 /* gdtoa */,
 				8AF27A571390F51A0095D9A0 /* gme */,
+				8A422110150A0478001D28A0 /* hid_utilities */,
 				8AF2790A1390F0880095D9A0 /* jpeg-6b */,
 				8AF2795F1390F1410095D9A0 /* lzma */,
 				8A6BE7B7142F539000AFCF10 /* misc */,
@@ -2519,6 +2551,7 @@
 				8AF27A541390F4F40095D9A0 /* libgme_gzdoom.a */,
 				8AF2795A1390F1200095D9A0 /* liblzma_gzdoom.a */,
 				8AF278CA1390F0370095D9A0 /* libjpeg_gzdoom.a */,
+				8A422108150A0420001D28A0 /* libhid_utilities_gzdoom.a */,
 				8AF27A311390F41F0095D9A0 /* zipdir */,
 				8AF27A0A1390F2B50095D9A0 /* re2c */,
 				8AF279BC1390F2540095D9A0 /* lemon */,
@@ -2586,6 +2619,27 @@
 				497C93EA13C5A6F800E6B4A8 /* voxels.h */,
 			);
 			path = r_data;
+			sourceTree = "<group>";
+		};
+		8A422110150A0478001D28A0 /* hid_utilities */ = {
+			isa = PBXGroup;
+			children = (
+				8A422111150A0478001D28A0 /* HID_Config_Utilities.c */,
+				8A422112150A0478001D28A0 /* HID_Error_Handler.c */,
+				8A422113150A0478001D28A0 /* HID_Name_Lookup.c */,
+				8A422114150A0478001D28A0 /* HID_Queue_Utilities.c */,
+				8A422115150A0478001D28A0 /* HID_Utilities.c */,
+				8A422116150A0478001D28A0 /* HID_Utilities_External.h */,
+				8A422117150A0478001D28A0 /* ImmrHIDUtilAddOn.c */,
+				8A422118150A0478001D28A0 /* ImmrHIDUtilAddOn.h */,
+				8A422119150A0478001D28A0 /* IOHIDDevice_.c */,
+				8A42211A150A0478001D28A0 /* IOHIDDevice_.h */,
+				8A42211B150A0478001D28A0 /* IOHIDElement_.c */,
+				8A42211C150A0478001D28A0 /* IOHIDElement_.h */,
+				8A42211D150A0478001D28A0 /* IOHIDLib_.h */,
+			);
+			name = hid_utilities;
+			path = thirdparty/hid_utilities;
 			sourceTree = "<group>";
 		};
 		8A4D6BA21494F7DC003DC1CB /* zdbsp */ = {
@@ -3964,6 +4018,7 @@
 				8AF27F38139126C00095D9A0 /* i_system.cpp */,
 				8AF27F39139126C00095D9A0 /* i_system.h */,
 				8AF27F3A139126C00095D9A0 /* i_video.h */,
+				8A422138150A0578001D28A0 /* iokit_joystick.cpp */,
 				8AF27F3B139126C00095D9A0 /* iwadpicker_cocoa.mm */,
 				8AF27F3C139126C00095D9A0 /* sdlglvideo.cpp */,
 				8AF27F3D139126C00095D9A0 /* sdlglvideo.h */,
@@ -4163,6 +4218,21 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		8A422107150A0420001D28A0 /* hid_utilities */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8A42212B150A0479001D28A0 /* Build configuration list for PBXNativeTarget "hid_utilities" */;
+			buildPhases = (
+				8A422105150A0420001D28A0 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = hid_utilities;
+			productName = hid_utilities;
+			productReference = 8A422108150A0420001D28A0 /* libhid_utilities_gzdoom.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		8A4D6B9D1494F7BE003DC1CB /* zdbsp */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8A4D6BD71494F7DD003DC1CB /* Build configuration list for PBXNativeTarget "zdbsp" */;
@@ -4217,6 +4287,7 @@
 				8A9F52F914BB0F2900F3369B /* PBXTargetDependency */,
 				8A9F52FB14BB0F2900F3369B /* PBXTargetDependency */,
 				8A9F52FD14BB0F2900F3369B /* PBXTargetDependency */,
+				8A42210F150A0461001D28A0 /* PBXTargetDependency */,
 			);
 			name = GZDoom_Cocoa;
 			productInstallPath = "$(HOME)/Applications";
@@ -4418,6 +4489,7 @@
 				8AF27A531390F4F40095D9A0 /* gme */,
 				8AF27B241390F5DC0095D9A0 /* dumb */,
 				8AF27C1B1390F7E20095D9A0 /* gdtoa */,
+				8A422107150A0420001D28A0 /* hid_utilities */,
 				8A4D6C2B1494FD7A003DC1CB /* acc */,
 				8A4D6B9D1494F7BE003DC1CB /* zdbsp */,
 				8A6BE7A3142F529D00AFCF10 /* Make Backup */,
@@ -4581,6 +4653,19 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		8A422105150A0420001D28A0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A19382D150A5F3B003ED92C /* HID_Error_Handler.c in Sources */,
+				8A19382C150A5F38003ED92C /* HID_Name_Lookup.c in Sources */,
+				8A422121150A0478001D28A0 /* HID_Queue_Utilities.c in Sources */,
+				8A422122150A0478001D28A0 /* HID_Utilities.c in Sources */,
+				8A422126150A0478001D28A0 /* IOHIDDevice_.c in Sources */,
+				8A422128150A0478001D28A0 /* IOHIDElement_.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8A4D6B9B1494F7BE003DC1CB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4981,9 +5066,10 @@
 				8A9F546B14BB0F2900F3369B /* voxels.cpp in Sources */,
 				8A9F546C14BB0F2900F3369B /* r_swrenderer.cpp in Sources */,
 				8A9F546D14BB0F2900F3369B /* r_utility.cpp in Sources */,
-				8A9F546E14BB0F2900F3369B /* iwadpicker_cocoa.mm in Sources */,
-				8A7FF48014BB2B220069731E /* cocoa_no_sdl.mm in Sources */,
 				49A94D1614F4FCC8008312F3 /* gl_backbuffer_fbo.cpp in Sources */,
+				8A422139150A0578001D28A0 /* iokit_joystick.cpp in Sources */,
+				8A7FF48014BB2B220069731E /* cocoa_no_sdl.mm in Sources */,
+				8A9F546E14BB0F2900F3369B /* iwadpicker_cocoa.mm in Sources */,
 				8A9F547014BB0F2900F3369B /* autozend.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5663,6 +5749,11 @@
 			name = "Static Library";
 			targetProxy = 8A2AD157142F281400149995 /* PBXContainerItemProxy */;
 		};
+		8A42210F150A0461001D28A0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8A422107150A0420001D28A0 /* hid_utilities */;
+			targetProxy = 8A42210E150A0461001D28A0 /* PBXContainerItemProxy */;
+		};
 		8A9F52D914BB0E6500F3369B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 8D1107260486CEB800E47090 /* GZDoom_SDL */;
@@ -5804,6 +5895,36 @@
 			};
 			name = Release;
 		};
+		8A422109150A0421001D28A0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/lib;
+				PREBINDING = NO;
+				PRODUCT_NAME = hid_utilities_gzdoom;
+			};
+			name = Debug;
+		};
+		8A42210A150A0421001D28A0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/lib;
+				PREBINDING = NO;
+				PRODUCT_NAME = hid_utilities_gzdoom;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 		8A4D6BA01494F7BF003DC1CB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -5936,6 +6057,14 @@
 					"$(inherited)",
 					COCOA_NO_SDL,
 				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(DOOM_HEADER_SEARCH_PATHS)",
+					"$(PORT_HEADER_SEARCH_PATHS)",
+					"$(LIBS_HEADER_SEARCH_PATHS)",
+					"$(TRDP_HEADER_SEARCH_PATHS)",
+					thirdparty/hid_utilities,
+				);
 				INFOPLIST_FILE = "GZDoom-Info.plist";
 				PRODUCT_NAME = GZDoom;
 				SDKROOT = macosx10.6;
@@ -5951,6 +6080,14 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					COCOA_NO_SDL,
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(DOOM_HEADER_SEARCH_PATHS)",
+					"$(PORT_HEADER_SEARCH_PATHS)",
+					"$(LIBS_HEADER_SEARCH_PATHS)",
+					"$(TRDP_HEADER_SEARCH_PATHS)",
+					thirdparty/hid_utilities,
 				);
 				INFOPLIST_FILE = "GZDoom-Info.plist";
 				PRODUCT_NAME = GZDoom;
@@ -6183,6 +6320,15 @@
 			buildConfigurations = (
 				49E92B3313991F2900CCEBBC /* Debug */,
 				49E92B3413991F2900CCEBBC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8A42212B150A0479001D28A0 /* Build configuration list for PBXNativeTarget "hid_utilities" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8A422109150A0421001D28A0 /* Debug */,
+				8A42210A150A0421001D28A0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
