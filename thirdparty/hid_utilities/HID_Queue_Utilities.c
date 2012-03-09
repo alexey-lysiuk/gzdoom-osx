@@ -61,9 +61,10 @@ static IOReturn HIDCreateQueue(IOHIDDeviceRef inIOHIDDeviceRef) {
 		} else {
 			tIOHIDQueueRef = IOHIDQueueCreate(kCFAllocatorDefault, inIOHIDDeviceRef, kDeviceQueueSize, kIOHIDOptionsTypeNone);
 			if ( tIOHIDQueueRef ) { // did that work
-				HIDReportErrorNum("Failed to create queue via create", result);
-			} else {
+				IOHIDDevice_SetQueue(inIOHIDDeviceRef, tIOHIDQueueRef);
 				result = kIOReturnSuccess;
+			} else {
+				HIDReportErrorNum("Failed to create queue via create", result);
 			}
 		}
 	} else {
