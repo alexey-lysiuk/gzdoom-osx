@@ -125,16 +125,16 @@ private:
 	TArray< AxisInfo > m_axes;
 	
 	TArray< IOHIDElementRef > m_buttons;
+	TArray< IOHIDElementRef > m_POVs;
 
 	
 	static const float DEFAULT_DEADZONE;
 	static const float DEFAULT_SENSITIVITY;
 	
 	
-	size_t FindAxis  ( const IOHIDElementRef element );
-	size_t FindButton( const IOHIDElementRef element );
-	
-	static const size_t ELEMENT_NOT_FOUND = size_t( -1 );
+	bool ProcessAxis  ( const IOHIDValueRef value );
+	bool ProcessButton( const IOHIDValueRef value );
+	bool ProcessPOV   ( const IOHIDValueRef value );
 	
 };
 
@@ -157,8 +157,9 @@ IOKitJoystick::IOKitJoystick( IOHIDDeviceRef device )
 		{
 			const uint32_t usage = IOHIDElementGetUsage( element );
 			
-			if (   kHIDUsage_GD_X  == usage || kHIDUsage_GD_Y  == usage || kHIDUsage_GD_Z  == usage
-				|| kHIDUsage_GD_Rx == usage || kHIDUsage_GD_Ry == usage || kHIDUsage_GD_Rz == usage )
+			if ( kHIDUsage_GD_Slider == usage  
+				|| kHIDUsage_GD_X    == usage || kHIDUsage_GD_Y  == usage || kHIDUsage_GD_Z  == usage
+				|| kHIDUsage_GD_Rx   == usage || kHIDUsage_GD_Ry == usage || kHIDUsage_GD_Rz == usage )
 			{
 				AxisInfo axis;
 				memset( &axis, 0, sizeof( axis ) );
@@ -181,6 +182,12 @@ IOKitJoystick::IOKitJoystick( IOHIDDeviceRef device )
 				
 				HIDQueueElement( m_device, element );
 			}
+			else if ( kHIDUsage_GD_Hatswitch == usage && m_POVs.Size() < 4 )
+			{
+				m_POVs.Push( element );
+				
+				HIDQueueElement( m_device, element );
+			}			
 		}
 		else if ( kHIDPage_Button == usagePage )
 		{
@@ -398,66 +405,146 @@ void IOKitJoystick::Update()
 	
 	while ( HIDGetEvent( m_device, &value ) && NULL != value )
 	{
-		IOHIDElementRef element = IOHIDValueGetElement( value );
-		
-		const size_t axisIndex = FindAxis( element );
-		
-		if ( ELEMENT_NOT_FOUND == axisIndex )
-		{
-			const size_t buttonIndex = FindButton( element );
-			
-			if ( ELEMENT_NOT_FOUND != buttonIndex )
-			{
-				const bool isPressed = IOHIDValueGetIntegerValue( value ) > 0;
-				
-				event_t event;
-				memset( &event, 0, sizeof( event ) );
-				
-				event.type  = isPressed ? EV_KeyDown : EV_KeyUp;
-				event.data1 = static_cast< SWORD >( KEY_FIRSTJOYBUTTON + buttonIndex );
-				
-				D_PostEvent( &event );
-			}
-		}
-		else
-		{
-			AxisInfo& axis = m_axes[ axisIndex ];
-			
-			const double scaledValue   = IOHIDValueGetScaledValue( value, kIOHIDValueScaleTypeCalibrated );
-			const double filteredValue = Joy_RemoveDeadZone( scaledValue, axis.deadZone, NULL );
-			
-			axis.value = static_cast< float >( filteredValue * m_sensitivity * axis.sensitivity );
-		}
+		ProcessAxis( value ) || ProcessButton( value ) || ProcessPOV( value );
 		
 		CFRelease( value );
 	}
 }
 
 
-size_t IOKitJoystick::FindAxis( const IOHIDElementRef element )
+bool IOKitJoystick::ProcessAxis( const IOHIDValueRef value )
 {
+	const IOHIDElementRef element = IOHIDValueGetElement( value );
+	
+	if ( NULL == element )
+	{
+		return false;
+	}
+
 	for ( size_t i = 0, count = m_axes.Size(); i < count; ++i )
 	{
-		if ( element == m_axes[i].element )
+		if ( element != m_axes[i].element )
 		{
-			return i;
+			continue;
 		}
+		
+		AxisInfo& axis = m_axes[i];
+		
+		const double scaledValue   = IOHIDValueGetScaledValue( value, kIOHIDValueScaleTypeCalibrated );
+		const double filteredValue = Joy_RemoveDeadZone( scaledValue, axis.deadZone, NULL );
+		
+		axis.value = static_cast< float >( filteredValue * m_sensitivity * axis.sensitivity );
+		
+		return true;
 	}
 	
-	return ELEMENT_NOT_FOUND;
+	return false;
 }
 
-size_t IOKitJoystick::FindButton( const IOHIDElementRef element )
+bool IOKitJoystick::ProcessButton( const IOHIDValueRef value )
 {
-	for ( size_t i = 0, count = m_buttons.Size(); i < count; ++i )
+	const IOHIDElementRef element = IOHIDValueGetElement( value );
+	
+	if ( NULL == element )
 	{
-		if ( element == m_buttons[i] )
-		{
-			return i;
-		}
+		return false;
 	}
 	
-	return ELEMENT_NOT_FOUND;
+	for ( size_t i = 0, count = m_buttons.Size(); i < count; ++i )
+	{
+		if ( element != m_buttons[i] )
+		{
+			continue;
+		}
+		
+		const int newButton = IOHIDValueGetIntegerValue( value ) & 1;
+		const int oldButton = ~newButton;
+		
+		Joy_GenerateButtonEvents( oldButton, newButton, 1, 
+			static_cast< int >( KEY_FIRSTJOYBUTTON + i ) );
+		
+		return true;
+	}
+	
+	return false;
+}
+
+bool IOKitJoystick::ProcessPOV( const IOHIDValueRef value )
+{
+	const IOHIDElementRef element = IOHIDValueGetElement( value );
+	
+	if ( NULL == element )
+	{
+		return false;
+	}
+	
+	for ( size_t i = 0, count = m_POVs.Size(); i < count; ++i )
+	{
+		if ( element != m_POVs[i] )
+		{
+			continue;
+		}
+		
+		const CFIndex direction = IOHIDValueGetIntegerValue( value );
+
+		// Default values is for Up/North
+		int oldButtons = 0;
+		int newButtons = 1;
+		int numButtons = 1;
+		int baseButton = KEY_JOYPOV1_UP;
+		
+		switch ( direction )
+		{
+			case 0: // N
+				break;
+
+			case 1: // NE
+				newButtons = 3;
+				numButtons = 2;
+				break;
+				
+			case 2: // E
+				baseButton = KEY_JOYPOV1_RIGHT;
+				break;
+
+			case 3: // SE
+				newButtons = 3;
+				numButtons = 2;
+				baseButton = KEY_JOYPOV1_RIGHT;
+				break;
+
+			case 4: // S
+				baseButton = KEY_JOYPOV1_DOWN;
+				break;
+
+			case 5: // SW
+				newButtons = 3;
+				numButtons = 2;
+				baseButton = KEY_JOYPOV1_DOWN;
+				break;
+				
+			case 6: // W
+				baseButton = KEY_JOYPOV1_LEFT;
+				break;
+				
+			case 7: // NW
+				newButtons = 9; // UP and LEFT
+				numButtons = 4;
+				break;
+				
+			default:
+				// release all four directions
+				oldButtons = 15;
+				newButtons = 0;
+				numButtons = 4;
+				break;
+		}
+		
+		Joy_GenerateButtonEvents( oldButtons, newButtons, numButtons, 
+			static_cast< int >( baseButton + i * 4 ) );
+	}
+	
+	return false;
 }
 
 
