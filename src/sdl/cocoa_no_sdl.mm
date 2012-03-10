@@ -65,6 +65,9 @@
 #include "version.h"
 
 
+#define GZ_UNUSED( VARIABLE ) ( ( void )( VARIABLE ) )
+
+
 // ---------------------------------------------------------------------------
 
 
@@ -767,27 +770,37 @@ static ApplicationDelegate* s_applicationDelegate;
 - (void)keyDown:(NSEvent*)theEvent
 {
 	// Empty but present to avoid playing of 'beep' alert sound
+	
+	GZ_UNUSED( theEvent );
 }
 
 - (void)keyUp:(NSEvent*)theEvent;
 {
 	// Empty but present to avoid playing of 'beep' alert sound
+	
+	GZ_UNUSED( theEvent );
 }
 
 
 - (void)applicationDidBecomeActive:(NSNotification*)aNotification
 {
+	GZ_UNUSED( aNotification );
+	
 	S_SetSoundPaused(1);
 }
 
 - (void)applicationWillResignActive:(NSNotification*)aNotification
 {
+	GZ_UNUSED( aNotification );
+	
 	S_SetSoundPaused(0);
 }
 
 
 - (void)applicationWillTerminate:(NSNotification*)aNotification
 {
+	GZ_UNUSED( aNotification );
+	
 	// Hide window as nothing will be rendered at this point
 	[m_window orderOut:nil];
 }
@@ -878,16 +891,16 @@ static ApplicationDelegate* s_applicationDelegate;
 		const float  displayWidth  = displayRect.size.width;
 		const float  displayHeight = displayRect.size.height;
 		
-		const float pixelScaleFactorX = displayRect.size.width  / static_cast< float >( width  );
-		const float pixelScaleFactorY = displayRect.size.height / static_cast< float >( height );
+		const float pixelScaleFactorX = displayWidth  / static_cast< float >( width  );
+		const float pixelScaleFactorY = displayHeight / static_cast< float >( height );
 		
 		backbufferParameters.pixelScale = std::min( pixelScaleFactorX, pixelScaleFactorY );
 		
 		backbufferParameters.width  = width  * backbufferParameters.pixelScale;
 		backbufferParameters.height = height * backbufferParameters.pixelScale;
 		
-		backbufferParameters.shiftX = ( displayRect.size.width  - backbufferParameters.width  ) / 2.0f;
-		backbufferParameters.shiftY = ( displayRect.size.height - backbufferParameters.height ) / 2.0f;
+		backbufferParameters.shiftX = ( displayWidth  - backbufferParameters.width  ) / 2.0f;
+		backbufferParameters.shiftY = ( displayHeight - backbufferParameters.height ) / 2.0f;
 		
 		[m_window setLevel:NSMainMenuWindowLevel + 1];
 		[m_window setStyleMask:NSBorderlessWindowMask];
@@ -933,6 +946,8 @@ static ApplicationDelegate* s_applicationDelegate;
 
 - (void)processEvents:(NSTimer*)timer
 {
+	GZ_UNUSED( timer );
+	
     while ( true )
     {
         NSEvent* event = [NSApp nextEventMatchingMask:NSAnyEventMask
@@ -1034,7 +1049,7 @@ bool I_SetCursor( FTexture* cursorpic )
 		
 		// Swap red and blue components in each pixel
 		
-		for ( size_t i = 0; i < imageWidth * imageHeight; ++i )
+		for ( size_t i = 0; i < size_t( imageWidth * imageHeight ); ++i )
 		{
 			const size_t offset = i * 4;
 			
@@ -1110,7 +1125,9 @@ void SDL_DestroyMutex( SDL_mutex* mutex )
 uint32_t SDL_GetTicks()
 {
 	static timeval start;
+	
 	static const int dummy = gettimeofday( &start, NULL );
+	GZ_UNUSED( dummy );
 	
 	timeval now;
 	gettimeofday( &now, NULL );
@@ -1123,8 +1140,10 @@ uint32_t SDL_GetTicks()
 }
 
 
-int SDL_Init( Uint32 )
+int SDL_Init( Uint32 flags )
 {
+	GZ_UNUSED( flags );
+	
 	if ( NULL == s_applicationDelegate )
 	{
 		StackAutoreleasePool pool;
@@ -1189,8 +1208,11 @@ const SDL_VideoInfo* SDL_GetVideoInfo()
 	return &videoInfo;
 }
 
-SDL_Rect** SDL_ListModes( SDL_PixelFormat*, Uint32 flags )
+SDL_Rect** SDL_ListModes( SDL_PixelFormat* format, Uint32 flags )
 {
+	GZ_UNUSED( format );
+	GZ_UNUSED( flags );
+	
 	static std::vector< SDL_Rect* > resolutions;
 	
 	if ( resolutions.empty() )
@@ -1299,13 +1321,18 @@ SDL_Surface* SDL_SetVideoMode( int width, int height, int, Uint32 flags )
 }
 
 
-void SDL_WM_SetCaption( const char*, const char* )
+void SDL_WM_SetCaption( const char* title, const char* icon )
 {
+	GZ_UNUSED( title );
+	GZ_UNUSED( icon );
+	
 	// Window title is set in SDL_SetVideoMode()
 }
 
-int SDL_WM_ToggleFullScreen( SDL_Surface* )
+int SDL_WM_ToggleFullScreen( SDL_Surface* surface )
 {
+	GZ_UNUSED( surface );
+	
 	return 1;
 }
 
@@ -1351,6 +1378,10 @@ int SDL_GL_GetAttribute( SDL_GLattr attr, int* value )
 		case SDL_GL_MULTISAMPLESAMPLES:
 			*value = [s_applicationDelegate multisample];
 			break;
+			
+		default:
+			// Not interested in other attributes
+			break;
 	}
 	
 	return 0;
@@ -1382,18 +1413,25 @@ int SDL_SetGammaRamp( const Uint16* red, const Uint16* green, const Uint16* blue
 }
 
 
-int SDL_LockSurface( SDL_Surface* )
+int SDL_LockSurface( SDL_Surface* surface )
 {
+	GZ_UNUSED( surface );
+	
 	return 0;
 }
 
-void SDL_UnlockSurface( SDL_Surface* )
+void SDL_UnlockSurface( SDL_Surface* surface )
 {
-	
+	GZ_UNUSED( surface );
 }
 
-int SDL_BlitSurface( SDL_Surface*, SDL_Rect*, SDL_Surface*, SDL_Rect* )
+int SDL_BlitSurface( SDL_Surface* src, SDL_Rect* srcrect, SDL_Surface* dst, SDL_Rect* dstrect )
 {
+	GZ_UNUSED( src );
+	GZ_UNUSED( srcrect );
+	GZ_UNUSED( dst );
+	GZ_UNUSED( dstrect );
+	
 	return 0;
 }
 
@@ -1470,6 +1508,12 @@ int SDL_Flip( SDL_Surface* screen )
 
 int SDL_SetPalette( SDL_Surface* surface, int flags, SDL_Color* colors, int firstcolor, int ncolors )
 {
+	GZ_UNUSED( surface );
+	GZ_UNUSED( flags );
+	GZ_UNUSED( colors );
+	GZ_UNUSED( firstcolor );
+	GZ_UNUSED( ncolors );
+	
 	return 0;
 }
 	
