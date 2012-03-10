@@ -428,7 +428,7 @@ void IOKitJoystick::Update()
 			const double scaledValue   = IOHIDValueGetScaledValue( value, kIOHIDValueScaleTypeCalibrated );
 			const double filteredValue = Joy_RemoveDeadZone( scaledValue, axis.deadZone, NULL );
 			
-			axis.value = static_cast< float >( filteredValue * axis.sensitivity );
+			axis.value = static_cast< float >( filteredValue * m_sensitivity * axis.sensitivity );
 		}
 		
 		CFRelease( value );
