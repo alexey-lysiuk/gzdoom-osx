@@ -197,8 +197,6 @@ IOKitJoystick::IOKitJoystick( IOHIDDeviceRef device )
 
 IOKitJoystick::~IOKitJoystick()
 {
-	// TODO: Send key ups before destroying
-	
 	M_SaveJoystickConfig( this );
 }
 
@@ -476,53 +474,34 @@ public:
 	
 	void AddAxes( float axes[ NUM_JOYAXIS ] ) const;
 	
+	// Updates axes/buttons states
 	void Update();
+	
+	// Rebuilds device list
+	void Rescan();
 	
 private:
 	TArray< IOKitJoystick* > m_joysticks;
+	
+	static void OnDeviceChanged( void* context, IOReturn result, void* sender, IOHIDDeviceRef device );
+	
+	void ReleaseJoysticks();
+	
+	void EnableCallbacks();
+	void DisableCallbacks();
 	
 };
 
 
 IOKitJoystickManager::IOKitJoystickManager()
 {
-	const int usageCount = 2;
-	
-	const UInt32 usagePages[ usageCount ] =
-	{
-		kHIDPage_GenericDesktop,
-		kHIDPage_GenericDesktop
-	};
-	
-	const UInt32 usages[ usageCount ] =
-	{
-		kHIDUsage_GD_Joystick,
-		kHIDUsage_GD_GamePad
-	};
-	
-	if ( !HIDBuildMultiDeviceList( usagePages, usages, usageCount ) )
-	{
-		Printf( "I_StartupJoysticks: Failed to build device list.\n" );
-		return;
-	}
-	
-	IOHIDDeviceRef device = HIDGetFirstDevice();
-	
-	while ( NULL != device )
-	{
-		IOKitJoystick* joystick = new IOKitJoystick( device );
-		m_joysticks.Push( joystick );
-		
-		device = HIDGetNextDevice( device );
-	}
+	Rescan();
 }
 
 IOKitJoystickManager::~IOKitJoystickManager()
 {
-	for ( size_t i = 0, count = m_joysticks.Size(); i < count; ++i )
-	{
-		delete m_joysticks[i];
-	}
+	ReleaseJoysticks();
+	DisableCallbacks();
 	
 	HIDReleaseDeviceList();
 }
@@ -557,6 +536,93 @@ void IOKitJoystickManager::Update()
 	{
 		m_joysticks[i]->Update();
 	}
+}
+
+
+void IOKitJoystickManager::Rescan()
+{
+	ReleaseJoysticks();
+	DisableCallbacks();
+	
+	const int usageCount = 2;
+	
+	const UInt32 usagePages[ usageCount ] =
+	{
+		kHIDPage_GenericDesktop,
+		kHIDPage_GenericDesktop
+	};
+	
+	const UInt32 usages[ usageCount ] =
+	{
+		kHIDUsage_GD_Joystick,
+		kHIDUsage_GD_GamePad
+	};
+	
+	if ( HIDUpdateDeviceList( usagePages, usages, usageCount ) )
+	{
+		IOHIDDeviceRef device = HIDGetFirstDevice();
+		
+		while ( NULL != device )
+		{		
+			IOKitJoystick* joystick = new IOKitJoystick( device );
+			m_joysticks.Push( joystick );
+			
+			device = HIDGetNextDevice( device );
+		}
+	}
+	else
+	{
+		Printf( "IOKitJoystickManager: Failed to build gamepad/joystick device list.\n" );
+	}
+	
+	EnableCallbacks();
+}
+
+
+void IOKitJoystickManager::OnDeviceChanged( void* context, IOReturn result, void* sender, IOHIDDeviceRef device )
+{
+	event_t event;
+	
+	memset( &event, 0, sizeof( event ) );
+	event.type = EV_DeviceChange;
+	
+	D_PostEvent( &event );
+}
+
+
+void IOKitJoystickManager::ReleaseJoysticks()
+{
+	for ( size_t i = 0, count = m_joysticks.Size(); i < count; ++i )
+	{
+		delete m_joysticks[i];
+	}
+	
+	m_joysticks.Clear();
+}
+
+	
+void IOKitJoystickManager::EnableCallbacks()
+{
+	if ( NULL == gIOHIDManagerRef )
+	{
+		return;
+	}	
+	
+	IOHIDManagerRegisterDeviceMatchingCallback( gIOHIDManagerRef, OnDeviceChanged, this );
+	IOHIDManagerRegisterDeviceRemovalCallback ( gIOHIDManagerRef, OnDeviceChanged, this );
+	IOHIDManagerScheduleWithRunLoop( gIOHIDManagerRef, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode );
+}
+
+void IOKitJoystickManager::DisableCallbacks()
+{
+	if ( NULL == gIOHIDManagerRef )
+	{
+		return;
+	}	
+	
+	IOHIDManagerUnscheduleFromRunLoop( gIOHIDManagerRef, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode );
+	IOHIDManagerRegisterDeviceMatchingCallback( gIOHIDManagerRef, NULL, NULL );
+	IOHIDManagerRegisterDeviceRemovalCallback ( gIOHIDManagerRef, NULL, NULL );
 }
 
 
@@ -602,14 +668,11 @@ void I_GetAxes( float axes[ NUM_JOYAXIS ] )
 
 IJoystickConfig* I_UpdateDeviceList()
 {
-	// TODO ...
-/*
-	if ( NULL != s_joystickManager )
+	if ( use_joystick && NULL != s_joystickManager )
 	{
-		delete s_joystickManager;
-		s_joystickManager = new IOKitJoystickManager;
+		s_joystickManager->Rescan();
 	}
-*/
+	
 	return NULL;
 }
 
