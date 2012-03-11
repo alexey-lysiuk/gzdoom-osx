@@ -39,7 +39,7 @@
 #include <dlfcn.h>
 
 #define BOOL BOOL_CPP_TYPE
-#include "gl/system/gl_backbuffer_fbo.h"
+#include "gl/system/gl_auxilium.h"
 #undef  BOOL
 
 #ifdef min
@@ -471,7 +471,7 @@ void NSEventToGameMousePosition( NSEvent* inEvent, event_t* outEvent )
 	const NSPoint windowPos = [window convertScreenToBase:screenPos];
 	const NSPoint   viewPos = [view convertPointFromBase:windowPos];
 	
-	const OpenGLBackbufferFBO::Parameters& backbufferParameters = OpenGLBackbufferFBO::GetParameters();
+	const GLAuxilium::BackbufferFBO::Parameters& backbufferParameters = GLAuxilium::BackbufferFBO::GetParameters();
 	const float posX = (                            viewPos.x - backbufferParameters.shiftX ) / backbufferParameters.pixelScale;
 	const float posY = ( [view frame].size.height - viewPos.y - backbufferParameters.shiftY ) / backbufferParameters.pixelScale;
 	
@@ -883,7 +883,7 @@ static ApplicationDelegate* s_applicationDelegate;
 	
 	CGLContextObj context = CGLGetCurrentContext();
 	
-	OpenGLBackbufferFBO::Parameters& backbufferParameters = OpenGLBackbufferFBO::GetParameters();
+	GLAuxilium::BackbufferFBO::Parameters& backbufferParameters = GLAuxilium::BackbufferFBO::GetParameters();
 	
 	if ( fullscreen )
 	{
@@ -1390,7 +1390,7 @@ int SDL_GL_GetAttribute( SDL_GLattr attr, int* value )
 
 int SDL_GetGammaRamp( Uint16* red, Uint16* green, Uint16* blue )
 {
-	OpenGLBackbufferFBO* frameBuffer = static_cast< OpenGLBackbufferFBO* >( screen );
+	GLAuxilium::BackbufferFBO* frameBuffer = static_cast< GLAuxilium::BackbufferFBO* >( screen );
 	
 	if ( NULL != frameBuffer )
 	{
@@ -1402,7 +1402,7 @@ int SDL_GetGammaRamp( Uint16* red, Uint16* green, Uint16* blue )
 
 int SDL_SetGammaRamp( const Uint16* red, const Uint16* green, const Uint16* blue )
 {
-	OpenGLBackbufferFBO* frameBuffer = static_cast< OpenGLBackbufferFBO* >( screen );
+	GLAuxilium::BackbufferFBO* frameBuffer = static_cast< GLAuxilium::BackbufferFBO* >( screen );
 	
 	if ( NULL != frameBuffer )
 	{
@@ -1454,7 +1454,7 @@ static void SetupSoftwareRendering( SDL_Surface* screen )
 	gl.Viewport( 0, 0, viewport[0], viewport[1] );
 	gl.Clear( GL_COLOR_BUFFER_BIT );
 
-	const OpenGLBackbufferFBO::Parameters& viewportParameters = OpenGLBackbufferFBO::GetParameters();
+	const GLAuxilium::BackbufferFBO::Parameters& viewportParameters = GLAuxilium::BackbufferFBO::GetParameters();
 	gl.Viewport( viewportParameters.shiftX, viewportParameters.shiftY, 
 				 viewportParameters.width,  viewportParameters.height );
 	
@@ -1463,7 +1463,7 @@ static void SetupSoftwareRendering( SDL_Surface* screen )
 	gl.GenTextures( 1, &s_softwareTextureID );
 	gl.BindTexture( GL_TEXTURE_2D, s_softwareTextureID );
 	
-	OpenGLBackbufferFBO::SetTextureParameters( GL_TEXTURE_2D, GL_NEAREST );
+	GLAuxilium::SetTextureParameters( GL_TEXTURE_2D, GL_NEAREST );
 }
 
 

@@ -28,7 +28,7 @@
 #include "gl/system/gl_cvars.h"
 
 #ifdef COCOA_NO_SDL
-#include "gl/system/gl_backbuffer_fbo.h"
+#include "gl/system/gl_auxilium.h"
 #endif // COCOA_NO_SDL
 
 
@@ -206,7 +206,7 @@ DFrameBuffer *SDLGLVideo::CreateFrameBuffer (int width, int height, bool fullscr
 	}
 	
 #ifdef COCOA_NO_SDL
-	SDLGLFB *fb = new OpenGLBackbufferFBO( width, height, fullscreen );
+	SDLGLFB *fb = new GLAuxilium::BackbufferFBO( width, height, fullscreen );
 #else // !COCOA_NO_SDL
 	SDLGLFB *fb = new OpenGLFrameBuffer (0, width, height, 32, 60, fullscreen);
 #endif // COCOA_NO_SDL

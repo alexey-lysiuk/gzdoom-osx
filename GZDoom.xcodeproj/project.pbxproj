@@ -63,7 +63,7 @@
 		497C93EE13C5A6F800E6B4A8 /* renderstyle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 497C93E513C5A6F800E6B4A8 /* renderstyle.cpp */; };
 		497C93EF13C5A6F800E6B4A8 /* sprites.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 497C93E713C5A6F800E6B4A8 /* sprites.cpp */; };
 		497C93F013C5A6F800E6B4A8 /* voxels.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 497C93E913C5A6F800E6B4A8 /* voxels.cpp */; };
-		49A94D1614F4FCC8008312F3 /* gl_backbuffer_fbo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49A94D1414F4FCC8008312F3 /* gl_backbuffer_fbo.cpp */; };
+		49A94D1614F4FCC8008312F3 /* gl_auxilium.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49A94D1414F4FCC8008312F3 /* gl_auxilium.cpp */; };
 		49E9287913978BF600CCEBBC /* doom.icns in Resources */ = {isa = PBXBuildFile; fileRef = 49E9287713978BF600CCEBBC /* doom.icns */; };
 		8A19382C150A5F38003ED92C /* HID_Name_Lookup.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A422113150A0478001D28A0 /* HID_Name_Lookup.c */; };
 		8A19382D150A5F3B003ED92C /* HID_Error_Handler.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A422112150A0478001D28A0 /* HID_Error_Handler.c */; };
@@ -1294,8 +1294,8 @@
 		497C93E913C5A6F800E6B4A8 /* voxels.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = voxels.cpp; sourceTree = "<group>"; };
 		497C93EA13C5A6F800E6B4A8 /* voxels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = voxels.h; sourceTree = "<group>"; };
 		497C941213C5AA2500E6B4A8 /* errors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = errors.h; sourceTree = "<group>"; };
-		49A94D1414F4FCC8008312F3 /* gl_backbuffer_fbo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gl_backbuffer_fbo.cpp; sourceTree = "<group>"; };
-		49A94D1514F4FCC8008312F3 /* gl_backbuffer_fbo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gl_backbuffer_fbo.h; sourceTree = "<group>"; };
+		49A94D1414F4FCC8008312F3 /* gl_auxilium.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gl_auxilium.cpp; sourceTree = "<group>"; };
+		49A94D1514F4FCC8008312F3 /* gl_auxilium.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gl_auxilium.h; sourceTree = "<group>"; };
 		49E9287713978BF600CCEBBC /* doom.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = doom.icns; sourceTree = "<group>"; };
 		8A3AC15A14BE294E000D402B /* GZDoom.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GZDoom.xib; sourceTree = "<group>"; };
 		8A422108150A0420001D28A0 /* libhid_utilities_gzdoom.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libhid_utilities_gzdoom.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3872,8 +3872,8 @@
 		8AF27E41139126C00095D9A0 /* system */ = {
 			isa = PBXGroup;
 			children = (
-				49A94D1414F4FCC8008312F3 /* gl_backbuffer_fbo.cpp */,
-				49A94D1514F4FCC8008312F3 /* gl_backbuffer_fbo.h */,
+				49A94D1414F4FCC8008312F3 /* gl_auxilium.cpp */,
+				49A94D1514F4FCC8008312F3 /* gl_auxilium.h */,
 				8AF27E42139126C00095D9A0 /* gl_cvars.h */,
 				8AF27E43139126C00095D9A0 /* gl_framebuffer.cpp */,
 				8AF27E44139126C00095D9A0 /* gl_framebuffer.h */,
@@ -5066,7 +5066,7 @@
 				8A9F546B14BB0F2900F3369B /* voxels.cpp in Sources */,
 				8A9F546C14BB0F2900F3369B /* r_swrenderer.cpp in Sources */,
 				8A9F546D14BB0F2900F3369B /* r_utility.cpp in Sources */,
-				49A94D1614F4FCC8008312F3 /* gl_backbuffer_fbo.cpp in Sources */,
+				49A94D1614F4FCC8008312F3 /* gl_auxilium.cpp in Sources */,
 				8A422139150A0578001D28A0 /* iokit_joystick.cpp in Sources */,
 				8A7FF48014BB2B220069731E /* cocoa_no_sdl.mm in Sources */,
 				8A9F546E14BB0F2900F3369B /* iwadpicker_cocoa.mm in Sources */,

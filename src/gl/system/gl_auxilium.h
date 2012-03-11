@@ -1,5 +1,5 @@
 /*
- ** gl_backbuffer_fbo.h
+ ** gl_auxilium.h
  **
  **---------------------------------------------------------------------------
  ** Copyright 2012 Alexey Lysiuk
@@ -34,18 +34,21 @@
 #include "gl/system/gl_framebuffer.h"
 
 
-class OpenGLBackbufferFBO : public OpenGLFrameBuffer
+namespace GLAuxilium
 {
-	DECLARE_CLASS( OpenGLBackbufferFBO, OpenGLFrameBuffer )
+	
+class BackbufferFBO : public OpenGLFrameBuffer
+{
+	DECLARE_CLASS( BackbufferFBO, OpenGLFrameBuffer )
 	
 public:
-	OpenGLBackbufferFBO();
-	OpenGLBackbufferFBO( int width, int height, bool fullscreen );
-	virtual ~OpenGLBackbufferFBO();
+	BackbufferFBO();
+	BackbufferFBO( int width, int height, bool fullscreen );
+	virtual ~BackbufferFBO();
 	
 	virtual bool Lock( bool buffered );
 	virtual void Update();
-
+	
 	virtual void GetScreenshotBuffer( const BYTE*& buffer, int& pitch, ESSType& color_type );
 	
 	
@@ -65,8 +68,6 @@ public:
 	void GetGammaTable(       uint16_t* red,       uint16_t* green,       uint16_t* blue );
 	void SetGammaTable( const uint16_t* red, const uint16_t* green, const uint16_t* blue );
 	
-	static void SetTextureParameters( const GLenum target, const GLint filter );
-	
 private:
 	GLuint m_fboID;
 	GLuint m_colorID;
@@ -80,7 +81,7 @@ private:
 	static const size_t GAMMA_TABLE_SIZE = 256;
 	uint32_t m_gammaTable[ GAMMA_TABLE_SIZE ];
 	
-
+	
 	static Parameters s_parameters;
 	
 	
@@ -90,3 +91,9 @@ private:
 	void DrawFBO();
 	
 };
+	
+	
+void SetTextureParameters( const GLenum target, const GLint filter );
+
+	
+} // namespace GLAuxilium

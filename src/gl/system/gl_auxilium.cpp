@@ -1,5 +1,5 @@
 /*
- ** gl_backbuffer_fbo.cpp
+ ** gl_auxilium.cpp
  **
  **---------------------------------------------------------------------------
  ** Copyright 2012 Alexey Lysiuk
@@ -31,7 +31,7 @@
  **
  */
 
-#include "gl/system/gl_backbuffer_fbo.h"
+#include "gl/system/gl_auxilium.h"
 
 #include "i_system.h"
 #include "version.h"
@@ -41,10 +41,13 @@
 #include "gl/utility/gl_clock.h"
 
 
-IMPLEMENT_CLASS( OpenGLBackbufferFBO )
+namespace GLAuxilium
+{
+
+IMPLEMENT_CLASS( BackbufferFBO )
 
 
-OpenGLBackbufferFBO::Parameters OpenGLBackbufferFBO::s_parameters = 
+BackbufferFBO::Parameters BackbufferFBO::s_parameters = 
 {
 	1.0f, // pixelScale
 	
@@ -59,12 +62,12 @@ OpenGLBackbufferFBO::Parameters OpenGLBackbufferFBO::s_parameters =
 static const uint32_t GAMMA_TABLE_ALPHA = 0xFF000000;
 
 
-OpenGLBackbufferFBO::OpenGLBackbufferFBO()
+BackbufferFBO::BackbufferFBO()
 {
 	
 }
 
-OpenGLBackbufferFBO::OpenGLBackbufferFBO( int width, int height, bool fullscreen )
+BackbufferFBO::BackbufferFBO( int width, int height, bool fullscreen )
 : OpenGLFrameBuffer( 0, width, height, 32, 60, fullscreen )
 , m_fboID         (0)
 , m_colorID       (0)
@@ -92,7 +95,7 @@ OpenGLBackbufferFBO::OpenGLBackbufferFBO( int width, int height, bool fullscreen
 	InitGammaCorrection();
 }
 
-OpenGLBackbufferFBO::~OpenGLBackbufferFBO()
+BackbufferFBO::~BackbufferFBO()
 {
 	gl.DeleteProgram( m_gammaProgramID );
 	gl.DeleteShader( m_gammaShaderID );
@@ -103,7 +106,7 @@ OpenGLBackbufferFBO::~OpenGLBackbufferFBO()
 }
 
 
-bool OpenGLBackbufferFBO::Lock( bool buffered )
+bool BackbufferFBO::Lock( bool buffered )
 {
 	if ( 0 == m_Lock )
 	{
@@ -113,7 +116,7 @@ bool OpenGLBackbufferFBO::Lock( bool buffered )
 	return Super::Lock( buffered );
 }
 
-void OpenGLBackbufferFBO::Update()
+void BackbufferFBO::Update()
 {
 	if ( !CanUpdate() )
 	{
@@ -135,7 +138,7 @@ void OpenGLBackbufferFBO::Update()
 }
 
 
-void OpenGLBackbufferFBO::GetScreenshotBuffer( const BYTE*& buffer, int& pitch, ESSType& color_type )
+void BackbufferFBO::GetScreenshotBuffer( const BYTE*& buffer, int& pitch, ESSType& color_type )
 {
 	GLint readFBO;
 	glGetIntegerv( GL_READ_FRAMEBUFFER_BINDING, &readFBO );
@@ -148,7 +151,7 @@ void OpenGLBackbufferFBO::GetScreenshotBuffer( const BYTE*& buffer, int& pitch, 
 }
 
 
-void OpenGLBackbufferFBO::InitFBO()
+void BackbufferFBO::InitFBO()
 {
 	const bool isScaled = fabsf( s_parameters.pixelScale - 1.0f ) > 0.01f;
 	
@@ -173,7 +176,7 @@ void OpenGLBackbufferFBO::InitFBO()
 	gl.BindFramebuffer( GL_FRAMEBUFFER, 0 );
 }
 
-void OpenGLBackbufferFBO::InitGammaCorrection()
+void BackbufferFBO::InitGammaCorrection()
 {
 	// Create gamma correction texture
 	
@@ -236,17 +239,7 @@ void OpenGLBackbufferFBO::InitGammaCorrection()
 }
 
 
-void OpenGLBackbufferFBO::SetTextureParameters( const GLenum target, const GLint filter )
-{
-	gl.TexParameteri( target, GL_TEXTURE_MIN_FILTER, filter );
-	gl.TexParameteri( target, GL_TEXTURE_MAG_FILTER, filter );
-	
-	gl.TexParameteri( target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-	gl.TexParameteri( target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
-}
-
-
-void OpenGLBackbufferFBO::DrawFBO()
+void BackbufferFBO::DrawFBO()
 {
 	gl.BindFramebuffer( GL_FRAMEBUFFER, 0 );
 	
@@ -297,13 +290,13 @@ void OpenGLBackbufferFBO::DrawFBO()
 }
 
 
-OpenGLBackbufferFBO::Parameters& OpenGLBackbufferFBO::GetParameters()
+BackbufferFBO::Parameters& BackbufferFBO::GetParameters()
 {
 	return s_parameters;
 }
 
 
-void OpenGLBackbufferFBO::GetGammaTable( uint16_t* red, uint16_t* green, uint16_t* blue )
+void BackbufferFBO::GetGammaTable( uint16_t* red, uint16_t* green, uint16_t* blue )
 {
 	for ( size_t i = 0; i < GAMMA_TABLE_SIZE; ++i )
 	{
@@ -319,7 +312,7 @@ void OpenGLBackbufferFBO::GetGammaTable( uint16_t* red, uint16_t* green, uint16_
 	}	
 }
 
-void OpenGLBackbufferFBO::SetGammaTable( const uint16_t* red, const uint16_t* green, const uint16_t* blue )
+void BackbufferFBO::SetGammaTable( const uint16_t* red, const uint16_t* green, const uint16_t* blue )
 {
 	for ( size_t i = 0; i < GAMMA_TABLE_SIZE; ++i )
 	{
@@ -336,3 +329,18 @@ void OpenGLBackbufferFBO::SetGammaTable( const uint16_t* red, const uint16_t* gr
 	gl.TexImage1D ( GL_TEXTURE_1D, 0, GL_RGBA8, 256, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_gammaTable );
 	gl.BindTexture( GL_TEXTURE_1D, 0 );
 }
+
+
+// ---------------------------------------------------------------------------
+
+
+void SetTextureParameters( const GLenum target, const GLint filter )
+{
+	gl.TexParameteri( target, GL_TEXTURE_MIN_FILTER, filter );
+	gl.TexParameteri( target, GL_TEXTURE_MAG_FILTER, filter );
+	
+	gl.TexParameteri( target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+	gl.TexParameteri( target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+}
+
+} // namespace GLAuxilium
