@@ -99,6 +99,9 @@ GLuint RenderTarget::GetColorTexture() const
 
 void RenderTarget::Init()
 {
+	GLint oldTex2D = 0;
+	glGetIntegerv( GL_TEXTURE_BINDING_2D, &oldTex2D );
+	
 	// TODO: check hardware support
 	
 	gl.GenTextures( 1, &m_colorID );
@@ -124,6 +127,7 @@ void RenderTarget::Init()
 	// TODO: check FBO completeness
 	
 	gl.BindFramebuffer( GL_FRAMEBUFFER, m_oldFBOID );
+	gl.BindTexture( GL_TEXTURE_2D, oldTex2D );
 }
 
 void RenderTarget::Release()
@@ -176,6 +180,187 @@ void RenderTarget::InitDefaults( const GLsizei width, const GLsizei height )
 // ---------------------------------------------------------------------------
 
 
+ShaderProgram::ShaderProgram()
+{
+	InitDefaults( NULL, NULL );
+}
+
+ShaderProgram::ShaderProgram( const char* vertexName, const char* fragmentName )
+{
+	InitDefaults( vertexName, fragmentName );
+}
+
+ShaderProgram::~ShaderProgram()
+{
+	Release();
+}
+
+
+const char* ShaderProgram::GetVertexName() const
+{
+	return m_vertexName.GetChars();
+}
+
+void ShaderProgram::SetVertexName( const char* name )
+{
+	m_vertexName = name;
+}
+
+const char* ShaderProgram::GetFragmentName() const
+{
+	return m_fragmentName.GetChars();
+}
+
+void ShaderProgram::SetFragmentName( const char* name )
+{
+	m_fragmentName = name;
+}
+
+
+GLuint ShaderProgram::GetProgram() const
+{
+	return m_programID;
+}
+
+GLuint ShaderProgram::GetVertexShader() const
+{
+	return m_vertexShaderID;
+}
+
+
+GLuint ShaderProgram::GetFragmentShader() const
+{
+	return m_fragmentShaderID;
+}
+
+
+static GLuint CreateShader( const GLenum type, const char* name )
+{
+	const int shaderLumpID = Wads.CheckNumForFullName( name );
+	
+	if ( -1 == shaderLumpID )
+	{
+		Printf( "Unable to load shader %s\n", name );
+		
+		return 0;
+	}
+
+	FMemLump shaderLump = Wads.ReadLump( shaderLumpID );
+	
+	const char* shaderString = shaderLump.GetString().GetChars();
+	GLint shaderSize = strlen( shaderString );
+	
+	static char errorBuffer[ 8 * 1024 ];
+	memset( errorBuffer, 0, sizeof ( errorBuffer ) );
+	
+	const GLuint result = gl.CreateShader( type );
+	
+	gl.ShaderSource( result, 1, &shaderString, &shaderSize );
+	gl.CompileShader( result );
+	gl.GetShaderInfoLog( result, sizeof( errorBuffer ), NULL, errorBuffer );
+	
+	if ( '\0' != *errorBuffer )
+	{
+		Printf( "Shader %s compilation failed:\n%s\n", name, errorBuffer );
+	}
+	
+	return result;
+}
+
+
+void ShaderProgram::Init()
+{
+	const bool hasVertexShader = m_vertexName.Len() > 0;
+	if ( hasVertexShader )
+	{
+		m_vertexShaderID = CreateShader( GL_VERTEX_SHADER, m_vertexName );
+	}
+	
+	const bool hasFragmentShader = m_fragmentName.Len() > 0;
+	if ( hasFragmentShader )
+	{
+		m_fragmentShaderID = CreateShader( GL_FRAGMENT_SHADER, m_fragmentName );
+	}
+	
+	if ( 0 == m_vertexShaderID && 0 == m_fragmentShaderID )
+	{
+		return;
+	}
+	
+	m_programID = gl.CreateProgram();
+	
+	gl.AttachShader( m_programID, m_vertexShaderID );
+	gl.AttachShader( m_programID, m_fragmentShaderID );
+	gl.LinkProgram ( m_programID );
+	
+	static char errorBuffer[ 8 * 1024 ];
+	memset( errorBuffer, 0, sizeof ( errorBuffer ) );
+	
+	gl.GetProgramInfoLog( m_programID, sizeof( errorBuffer ), NULL, errorBuffer );
+	
+	if ( '\0' != *errorBuffer )
+	{
+		Printf( "Program link failed:\n%s\n", errorBuffer );
+		Printf( "Vertex shader: %s\n",   hasVertexShader   ? m_vertexName.GetChars()   : "<none>" );
+		Printf( "Fragment shader: %s\n", hasFragmentShader ? m_fragmentName.GetChars() : "<none>" );
+	}
+}
+
+void ShaderProgram::Release()
+{
+	gl.DeleteProgram( m_programID );
+	m_programID = 0;
+	
+	gl.DeleteShader( m_fragmentShaderID );
+	m_fragmentShaderID = 0;
+	
+	gl.DeleteShader( m_vertexShaderID );
+	m_vertexShaderID = 0;
+}
+
+
+void ShaderProgram::Bind()
+{
+	GLint oldProgram = 0;
+	glGetIntegerv( GL_CURRENT_PROGRAM, &oldProgram );
+	
+	if ( GLuint( oldProgram ) != m_programID )
+	{
+		gl.UseProgram( m_programID );
+		
+		m_oldProgramID = oldProgram;
+	}
+}
+
+void ShaderProgram::Unbind()
+{
+	gl.UseProgram( m_oldProgramID );
+}
+
+
+void ShaderProgram::InitDefaults( const char* vertexName, const char* fragmentName )
+{
+	if ( NULL != vertexName )
+	{
+		m_vertexName = vertexName;
+	}
+	
+	if ( NULL != fragmentName )
+	{
+		m_fragmentName = fragmentName;
+	}
+	
+	m_programID        = 0;
+	m_vertexShaderID   = 0;
+	m_fragmentShaderID = 0;
+	
+	m_oldProgramID     = 0;
+}
+
+
+// ---------------------------------------------------------------------------
+
+
 IMPLEMENT_CLASS( BackBuffer )
 
 
@@ -202,9 +387,7 @@ BackBuffer::BackBuffer()
 BackBuffer::BackBuffer( int width, int height, bool fullscreen )
 : OpenGLFrameBuffer( 0, width, height, 32, 60, fullscreen )
 , m_renderTarget( width, height )
-, m_gammaProgramID(0)
-, m_gammaShaderID (0)
-, m_gammaTableID  (0)
+, m_gammaTableID(0)
 {
 	static const char ERROR_MESSAGE[] = 
 		"The graphics hardware in your system does not support %s.\n"
@@ -221,18 +404,8 @@ BackBuffer::BackBuffer( int width, int height, bool fullscreen )
 		I_FatalError( ERROR_MESSAGE, "Frame Buffer Object (FBO)" );
 	}
 	
-	const bool isScaled = fabsf( s_parameters.pixelScale - 1.0f ) > 0.01f;
-	
-	m_renderTarget.SetTextureFilter( isScaled ? GL_LINEAR : GL_NEAREST );
-	m_renderTarget.Init();
-	
+	InitRenderTarget();
 	InitGammaCorrection();
-}
-
-BackBuffer::~BackBuffer()
-{
-	gl.DeleteProgram( m_gammaProgramID );
-	gl.DeleteShader( m_gammaShaderID );
 }
 
 
@@ -278,6 +451,14 @@ void BackBuffer::GetScreenshotBuffer( const BYTE*& buffer, int& pitch, ESSType& 
 }
 
 
+void BackBuffer::InitRenderTarget()
+{
+	const bool isScaled = fabsf( s_parameters.pixelScale - 1.0f ) > 0.01f;
+	
+	m_renderTarget.SetTextureFilter( isScaled ? GL_LINEAR : GL_NEAREST );
+	m_renderTarget.Init();
+}
+
 void BackBuffer::InitGammaCorrection()
 {
 	// Create gamma correction texture
@@ -295,49 +476,20 @@ void BackBuffer::InitGammaCorrection()
 	
 	// Create gamma correction shader
 	
-	const int shaderLumpID = Wads.CheckNumForFullName( "shaders/glsl/gamma_correction.fp" );
-	if ( -1 == shaderLumpID )
-	{
-		Printf( "Unable to load gamma correction shader.\n" );
-		return;
-	}
-	
-	FMemLump shaderLump = Wads.ReadLump( shaderLumpID );
-	
-	const char* shaderString = shaderLump.GetString().GetChars();
-	GLint shaderSize = strlen( shaderString );
-
-	char buffer[ 4096 ] = {0};
-	
-	m_gammaShaderID = gl.CreateShader( GL_FRAGMENT_SHADER );
-	gl.ShaderSource( m_gammaShaderID, 1, &shaderString, &shaderSize );
-	gl.CompileShader( m_gammaShaderID );
-	gl.GetShaderInfoLog( m_gammaShaderID, sizeof( buffer ), NULL, buffer );
-	
-	if ( '\0' != *buffer )
-	{
-		Printf( "Gamma correction shader compilation failed:\n%s\n", buffer );
-	}
-	
-	m_gammaProgramID = gl.CreateProgram();
-	gl.AttachShader( m_gammaProgramID, m_gammaShaderID );
-	gl.LinkProgram( m_gammaProgramID );
-	gl.GetProgramInfoLog( m_gammaProgramID, sizeof( buffer ), NULL, buffer );
-	
-	if ( '\0' != *buffer )
-	{
-		Printf( "Gamma correction shader link failed:\n%s\n", buffer );
-	}
+	m_gammaProgram.SetFragmentName( "shaders/glsl/gamma_correction.fp" );
+	m_gammaProgram.Init();
+	m_gammaProgram.Bind();
 	
 	// Setup uniforms for gamma correction shader
 	
-	const GLint backbufferLocation = gl.GetUniformLocation( m_gammaProgramID, "backbuffer" );
-	const GLint gammaTableLocation = gl.GetUniformLocation( m_gammaProgramID, "gammaTable" );
+	const GLuint gammaProgramID     = m_gammaProgram.GetProgram();
+	const GLint  backbufferLocation = gl.GetUniformLocation( gammaProgramID, "backbuffer" );
+	const GLint  gammaTableLocation = gl.GetUniformLocation( gammaProgramID, "gammaTable" );
 	
-	gl.UseProgram( m_gammaProgramID );
 	gl.Uniform1i ( backbufferLocation, 0 );
 	gl.Uniform1i ( gammaTableLocation, 1 );
-	gl.UseProgram( 0 );
+	
+	m_gammaProgram.Unbind();
 }
 
 
@@ -354,7 +506,7 @@ void BackBuffer::DrawRenderTarget()
 	gl.BindTexture( GL_TEXTURE_1D, m_gammaTableID );
 	gl.ActiveTexture( GL_TEXTURE0 );
 	
-	gl.UseProgram( m_gammaProgramID );
+	m_gammaProgram.Bind();
 	
 	GLint viewport[4] = {0};
 	glGetIntegerv( GL_VIEWPORT, viewport );
@@ -379,7 +531,7 @@ void BackBuffer::DrawRenderTarget()
 	gl.Vertex2f( x1, y2 );
 	gl.End();
 	
-	gl.UseProgram(0);
+	m_gammaProgram.Unbind();
 	
 	gl.Viewport( viewport[0], viewport[1], viewport[2], viewport[3] );
 	

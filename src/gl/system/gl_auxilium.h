@@ -75,7 +75,59 @@ private:
 	
 	void InitDefaults( const GLsizei width, const GLsizei height );
 	
+	// Without implementation
+	RenderTarget( const RenderTarget& );
+	RenderTarget& operator=( const RenderTarget& );	
+	
 };
+
+
+// ---------------------------------------------------------------------------
+
+
+class ShaderProgram
+{
+public:
+	ShaderProgram();
+	ShaderProgram( const char* vertexName, const char* fragmentName );
+	~ShaderProgram();
+	
+	const char* GetVertexName() const;
+	void SetVertexName( const char* name );
+
+	const char* GetFragmentName() const;
+	void SetFragmentName( const char* name );
+	
+	GLuint GetProgram() const;
+	GLuint GetVertexShader() const;
+	GLuint GetFragmentShader() const;
+	
+	void Init();
+	void Release();
+	
+	void Bind();
+	void Unbind();
+	
+private:
+	FString m_vertexName;
+	FString m_fragmentName;
+	
+	GLuint m_programID;
+	GLuint m_vertexShaderID;
+	GLuint m_fragmentShaderID;
+	
+	GLint m_oldProgramID;
+	
+	void InitDefaults( const char* vertexName, const char* fragmentName );
+	
+	// Without implementation
+	ShaderProgram( const ShaderProgram& );
+	ShaderProgram& operator=( const ShaderProgram& );
+	
+};
+	
+
+// ---------------------------------------------------------------------------
 
 
 class BackBuffer : public OpenGLFrameBuffer
@@ -85,7 +137,6 @@ class BackBuffer : public OpenGLFrameBuffer
 public:
 	BackBuffer();
 	BackBuffer( int width, int height, bool fullscreen );
-	virtual ~BackBuffer();
 	
 	virtual bool Lock( bool buffered );
 	virtual void Update();
@@ -110,10 +161,8 @@ public:
 	void SetGammaTable( const uint16_t* red, const uint16_t* green, const uint16_t* blue );
 	
 private:
-	RenderTarget m_renderTarget;
-	
-	GLuint m_gammaProgramID;
-	GLuint m_gammaShaderID;
+	RenderTarget  m_renderTarget;
+	ShaderProgram m_gammaProgram;
 	
 	GLuint m_gammaTableID;
 	
@@ -124,9 +173,14 @@ private:
 	static Parameters s_parameters;
 	
 	
+	void InitRenderTarget();
 	void InitGammaCorrection();
 	
 	void DrawRenderTarget();
+	
+	// Without implementation
+	BackBuffer( const BackBuffer& );
+	BackBuffer& operator=( const BackBuffer& );	
 	
 };
 	
