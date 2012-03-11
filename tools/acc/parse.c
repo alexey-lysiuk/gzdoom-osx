@@ -482,8 +482,10 @@ static void Outside(void)
 				{
 					MS_Message(MSG_DEBUG, "Strings will be encrypted\n");
 					pc_EncryptStrings = TRUE;
-					if(pc_NoShrink)
+					if(pc_EnforceHexen)
+					{
 						ERR_Error(ERR_HEXEN_COMPAT, YES);
+					}
 				}
 				TK_NextToken();
 				break;
@@ -1545,7 +1547,7 @@ static void LeadingLineSpecial(boolean executewait)
 	int argCountMin;
 	int argCountMax;
 	int argSave[8];
-	U_BYTE specialValue;
+	U_INT specialValue;
 	boolean direct;
 
 	MS_Message(MSG_DEBUG, "---- LeadingLineSpecial ----\n");
@@ -1620,6 +1622,10 @@ static void LeadingLineSpecial(boolean executewait)
 		}
 		else
 		{
+			if (specialValue > 255)
+			{
+				ERR_Error(ERR_SPECIAL_RANGE, YES);
+			}
 			PC_AppendByte(specialValue);
 		}
 		if(executewait)
@@ -4029,6 +4035,11 @@ static void ParseArrayIndices(symbolNode_t *sym, int requiredIndices)
 		i++;
 		TK_TokenMustBe(TK_RBRACKET, ERR_MISSING_RBRACKET);
 		TK_NextToken();
+	}
+	if(i < requiredIndices)
+	{
+		ERR_Error(ERR_TOO_FEW_DIM_USED, YES,
+			sym->name, requiredIndices - i);
 	}
 	// if there were unspecified indices, multiply the offset by their sizes [JB]
 	if(requiredIndices < sym->info.array.ndim - 1)

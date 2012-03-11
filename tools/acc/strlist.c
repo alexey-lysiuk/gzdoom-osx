@@ -115,8 +115,10 @@ int STR_FindLanguage(char *name)
 		}
 		LanguageInfo[i]->list.stringCount = 0;
 		NumLanguages++;
-		if(NumLanguages > 1 && pc_NoShrink)
+		if(NumLanguages > 1 && pc_EnforceHexen)
+		{
 			ERR_Error(ERR_HEXEN_COMPAT, YES);
+		}
 	}
 	return i;
 }
@@ -156,8 +158,10 @@ int STR_FindInList(int list, char *name)
 		StringLists[list] = MS_Alloc(sizeof(stringList_t), ERR_OUT_OF_MEMORY);
 		StringLists[list]->stringCount = 0;
 		NumStringLists++;
-		if(pc_NoShrink)
+		if(pc_EnforceHexen)
+		{
 			ERR_Error(ERR_HEXEN_COMPAT, YES);
+		}
 	}
 	return STR_FindInSomeList (StringLists[list], name);
 }
@@ -196,8 +200,10 @@ int STR_FindInListInsensitive(int list, char *name)
 		StringLists[list] = MS_Alloc(sizeof(stringList_t), ERR_OUT_OF_MEMORY);
 		StringLists[list]->stringCount = 0;
 		NumStringLists++;
-		if(pc_NoShrink)
+		if(pc_EnforceHexen)
+		{
 			ERR_Error(ERR_HEXEN_COMPAT, YES);
+		}
 	}
 	return STR_FindInSomeListInsensitive (StringLists[list], name);
 }
@@ -255,8 +261,10 @@ int STR_AppendToList(int list, char *name)
 		StringLists[list] = MS_Alloc(sizeof(stringList_t), ERR_OUT_OF_MEMORY);
 		StringLists[list]->stringCount = 0;
 		NumStringLists++;
-		if(pc_NoShrink)
+		if(pc_EnforceHexen)
+		{
 			ERR_Error(ERR_HEXEN_COMPAT, YES);
+		}
 	}
 	return STR_PutStringInSomeList(StringLists[list], StringLists[list]->stringCount, name);
 }

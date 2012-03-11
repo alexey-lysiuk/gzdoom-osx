@@ -160,6 +160,7 @@ static struct
 	{ ERR_MISSING_RBRACKET, "Missing ']'." },
 	{ ERR_ZERO_DIMENSION, "Arrays cannot have a dimension of zero." },
 	{ ERR_TOO_MANY_DIM_USED, "%s only has %d dimensions." },
+	{ ERR_TOO_FEW_DIM_USED, "%s access needs %d more dimensions." },
 	{ ERR_ARRAY_MAPVAR_ONLY, "Only map variables can be arrays." },
 	{ ERR_NOT_AN_ARRAY, "%s is not an array." },
 	{ ERR_MISSING_LBRACE_ARR, "Missing opening '{' in array initializer." },
@@ -178,7 +179,9 @@ static struct
 	{ ERR_NOT_A_CHAR_ARRAY, "%s has %d dimensions. Use %d subscripts to get a char array." },
 	{ ERR_CANT_FIND_INCLUDE, "Couldn't find include file \"%s\"." },
 	{ ERR_SCRIPT_NAMED_NONE, "Scripts may not be named \"None\"." },
-	{ ERR_HEXEN_COMPAT, "Attempt to use feature not supported by Hexen pcode with -h specified." },
+	{ ERR_HEXEN_COMPAT, "Attempt to use feature not supported by Hexen." },
+	{ ERR_NOT_HEXEN, "Cannot save; new features are not compatible with Hexen." },
+	{ ERR_SPECIAL_RANGE, "Line specials with values higher than 255 require #nocompact." },
 	{ ERR_NONE, NULL }
 };
 
