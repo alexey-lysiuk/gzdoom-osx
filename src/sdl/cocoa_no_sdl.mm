@@ -471,7 +471,7 @@ void NSEventToGameMousePosition( NSEvent* inEvent, event_t* outEvent )
 	const NSPoint windowPos = [window convertScreenToBase:screenPos];
 	const NSPoint   viewPos = [view convertPointFromBase:windowPos];
 	
-	const GLAuxilium::BackbufferFBO::Parameters& backbufferParameters = GLAuxilium::BackbufferFBO::GetParameters();
+	const GLAuxilium::BackBuffer::Parameters& backbufferParameters = GLAuxilium::BackBuffer::GetParameters();
 	const float posX = (                            viewPos.x - backbufferParameters.shiftX ) / backbufferParameters.pixelScale;
 	const float posY = ( [view frame].size.height - viewPos.y - backbufferParameters.shiftY ) / backbufferParameters.pixelScale;
 	
@@ -883,7 +883,7 @@ static ApplicationDelegate* s_applicationDelegate;
 	
 	CGLContextObj context = CGLGetCurrentContext();
 	
-	GLAuxilium::BackbufferFBO::Parameters& backbufferParameters = GLAuxilium::BackbufferFBO::GetParameters();
+	GLAuxilium::BackBuffer::Parameters& backbufferParameters = GLAuxilium::BackBuffer::GetParameters();
 	
 	if ( fullscreen )
 	{
@@ -1390,7 +1390,7 @@ int SDL_GL_GetAttribute( SDL_GLattr attr, int* value )
 
 int SDL_GetGammaRamp( Uint16* red, Uint16* green, Uint16* blue )
 {
-	GLAuxilium::BackbufferFBO* frameBuffer = static_cast< GLAuxilium::BackbufferFBO* >( screen );
+	GLAuxilium::BackBuffer* frameBuffer = static_cast< GLAuxilium::BackBuffer* >( screen );
 	
 	if ( NULL != frameBuffer )
 	{
@@ -1402,7 +1402,7 @@ int SDL_GetGammaRamp( Uint16* red, Uint16* green, Uint16* blue )
 
 int SDL_SetGammaRamp( const Uint16* red, const Uint16* green, const Uint16* blue )
 {
-	GLAuxilium::BackbufferFBO* frameBuffer = static_cast< GLAuxilium::BackbufferFBO* >( screen );
+	GLAuxilium::BackBuffer* frameBuffer = static_cast< GLAuxilium::BackBuffer* >( screen );
 	
 	if ( NULL != frameBuffer )
 	{
@@ -1454,7 +1454,7 @@ static void SetupSoftwareRendering( SDL_Surface* screen )
 	gl.Viewport( 0, 0, viewport[0], viewport[1] );
 	gl.Clear( GL_COLOR_BUFFER_BIT );
 
-	const GLAuxilium::BackbufferFBO::Parameters& viewportParameters = GLAuxilium::BackbufferFBO::GetParameters();
+	const GLAuxilium::BackBuffer::Parameters& viewportParameters = GLAuxilium::BackBuffer::GetParameters();
 	gl.Viewport( viewportParameters.shiftX, viewportParameters.shiftY, 
 				 viewportParameters.width,  viewportParameters.height );
 	

@@ -44,10 +44,142 @@
 namespace GLAuxilium
 {
 
-IMPLEMENT_CLASS( BackbufferFBO )
+RenderTarget::RenderTarget()
+{
+	InitDefaults( 0, 0 );
+}
+
+RenderTarget::RenderTarget( const GLsizei width, const GLsizei height )
+{
+	InitDefaults( width, height );
+}
+
+RenderTarget::~RenderTarget()
+{
+	Release();
+}
 
 
-BackbufferFBO::Parameters BackbufferFBO::s_parameters = 
+GLsizei RenderTarget::GetWidth() const
+{
+	return m_width;
+}
+
+void RenderTarget::SetWidth( const GLsizei width )
+{
+	m_width = width;
+}
+
+GLsizei RenderTarget::GetHeight() const
+{
+	return m_height;
+}
+
+void RenderTarget::SetHeight( const GLsizei height )
+{
+	m_height = height;
+}
+
+GLsizei RenderTarget::GetTextureFilter() const
+{
+	return m_textureFilter;
+}
+
+void RenderTarget::SetTextureFilter( const GLint filter )
+{
+	m_textureFilter = filter;
+}
+
+
+GLuint RenderTarget::GetColorTexture() const
+{
+	return m_colorID;
+}
+
+
+void RenderTarget::Init()
+{
+	// TODO: check hardware support
+	
+	gl.GenTextures( 1, &m_colorID );
+	gl.BindTexture( GL_TEXTURE_2D, m_colorID );
+	gl.TexImage2D ( GL_TEXTURE_2D, 0, GL_RGBA8, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL );
+	SetTextureParameters( GL_TEXTURE_2D, m_textureFilter );
+	
+	gl.GenTextures( 1, &m_depthStencilID );
+	gl.BindTexture( GL_TEXTURE_2D, m_depthStencilID );
+	gl.TexImage2D ( GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, m_width, m_height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL );
+	SetTextureParameters( GL_TEXTURE_2D, GL_NEAREST );
+	
+	// TODO: check errors
+	
+	glGetIntegerv( GL_FRAMEBUFFER_BINDING, &m_oldFBOID );
+	
+	gl.GenFramebuffers( 1, &m_fboID );
+	gl.BindFramebuffer( GL_FRAMEBUFFER, m_fboID );
+	
+	gl.FramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,        GL_TEXTURE_2D, m_colorID,        0 );
+	gl.FramebufferTexture2D( GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_depthStencilID, 0 );
+	
+	// TODO: check FBO completeness
+	
+	gl.BindFramebuffer( GL_FRAMEBUFFER, m_oldFBOID );
+}
+
+void RenderTarget::Release()
+{
+	gl.DeleteTextures( 1, &m_depthStencilID );
+	m_depthStencilID = 0;
+	
+	gl.DeleteTextures( 1, &m_colorID );
+	m_colorID = 0;
+	
+	gl.DeleteFramebuffers( 1, &m_fboID );
+	m_fboID = 0;
+}
+
+
+void RenderTarget::Bind()
+{
+	GLint oldFBO = 0;
+	glGetIntegerv( GL_FRAMEBUFFER_BINDING, &oldFBO );
+	
+	if ( GLuint( oldFBO ) != m_fboID )
+	{
+		gl.BindFramebuffer( GL_FRAMEBUFFER, m_fboID );
+		
+		m_oldFBOID = oldFBO;
+	}
+}
+
+void RenderTarget::Unbind()
+{
+	gl.BindFramebuffer( GL_FRAMEBUFFER, m_oldFBOID );
+}
+
+
+void RenderTarget::InitDefaults( const GLsizei width, const GLsizei height )
+{
+	m_width          = width;
+	m_height         = height;
+	
+	m_textureFilter  = GL_NEAREST;
+	
+	m_fboID          = 0;
+	m_colorID        = 0;
+	m_depthStencilID = 0;
+	
+	m_oldFBOID       = 0;
+}
+
+
+// ---------------------------------------------------------------------------
+
+
+IMPLEMENT_CLASS( BackBuffer )
+
+
+BackBuffer::Parameters BackBuffer::s_parameters = 
 {
 	1.0f, // pixelScale
 	
@@ -62,16 +194,14 @@ BackbufferFBO::Parameters BackbufferFBO::s_parameters =
 static const uint32_t GAMMA_TABLE_ALPHA = 0xFF000000;
 
 
-BackbufferFBO::BackbufferFBO()
+BackBuffer::BackBuffer()
 {
 	
 }
 
-BackbufferFBO::BackbufferFBO( int width, int height, bool fullscreen )
+BackBuffer::BackBuffer( int width, int height, bool fullscreen )
 : OpenGLFrameBuffer( 0, width, height, 32, 60, fullscreen )
-, m_fboID         (0)
-, m_colorID       (0)
-, m_depthStencilID(0)
+, m_renderTarget( width, height )
 , m_gammaProgramID(0)
 , m_gammaShaderID (0)
 , m_gammaTableID  (0)
@@ -91,32 +221,32 @@ BackbufferFBO::BackbufferFBO( int width, int height, bool fullscreen )
 		I_FatalError( ERROR_MESSAGE, "Frame Buffer Object (FBO)" );
 	}
 	
-	InitFBO();
+	const bool isScaled = fabsf( s_parameters.pixelScale - 1.0f ) > 0.01f;
+	
+	m_renderTarget.SetTextureFilter( isScaled ? GL_LINEAR : GL_NEAREST );
+	m_renderTarget.Init();
+	
 	InitGammaCorrection();
 }
 
-BackbufferFBO::~BackbufferFBO()
+BackBuffer::~BackBuffer()
 {
 	gl.DeleteProgram( m_gammaProgramID );
 	gl.DeleteShader( m_gammaShaderID );
-	
-	gl.DeleteTextures( 1, &m_depthStencilID );
-	gl.DeleteTextures( 1, &m_colorID );
-	gl.DeleteFramebuffers( 1, &m_fboID );
 }
 
 
-bool BackbufferFBO::Lock( bool buffered )
+bool BackBuffer::Lock( bool buffered )
 {
 	if ( 0 == m_Lock )
 	{
-		gl.BindFramebuffer( GL_FRAMEBUFFER, m_fboID );
+		m_renderTarget.Bind();
 	}
 	
 	return Super::Lock( buffered );
 }
 
-void BackbufferFBO::Update()
+void BackBuffer::Update()
 {
 	if ( !CanUpdate() )
 	{
@@ -129,7 +259,7 @@ void BackbufferFBO::Update()
 	DrawRateStuff();
 	GLRenderer->Flush();
 	
-	DrawFBO();
+	DrawRenderTarget();
 	
 	Swap();
 	Unlock();
@@ -138,45 +268,17 @@ void BackbufferFBO::Update()
 }
 
 
-void BackbufferFBO::GetScreenshotBuffer( const BYTE*& buffer, int& pitch, ESSType& color_type )
+void BackBuffer::GetScreenshotBuffer( const BYTE*& buffer, int& pitch, ESSType& color_type )
 {
-	GLint readFBO;
-	glGetIntegerv( GL_READ_FRAMEBUFFER_BINDING, &readFBO );
-	
-	gl.BindFramebuffer( GL_READ_FRAMEBUFFER, m_fboID );
+	m_renderTarget.Bind();
 	
 	Super::GetScreenshotBuffer( buffer, pitch, color_type );
 	
-	gl.BindFramebuffer( GL_READ_FRAMEBUFFER, readFBO );
+	m_renderTarget.Unbind();
 }
 
 
-void BackbufferFBO::InitFBO()
-{
-	const bool isScaled = fabsf( s_parameters.pixelScale - 1.0f ) > 0.01f;
-	
-	gl.GenTextures( 1, &m_colorID );
-	gl.BindTexture( GL_TEXTURE_2D, m_colorID );
-	gl.TexImage2D ( GL_TEXTURE_2D, 0, GL_RGBA8, Width, Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL );
-	SetTextureParameters( GL_TEXTURE_2D, isScaled ? GL_LINEAR : GL_NEAREST );
-	gl.BindTexture( GL_TEXTURE_2D, 0 );
-
-	gl.GenTextures( 1, &m_depthStencilID );
-	gl.BindTexture( GL_TEXTURE_2D, m_depthStencilID );
-	gl.TexImage2D ( GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, Width, Height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL );
-	SetTextureParameters( GL_TEXTURE_2D, GL_NEAREST );
-	gl.BindTexture( GL_TEXTURE_2D, 0 );
-
-	gl.GenFramebuffers( 1, &m_fboID );
-	gl.BindFramebuffer( GL_FRAMEBUFFER, m_fboID );
-
-	gl.FramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,        GL_TEXTURE_2D, m_colorID,        0 );
-	gl.FramebufferTexture2D( GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_depthStencilID, 0 );
-
-	gl.BindFramebuffer( GL_FRAMEBUFFER, 0 );
-}
-
-void BackbufferFBO::InitGammaCorrection()
+void BackBuffer::InitGammaCorrection()
 {
 	// Create gamma correction texture
 	
@@ -239,20 +341,18 @@ void BackbufferFBO::InitGammaCorrection()
 }
 
 
-void BackbufferFBO::DrawFBO()
+void BackBuffer::DrawRenderTarget()
 {
-	gl.BindFramebuffer( GL_FRAMEBUFFER, 0 );
+	m_renderTarget.Unbind();
 	
 	gl.Disable( GL_BLEND );
 	gl.Disable( GL_ALPHA_TEST );
 	
 	gl.ActiveTexture( GL_TEXTURE0 );
-	gl.BindTexture( GL_TEXTURE_2D, m_colorID );
+	gl.BindTexture( GL_TEXTURE_2D, m_renderTarget.GetColorTexture() );
 	gl.ActiveTexture( GL_TEXTURE1 );
 	gl.BindTexture( GL_TEXTURE_1D, m_gammaTableID );
 	gl.ActiveTexture( GL_TEXTURE0 );
-	
-//	glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL );
 	
 	gl.UseProgram( m_gammaProgramID );
 	
@@ -290,13 +390,13 @@ void BackbufferFBO::DrawFBO()
 }
 
 
-BackbufferFBO::Parameters& BackbufferFBO::GetParameters()
+BackBuffer::Parameters& BackBuffer::GetParameters()
 {
 	return s_parameters;
 }
 
 
-void BackbufferFBO::GetGammaTable( uint16_t* red, uint16_t* green, uint16_t* blue )
+void BackBuffer::GetGammaTable( uint16_t* red, uint16_t* green, uint16_t* blue )
 {
 	for ( size_t i = 0; i < GAMMA_TABLE_SIZE; ++i )
 	{
@@ -312,7 +412,7 @@ void BackbufferFBO::GetGammaTable( uint16_t* red, uint16_t* green, uint16_t* blu
 	}	
 }
 
-void BackbufferFBO::SetGammaTable( const uint16_t* red, const uint16_t* green, const uint16_t* blue )
+void BackBuffer::SetGammaTable( const uint16_t* red, const uint16_t* green, const uint16_t* blue )
 {
 	for ( size_t i = 0; i < GAMMA_TABLE_SIZE; ++i )
 	{
