@@ -31,6 +31,10 @@
  **
  */
 
+#ifndef GL_SYSTEM_AUXILIUM_H_INCLUDED
+#define GL_SYSTEM_AUXILIUM_H_INCLUDED
+
+
 #include "gl/system/gl_framebuffer.h"
 
 
@@ -189,3 +193,6 @@ void SetTextureParameters( const GLenum target, const GLint filter );
 
 	
 } // namespace GLAuxilium
+
+
+#endif // GL_SYSTEM_AUXILIUM_H_INCLUDED

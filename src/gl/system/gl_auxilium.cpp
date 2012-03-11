@@ -240,7 +240,7 @@ static GLuint CreateShader( const GLenum type, const char* name )
 	
 	if ( -1 == shaderLumpID )
 	{
-		Printf( "Unable to load shader %s\n", name );
+		Printf( "Unable to load shader \"%s\"\n", name );
 		
 		return 0;
 	}
@@ -261,7 +261,7 @@ static GLuint CreateShader( const GLenum type, const char* name )
 	
 	if ( '\0' != *errorBuffer )
 	{
-		Printf( "Shader %s compilation failed:\n%s\n", name, errorBuffer );
+		Printf( "Shader \"%s\" compilation failed:\n%s\n", name, errorBuffer );
 	}
 	
 	return result;
@@ -486,8 +486,8 @@ void BackBuffer::InitGammaCorrection()
 	const GLint  backbufferLocation = gl.GetUniformLocation( gammaProgramID, "backbuffer" );
 	const GLint  gammaTableLocation = gl.GetUniformLocation( gammaProgramID, "gammaTable" );
 	
-	gl.Uniform1i ( backbufferLocation, 0 );
-	gl.Uniform1i ( gammaTableLocation, 1 );
+	gl.Uniform1i( backbufferLocation, 0 );
+	gl.Uniform1i( gammaTableLocation, 1 );
 	
 	m_gammaProgram.Unbind();
 }
