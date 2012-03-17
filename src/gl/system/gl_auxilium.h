@@ -136,11 +136,11 @@ private:
 
 class BackBuffer : public OpenGLFrameBuffer
 {
-	DECLARE_CLASS( BackBuffer, OpenGLFrameBuffer )
+	typedef OpenGLFrameBuffer Super;
 	
 public:
-	BackBuffer();
 	BackBuffer( int width, int height, bool fullscreen );
+	~BackBuffer();
 	
 	virtual bool Lock( bool buffered );
 	virtual void Update();

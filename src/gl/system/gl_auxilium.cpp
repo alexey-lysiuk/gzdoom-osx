@@ -99,9 +99,6 @@ GLuint RenderTarget::GetColorTexture() const
 
 void RenderTarget::Init()
 {
-	GLint oldTex2D = 0;
-	glGetIntegerv( GL_TEXTURE_BINDING_2D, &oldTex2D );
-	
 	// TODO: check hardware support
 	
 	gl.GenTextures( 1, &m_colorID );
@@ -116,8 +113,6 @@ void RenderTarget::Init()
 	
 	// TODO: check errors
 	
-	glGetIntegerv( GL_FRAMEBUFFER_BINDING, &m_oldFBOID );
-	
 	gl.GenFramebuffers( 1, &m_fboID );
 	gl.BindFramebuffer( GL_FRAMEBUFFER, m_fboID );
 	
@@ -125,9 +120,6 @@ void RenderTarget::Init()
 	gl.FramebufferTexture2D( GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_depthStencilID, 0 );
 	
 	// TODO: check FBO completeness
-	
-	gl.BindFramebuffer( GL_FRAMEBUFFER, m_oldFBOID );
-	gl.BindTexture( GL_TEXTURE_2D, oldTex2D );
 }
 
 void RenderTarget::Release()
@@ -361,9 +353,6 @@ void ShaderProgram::InitDefaults( const char* vertexName, const char* fragmentNa
 // ---------------------------------------------------------------------------
 
 
-IMPLEMENT_CLASS( BackBuffer )
-
-
 BackBuffer::Parameters BackBuffer::s_parameters = 
 {
 	1.0f, // pixelScale
@@ -378,11 +367,6 @@ BackBuffer::Parameters BackBuffer::s_parameters =
 
 static const uint32_t GAMMA_TABLE_ALPHA = 0xFF000000;
 
-
-BackBuffer::BackBuffer()
-{
-	
-}
 
 BackBuffer::BackBuffer( int width, int height, bool fullscreen )
 : OpenGLFrameBuffer( 0, width, height, 32, 60, fullscreen )
@@ -406,6 +390,11 @@ BackBuffer::BackBuffer( int width, int height, bool fullscreen )
 	
 	InitRenderTarget();
 	InitGammaCorrection();
+}
+
+BackBuffer::~BackBuffer()
+{
+	gl.DeleteTextures( 1, &m_gammaTableID );
 }
 
 
