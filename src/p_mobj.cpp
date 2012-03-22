@@ -3364,6 +3364,50 @@ void AActor::Tick ()
 
 //==========================================================================
 //
+// AActor :: CheckSectorTransition
+//
+// Fire off some sector triggers if the actor has changed sectors.
+//
+//==========================================================================
+
+void AActor::CheckSectorTransition(sector_t *oldsec)
+{
+	if (oldsec != Sector)
+	{
+		if (oldsec->SecActTarget != NULL)
+		{
+			oldsec->SecActTarget->TriggerAction(this, SECSPAC_Exit);
+		}
+		if (Sector->SecActTarget != NULL)
+		{
+			int act = SECSPAC_Enter;
+			if (z <= Sector->floorplane.ZatPoint(x, y))
+			{
+				act |= SECSPAC_HitFloor;
+			}
+			if (z + height >= Sector->ceilingplane.ZatPoint(x, y))
+			{
+				act |= SECSPAC_HitCeiling;
+			}
+			if (Sector->heightsec != NULL && z == Sector->heightsec->floorplane.ZatPoint(x, y))
+			{
+				act |= SECSPAC_HitFakeFloor;
+			}
+			Sector->SecActTarget->TriggerAction(this, act);
+		}
+		if (z == floorz)
+		{
+			P_CheckFor3DFloorHit(this);
+		}
+		if (z + height == ceilingz)
+		{
+			P_CheckFor3DCeilingHit(this);
+		}
+	}
+}
+
+//==========================================================================
+//
 // AActor::UpdateWaterLevel
 //
 // Returns true if actor should splash
@@ -4051,9 +4095,12 @@ APlayerPawn *P_SpawnPlayer (FMapThing *mthing, bool tempplayer)
 
 	p->velx = p->vely = 0;		// killough 10/98: initialize bobbing to 0.
 
-	if (players[consoleplayer].camera == oldactor)
+	for (int ii = 0; ii < MAXPLAYERS; ++ii)
 	{
-		players[consoleplayer].camera = mobj;
+		if (playeringame[ii] && players[ii].camera == oldactor)
+		{
+			players[ii].camera = mobj;
+		}
 	}
 
 	// [RH] Allow chasecam for demo watching
