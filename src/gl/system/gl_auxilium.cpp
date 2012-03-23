@@ -44,186 +44,116 @@
 namespace GLAuxilium
 {
 
-RenderTarget::RenderTarget()
+GLint GetInternalFormat( const TextureFormat format )
 {
-	InitDefaults( 0, 0 );
-}
-
-RenderTarget::RenderTarget( const GLsizei width, const GLsizei height )
-{
-	InitDefaults( width, height );
-}
-
-RenderTarget::~RenderTarget()
-{
-	Release();
-}
-
-
-GLsizei RenderTarget::GetWidth() const
-{
-	return m_width;
-}
-
-void RenderTarget::SetWidth( const GLsizei width )
-{
-	m_width = width;
-}
-
-GLsizei RenderTarget::GetHeight() const
-{
-	return m_height;
-}
-
-void RenderTarget::SetHeight( const GLsizei height )
-{
-	m_height = height;
-}
-
-GLsizei RenderTarget::GetTextureFilter() const
-{
-	return m_textureFilter;
-}
-
-void RenderTarget::SetTextureFilter( const GLint filter )
-{
-	m_textureFilter = filter;
-}
-
-
-GLuint RenderTarget::GetColorTexture() const
-{
-	return m_colorID;
-}
-
-
-void RenderTarget::Init()
-{
-	// TODO: check hardware support
-	
-	gl.GenTextures( 1, &m_colorID );
-	gl.BindTexture( GL_TEXTURE_2D, m_colorID );
-	gl.TexImage2D ( GL_TEXTURE_2D, 0, GL_RGBA8, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL );
-	SetTextureParameters( GL_TEXTURE_2D, m_textureFilter );
-	
-	gl.GenTextures( 1, &m_depthStencilID );
-	gl.BindTexture( GL_TEXTURE_2D, m_depthStencilID );
-	gl.TexImage2D ( GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, m_width, m_height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL );
-	SetTextureParameters( GL_TEXTURE_2D, GL_NEAREST );
-	
-	// TODO: check errors
-	
-	gl.GenFramebuffers( 1, &m_fboID );
-	gl.BindFramebuffer( GL_FRAMEBUFFER, m_fboID );
-	
-	gl.FramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,        GL_TEXTURE_2D, m_colorID,        0 );
-	gl.FramebufferTexture2D( GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_depthStencilID, 0 );
-	
-	// TODO: check FBO completeness
-}
-
-void RenderTarget::Release()
-{
-	gl.DeleteTextures( 1, &m_depthStencilID );
-	m_depthStencilID = 0;
-	
-	gl.DeleteTextures( 1, &m_colorID );
-	m_colorID = 0;
-	
-	gl.DeleteFramebuffers( 1, &m_fboID );
-	m_fboID = 0;
-}
-
-
-void RenderTarget::Bind()
-{
-	GLint oldFBO = 0;
-	glGetIntegerv( GL_FRAMEBUFFER_BINDING, &oldFBO );
-	
-	if ( GLuint( oldFBO ) != m_fboID )
+	switch ( format )
 	{
-		gl.BindFramebuffer( GL_FRAMEBUFFER, m_fboID );
+		case TEXTURE_FORMAT_COLOR_RGBA:
+			return GL_RGBA8;
 		
-		m_oldFBOID = oldFBO;
+		case TEXTURE_FORMAT_DEPTH_STENCIL:
+			return GL_DEPTH24_STENCIL8;
+		
+		default:
+			assert( !"Unknown texture format" );
+			return 0;
 	}
 }
 
-void RenderTarget::Unbind()
+GLint GetFormat( const TextureFormat format )
 {
-	gl.BindFramebuffer( GL_FRAMEBUFFER, m_oldFBOID );
+	switch ( format )
+	{
+		case TEXTURE_FORMAT_COLOR_RGBA:
+			return GL_RGBA;
+			
+		case TEXTURE_FORMAT_DEPTH_STENCIL:
+			return GL_DEPTH_STENCIL;
+			
+		default:
+			assert( !"Unknown texture format" );
+			return 0;
+	}
+}
+
+GLint GetDataType( const TextureFormat format )
+{
+	switch ( format )
+	{
+		case TEXTURE_FORMAT_COLOR_RGBA:
+			return GL_UNSIGNED_BYTE;
+			
+		case TEXTURE_FORMAT_DEPTH_STENCIL:
+			return GL_UNSIGNED_INT_24_8;
+			
+		default:
+			assert( !"Unknown texture format" );
+			return 0;
+	}
 }
 
 
-void RenderTarget::InitDefaults( const GLsizei width, const GLsizei height )
+GLint GetFilter( const TextureFilter filter )
 {
-	m_width          = width;
-	m_height         = height;
-	
-	m_textureFilter  = GL_NEAREST;
-	
-	m_fboID          = 0;
-	m_colorID        = 0;
-	m_depthStencilID = 0;
-	
-	m_oldFBOID       = 0;
+	switch ( filter )
+	{
+		case TEXTURE_FILTER_NEAREST:
+			return GL_NEAREST;
+			
+		case TEXTURE_FILTER_LINEAR:
+			return GL_LINEAR;
+			
+		default:
+			assert( !"Unknown texture filter" );
+			return 0;
+	}
 }
 
 
 // ---------------------------------------------------------------------------
 
 
-ShaderProgram::ShaderProgram()
+RenderTarget::RenderTarget( const GLsizei width, const GLsizei height )
 {
-	InitDefaults( NULL, NULL );
+	m_color.SetImageData( TEXTURE_FORMAT_COLOR_RGBA, width, height, NULL );
+	m_color.SetFilter( TEXTURE_FILTER_NEAREST );
+	
+	m_depthStencil.SetImageData( TEXTURE_FORMAT_DEPTH_STENCIL, width, height, NULL );
+	m_depthStencil.SetFilter( TEXTURE_FILTER_NEAREST );
+	
+	gl.GenFramebuffers( 1, &m_ID );
+	gl.BindFramebuffer( GL_FRAMEBUFFER, m_ID );
+	
+	gl.FramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,        GL_TEXTURE_2D, m_color.m_ID,        0 );
+	gl.FramebufferTexture2D( GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_depthStencil.m_ID, 0 );
+	
+	gl.BindFramebuffer( GL_FRAMEBUFFER, 0 );
 }
-
-ShaderProgram::ShaderProgram( const char* vertexName, const char* fragmentName )
+	
+RenderTarget::~RenderTarget()
 {
-	InitDefaults( vertexName, fragmentName );
-}
-
-ShaderProgram::~ShaderProgram()
-{
-	Release();
-}
-
-
-const char* ShaderProgram::GetVertexName() const
-{
-	return m_vertexName.GetChars();
-}
-
-void ShaderProgram::SetVertexName( const char* name )
-{
-	m_vertexName = name;
-}
-
-const char* ShaderProgram::GetFragmentName() const
-{
-	return m_fragmentName.GetChars();
-}
-
-void ShaderProgram::SetFragmentName( const char* name )
-{
-	m_fragmentName = name;
+	gl.DeleteFramebuffers( 1, &m_ID );
 }
 
 
-GLuint ShaderProgram::GetProgram() const
+Texture2D& RenderTarget::GetColorTexture()
 {
-	return m_programID;
-}
-
-GLuint ShaderProgram::GetVertexShader() const
-{
-	return m_vertexShaderID;
+	return m_color;
 }
 
 
-GLuint ShaderProgram::GetFragmentShader() const
+void RenderTarget::DoBind( const GLuint resourceID )
 {
-	return m_fragmentShaderID;
+	gl.BindFramebuffer( GL_FRAMEBUFFER, resourceID );
 }
+
+GLuint RenderTarget::GetBoundName()
+{
+	return GL_FRAMEBUFFER_BINDING;
+}
+
+
+// ---------------------------------------------------------------------------
 
 
 static GLuint CreateShader( const GLenum type, const char* name )
@@ -260,18 +190,18 @@ static GLuint CreateShader( const GLenum type, const char* name )
 }
 
 
-void ShaderProgram::Init()
+ShaderProgram::ShaderProgram( const char* const vertexName, const char* const fragmentName )
 {
-	const bool hasVertexShader = m_vertexName.Len() > 0;
+	const bool hasVertexShader = NULL != vertexName && strlen( vertexName ) > 0;
 	if ( hasVertexShader )
 	{
-		m_vertexShaderID = CreateShader( GL_VERTEX_SHADER, m_vertexName );
+		m_vertexShaderID = CreateShader( GL_VERTEX_SHADER, vertexName );
 	}
 	
-	const bool hasFragmentShader = m_fragmentName.Len() > 0;
+	const bool hasFragmentShader = NULL != fragmentName && strlen( fragmentName ) > 0;
 	if ( hasFragmentShader )
 	{
-		m_fragmentShaderID = CreateShader( GL_FRAGMENT_SHADER, m_fragmentName );
+		m_fragmentShaderID = CreateShader( GL_FRAGMENT_SHADER, fragmentName );
 	}
 	
 	if ( 0 == m_vertexShaderID && 0 == m_fragmentShaderID )
@@ -279,74 +209,51 @@ void ShaderProgram::Init()
 		return;
 	}
 	
-	m_programID = gl.CreateProgram();
+	m_ID = gl.CreateProgram();
 	
-	gl.AttachShader( m_programID, m_vertexShaderID );
-	gl.AttachShader( m_programID, m_fragmentShaderID );
-	gl.LinkProgram ( m_programID );
+	gl.AttachShader( m_ID, m_vertexShaderID );
+	gl.AttachShader( m_ID, m_fragmentShaderID );
+	gl.LinkProgram ( m_ID );
 	
 	static char errorBuffer[ 8 * 1024 ];
 	memset( errorBuffer, 0, sizeof ( errorBuffer ) );
 	
-	gl.GetProgramInfoLog( m_programID, sizeof( errorBuffer ), NULL, errorBuffer );
+	gl.GetProgramInfoLog( m_ID, sizeof( errorBuffer ), NULL, errorBuffer );
 	
 	if ( '\0' != *errorBuffer )
 	{
 		Printf( "Program link failed:\n%s\n", errorBuffer );
-		Printf( "Vertex shader: %s\n",   hasVertexShader   ? m_vertexName.GetChars()   : "<none>" );
-		Printf( "Fragment shader: %s\n", hasFragmentShader ? m_fragmentName.GetChars() : "<none>" );
+		Printf( "Vertex shader: %s\n",   hasVertexShader   ? vertexName   : "<none>" );
+		Printf( "Fragment shader: %s\n", hasFragmentShader ? fragmentName : "<none>" );
 	}
 }
 
-void ShaderProgram::Release()
+ShaderProgram::~ShaderProgram()
 {
-	gl.DeleteProgram( m_programID );
-	m_programID = 0;
-	
 	gl.DeleteShader( m_fragmentShaderID );
-	m_fragmentShaderID = 0;
-	
 	gl.DeleteShader( m_vertexShaderID );
-	m_vertexShaderID = 0;
 }
 
 
-void ShaderProgram::Bind()
+void ShaderProgram::DoBind( const GLuint resourceID )
 {
-	GLint oldProgram = 0;
-	glGetIntegerv( GL_CURRENT_PROGRAM, &oldProgram );
-	
-	if ( GLuint( oldProgram ) != m_programID )
-	{
-		gl.UseProgram( m_programID );
-		
-		m_oldProgramID = oldProgram;
-	}
+	gl.UseProgram( resourceID );
 }
 
-void ShaderProgram::Unbind()
+GLenum ShaderProgram::GetBoundName()
 {
-	gl.UseProgram( m_oldProgramID );
+	return GL_CURRENT_PROGRAM;
 }
 
 
-void ShaderProgram::InitDefaults( const char* vertexName, const char* fragmentName )
+void ShaderProgram::SetUniform( const char* const name, const GLint value )
 {
-	if ( NULL != vertexName )
-	{
-		m_vertexName = vertexName;
-	}
+	Bind();
 	
-	if ( NULL != fragmentName )
-	{
-		m_fragmentName = fragmentName;
-	}
+	const GLint location = gl.GetUniformLocation( m_ID, name );
+	gl.Uniform1i( location, value );
 	
-	m_programID        = 0;
-	m_vertexShaderID   = 0;
-	m_fragmentShaderID = 0;
-	
-	m_oldProgramID     = 0;
+	Unbind();
 }
 
 
@@ -371,8 +278,9 @@ static const uint32_t GAMMA_TABLE_ALPHA = 0xFF000000;
 BackBuffer::BackBuffer( int width, int height, bool fullscreen )
 : OpenGLFrameBuffer( 0, width, height, 32, 60, fullscreen )
 , m_renderTarget( width, height )
-, m_gammaTableID(0)
+, m_gammaProgram( NULL, "shaders/glsl/gamma_correction.fp" )
 {
+/*
 	static const char ERROR_MESSAGE[] = 
 		"The graphics hardware in your system does not support %s.\n"
 		"It is required to run this version of " GAMENAME ".\n"
@@ -387,14 +295,28 @@ BackBuffer::BackBuffer( int width, int height, bool fullscreen )
 	{
 		I_FatalError( ERROR_MESSAGE, "Frame Buffer Object (FBO)" );
 	}
+*/	
+		
+	const bool isScaled = fabsf( s_parameters.pixelScale - 1.0f ) > 0.01f;
 	
-	InitRenderTarget();
-	InitGammaCorrection();
-}
-
-BackBuffer::~BackBuffer()
-{
-	gl.DeleteTextures( 1, &m_gammaTableID );
+	m_renderTarget.GetColorTexture().SetFilter( isScaled 
+		? TEXTURE_FILTER_LINEAR 
+		: TEXTURE_FILTER_NEAREST );
+	
+	// Create gamma correction texture
+	
+	for ( size_t i = 0; i < GAMMA_TABLE_SIZE; ++i )
+	{
+		m_gammaTable[i] = GAMMA_TABLE_ALPHA + ( i << 16 ) + ( i << 8 ) + i;
+	}
+	
+	m_gammaTexture.SetFilter( TEXTURE_FILTER_NEAREST );
+	m_gammaTexture.SetImageData( TEXTURE_FORMAT_COLOR_RGBA, 256, 1, m_gammaTable );
+	
+	// Setup uniform samplers for gamma correction shader
+	
+	m_gammaProgram.SetUniform( "backbuffer", 0 );
+	m_gammaProgram.SetUniform( "gammaTable", 1 );
 }
 
 
@@ -440,94 +362,28 @@ void BackBuffer::GetScreenshotBuffer( const BYTE*& buffer, int& pitch, ESSType& 
 }
 
 
-void BackBuffer::InitRenderTarget()
-{
-	const bool isScaled = fabsf( s_parameters.pixelScale - 1.0f ) > 0.01f;
-	
-	m_renderTarget.SetTextureFilter( isScaled ? GL_LINEAR : GL_NEAREST );
-	m_renderTarget.Init();
-}
-
-void BackBuffer::InitGammaCorrection()
-{
-	// Create gamma correction texture
-	
-	for ( size_t i = 0; i < GAMMA_TABLE_SIZE; ++i )
-	{
-		m_gammaTable[i] = GAMMA_TABLE_ALPHA + ( i << 16 ) + ( i << 8 ) + i;
-	}
-	
-	gl.GenTextures( 1, &m_gammaTableID );
-	gl.BindTexture( GL_TEXTURE_1D, m_gammaTableID );
-	SetTextureParameters( GL_TEXTURE_1D, GL_NEAREST );
-	gl.TexImage1D ( GL_TEXTURE_1D, 0, GL_RGBA8, 256, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_gammaTable );
-	gl.BindTexture( GL_TEXTURE_1D, 0 );
-	
-	// Create gamma correction shader
-	
-	m_gammaProgram.SetFragmentName( "shaders/glsl/gamma_correction.fp" );
-	m_gammaProgram.Init();
-	m_gammaProgram.Bind();
-	
-	// Setup uniforms for gamma correction shader
-	
-	const GLuint gammaProgramID     = m_gammaProgram.GetProgram();
-	const GLint  backbufferLocation = gl.GetUniformLocation( gammaProgramID, "backbuffer" );
-	const GLint  gammaTableLocation = gl.GetUniformLocation( gammaProgramID, "gammaTable" );
-	
-	gl.Uniform1i( backbufferLocation, 0 );
-	gl.Uniform1i( gammaTableLocation, 1 );
-	
-	m_gammaProgram.Unbind();
-}
-
-
 void BackBuffer::DrawRenderTarget()
 {
 	m_renderTarget.Unbind();
 	
-	gl.Disable( GL_BLEND );
-	gl.Disable( GL_ALPHA_TEST );
+	Texture2D& colorTexture = m_renderTarget.GetColorTexture();
 	
 	gl.ActiveTexture( GL_TEXTURE0 );
-	gl.BindTexture( GL_TEXTURE_2D, m_renderTarget.GetColorTexture() );
+	colorTexture.Bind();
 	gl.ActiveTexture( GL_TEXTURE1 );
-	gl.BindTexture( GL_TEXTURE_1D, m_gammaTableID );
+	m_gammaTexture.Bind();
 	gl.ActiveTexture( GL_TEXTURE0 );
-	
-	m_gammaProgram.Bind();
 	
 	GLint viewport[4] = {0};
 	glGetIntegerv( GL_VIEWPORT, viewport );
 	
 	gl.Viewport( s_parameters.shiftX, s_parameters.shiftY, s_parameters.width, s_parameters.height );
 	
-	static const float U0 = 0.0f, U1 = 1.0f;
-	static const float V0 = 0.0f, V1 = 1.0f;
-	
-	const float x1 = 0.0f,  y1 = 0.0f;
-	const float x2 = Width, y2 = Height;
-	
-	gl.Begin( GL_QUADS );
-	gl.Color4f( 1.0f, 1.0f, 1.0f, 1.0f );
-	gl.TexCoord2f( U0, V1 );
-	gl.Vertex2f( x1, y1 );
-	gl.TexCoord2f( U1, V1 );
-	gl.Vertex2f( x2, y1 );
-	gl.TexCoord2f( U1, V0 );
-	gl.Vertex2f( x2, y2 );
-	gl.TexCoord2f( U0, V0 );
-	gl.Vertex2f( x1, y2 );
-	gl.End();
-	
+	m_gammaProgram.Bind();
+	colorTexture.Draw2D( Width, Height );
 	m_gammaProgram.Unbind();
 	
 	gl.Viewport( viewport[0], viewport[1], viewport[2], viewport[3] );
-	
-	gl.BindTexture( GL_TEXTURE_2D, 0 );
-	
-	gl.Enable( GL_ALPHA_TEST );
-	gl.Enable( GL_BLEND );
 }
 
 
@@ -566,22 +422,7 @@ void BackBuffer::SetGammaTable( const uint16_t* red, const uint16_t* green, cons
 		m_gammaTable[i] = GAMMA_TABLE_ALPHA + ( b << 16 ) + ( g << 8 ) + r;
 	}
 	
-	gl.BindTexture( GL_TEXTURE_1D, m_gammaTableID );
-	gl.TexImage1D ( GL_TEXTURE_1D, 0, GL_RGBA8, 256, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_gammaTable );
-	gl.BindTexture( GL_TEXTURE_1D, 0 );
-}
-
-
-// ---------------------------------------------------------------------------
-
-
-void SetTextureParameters( const GLenum target, const GLint filter )
-{
-	gl.TexParameteri( target, GL_TEXTURE_MIN_FILTER, filter );
-	gl.TexParameteri( target, GL_TEXTURE_MAG_FILTER, filter );
-	
-	gl.TexParameteri( target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-	gl.TexParameteri( target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+	m_gammaTexture.SetImageData( TEXTURE_FORMAT_COLOR_RGBA, 256, 1, m_gammaTable );
 }
 
 } // namespace GLAuxilium

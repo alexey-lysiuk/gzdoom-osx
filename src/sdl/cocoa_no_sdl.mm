@@ -1252,7 +1252,7 @@ SDL_Rect** SDL_ListModes( SDL_PixelFormat* format, Uint32 flags )
 }
 
 
-static GLuint s_softwareTextureID;
+static GLAuxilium::Texture2D* s_softwareTexture;
 
 static const Uint16 BYTES_PER_PIXEL = 4;
 
@@ -1297,10 +1297,10 @@ SDL_Surface* SDL_SetVideoMode( int width, int height, int, Uint32 flags )
 			free( result.pixels );
 		}
 		
-		if ( 0 != s_softwareTextureID )
+		if ( NULL != s_softwareTexture )
 		{
-			glDeleteTextures( 1, &s_softwareTextureID );
-			s_softwareTextureID = 0;
+			delete s_softwareTexture;
+			s_softwareTexture = NULL;
 		}
 	}
 	
@@ -1460,10 +1460,8 @@ static void SetupSoftwareRendering( SDL_Surface* screen )
 	
 	gl.Enable( GL_TEXTURE_2D );
 	
-	gl.GenTextures( 1, &s_softwareTextureID );
-	gl.BindTexture( GL_TEXTURE_2D, s_softwareTextureID );
-	
-	GLAuxilium::SetTextureParameters( GL_TEXTURE_2D, GL_NEAREST );
+	s_softwareTexture = new GLAuxilium::Texture2D;
+	s_softwareTexture->SetFilter( GLAuxilium::TEXTURE_FILTER_NEAREST );
 }
 
 
@@ -1471,7 +1469,7 @@ int SDL_Flip( SDL_Surface* screen )
 {
 	assert( NULL != screen );
 	
-	if ( 0 == s_softwareTextureID )
+	if ( NULL == s_softwareTexture )
 	{
 		SetupSoftwareRendering( screen );
 	}
@@ -1479,25 +1477,8 @@ int SDL_Flip( SDL_Surface* screen )
 	const int width  = screen->w;
 	const int height = screen->h;
 	
-	gl.TexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, screen->pixels );
-	
-	static const GLfloat U0 = 0.0f, U1 = 1.0f;
-	static const GLfloat V0 = 1.0f, V1 = 0.0f;
-	
-	const GLfloat x1 = 0.0f,  y1 = 0.0f;
-	const GLfloat x2 = width, y2 = height;
-	
-	gl.Begin( GL_QUADS );
-	gl.Color4f( 1.0f, 1.0f, 1.0f, 1.0f );
-	gl.TexCoord2f( U0, V1 );
-	gl.Vertex2f( x1, y1 );
-	gl.TexCoord2f( U1, V1 );
-	gl.Vertex2f( x2, y1 );
-	gl.TexCoord2f( U1, V0 );
-	gl.Vertex2f( x2, y2 );
-	gl.TexCoord2f( U0, V0 );
-	gl.Vertex2f( x1, y2 );
-	gl.End();
+	s_softwareTexture->SetImageData( GLAuxilium::TEXTURE_FORMAT_COLOR_RGBA, width, height, screen->pixels );
+	s_softwareTexture->Draw2D( width, -height ); // flipped vertically
 	
 	gl.Flush();
 	

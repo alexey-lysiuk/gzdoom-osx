@@ -41,47 +41,20 @@
 namespace GLAuxilium
 {
 
-class RenderTarget
+class NonCopyable
 {
-public:
-	RenderTarget();
-	RenderTarget( const GLsizei width, const GLsizei height );
-	~RenderTarget();
-
-	GLsizei GetWidth() const;
-	void SetWidth( const GLsizei width );
-
-	GLsizei GetHeight() const;
-	void SetHeight( const GLsizei height );
-
-	GLsizei GetTextureFilter() const;
-	void SetTextureFilter( const GLint filter );
+protected:
+	NonCopyable()
+	{
+	}
 	
-	GLuint GetColorTexture() const;
+	~NonCopyable()
+	{
+	}
 	
-	void Init();
-	void Release();
-	
-	void Bind();
-	void Unbind();
-		
 private:
-	GLsizei m_width;
-	GLsizei m_height;
-	
-	GLint m_textureFilter;
-	
-	GLuint m_fboID;
-	GLuint m_colorID;
-	GLuint m_depthStencilID;
-	
-	GLint m_oldFBOID;
-	
-	void InitDefaults( const GLsizei width, const GLsizei height );
-	
-	// Without implementation
-	RenderTarget( const RenderTarget& );
-	RenderTarget& operator=( const RenderTarget& );	
+	NonCopyable( const NonCopyable& );
+	const NonCopyable& operator=( const NonCopyable& );
 	
 };
 
@@ -89,58 +62,339 @@ private:
 // ---------------------------------------------------------------------------
 
 
-class ShaderProgram
+template < typename T >
+class NoUnbind : private NonCopyable
 {
 public:
-	ShaderProgram();
-	ShaderProgram( const char* vertexName, const char* fragmentName );
-	~ShaderProgram();
+	void BindImpl( const GLuint resourceID )
+	{
+		T::DoBind( resourceID );
+	}
 	
-	const char* GetVertexName() const;
-	void SetVertexName( const char* name );
+	void UnbindImpl()
+	{
+		
+	}
+	
+};
 
-	const char* GetFragmentName() const;
-	void SetFragmentName( const char* name );
+
+template < typename T >
+class UnbindToDefault : private NonCopyable
+{
+public:
+	void BindImpl( const GLuint resourceID )
+	{
+		T::DoBind( resourceID );
+	}
 	
-	GLuint GetProgram() const;
-	GLuint GetVertexShader() const;
-	GLuint GetFragmentShader() const;
+	void UnbindImpl()
+	{
+		T::DoBind(0);
+	}
 	
-	void Init();
-	void Release();
+};
+
+
+template < typename T >
+class UnbindToPrevious : private NonCopyable
+{
+public:
+	UnbindToPrevious()
+	: m_oldID(0)
+	{
+		
+	}
 	
-	void Bind();
-	void Unbind();
+	void BindImpl( const GLuint resourceID )
+	{
+		const GLuint oldID = this->GetBoundID();
+		
+		if ( oldID != resourceID )
+		{
+			T::DoBind( resourceID );
+			
+			m_oldID = oldID;
+		}
+	}
+	
+	void UnbindImpl()
+	{
+		T::DoBind( m_oldID );
+	}
 	
 private:
-	FString m_vertexName;
-	FString m_fragmentName;
+	GLuint m_oldID;
 	
-	GLuint m_programID;
+	GLuint GetBoundID()
+	{
+		GLint result;
+		
+		glGetIntegerv( T::GetBoundName(), &result );
+		
+		return static_cast< GLuint >( result );
+	}
+	
+};
+
+
+// ---------------------------------------------------------------------------
+
+
+template < typename Type, 
+	template < typename Type > class BindPolicy >
+class Resource : private BindPolicy< Type >
+{
+public:
+	Resource()
+	: m_ID(0)
+	{
+		
+	}
+	
+	~Resource()
+	{
+		this->Unbind();
+	}
+	
+	void Bind()
+	{
+		GetBindPolicy()->BindImpl( m_ID );
+	}
+	
+	void Unbind()
+	{
+		GetBindPolicy()->UnbindImpl();
+	}
+	
+protected:
+	GLuint m_ID;
+	
+private:
+	typedef BindPolicy< Type >* BindPolicyPtr;
+	
+	BindPolicyPtr GetBindPolicy()
+	{
+		return static_cast< BindPolicyPtr >( this );
+	}
+	
+}; // class Resource
+
+
+// ---------------------------------------------------------------------------
+
+
+enum TextureFormat
+{
+	TEXTURE_FORMAT_COLOR_RGBA,
+	TEXTURE_FORMAT_DEPTH_STENCIL
+};
+
+enum TextureFilter
+{
+	TEXTURE_FILTER_NEAREST,
+	TEXTURE_FILTER_LINEAR
+};
+
+
+GLint GetInternalFormat( const TextureFormat format );	
+GLint GetFormat( const TextureFormat format );
+GLint GetDataType( const TextureFormat format );
+
+GLint GetFilter( const TextureFilter filter );
+
+
+template < GLenum target >
+inline GLenum GetTextureBoundName();
+
+template <>
+inline GLenum GetTextureBoundName< GL_TEXTURE_1D >()
+{
+	return GL_TEXTURE_BINDING_1D;
+}
+
+template <>
+inline GLenum GetTextureBoundName< GL_TEXTURE_2D >()
+{
+	return GL_TEXTURE_BINDING_2D;
+}	
+
+
+template < GLenum target >
+struct TextureImageHandler
+{
+	static void DoSetImageData( const TextureFormat format, const GLsizei width, const GLsizei height, const void* const data );
+};
+
+template <>
+struct TextureImageHandler< GL_TEXTURE_1D >
+{
+	static void DoSetImageData( const TextureFormat format, const GLsizei width, const GLsizei, const void* const data )
+	{
+		gl.TexImage1D( GL_TEXTURE_1D, 0, GetInternalFormat( format ), 
+			width, 0, GetFormat( format ), GetDataType( format ), data );
+	}
+};
+
+template <>
+struct TextureImageHandler< GL_TEXTURE_2D >
+{
+	static void DoSetImageData( const TextureFormat format, const GLsizei width, const GLsizei height, const void* const data )
+	{
+		gl.TexImage2D( GL_TEXTURE_2D, 0, GetInternalFormat( format ), 
+			width, height, 0, GetFormat( format ), GetDataType( format ), data );
+	}
+};
+
+
+template < GLenum target >
+class Texture : public Resource< Texture< target >, UnbindToDefault >,
+	private TextureImageHandler< target >
+{
+	friend class RenderTarget;
+	
+public:
+	Texture()
+	{
+		gl.GenTextures( 1, &this->m_ID );
+	}
+	
+	~Texture()
+	{
+		gl.DeleteTextures( 1, &this->m_ID );
+	}
+	
+	
+	static void DoBind( const GLuint resourceID )
+	{
+		gl.BindTexture( target, resourceID );
+	}
+	
+	static GLenum GetBoundName()
+	{
+		return GetTextureBoundName< target >();
+	}
+	
+	
+	void SetFilter( const TextureFilter filter )
+	{
+		const GLint glFilter = GetFilter( filter );
+		
+		this->Bind();
+		
+		gl.TexParameteri( target, GL_TEXTURE_MIN_FILTER, glFilter );
+		gl.TexParameteri( target, GL_TEXTURE_MAG_FILTER, glFilter );
+		
+		gl.TexParameteri( target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+		gl.TexParameteri( target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+		
+		this->Unbind();
+	}
+	
+	void SetImageData( const TextureFormat format, const GLsizei width, const GLsizei height, const void* const data )
+	{
+		this->Bind();
+		this->DoSetImageData( format, width, height, data );
+		this->Unbind();
+	}
+	
+	
+	void Draw2D( const GLsizei width, const GLsizei height )
+	{
+		const bool flipX = width  < 0;
+		const bool flipY = height < 0;
+		
+		const float u0 = flipX ? 1.0f : 0.0f;
+		const float v0 = flipY ? 1.0f : 0.0f;
+		const float u1 = flipX ? 0.0f : 1.0f;
+		const float v1 = flipY ? 0.0f : 1.0f;
+		
+		const float x1 = 0.0f;
+		const float y1 = 0.0f;
+		const float x2 = abs( width  );
+		const float y2 = abs( height );
+		
+		gl.Disable( GL_BLEND );
+		gl.Disable( GL_ALPHA_TEST );
+		
+		this->Bind();
+		
+		gl.Begin( GL_QUADS );
+		gl.Color4f( 1.0f, 1.0f, 1.0f, 1.0f );
+		gl.TexCoord2f( u0, v1 );
+		gl.Vertex2f( x1, y1 );
+		gl.TexCoord2f( u1, v1 );
+		gl.Vertex2f( x2, y1 );
+		gl.TexCoord2f( u1, v0 );
+		gl.Vertex2f( x2, y2 );
+		gl.TexCoord2f( u0, v0 );
+		gl.Vertex2f( x1, y2 );
+		gl.End();
+		
+		this->Unbind();
+		
+		gl.Enable( GL_ALPHA_TEST );
+		gl.Enable( GL_BLEND );
+	}
+	
+}; // class Texture
+
+
+typedef Texture< GL_TEXTURE_1D > Texture1D;
+typedef Texture< GL_TEXTURE_2D > Texture2D;
+
+
+// ---------------------------------------------------------------------------
+
+
+class RenderTarget : public Resource< RenderTarget, UnbindToPrevious >
+{
+public:
+	RenderTarget( const GLsizei width, const GLsizei height );
+	~RenderTarget();
+	
+	static void DoBind( const GLuint resourceID );
+	static GLenum GetBoundName();
+	
+	Texture2D& GetColorTexture();
+	
+private:
+	Texture2D m_color;
+	Texture2D m_depthStencil;
+	
+}; // class RenderTarget
+
+
+// ---------------------------------------------------------------------------
+
+
+class ShaderProgram : public Resource< ShaderProgram, UnbindToDefault >
+{
+public:
+	ShaderProgram( const char* const vertexName, const char* const fragmentName );
+	~ShaderProgram();
+	
+	static void DoBind( const GLuint resourceID );
+	static GLenum GetBoundName();
+	
+	void SetUniform( const char* const name, const GLint value );
+	
+private:
 	GLuint m_vertexShaderID;
 	GLuint m_fragmentShaderID;
 	
-	GLint m_oldProgramID;
-	
-	void InitDefaults( const char* vertexName, const char* fragmentName );
-	
-	// Without implementation
-	ShaderProgram( const ShaderProgram& );
-	ShaderProgram& operator=( const ShaderProgram& );
-	
-};
-	
+}; // class ShaderProgram
+
 
 // ---------------------------------------------------------------------------
 
 
-class BackBuffer : public OpenGLFrameBuffer
+class BackBuffer : public OpenGLFrameBuffer, private NonCopyable
 {
 	typedef OpenGLFrameBuffer Super;
 	
 public:
 	BackBuffer( int width, int height, bool fullscreen );
-	~BackBuffer();
 	
 	virtual bool Lock( bool buffered );
 	virtual void Update();
@@ -168,30 +422,17 @@ private:
 	RenderTarget  m_renderTarget;
 	ShaderProgram m_gammaProgram;
 	
-	GLuint m_gammaTableID;
+	Texture1D m_gammaTexture;
 	
 	static const size_t GAMMA_TABLE_SIZE = 256;
 	uint32_t m_gammaTable[ GAMMA_TABLE_SIZE ];
 	
-	
 	static Parameters s_parameters;
-	
-	
-	void InitRenderTarget();
-	void InitGammaCorrection();
 	
 	void DrawRenderTarget();
 	
-	// Without implementation
-	BackBuffer( const BackBuffer& );
-	BackBuffer& operator=( const BackBuffer& );	
-	
-};
-	
-	
-void SetTextureParameters( const GLenum target, const GLint filter );
+}; // class BackBuffer
 
-	
 } // namespace GLAuxilium
 
 
