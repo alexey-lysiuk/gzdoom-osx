@@ -363,8 +363,8 @@ void AActor::Serialize (FArchive &arc)
 		{
 			if (playeringame[player - players] && 
 				player->cls != NULL &&
-				state->sprite == 
-				GetDefaultByType (player->cls)->SpawnState->sprite)
+				!(flags4 & MF4_NOSKIN) &&
+				state->sprite == GetDefaultByType (player->cls)->SpawnState->sprite)
 			{ // Give player back the skin
 				sprite = skins[player->userinfo.skin].sprite;
 				scaleX = skins[player->userinfo.skin].ScaleX;
@@ -1572,7 +1572,6 @@ bool P_SeekerMissile (AActor *actor, angle_t thresh, angle_t turnMax, bool preci
 // Returns the actor's old floorz.
 //
 #define STOPSPEED			0x1000
-#define FRICTION			0xe800
 #define CARRYSTOPSPEED		(STOPSPEED*32/3)
 
 fixed_t P_XYMovement (AActor *mo, fixed_t scrollx, fixed_t scrolly) 
