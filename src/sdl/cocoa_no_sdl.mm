@@ -933,7 +933,7 @@ static ApplicationDelegate* s_applicationDelegate;
 	
 	CGLFlushDrawable( context );
 	
-	static const NSString* const TITLE_STRING = 
+	static NSString* const TITLE_STRING = 
 		[NSString stringWithUTF8String:GAMESIG " " DOTVERSIONSTR " (" __DATE__ ")"];
 	[m_window setTitle:TITLE_STRING];		
 	

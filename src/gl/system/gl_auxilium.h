@@ -142,7 +142,7 @@ private:
 
 
 template < typename Type, 
-	template < typename Type > class BindPolicy >
+	template < typename > class BindPolicy >
 class Resource : private BindPolicy< Type >
 {
 public:

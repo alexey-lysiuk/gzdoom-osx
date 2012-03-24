@@ -36,6 +36,7 @@
 #define __TARRAY_H__
 
 #include <stdlib.h>
+#include <string.h>
 #include <assert.h>
 #include <new>
 
