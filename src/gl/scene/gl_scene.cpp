@@ -106,7 +106,7 @@ angle_t FGLRenderer::FrustumAngle()
 {
 	float tilt= fabs(mAngles.Pitch);
 
-	// If the pitch is larger than this you can look all around at a FOV of 90°
+	// If the pitch is larger than this you can look all around at a FOV of 90ï¾°
 	if (tilt>46.0f) return 0xffffffff;
 
 	// ok, this is a gross hack that barely works...
@@ -909,7 +909,7 @@ void FGLRenderer::SetFixedColormap (player_t *player)
 //-----------------------------------------------------------------------------
 
 sector_t * FGLRenderer::RenderViewpoint (AActor * camera, GL_IRECT * bounds, float fov, float ratio, float fovratio, bool mainview, bool toscreen)
-{       
+{
 	sector_t * retval;
 	R_SetupFrame (camera);
 	SetViewArea();
@@ -957,8 +957,44 @@ sector_t * FGLRenderer::RenderViewpoint (AActor * camera, GL_IRECT * bounds, flo
 //
 //-----------------------------------------------------------------------------
 
+#ifdef COCOA_NO_SDL
+
+#include "gl/system/gl_auxilium.h"
+
+CVAR( Int, gl_postprocess, 0, CVAR_ARCHIVE | CVAR_GLOBALCONFIG )
+
+#endif // COCOA_NO_SDL
+
 void FGLRenderer::RenderView (player_t* player)
 {
+#ifdef COCOA_NO_SDL
+	GLAuxilium::BackBuffer*  backBuffer = GLAuxilium::BackBuffer::GetInstance();
+	GLAuxilium::PostProcess* postProcess = NULL == backBuffer 
+		? NULL 
+		: &backBuffer->GetPostProcess();
+	
+	const bool isPostProcessActive = ( NULL != postProcess ) && ( gl_postprocess > 0 );
+	
+	if ( NULL != postProcess )
+	{
+		const bool isPostProcessInitialized = postProcess->IsInitialized();
+		
+		if ( !isPostProcessActive && isPostProcessInitialized )
+		{
+			postProcess->Release();
+		}
+		else if ( isPostProcessActive && !isPostProcessInitialized )
+		{
+			postProcess->Init( "shaders/glsl/fxaa.fp", framebuffer->GetWidth(), framebuffer->GetHeight() );
+		}
+	}
+	
+	if ( isPostProcessActive )
+	{
+		postProcess->Start();
+	}	
+#endif // COCOA_NO_SDL
+	
 	OpenGLFrameBuffer* GLTarget = static_cast<OpenGLFrameBuffer*>(screen);
 	AActor *&LastCamera = GLTarget->LastCamera;
 
@@ -1010,6 +1046,13 @@ void FGLRenderer::RenderView (player_t* player)
 
 	sector_t * viewsector = RenderViewpoint(player->camera, NULL, FieldOfView * 360.0f / FINEANGLES, ratio, fovratio, true, true);
 	EndDrawScene(viewsector);
+
+#ifdef COCOA_NO_SDL
+	if ( isPostProcessActive )
+	{
+		postProcess->Finish();
+	}
+#endif // COCOA_NO_SDL
 
 	All.Unclock();
 }
