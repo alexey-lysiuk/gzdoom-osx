@@ -378,6 +378,7 @@ public:
 	static GLenum GetBoundName();
 	
 	void SetUniform( const char* const name, const GLint value );
+	void SetUniform( const char* const name, const GLfloat value0, const GLfloat value1 );
 	
 private:
 	GLuint m_vertexShaderID;
@@ -389,17 +390,50 @@ private:
 // ---------------------------------------------------------------------------
 
 
+class PostProcess
+{
+public:
+	PostProcess();
+	~PostProcess();
+	
+	void Init( const char* const shaderName, const GLsizei width, const GLsizei height );
+	void Release();
+	
+	bool IsInitialized() const;
+	
+	void Start();
+	void Finish();
+	
+private:
+	GLsizei m_width;
+	GLsizei m_height;
+	
+	RenderTarget*  m_renderTarget;
+	ShaderProgram* m_shader;
+	
+}; // class PostProcess
+
+
+// ---------------------------------------------------------------------------
+
+
 class BackBuffer : public OpenGLFrameBuffer, private NonCopyable
 {
 	typedef OpenGLFrameBuffer Super;
 	
 public:
 	BackBuffer( int width, int height, bool fullscreen );
+	~BackBuffer();
 	
 	virtual bool Lock( bool buffered );
 	virtual void Update();
 	
 	virtual void GetScreenshotBuffer( const BYTE*& buffer, int& pitch, ESSType& color_type );
+	
+	
+	static BackBuffer* GetInstance();
+	
+	PostProcess& GetPostProcess();
 	
 	
 	struct Parameters
@@ -419,15 +453,19 @@ public:
 	void SetGammaTable( const uint16_t* red, const uint16_t* green, const uint16_t* blue );
 	
 private:
-	RenderTarget  m_renderTarget;
-	ShaderProgram m_gammaProgram;
+	static BackBuffer*  s_instance;
 	
-	Texture1D m_gammaTexture;
+	RenderTarget        m_renderTarget;
+	ShaderProgram       m_gammaProgram;
+	
+	Texture1D           m_gammaTexture;
 	
 	static const size_t GAMMA_TABLE_SIZE = 256;
-	uint32_t m_gammaTable[ GAMMA_TABLE_SIZE ];
+	uint32_t            m_gammaTable[ GAMMA_TABLE_SIZE ];
 	
-	static Parameters s_parameters;
+	PostProcess         m_postProcess;
+	
+	static Parameters   s_parameters;
 	
 	void DrawRenderTarget();
 	

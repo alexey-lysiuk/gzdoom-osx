@@ -256,8 +256,107 @@ void ShaderProgram::SetUniform( const char* const name, const GLint value )
 	Unbind();
 }
 
+void ShaderProgram::SetUniform( const char* const name, const GLfloat value0, const GLfloat value1 )
+{
+	Bind();
+	
+	const GLint location = gl.GetUniformLocation( m_ID, name );
+	gl.Uniform2f( location, value0, value1 );
+	
+	Unbind();
+}
+
 
 // ---------------------------------------------------------------------------
+
+
+PostProcess::PostProcess()
+: m_width       ( 0    )
+, m_height      ( 0    )
+, m_renderTarget( NULL )
+, m_shader      ( NULL )
+{
+	
+}
+
+PostProcess::~PostProcess()
+{
+	Release();
+}
+
+
+void PostProcess::Init( const char* const shaderName, const GLsizei width, const GLsizei height )
+{
+	assert( NULL != shaderName );
+	assert( width  > 0 );
+	assert( height > 0 );
+	
+	Release();
+	
+	m_width  = width;
+	m_height = height;
+	
+	m_renderTarget = new RenderTarget( m_width, m_height );
+	
+	m_shader = new ShaderProgram( NULL, shaderName );
+	m_shader->SetUniform( "sampler0", 0 );
+	m_shader->SetUniform( "resolution", 
+		static_cast< GLfloat >( width ), 
+		static_cast< GLfloat >( height ) );
+}
+
+void PostProcess::Release()
+{
+	if ( NULL != m_shader )
+	{
+		delete m_shader;
+		m_shader = NULL;
+	}
+	
+	if ( NULL != m_renderTarget )
+	{
+		delete m_renderTarget;
+		m_renderTarget = NULL;
+	}
+	
+	m_width  = 0;
+	m_height = 0;
+}
+
+	
+bool PostProcess::IsInitialized() const
+{
+	// TODO: check other members?
+	return NULL != m_renderTarget;
+}
+	
+	
+void PostProcess::Start()
+{
+	assert( NULL != m_renderTarget );
+	
+	m_renderTarget->Bind();
+}
+
+void PostProcess::Finish()
+{
+	m_renderTarget->Unbind();
+	
+	Texture2D& colorTexture = m_renderTarget->GetColorTexture();
+	
+	gl.ActiveTexture( GL_TEXTURE0 );
+	colorTexture.Bind();
+	
+	m_shader->Bind();
+	colorTexture.Draw2D( m_width, m_height );
+	m_shader->Unbind();
+}
+
+
+// ---------------------------------------------------------------------------
+
+
+BackBuffer* BackBuffer::s_instance;
 
 
 BackBuffer::Parameters BackBuffer::s_parameters = 
@@ -295,7 +394,9 @@ BackBuffer::BackBuffer( int width, int height, bool fullscreen )
 	{
 		I_FatalError( ERROR_MESSAGE, "Frame Buffer Object (FBO)" );
 	}
-*/	
+*/
+	
+	s_instance = this;
 		
 	const bool isScaled = fabsf( s_parameters.pixelScale - 1.0f ) > 0.01f;
 	
@@ -317,6 +418,11 @@ BackBuffer::BackBuffer( int width, int height, bool fullscreen )
 	
 	m_gammaProgram.SetUniform( "backbuffer", 0 );
 	m_gammaProgram.SetUniform( "gammaTable", 1 );
+}
+
+BackBuffer::~BackBuffer()
+{
+	s_instance = NULL;
 }
 
 
@@ -362,6 +468,17 @@ void BackBuffer::GetScreenshotBuffer( const BYTE*& buffer, int& pitch, ESSType& 
 }
 
 
+BackBuffer* BackBuffer::GetInstance()
+{
+	return s_instance;
+}
+
+PostProcess& BackBuffer::GetPostProcess()
+{
+	return m_postProcess;
+}
+
+	
 void BackBuffer::DrawRenderTarget()
 {
 	m_renderTarget.Unbind();
