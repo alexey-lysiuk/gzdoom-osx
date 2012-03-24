@@ -417,7 +417,16 @@ private:
 // ---------------------------------------------------------------------------
 
 
-class BackBuffer : public OpenGLFrameBuffer, private NonCopyable
+struct CapabilityChecker
+{
+	CapabilityChecker();
+};
+
+
+// ---------------------------------------------------------------------------
+
+
+class BackBuffer : public OpenGLFrameBuffer, private CapabilityChecker, private NonCopyable
 {
 	typedef OpenGLFrameBuffer Super;
 	

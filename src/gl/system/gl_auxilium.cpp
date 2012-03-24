@@ -356,6 +356,28 @@ void PostProcess::Finish()
 // ---------------------------------------------------------------------------
 
 
+CapabilityChecker::CapabilityChecker()
+{
+	static const char ERROR_MESSAGE[] = 
+		"The graphics hardware in your system does not support %s.\n"
+		"It is required to run this version of " GAMENAME ".\n"
+		"You can try to use SDL-based version where this feature is not mandatory.";
+
+	if ( !( gl.flags & RFL_GL_21 ) )
+	{
+		I_FatalError( ERROR_MESSAGE, "OpenGL 2.1" );
+	}
+
+	if ( !( gl.flags & RFL_FRAMEBUFFER ) )
+	{
+		I_FatalError( ERROR_MESSAGE, "Frame Buffer Object (FBO)" );
+	}
+}
+
+
+// ---------------------------------------------------------------------------
+
+
 BackBuffer* BackBuffer::s_instance;
 
 
@@ -379,23 +401,6 @@ BackBuffer::BackBuffer( int width, int height, bool fullscreen )
 , m_renderTarget( width, height )
 , m_gammaProgram( NULL, "shaders/glsl/gamma_correction.fp" )
 {
-/*
-	static const char ERROR_MESSAGE[] = 
-		"The graphics hardware in your system does not support %s.\n"
-		"It is required to run this version of " GAMENAME ".\n"
-		"You can try to use SDL-based version where this feature is not mandatory.";
-	
-	if ( !( gl.flags & RFL_GL_21 ) )
-	{
-		I_FatalError( ERROR_MESSAGE, "OpenGL 2.1" );
-	}
-	
-	if ( !( gl.flags & RFL_FRAMEBUFFER ) )
-	{
-		I_FatalError( ERROR_MESSAGE, "Frame Buffer Object (FBO)" );
-	}
-*/
-	
 	s_instance = this;
 		
 	const bool isScaled = fabsf( s_parameters.pixelScale - 1.0f ) > 0.01f;
