@@ -248,7 +248,7 @@ struct TextureImageHandler< GL_TEXTURE_2D >
 
 
 template < GLenum target >
-class Texture : public Resource< Texture< target >, UnbindToDefault >,
+class Texture : public Resource< Texture< target >, NoUnbind >,
 	private TextureImageHandler< target >
 {
 	friend class RenderTarget;
