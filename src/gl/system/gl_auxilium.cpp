@@ -232,6 +232,8 @@ ShaderProgram::~ShaderProgram()
 {
 	gl.DeleteShader( m_fragmentShaderID );
 	gl.DeleteShader( m_vertexShaderID );
+	
+	gl.DeleteProgram( m_ID );
 }
 
 
