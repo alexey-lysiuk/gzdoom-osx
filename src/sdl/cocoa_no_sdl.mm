@@ -1017,6 +1017,8 @@ static ApplicationDelegate* s_applicationDelegate;
 
 bool I_SetCursor( FTexture* cursorpic )
 {
+	StackAutoreleasePool pool;
+	
 	if ( NULL == cursorpic || FTexture::TEX_Null == cursorpic->UseType )
 	{
 		s_cursor = [NSCursor arrowCursor];
