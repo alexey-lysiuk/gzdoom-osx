@@ -350,7 +350,7 @@ typedef Texture< GL_TEXTURE_2D > Texture2D;
 class RenderTarget : public Resource< RenderTarget, UnbindToPrevious >
 {
 public:
-	RenderTarget( const GLsizei width, const GLsizei height );
+	RenderTarget( const GLsizei width, const GLsizei height, const RenderTarget* const sharedDepth = NULL );
 	~RenderTarget();
 	
 	static void DoBind( const GLuint resourceID );
@@ -393,7 +393,7 @@ private:
 class PostProcess
 {
 public:
-	PostProcess();
+	explicit PostProcess( const RenderTarget* const sharedDepth = NULL );
 	~PostProcess();
 	
 	void Init( const char* const shaderName, const GLsizei width, const GLsizei height );
@@ -410,6 +410,8 @@ private:
 	
 	RenderTarget*  m_renderTarget;
 	ShaderProgram* m_shader;
+	
+	const RenderTarget* m_sharedDepth;
 	
 }; // class PostProcess
 

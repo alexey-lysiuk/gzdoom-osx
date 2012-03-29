@@ -113,19 +113,26 @@ GLint GetFilter( const TextureFilter filter )
 // ---------------------------------------------------------------------------
 
 
-RenderTarget::RenderTarget( const GLsizei width, const GLsizei height )
+RenderTarget::RenderTarget( const GLsizei width, const GLsizei height, const RenderTarget* const sharedDepth )
 {
 	m_color.SetImageData( TEXTURE_FORMAT_COLOR_RGBA, width, height, NULL );
 	m_color.SetFilter( TEXTURE_FILTER_NEAREST );
 	
-	m_depthStencil.SetImageData( TEXTURE_FORMAT_DEPTH_STENCIL, width, height, NULL );
-	m_depthStencil.SetFilter( TEXTURE_FILTER_NEAREST );
+	if ( NULL == sharedDepth )
+	{
+		m_depthStencil.SetImageData( TEXTURE_FORMAT_DEPTH_STENCIL, width, height, NULL );
+		m_depthStencil.SetFilter( TEXTURE_FILTER_NEAREST );
+	}
+	
+	const GLuint depthStencilID = NULL == sharedDepth 
+		? m_depthStencil.m_ID 
+		: sharedDepth->m_depthStencil.m_ID;
 	
 	gl.GenFramebuffers( 1, &m_ID );
 	gl.BindFramebuffer( GL_FRAMEBUFFER, m_ID );
 	
-	gl.FramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,        GL_TEXTURE_2D, m_color.m_ID,        0 );
-	gl.FramebufferTexture2D( GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_depthStencil.m_ID, 0 );
+	gl.FramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,        GL_TEXTURE_2D, m_color.m_ID,   0 );
+	gl.FramebufferTexture2D( GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, depthStencilID, 0 );
 	
 	gl.BindFramebuffer( GL_FRAMEBUFFER, 0 );
 }
@@ -272,11 +279,12 @@ void ShaderProgram::SetUniform( const char* const name, const GLfloat value0, co
 // ---------------------------------------------------------------------------
 
 
-PostProcess::PostProcess()
+PostProcess::PostProcess( const RenderTarget* const sharedDepth )
 : m_width       ( 0    )
 , m_height      ( 0    )
 , m_renderTarget( NULL )
 , m_shader      ( NULL )
+, m_sharedDepth ( sharedDepth )
 {
 	
 }
@@ -298,7 +306,7 @@ void PostProcess::Init( const char* const shaderName, const GLsizei width, const
 	m_width  = width;
 	m_height = height;
 	
-	m_renderTarget = new RenderTarget( m_width, m_height );
+	m_renderTarget = new RenderTarget( m_width, m_height, m_sharedDepth );
 	
 	m_shader = new ShaderProgram( NULL, shaderName );
 	m_shader->SetUniform( "sampler0", 0 );
@@ -402,6 +410,7 @@ BackBuffer::BackBuffer( int width, int height, bool fullscreen )
 : OpenGLFrameBuffer( 0, width, height, 32, 60, fullscreen )
 , m_renderTarget( width, height )
 , m_gammaProgram( NULL, "shaders/glsl/gamma_correction.fp" )
+, m_postProcess( &m_renderTarget )
 {
 	s_instance = this;
 		
