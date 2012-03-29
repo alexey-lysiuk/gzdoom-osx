@@ -51,6 +51,7 @@
 
 #include <SDL.h>
 
+#include "gccinlines.h"
 #include "bitmap.h"
 #include "c_console.h"
 #include "c_cvars.h"
@@ -1079,6 +1080,171 @@ bool I_SetCursor( FTexture* cursorpic )
 // ---------------------------------------------------------------------------
 
 
+unsigned int I_MSTime()
+{
+	return SDL_GetTicks();
+}
+
+unsigned int I_FPSTime()
+{
+	return SDL_GetTicks();
+}
+
+
+namespace
+{
+
+timespec GetNextTickTime()
+{
+	timeval tv;
+	gettimeofday( &tv, NULL );
+	
+	static const long MILISECONDS_IN_SECOND  = 1000;
+	static const long MICROSECONDS_IN_SECOND = 1000 * MILISECONDS_IN_SECOND;
+	static const long NANOSECONDS_IN_SECOND  = 1000 * MICROSECONDS_IN_SECOND;
+	
+	timespec ts;
+	ts.tv_sec = tv.tv_sec;
+	ts.tv_nsec = ( tv.tv_usec + MICROSECONDS_IN_SECOND / TICRATE ) * MILISECONDS_IN_SECOND;
+	
+	if ( ts.tv_nsec >= NANOSECONDS_IN_SECOND )
+	{
+		ts.tv_sec++;
+		ts.tv_nsec -= NANOSECONDS_IN_SECOND;
+	}
+	
+	return ts;
+}
+
+
+pthread_cond_t  s_timerSignal;
+pthread_mutex_t s_timerMutex;
+
+pthread_cond_t  s_tickSignal;
+pthread_mutex_t s_tickMutex;
+
+pthread_t       s_timerThread;
+
+
+uint32_t s_ticStart;
+uint32_t s_ticNext;
+
+uint32_t s_timerStart;
+uint32_t s_timerNext;
+
+int  s_tics;
+bool s_isTicFrozen;
+
+
+void* TimerThreadFunc( void* )
+{
+	while ( true )
+	{
+		const timespec timeToNextTick = GetNextTickTime();
+		
+		const int result = pthread_cond_timedwait( &s_timerSignal, &s_timerMutex, &timeToNextTick );
+		
+		if ( ETIMEDOUT != result )
+		{
+			// game exit is requested if wait on s_timerSignal did not time out 
+			break;
+		}
+		
+		if ( !s_isTicFrozen )
+		{
+			++s_tics;
+		}
+		
+		s_timerStart = SDL_GetTicks();
+		s_timerNext  = Scale( Scale( s_timerStart, TICRATE, 1000 ) + 1, 1000, TICRATE );
+		
+		pthread_cond_signal ( &s_tickSignal );
+		pthread_mutex_unlock( &s_tickMutex  );
+	}
+	
+	return NULL;
+}
+
+
+void InitTimer()
+{
+	pthread_cond_init ( &s_timerSignal, NULL );
+	pthread_mutex_init( &s_timerMutex,  NULL );
+	
+	pthread_cond_init ( &s_tickSignal, NULL );
+	pthread_mutex_init( &s_tickMutex,  NULL );
+	
+	pthread_create( &s_timerThread, NULL, TimerThreadFunc, NULL );
+}
+
+void ReleaseTimer()
+{
+	pthread_cond_signal ( &s_timerSignal );
+	pthread_mutex_unlock( &s_timerMutex  );
+	
+	pthread_join( s_timerThread, NULL );
+	
+	pthread_mutex_destroy( &s_tickMutex  );
+	pthread_cond_destroy ( &s_tickSignal );
+	
+	pthread_mutex_destroy( &s_timerMutex  );
+	pthread_cond_destroy ( &s_timerSignal );
+}
+
+} // unnamed namespace
+
+
+int I_GetTimeSelect( bool saveMS )
+{
+	if ( saveMS )
+	{
+		s_ticStart = s_timerStart;
+		s_ticNext  = s_timerNext;
+	}
+	
+	return s_tics;
+}
+
+int I_WaitForTicSelect( int prevTic )
+{
+	assert( !s_isTicFrozen );
+	
+	while ( s_tics <= prevTic )
+	{
+		const timespec timeToNextTick = GetNextTickTime();
+
+		pthread_cond_timedwait( &s_tickSignal, &s_tickMutex, &timeToNextTick );
+	}
+	
+	return s_tics;	
+}
+
+void I_FreezeTimeSelect( bool frozen )
+{
+	s_isTicFrozen = frozen;
+}
+
+
+fixed_t I_GetTimeFrac( uint32* ms )
+{
+	const uint32_t now = SDL_GetTicks();
+	
+	if ( NULL != ms )
+	{
+		*ms = s_ticNext;
+	}
+	
+	const uint32_t step = s_ticNext - s_ticStart;
+	
+	return 0 == step
+		? FRACUNIT
+		: clamp< fixed_t >( ( now - s_ticStart ) * FRACUNIT / step, 0, FRACUNIT );
+}
+
+
+// ---------------------------------------------------------------------------
+
+
 extern "C" 
 {
 
@@ -1162,6 +1328,8 @@ int SDL_Init( Uint32 flags )
 		// application remains deactivated for an unknown reason.
 		// The following call resolves this issue
 		[NSApp activateIgnoringOtherApps:YES];
+		
+		InitTimer();
 	}
 
 	return 0;
@@ -1171,6 +1339,8 @@ void SDL_Quit()
 {
 	if ( NULL != s_applicationDelegate )
 	{
+		ReleaseTimer();
+		
 		[s_applicationDelegate release];
 		s_applicationDelegate = NULL;
 	}

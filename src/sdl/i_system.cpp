@@ -141,6 +141,14 @@ void I_EndRead(void)
 }
 
 
+#ifdef COCOA_NO_SDL
+
+int I_GetTimeSelect( bool saveMS );
+int I_WaitForTicSelect( int prevtic );
+void I_FreezeTimeSelect( bool frozen );
+
+#else // !COCOA_NO_SDL
+
 static DWORD TicStart;
 static DWORD TicNext;
 static DWORD BaseTime;
@@ -210,11 +218,11 @@ int I_GetTimeSignaled (bool saveMS)
 int I_WaitForTicPolled (int prevtic)
 {
     int time;
-
+	
 	assert (TicFrozen == 0);
     while ((time = I_GetTimePolled(false)) <= prevtic)
 		;
-
+	
     return time;
 }
 
@@ -275,10 +283,10 @@ int I_WaitForTicSelect (int prevtic)
 //
 void I_HandleAlarm (int sig)
 {
-	if(!TicFrozen)
+		if(!TicFrozen)
 		tics++;
-	sig_start = SDL_GetTicks();
-	sig_next = Scale((Scale (sig_start, TICRATE, 1000) + 1), 1000, TICRATE);
+		sig_start = SDL_GetTicks();
+		sig_next = Scale((Scale (sig_start, TICRATE, 1000) + 1), 1000, TICRATE);
 #ifdef __APPLE__
 	semaphore_signal(timerWait);
 #else
@@ -334,6 +342,8 @@ fixed_t I_GetTimeFrac (uint32 *ms)
 		return frac;
 	}
 }
+
+#endif // COCOA_NO_SDL
 
 void I_WaitVBL (int count)
 {
