@@ -1117,14 +1117,14 @@ timespec GetNextTickTime()
 }
 
 
-pthread_cond_t  s_timerSignal;
+// Signal of s_timerEvent from main thread indicates application shutdown request,
+// so timer thread's function will exit
+// Signal of s_timerEvent from timer thread indicates new tick,
+// at TICRATE which was 35 Hz in original Doom
+
+pthread_cond_t  s_timerEvent;
 pthread_mutex_t s_timerMutex;
-
-pthread_cond_t  s_tickSignal;
-pthread_mutex_t s_tickMutex;
-
 pthread_t       s_timerThread;
-
 
 uint32_t s_ticStart;
 uint32_t s_ticNext;
@@ -1140,26 +1140,28 @@ void* TimerThreadFunc( void* )
 {
 	while ( true )
 	{
+		pthread_mutex_lock( &s_timerMutex );
+		
 		const timespec timeToNextTick = GetNextTickTime();
 		
-		const int result = pthread_cond_timedwait( &s_timerSignal, &s_timerMutex, &timeToNextTick );
+		const int waitResult = pthread_cond_timedwait( &s_timerEvent, &s_timerMutex, &timeToNextTick );
 		
-		if ( ETIMEDOUT != result )
+		if ( ETIMEDOUT != waitResult )
 		{
-			// game exit is requested if wait on s_timerSignal did not time out 
+			// game exit is requested if wait on s_timerEvent did not time out 
 			break;
 		}
 		
 		if ( !s_isTicFrozen )
 		{
-			++s_tics;
+			__sync_add_and_fetch( &s_tics, 1 );
 		}
 		
 		s_timerStart = SDL_GetTicks();
 		s_timerNext  = Scale( Scale( s_timerStart, TICRATE, 1000 ) + 1, 1000, TICRATE );
 		
-		pthread_cond_signal ( &s_tickSignal );
-		pthread_mutex_unlock( &s_tickMutex  );
+		pthread_cond_signal ( &s_timerEvent );
+		pthread_mutex_unlock( &s_timerMutex );
 	}
 	
 	return NULL;
@@ -1168,27 +1170,21 @@ void* TimerThreadFunc( void* )
 
 void InitTimer()
 {
-	pthread_cond_init ( &s_timerSignal, NULL );
+	pthread_cond_init ( &s_timerEvent,  NULL );
 	pthread_mutex_init( &s_timerMutex,  NULL );
-	
-	pthread_cond_init ( &s_tickSignal, NULL );
-	pthread_mutex_init( &s_tickMutex,  NULL );
 	
 	pthread_create( &s_timerThread, NULL, TimerThreadFunc, NULL );
 }
 
 void ReleaseTimer()
 {
-	pthread_cond_signal ( &s_timerSignal );
-	pthread_mutex_unlock( &s_timerMutex  );
+	pthread_cond_signal ( &s_timerEvent );
+	pthread_mutex_unlock( &s_timerMutex );
 	
 	pthread_join( s_timerThread, NULL );
 	
-	pthread_mutex_destroy( &s_tickMutex  );
-	pthread_cond_destroy ( &s_tickSignal );
-	
-	pthread_mutex_destroy( &s_timerMutex  );
-	pthread_cond_destroy ( &s_timerSignal );
+	pthread_mutex_destroy( &s_timerMutex );
+	pthread_cond_destroy ( &s_timerEvent );
 }
 
 } // unnamed namespace
@@ -1211,9 +1207,12 @@ int I_WaitForTicSelect( int prevTic )
 	
 	while ( s_tics <= prevTic )
 	{
+		pthread_mutex_lock( &s_timerMutex );
+		
 		const timespec timeToNextTick = GetNextTickTime();
-
-		pthread_cond_timedwait( &s_tickSignal, &s_tickMutex, &timeToNextTick );
+		
+		pthread_cond_timedwait( &s_timerEvent, &s_timerMutex, &timeToNextTick );
+		pthread_mutex_unlock  ( &s_timerMutex );
 	}
 	
 	return s_tics;	
