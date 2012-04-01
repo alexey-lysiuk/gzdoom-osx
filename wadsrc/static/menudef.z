@@ -21,6 +21,12 @@ OptionValue "VBOModes"
 	2, "Dynamic"
 }
 
+OptionValue "PostProcess"
+{
+	0, "Off"
+	1, "FXAA"
+}
+
 OptionValue "FilterModes"
 {
 	0, "None"
@@ -184,6 +190,7 @@ OptionMenu "GLPrefOptions"
 	Slider "Ambient light level",		gl_light_ambient,				1.0, 255.0, 5.0
 	Option "Rendering quality",			gl_render_precise,				"Precision"
 	Option "Use vertex buffer",			gl_usevbo,						"VBOModes"
+	Option "Post-processing",			gl_postprocess,					"PostProcess"
 }
 
 OptionMenu "GLShaderOptions"
