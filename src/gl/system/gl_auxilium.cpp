@@ -110,6 +110,50 @@ GLint GetFilter( const TextureFilter filter )
 }
 
 
+void BoundTextureSetFilter( const GLenum target, const GLint filter )
+{
+	gl.TexParameteri( target, GL_TEXTURE_MIN_FILTER, filter );
+	gl.TexParameteri( target, GL_TEXTURE_MAG_FILTER, filter );
+	
+	gl.TexParameteri( target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+	gl.TexParameteri( target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );		
+}
+
+void BoundTextureDraw2D( const GLsizei width, const GLsizei height )
+{
+	const bool flipX = width  < 0;
+	const bool flipY = height < 0;
+	
+	const float u0 = flipX ? 1.0f : 0.0f;
+	const float v0 = flipY ? 1.0f : 0.0f;
+	const float u1 = flipX ? 0.0f : 1.0f;
+	const float v1 = flipY ? 0.0f : 1.0f;
+	
+	const float x1 = 0.0f;
+	const float y1 = 0.0f;
+	const float x2 = abs( width  );
+	const float y2 = abs( height );
+	
+	gl.Disable( GL_BLEND );
+	gl.Disable( GL_ALPHA_TEST );
+	
+	gl.Begin( GL_QUADS );
+	gl.Color4f( 1.0f, 1.0f, 1.0f, 1.0f );
+	gl.TexCoord2f( u0, v1 );
+	gl.Vertex2f( x1, y1 );
+	gl.TexCoord2f( u1, v1 );
+	gl.Vertex2f( x2, y1 );
+	gl.TexCoord2f( u1, v0 );
+	gl.Vertex2f( x2, y2 );
+	gl.TexCoord2f( u0, v0 );
+	gl.Vertex2f( x1, y2 );
+	gl.End();
+	
+	gl.Enable( GL_ALPHA_TEST );
+	gl.Enable( GL_BLEND );
+}
+
+
 // ---------------------------------------------------------------------------
 
 
