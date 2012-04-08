@@ -86,7 +86,14 @@ bool AAmmo::HandlePickup (AInventory *item)
 			}
 			int oldamount = Amount;
 
-			Amount += receiving;
+			if (Amount > 0 && Amount + receiving < 0)
+			{
+				Amount = 0x7fffffff;
+			}
+			else
+			{
+				Amount += receiving;
+			}
 			if (Amount > MaxAmount && !sv_unlimited_pickup)
 			{
 				Amount = MaxAmount;
@@ -350,7 +357,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_RestoreSpecialPosition)
 	self->dropoffz =
 	self->floorz = sec->floorplane.ZatPoint(_x, _y);
 	self->ceilingz = sec->ceilingplane.ZatPoint(_x, _y);
-	P_FindFloorCeiling(self, true);
+	P_FindFloorCeiling(self, FFCF_ONLYSPAWNPOS);
 
 	if (self->flags & MF_SPAWNCEILING)
 	{
@@ -376,6 +383,17 @@ DEFINE_ACTION_FUNCTION(AActor, A_RestoreSpecialPosition)
 		{
 			self->z += FloatBobOffsets[(self->FloatBobPhase + level.maptime) & 63];
 		}
+	}
+	// Redo floor/ceiling check, in case of 3D floors
+	P_FindFloorCeiling(self, FFCF_SAMESECTOR);
+	if (self->z < self->floorz)
+	{ // Do not reappear under the floor, even if that's where we were for the
+	  // initial spawn.
+		self->z = self->floorz;
+	}
+	if (self->z + self->height > self->ceilingz)
+	{ // Do the same for the ceiling.
+		self->z = self->ceilingz - self->height;
 	}
 }
 
@@ -536,7 +554,15 @@ bool AInventory::HandlePickup (AInventory *item)
 	{
 		if (Amount < MaxAmount || sv_unlimited_pickup)
 		{
-			Amount += item->Amount;
+			if (Amount > 0 && Amount + item->Amount < 0)
+			{
+				Amount = 0x7fffffff;
+			}
+			else
+			{
+				Amount += item->Amount;
+			}
+		
 			if (Amount > MaxAmount && !sv_unlimited_pickup)
 			{
 				Amount = MaxAmount;
@@ -1300,6 +1326,9 @@ bool AInventory::TryPickupRestricted (AActor *&toucher)
 
 bool AInventory::CallTryPickup (AActor *toucher, AActor **toucher_return)
 {
+	// unmorphed versions of a currently morphed actor cannot pick up anything. 
+	if (toucher->flags & MF_UNMORPHED) return false;
+
 	bool res;
 	if (CanPickup(toucher))
 		res = TryPickup(toucher);

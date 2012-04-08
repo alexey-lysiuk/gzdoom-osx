@@ -2467,12 +2467,45 @@ void P_NightmareRespawn (AActor *mobj)
 	mo = AActor::StaticSpawn(RUNTIME_TYPE(mobj), x, y, z, NO_REPLACE, true);
 
 	if (z == ONFLOORZ)
-		mo->z += mo->SpawnPoint[2];
+	{
+		mo->z += mobj->SpawnPoint[2];
+		if (mo->z < mo->floorz)
+		{ // Do not respawn monsters in the floor, even if that's where they
+		  // started. The initial P_ZMovement() call would have put them on
+		  // the floor right away, but we need them on the floor now so we
+		  // can use P_CheckPosition() properly.
+			mo->z = mo->floorz;
+		}
+		if (mo->z + mo->height > mo->ceilingz)
+		{
+			mo->z = mo->ceilingz - mo->height;
+		}
+	}
 	else if (z == ONCEILINGZ)
-		mo->z -= mo->SpawnPoint[2];
+	{
+		mo->z -= mobj->SpawnPoint[2];
+	}
+
+	// If there are 3D floors, we need to find floor/ceiling again.
+	P_FindFloorCeiling(mo, FFCF_SAMESECTOR);
+
+	if (z == ONFLOORZ)
+	{
+		if (mo->z < mo->floorz)
+		{ // Do not respawn monsters in the floor, even if that's where they
+		  // started. The initial P_ZMovement() call would have put them on
+		  // the floor right away, but we need them on the floor now so we
+		  // can use P_CheckPosition() properly.
+			mo->z = mo->floorz;
+		}
+		if (mo->z + mo->height > mo->ceilingz)
+		{ // Do the same for the ceiling.
+			mo->z = mo->ceilingz - mo->height;
+		}
+	}
 
 	// something is occupying its position?
-	if (!P_TestMobjLocation (mo))
+	if (!P_CheckPosition(mo, mo->x, mo->y, true))
 	{
 		//[GrafZahl] MF_COUNTKILL still needs to be checked here.
 		mo->ClearCounters();
@@ -2481,7 +2514,6 @@ void P_NightmareRespawn (AActor *mobj)
 	}
 
 	z = mo->z;
-
 
 	// inherit attributes from deceased one
 	mo->SpawnPoint[0] = mobj->SpawnPoint[0];
@@ -3616,7 +3648,7 @@ AActor *AActor::StaticSpawn (const PClass *type, fixed_t ix, fixed_t iy, fixed_t
 		// z-coordinate.
 		if (!SpawningMapThing) 
 		{
-			P_FindFloorCeiling(actor, true);
+			P_FindFloorCeiling(actor, FFCF_ONLYSPAWNPOS);
 		}
 		else
 		{
@@ -4482,7 +4514,7 @@ AActor *P_SpawnMapThing (FMapThing *mthing, int position)
 	mobj->SpawnPoint[2] = mthing->z;
 	mobj->SpawnAngle = mthing->angle;
 	mobj->SpawnFlags = mthing->flags;
-	P_FindFloorCeiling(mobj, true);
+	P_FindFloorCeiling(mobj, FFCF_ONLYSPAWNPOS);
 
 	if (!(mobj->flags2 & MF2_ARGSDEFINED))
 	{
@@ -5860,6 +5892,7 @@ void PrintMiscActorInfo(AActor * query)
 			(query->special ? LineSpecialsInfo[query->special]->name : "None"),
 			query->args[0], query->args[1], query->args[2], query->args[3], 
 			query->args[4],	query->special1, query->special2);
+		Printf("\nTID is %d", query->tid);
 		Printf("\nIts coordinates are x: %f, y: %f, z:%f, floor:%f, ceiling:%f.",
 			FIXED2FLOAT(query->x), FIXED2FLOAT(query->y), FIXED2FLOAT(query->z),
 			FIXED2FLOAT(query->floorz), FIXED2FLOAT(query->ceilingz));

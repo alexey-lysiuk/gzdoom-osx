@@ -2062,10 +2062,7 @@ void Net_DoCommand (int type, BYTE **stream, int player)
 		break;
 
 	case DEM_CENTERVIEW:
-		if (players[player].mo != NULL)
-		{
-			players[player].mo->pitch = 0;
-		}
+		players[player].centering = true;
 		break;
 
 	case DEM_INVUSEALL:
@@ -2500,7 +2497,7 @@ static void RunScript(BYTE **stream, APlayerPawn *pawn, int snum, int argn, int 
 			arg[i] = argval;
 		}
 	}
-	P_StartScript(pawn, NULL, snum, level.mapname, arg, MIN<int>(countof(arg), argn), ACS_NET);
+	P_StartScript(pawn, NULL, snum, level.mapname, arg, MIN<int>(countof(arg), argn), ACS_NET | always);
 }
 
 void Net_SkipCommand (int type, BYTE **stream)

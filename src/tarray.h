@@ -36,8 +36,8 @@
 #define __TARRAY_H__
 
 #include <stdlib.h>
-#include <string.h>
 #include <assert.h>
+#include <string.h>
 #include <new>
 
 #if !defined(_WIN32)
