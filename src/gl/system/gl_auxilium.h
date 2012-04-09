@@ -205,6 +205,7 @@ GLint GetFilter( const TextureFilter filter );
 
 void BoundTextureSetFilter( const GLenum target, const GLint filter );
 void BoundTextureDraw2D( const GLsizei width, const GLsizei height );
+bool BoundTextureSaveAsPNG( const GLenum target, const char* const path );
 
 
 template < GLenum target >
@@ -303,6 +304,18 @@ public:
 		BoundTextureDraw2D( width, height );
 		
 		this->Unbind();
+	}
+	
+	
+	bool SaveAsPNG( const char* const path )
+	{
+		this->Bind();
+		
+		const bool result = BoundTextureSaveAsPNG( target, path );
+		
+		this->Unbind();
+		
+		return result;
 	}
 	
 }; // class Texture

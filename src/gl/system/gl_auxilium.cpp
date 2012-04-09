@@ -34,6 +34,7 @@
 #include "gl/system/gl_auxilium.h"
 
 #include "i_system.h"
+#include "m_png.h"
 #include "version.h"
 #include "w_wad.h"
 
@@ -151,6 +152,75 @@ void BoundTextureDraw2D( const GLsizei width, const GLsizei height )
 	
 	gl.Enable( GL_ALPHA_TEST );
 	gl.Enable( GL_BLEND );
+}
+
+bool BoundTextureSaveAsPNG( const GLenum target, const char* const path )
+{
+	if ( NULL == path )
+	{
+		return false;
+	}
+	
+	GLint width  = 0;
+	GLint height = 0;
+	
+	glGetTexLevelParameteriv( target, 0, GL_TEXTURE_WIDTH,  &width  );
+	glGetTexLevelParameteriv( target, 0, GL_TEXTURE_HEIGHT, &height );
+	
+	if ( 0 == width || 0 == height )
+	{
+		Printf( "BoundTextureSaveAsPNG: invalid texture size %ix%i\n", width, height );
+		
+		return false;
+	}
+
+	static const int BYTES_PER_PIXEL = 4;
+	
+	const int imageSize = width * height * BYTES_PER_PIXEL;
+	unsigned char* imageBuffer = static_cast< unsigned char* >( malloc( imageSize ) );
+	
+	if ( NULL == imageBuffer )
+	{
+		Printf( "BoundTextureSaveAsPNG: cannot allocate %i bytes\n", imageSize );
+		
+		return false;
+	}
+	
+	glGetTexImage( target, 0, GL_BGRA, GL_UNSIGNED_BYTE, imageBuffer );
+
+	const int lineSize = width * BYTES_PER_PIXEL;
+	unsigned char lineBuffer[ lineSize ];
+	
+	for ( GLint line = 0; line < height / 2; ++line )
+	{
+		void* frontLinePtr = &imageBuffer[ line                  * lineSize ];
+		void*  backLinePtr = &imageBuffer[ ( height - line - 1 ) * lineSize ];
+		
+		memcpy(   lineBuffer, frontLinePtr, lineSize );
+		memcpy( frontLinePtr,  backLinePtr, lineSize );
+		memcpy(  backLinePtr,   lineBuffer, lineSize );
+	}
+	
+	FILE* file = fopen( path, "w" );
+	
+	if ( NULL == file )
+	{
+		Printf( "BoundTextureSaveAsPNG: cannot open file %s\n", path );
+		
+		free( imageBuffer );
+		
+		return false;
+	}
+	
+	const bool result = 
+		   M_CreatePNG( file, &imageBuffer[0], NULL, SS_BGRA, width, height, width * BYTES_PER_PIXEL )
+		&& M_FinishPNG( file );
+	
+	fclose( file );
+	
+	free( imageBuffer );
+	
+	return result;
 }
 
 
