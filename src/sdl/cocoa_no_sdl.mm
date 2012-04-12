@@ -1117,14 +1117,11 @@ timespec GetNextTickTime()
 }
 
 
-// Signal of s_timerEvent from main thread indicates application shutdown request,
-// so timer thread's function will exit
-// Signal of s_timerEvent from timer thread indicates new tick,
-// at TICRATE which was 35 Hz in original Doom
-
 pthread_cond_t  s_timerEvent;
 pthread_mutex_t s_timerMutex;
 pthread_t       s_timerThread;
+
+bool s_timerExitRequested;
 
 uint32_t s_ticStart;
 uint32_t s_ticNext;
@@ -1140,17 +1137,15 @@ void* TimerThreadFunc( void* )
 {
 	while ( true )
 	{
-		pthread_mutex_lock( &s_timerMutex );
+		if ( s_timerExitRequested )
+		{
+			break;
+		}
 		
 		const timespec timeToNextTick = GetNextTickTime();
 		
-		const int waitResult = pthread_cond_timedwait( &s_timerEvent, &s_timerMutex, &timeToNextTick );
-		
-		if ( ETIMEDOUT != waitResult )
-		{
-			// game exit is requested if wait on s_timerEvent did not time out 
-			break;
-		}
+		pthread_mutex_lock( &s_timerMutex );
+		pthread_cond_timedwait( &s_timerEvent, &s_timerMutex, &timeToNextTick );
 		
 		if ( !s_isTicFrozen )
 		{
@@ -1178,8 +1173,7 @@ void InitTimer()
 
 void ReleaseTimer()
 {
-	pthread_cond_signal ( &s_timerEvent );
-	pthread_mutex_unlock( &s_timerMutex );
+	s_timerExitRequested	= true;
 	
 	pthread_join( s_timerThread, NULL );
 	
