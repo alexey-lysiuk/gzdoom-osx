@@ -83,9 +83,11 @@ msecnode_t* sector_list = NULL;		// phares 3/16/98
 //
 // PIT_FindFloorCeiling
 //
+// only3d set means to only check against 3D floors and midtexes.
+//
 //==========================================================================
 
-static bool PIT_FindFloorCeiling (line_t *ld, const FBoundingBox &box, FCheckPosition &tmf)
+static bool PIT_FindFloorCeiling (line_t *ld, const FBoundingBox &box, FCheckPosition &tmf, int flags)
 {
 	if (box.Right() <= ld->bbox[BOXLEFT]
 		|| box.Left() >= ld->bbox[BOXRIGHT]
@@ -113,28 +115,28 @@ static bool PIT_FindFloorCeiling (line_t *ld, const FBoundingBox &box, FCheckPos
 		 (ld->backsector->ceilingplane.a | ld->backsector->ceilingplane.b)) == 0)
 		 && ld->backsector->e->XFloor.ffloors.Size()==0 && ld->frontsector->e->XFloor.ffloors.Size()==0)
 	{
-		P_LineOpening (open, tmf.thing, ld, sx=tmf.x, sy=tmf.y, tmf.x, tmf.y);
+		P_LineOpening (open, tmf.thing, ld, sx=tmf.x, sy=tmf.y, tmf.x, tmf.y, flags);
 	}
 	else
 	{ // Find the point on the line closest to the actor's center, and use
 	  // that to calculate openings
-		float dx = (float)ld->dx;
-		float dy = (float)ld->dy;
-		fixed_t r = (fixed_t)(((float)(tmf.x - ld->v1->x) * dx +
-				 			   (float)(tmf.y - ld->v1->y) * dy) /
+		double dx = ld->dx;
+		double dy = ld->dy;
+		fixed_t r = xs_CRoundToInt(((double)(tmf.x - ld->v1->x) * dx +
+				 			   (double)(tmf.y - ld->v1->y) * dy) /
 							  (dx*dx + dy*dy) * 16777216.f);
 		if (r <= 0)
 		{
-			P_LineOpening (open, tmf.thing, ld, sx=ld->v1->x, sy=ld->v1->y, tmf.x, tmf.y);
+			P_LineOpening (open, tmf.thing, ld, sx=ld->v1->x, sy=ld->v1->y, tmf.x, tmf.y, flags);
 		}
 		else if (r >= (1<<24))
 		{
-			P_LineOpening (open, tmf.thing, ld, sx=ld->v2->x, sy=ld->v2->y, tmf.thing->x, tmf.thing->y);
+			P_LineOpening (open, tmf.thing, ld, sx=ld->v2->x, sy=ld->v2->y, tmf.thing->x, tmf.thing->y, flags);
 		}
 		else
 		{
 			P_LineOpening (open, tmf.thing, ld, sx=ld->v1->x + MulScale24 (r, ld->dx),
-				sy=ld->v1->y + MulScale24 (r, ld->dy), tmf.x, tmf.y);
+				sy=ld->v1->y + MulScale24 (r, ld->dy), tmf.x, tmf.y, flags);
 		}
 	}
 
@@ -147,7 +149,7 @@ static bool PIT_FindFloorCeiling (line_t *ld, const FBoundingBox &box, FCheckPos
 	if (open.bottom > tmf.floorz)
 	{
 		tmf.floorz = open.bottom;
-		tmf.floorsector = open.bottomsec;
+		if (open.bottomsec != NULL) tmf.floorsector = open.bottomsec;
 		tmf.touchmidtex = open.touchmidtex;
 		tmf.abovemidtex = open.abovemidtex;
 	}
@@ -175,7 +177,7 @@ void P_GetFloorCeilingZ(FCheckPosition &tmf, int flags)
 	sector_t *sec;
 	if (!(flags & FFCF_ONLYSPAWNPOS))
 	{
-		sec = !(flags & FFCF_SAMESECTOR) ? P_PointInSector (tmf.x, tmf.y) : sec = tmf.thing->Sector;
+		sec = !(flags & FFCF_SAMESECTOR) ? P_PointInSector (tmf.x, tmf.y) : tmf.thing->Sector;
 		tmf.floorsector = sec;
 		tmf.ceilingsector = sec;
 
@@ -231,6 +233,10 @@ void P_FindFloorCeiling (AActor *actor, int flags)
 	tmf.y = actor->y;
 	tmf.z = actor->z;
 
+	if (flags & FFCF_ONLYSPAWNPOS)
+	{
+		flags |= FFCF_3DMIDTEXRESTRICT;
+	}
 	if (!(flags & FFCF_ONLYSPAWNPOS))
 	{
 		P_GetFloorCeilingZ(tmf, flags);
@@ -264,7 +270,7 @@ void P_FindFloorCeiling (AActor *actor, int flags)
 
 	while ((ld = it.Next()))
 	{
-		PIT_FindFloorCeiling(ld, box, tmf);
+		PIT_FindFloorCeiling(ld, box, tmf, flags);
 	}
 
 	if (tmf.touchmidtex) tmf.dropoffz = tmf.floorz;
@@ -324,7 +330,7 @@ bool P_TeleportMove (AActor *thing, fixed_t x, fixed_t y, fixed_t z, bool telefr
 	tmf.z = z;
 	tmf.touchmidtex = false;
 	tmf.abovemidtex = false;
-	P_GetFloorCeilingZ(tmf, FFCF_ONLYSPAWNPOS);
+	P_GetFloorCeilingZ(tmf, 0);
 					
 	spechit.Clear ();
 
@@ -335,12 +341,12 @@ bool P_TeleportMove (AActor *thing, fixed_t x, fixed_t y, fixed_t z, bool telefr
 	FBlockLinesIterator it(box);
 	line_t *ld;
 
-	// P_LineOpening requires the thing's z to be the destination ú‹ order to work.
+	// P_LineOpening requires the thing's z to be the destination z in order to work.
 	fixed_t savedz = thing->z;
 	thing->z = z;
 	while ((ld = it.Next()))
 	{
-		PIT_FindFloorCeiling(ld, box, tmf);
+		PIT_FindFloorCeiling(ld, box, tmf, 0);
 	}
 	thing->z = savedz;
 
@@ -3652,6 +3658,7 @@ void P_TraceBleed (int damage, fixed_t x, fixed_t y, fixed_t z, AActor *actor, a
 	int count;
 	int noise;
 
+
 	if ((actor->flags & MF_NOBLOOD) ||
 		(actor->flags5 & MF5_NOBLOODDECALS) ||
 		(actor->flags2 & (MF2_INVULNERABLE|MF2_DORMANT)) ||
@@ -3923,6 +3930,7 @@ void P_RailAttack (AActor *source, int damage, int offset, int color1, int color
 	{
 		fixed_t x, y, z;
 		bool spawnpuff;
+		int puffflags = PF_HITTHING;
 
 		x = x1 + FixedMul (RailHits[i].Distance, vx);
 		y = y1 + FixedMul (RailHits[i].Distance, vy);
@@ -3936,11 +3944,12 @@ void P_RailAttack (AActor *source, int damage, int offset, int color1, int color
 		else
 		{
 			spawnpuff = (puffclass != NULL && puffDefaults->flags3 & MF3_ALWAYSPUFF);
+			puffflags |= PF_HITTHINGBLEED; // [XA] Allow for puffs to jump to XDeath state.
 			P_SpawnBlood (x, y, z, (source->angle + angleoffset) - ANG180, damage, RailHits[i].HitActor);
 			P_TraceBleed (damage, x, y, z, RailHits[i].HitActor, source->angle, pitch);
 		}
-		if (spawnpuff) P_SpawnPuff (source, puffclass, x, y, z, (source->angle + angleoffset) - ANG90, 1, PF_HITTHING);
-
+		if (spawnpuff)
+			P_SpawnPuff (source, puffclass, x, y, z, (source->angle + angleoffset) - ANG90, 1, puffflags);
 		if (puffDefaults && puffDefaults->PoisonDamage > 0 && puffDefaults->PoisonDuration != INT_MIN)
 			P_PoisonMobj(RailHits[i].HitActor, thepuff ? thepuff : source, source, puffDefaults->PoisonDamage, puffDefaults->PoisonDuration, puffDefaults->PoisonPeriod, puffDefaults->PoisonDamageType);
 
