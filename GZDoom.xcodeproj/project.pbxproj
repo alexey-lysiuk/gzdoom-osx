@@ -104,6 +104,14 @@
 		8A74F451139252F9001F54B0 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F450139252F9001F54B0 /* AudioUnit.framework */; };
 		8A74F4671392532C001F54B0 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F4661392532C001F54B0 /* Carbon.framework */; };
 		8A7C81C613BF3C0B000B654E /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3E139126C00095D9A0 /* SDLMain.m */; };
+		8A7D867D1537055C002D03BD /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E15139126C00095D9A0 /* Image.cpp */; };
+		8A7D867E1537055C002D03BD /* hq4x.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E13139126C00095D9A0 /* hq4x.cpp */; };
+		8A7D867F1537055D002D03BD /* hq3x.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E12139126C00095D9A0 /* hq3x.cpp */; };
+		8A7D86801537055D002D03BD /* hq2x.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E11139126C00095D9A0 /* hq2x.cpp */; };
+		8A7D86E715370D98002D03BD /* hq2x.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E11139126C00095D9A0 /* hq2x.cpp */; };
+		8A7D86E815370D98002D03BD /* hq3x.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E12139126C00095D9A0 /* hq3x.cpp */; };
+		8A7D86E915370D98002D03BD /* hq4x.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E13139126C00095D9A0 /* hq4x.cpp */; };
+		8A7D86EA15370D98002D03BD /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E15139126C00095D9A0 /* Image.cpp */; };
 		8A7FF48014BB2B220069731E /* cocoa_no_sdl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A7FF47F14BB2B220069731E /* cocoa_no_sdl.mm */; };
 		8A8D68B713C84344001D368F /* r_swrenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D68B313C84344001D368F /* r_swrenderer.cpp */; };
 		8A8D68B813C84344001D368F /* r_utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D68B513C84344001D368F /* r_utility.cpp */; };
@@ -5066,6 +5074,10 @@
 				8A9F546B14BB0F2900F3369B /* voxels.cpp in Sources */,
 				8A9F546C14BB0F2900F3369B /* r_swrenderer.cpp in Sources */,
 				8A9F546D14BB0F2900F3369B /* r_utility.cpp in Sources */,
+				8A7D867E1537055C002D03BD /* hq4x.cpp in Sources */,
+				8A7D867F1537055D002D03BD /* hq3x.cpp in Sources */,
+				8A7D86801537055D002D03BD /* hq2x.cpp in Sources */,
+				8A7D867D1537055C002D03BD /* Image.cpp in Sources */,
 				49A94D1614F4FCC8008312F3 /* gl_auxilium.cpp in Sources */,
 				8A422139150A0578001D28A0 /* iokit_joystick.cpp in Sources */,
 				8A7FF48014BB2B220069731E /* cocoa_no_sdl.mm in Sources */,
@@ -5700,6 +5712,10 @@
 				497C93F013C5A6F800E6B4A8 /* voxels.cpp in Sources */,
 				8A8D68B713C84344001D368F /* r_swrenderer.cpp in Sources */,
 				8A8D68B813C84344001D368F /* r_utility.cpp in Sources */,
+				8A7D86E715370D98002D03BD /* hq2x.cpp in Sources */,
+				8A7D86E815370D98002D03BD /* hq3x.cpp in Sources */,
+				8A7D86E915370D98002D03BD /* hq4x.cpp in Sources */,
+				8A7D86EA15370D98002D03BD /* Image.cpp in Sources */,
 				8AF28175139126C10095D9A0 /* iwadpicker_cocoa.mm in Sources */,
 				8A7C81C613BF3C0B000B654E /* SDLMain.m in Sources */,
 				8AF28013139126C00095D9A0 /* autozend.cpp in Sources */,

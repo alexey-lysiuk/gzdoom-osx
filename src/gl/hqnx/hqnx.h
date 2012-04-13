@@ -24,6 +24,11 @@
 
 #include "Image.h"
 
+#ifndef _MSC_VER
+#include <stdint.h>
+#define __int64 int64_t __attribute__ ((used))
+#endif // !_MSC_VER
+
 void DLL hq2x_32( int * pIn, unsigned char * pOut, int Xres, int Yres, int BpL );
 void DLL hq3x_32( int * pIn, unsigned char * pOut, int Xres, int Yres, int BpL );
 void DLL hq4x_32( int * pIn, unsigned char * pOut, int Xres, int Yres, int BpL );

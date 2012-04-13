@@ -22,11 +22,10 @@ extern int LUT16to32[65536*2];
 extern int RGBtoYUV[65536*2];
 
 static const __int64 reg_blank = 0;
-static const __int64 const3    = 0x0003000300030003;
-static const __int64 const5    = 0x0005000500050005;
-static const __int64 const6    = 0x0006000600060006;
-static const __int64 const14   = 0x000E000E000E000E;
-static const __int64 treshold  = 0x0000000000300706;
+static const __int64 const3    = 0x0003000300030003LL;
+static const __int64 const5    = 0x0005000500050005LL;
+static const __int64 const6    = 0x0006000600060006LL;
+static const __int64 const14   = 0x000E000E000E000ELL;
 
 inline void Interp1(unsigned char * pc, int c1, int c2)
 {

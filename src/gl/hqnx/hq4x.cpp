@@ -19,19 +19,18 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <conio.h>
 #include <string.h>
 #include "hqnx.h"
 
 int   LUT16to32[65536*2];
 int   RGBtoYUV[65536*2];
 
-static const __int64 reg_blank = 0;
-static const __int64 const3    = 0x0003000300030003;
-static const __int64 const5    = 0x0005000500050005;
-static const __int64 const6    = 0x0006000600060006;
-static const __int64 const7    = 0x0007000700070007;
-static const __int64 treshold  = 0x0000000000300706;
+static const __int64 reg_blank __attribute__ ((used))= 0;
+static const __int64 const3    __attribute__ ((used))= 0x0003000300030003LL;
+static const __int64 const5    __attribute__ ((used))= 0x0005000500050005LL;
+static const __int64 const6    __attribute__ ((used))= 0x0006000600060006LL;
+static const __int64 const7    __attribute__ ((used))= 0x0007000700070007LL;
+static const __int64 treshold  __attribute__ ((used))= 0x0000000000300706;
 
 
 inline void Interp1(unsigned char * pc, int c1, int c2)
@@ -312,13 +311,12 @@ inline void Interp8(unsigned char * pc, int c1, int c2)
 #define PIXEL33_82    Interp8(pOut+BpL+BpL+BpL+12, c[5], c[8]);
 
 
-#pragma warning(disable: 4035)
-
 int Diff(unsigned int w5, unsigned int w1)
 {
+  int result = 0;
+	
   __asm
   {
-    xor     eax,eax
     mov     ebx,w5
     mov     edx,w1
     cmp     ebx,edx
@@ -331,13 +329,13 @@ int Diff(unsigned int w5, unsigned int w1)
     psubusb mm2,mm5
     por     mm1,mm2
     psubusb mm1,treshold
-    movd    eax,mm1
+    movd    result,mm1
 FIN:
   }
-}
-// returns result in eax register
 
-#pragma warning(default: 4035)
+  return result;
+}
+
 
 void DLL hq4x_32( int * pIn, unsigned char * pOut, int Xres, int Yres, int BpL )
 {

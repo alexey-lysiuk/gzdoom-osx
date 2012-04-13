@@ -20,6 +20,10 @@
 #include <string.h>
 #include "Image.h"
 
+#ifndef _MSC_VER
+#define _stricmp strcasecmp
+#endif
+
 DLL CImage::CImage() 
 { 
   m_Xres = m_Yres = m_NumPixel = 0; 
