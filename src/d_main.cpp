@@ -210,6 +210,18 @@ CUSTOM_CVAR (String, vid_cursor, "None", CVAR_ARCHIVE | CVAR_NOINITCALL)
 	}
 }
 
+CUSTOM_CVAR( Int, cl_wipe_delay, 2, CVAR_ARCHIVE )
+{
+	if ( self < 0 )
+	{
+		self = 0;
+	}
+	else if ( self > 2 )
+	{
+		self = 2;
+	}
+}
+
 bool DrawFSHUD;				// [RH] Draw fullscreen HUD?
 TArray<FString> allwads;
 bool devparm;				// started game with -devparm
@@ -897,7 +909,7 @@ void D_Display ()
 		{
 			do
 			{
-				I_WaitVBL(2);
+				I_WaitVBL( cl_wipe_delay );
 				nowtime = I_MSTime();
 				diff = (nowtime - wipestart) * 40 / 1000;	// Using 35 here feels too slow.
 			} while (diff < 1);
