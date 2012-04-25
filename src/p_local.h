@@ -350,7 +350,7 @@ public:
 #define PT_DELTA		8		// x2,y2 is passed as a delta, not as an endpoint
 
 AActor *P_BlockmapSearch (AActor *mo, int distance, AActor *(*check)(AActor*, int, void *), void *params = NULL);
-AActor *P_RoughMonsterSearch (AActor *mo, int distance);
+AActor *P_RoughMonsterSearch (AActor *mo, int distance, bool onlyseekable=false);
 
 //
 // P_MAP
@@ -438,7 +438,7 @@ enum
 	FFCF_ONLYSPAWNPOS = 1,
 	FFCF_SAMESECTOR = 2,
 	FFCF_ONLY3DFLOORS = 4,	// includes 3D midtexes
-	FFCF_3DMIDTEXRESTRICT = 8,	// ignore 3D midtex's whose floorz are above thing's z
+	FFCF_3DRESTRICT = 8,	// ignore 3D midtexes and floors whose floorz are above thing's z
 };
 void	P_FindFloorCeiling (AActor *actor, int flags=0);
 
@@ -461,7 +461,7 @@ void	P_TraceBleed (int damage, fixed_t x, fixed_t y, fixed_t z, AActor *target, 
 void	P_TraceBleed (int damage, AActor *target, angle_t angle, int pitch);
 void	P_TraceBleed (int damage, AActor *target, AActor *missile);		// missile version
 void	P_TraceBleed (int damage, AActor *target);		// random direction version
-void	P_RailAttack (AActor *source, int damage, int offset, int color1 = 0, int color2 = 0, float maxdiff = 0, bool silent = false, const PClass *puff = NULL, bool pierce = true, angle_t angleoffset = 0, angle_t pitchoffset = 0, fixed_t distance = 8192*FRACUNIT, bool fullbright = false, int duration = 35, float sparsity = 1.0, float drift = 1.0, const PClass *spawnclass = NULL);	// [RH] Shoot a railgun
+void	P_RailAttack (AActor *source, int damage, int offset, int color1 = 0, int color2 = 0, float maxdiff = 0, bool silent = false, const PClass *puff = NULL, bool pierce = true, angle_t angleoffset = 0, angle_t pitchoffset = 0, fixed_t distance = 8192*FRACUNIT, bool fullbright = false, int duration = 0, float sparsity = 1.0, float drift = 1.0, const PClass *spawnclass = NULL);	// [RH] Shoot a railgun
 bool	P_HitFloor (AActor *thing);
 bool	P_HitWater (AActor *thing, sector_t *sec, fixed_t splashx = FIXED_MIN, fixed_t splashy = FIXED_MIN, fixed_t splashz=FIXED_MIN, bool checkabove = false, bool alert = true);
 void	P_CheckSplash(AActor *self, fixed_t distance);

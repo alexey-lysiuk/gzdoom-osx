@@ -685,9 +685,11 @@ void P_DrawRailTrail (AActor *source, const FVector3 &start, const FVector3 &end
 			if (!p)
 				return;
 
+			int spiralduration = (duration == 0) ? 35 : duration;
+
 			p->trans = 255;
 			p->ttl = duration;
-			p->fade = FADEFROMTTL(duration);
+			p->fade = FADEFROMTTL(spiralduration);
 			p->size = 3;
 			p->bright = fullbright;
 
@@ -726,7 +728,7 @@ void P_DrawRailTrail (AActor *source, const FVector3 &start, const FVector3 &end
 	if (color2 != -1 && r_rail_trailsparsity > 0 && spawnclass == NULL)
 	{
 		FVector3 trail_step = step * r_rail_trailsparsity * sparsity;
-		int trail_steps = steps * r_rail_trailsparsity / sparsity;
+		int trail_steps = xs_FloorToInt(steps * r_rail_trailsparsity / sparsity);
 
 		color2 = color2 == 0 ? -1 : ParticleColor(color2);
 		FVector3 diff(0, 0, 0);
@@ -734,7 +736,9 @@ void P_DrawRailTrail (AActor *source, const FVector3 &start, const FVector3 &end
 		pos = start;
 		for (i = trail_steps; i; i--)
 		{
-			particle_t *p = JitterParticle (33);
+			// [XA] inner trail uses a different default duration (33).
+			int innerduration = (duration == 0) ? 33 : duration;
+			particle_t *p = JitterParticle (innerduration, drift);
 
 			if (!p)
 				return;

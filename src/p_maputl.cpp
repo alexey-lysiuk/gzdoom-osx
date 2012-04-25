@@ -218,13 +218,13 @@ void P_LineOpening (FLineOpening &open, AActor *actor, const line_t *linedef,
 	// Check 3D floors
 	if (actor != NULL)
 	{
-		P_LineOpening_XFloors(open, actor, linedef, x, y, refx, refy);
+		P_LineOpening_XFloors(open, actor, linedef, x, y, refx, refy, !!(flags & FFCF_3DRESTRICT));
 	}
 
 	if (actor != NULL && linedef->frontsector != NULL && linedef->backsector != NULL && 
 		linedef->flags & ML_3DMIDTEX)
 	{
-		open.touchmidtex = P_LineOpening_3dMidtex(actor, linedef, open, !!(flags & FFCF_3DMIDTEXRESTRICT));
+		open.touchmidtex = P_LineOpening_3dMidtex(actor, linedef, open, !!(flags & FFCF_3DRESTRICT));
 	}
 	else
 	{
@@ -1401,9 +1401,9 @@ FPathTraverse::~FPathTraverse()
 //		distance is in MAPBLOCKUNITS
 //===========================================================================
 
-AActor *P_RoughMonsterSearch (AActor *mo, int distance)
+AActor *P_RoughMonsterSearch (AActor *mo, int distance, bool onlyseekable)
 {
-	return P_BlockmapSearch (mo, distance, RoughBlockCheck);
+	return P_BlockmapSearch (mo, distance, RoughBlockCheck, (void *)onlyseekable);
 }
 
 AActor *P_BlockmapSearch (AActor *mo, int distance, AActor *(*check)(AActor*, int, void *), void *params)
@@ -1501,14 +1501,19 @@ AActor *P_BlockmapSearch (AActor *mo, int distance, AActor *(*check)(AActor*, in
 //
 //===========================================================================
 
-static AActor *RoughBlockCheck (AActor *mo, int index, void *)
+static AActor *RoughBlockCheck (AActor *mo, int index, void *param)
 {
+	bool onlyseekable = param != NULL;
 	FBlockNode *link;
 
 	for (link = blocklinks[index]; link != NULL; link = link->NextActor)
 	{
 		if (link->Me != mo)
 		{
+			if (onlyseekable && !mo->CanSeek(link->Me))
+			{
+				continue;
+			}
 			if (mo->IsOkayToAttack (link->Me))
 			{
 				return link->Me;

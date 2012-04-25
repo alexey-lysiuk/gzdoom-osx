@@ -203,13 +203,13 @@ void P_GetFloorCeilingZ(FCheckPosition &tmf, int flags)
 
 		if (ff_top > tmf.floorz)
 		{
-			if (ff_top < tmf.z || (tmf.thing != NULL && ff_bottom < tmf.z && ff_top < tmf.z + tmf.thing->MaxStepHeight))  
+			if (ff_top <= tmf.z || (!(flags && FFCF_3DRESTRICT) && (tmf.thing != NULL && ff_bottom < tmf.z && ff_top < tmf.z + tmf.thing->MaxStepHeight)))
 			{
 				tmf.dropoffz = tmf.floorz = ff_top;
 				tmf.floorpic = *rover->top.texture;
 			}
 		}
-		if (ff_bottom < tmf.ceilingz && ff_bottom > tmf.z + tmf.thing->height) 
+		if (ff_bottom <= tmf.ceilingz && ff_bottom > tmf.z + tmf.thing->height) 
 		{
 			tmf.ceilingz = ff_bottom;
 			tmf.ceilingpic = *rover->bottom.texture;
@@ -235,7 +235,7 @@ void P_FindFloorCeiling (AActor *actor, int flags)
 
 	if (flags & FFCF_ONLYSPAWNPOS)
 	{
-		flags |= FFCF_3DMIDTEXRESTRICT;
+		flags |= FFCF_3DRESTRICT;
 	}
 	if (!(flags & FFCF_ONLYSPAWNPOS))
 	{
@@ -1561,6 +1561,10 @@ bool P_TestMobjZ (AActor *actor, bool quick, AActor **pOnmobj)
 		{ // Don't clip against self
 			continue;
 		}
+		if ((actor->flags & MF_MISSILE) && thing == actor->target)
+		{ // Don't clip against whoever shot the missile.
+			continue;
+		}
 		if (actor->z > thing->z+thing->height)
 		{ // over thing
 			continue;
@@ -1781,12 +1785,12 @@ bool P_TryMove (AActor *thing, fixed_t x, fixed_t y,
 		}
 		if (!(thing->flags & MF_TELEPORT) && !(thing->flags3 & MF3_FLOORHUGGER))
 		{
-			if (tm.floorz-thing->z > thing->MaxStepHeight)
-			{ // too big a step up
+			if ((thing->flags & MF_MISSILE) && !(thing->flags6 & MF6_STEPMISSILE) && tm.floorz > thing->z)
+			{ // [RH] Don't let normal missiles climb steps
 				goto pushline;
 			}
-			else if ((thing->flags & MF_MISSILE)&& !(thing->flags6 && MF6_STEPMISSILE) && tm.floorz > thing->z)
-			{ // [RH] Don't let normal missiles climb steps
+			if (tm.floorz-thing->z > thing->MaxStepHeight)
+			{ // too big a step up
 				goto pushline;
 			}
 			else if (thing->z < tm.floorz)
@@ -3945,8 +3949,11 @@ void P_RailAttack (AActor *source, int damage, int offset, int color1, int color
 		{
 			spawnpuff = (puffclass != NULL && puffDefaults->flags3 & MF3_ALWAYSPUFF);
 			puffflags |= PF_HITTHINGBLEED; // [XA] Allow for puffs to jump to XDeath state.
-			P_SpawnBlood (x, y, z, (source->angle + angleoffset) - ANG180, damage, RailHits[i].HitActor);
-			P_TraceBleed (damage, x, y, z, RailHits[i].HitActor, source->angle, pitch);
+			if(!(puffDefaults->flags3 & MF3_BLOODLESSIMPACT)) 
+			{
+				P_SpawnBlood (x, y, z, (source->angle + angleoffset) - ANG180, damage, RailHits[i].HitActor);
+				P_TraceBleed (damage, x, y, z, RailHits[i].HitActor, source->angle, pitch);
+			}
 		}
 		if (spawnpuff)
 			P_SpawnPuff (source, puffclass, x, y, z, (source->angle + angleoffset) - ANG90, 1, puffflags);

@@ -192,7 +192,7 @@ void ClientObituary (AActor *self, AActor *inflictor, AActor *attacker)
 	gender = self->player->userinfo.gender;
 
 	// Treat voodoo dolls as unknown deaths
-	if (inflictor && inflictor->player == self->player)
+	if (inflictor && inflictor->player && inflictor->player->mo != inflictor)
 		MeansOfDeath = NAME_None;
 
 	if (multiplayer && !deathmatch)
@@ -226,6 +226,12 @@ void ClientObituary (AActor *self, AActor *inflictor, AActor *attacker)
 	case NAME_Drowning:		messagename = "OB_WATER";		break;
 	case NAME_Slime:		messagename = "OB_SLIME";		break;
 	case NAME_Fire:			if (attacker == NULL) messagename = "OB_LAVA";		break;
+	}
+
+	// Check for being killed by a voodoo doll.
+	if (inflictor && inflictor->player && inflictor->player->mo != inflictor)
+	{
+		messagename = "OB_VOODOO";
 	}
 
 	if (messagename != NULL)
@@ -984,7 +990,14 @@ void P_DamageMobj (AActor *target, AActor *inflictor, AActor *source, int damage
 			int olddam = damage;
 			source->Inventory->ModifyDamage(olddam, mod, damage, false);
 			if (olddam != damage && damage <= 0)
+			{ // Still allow FORCEPAIN
+				if (!(target->flags5 & MF5_NOPAIN) && inflictor != NULL &&
+					(inflictor->flags6 & MF6_FORCEPAIN) && !(inflictor->flags5 & MF5_PAINLESS))
+				{
+					goto dopain;
+				}
 				return;
+			}
 		}
 		// Handle passive damage modifiers (e.g. PowerProtection)
 		if (target->Inventory != NULL)
@@ -992,17 +1005,32 @@ void P_DamageMobj (AActor *target, AActor *inflictor, AActor *source, int damage
 			int olddam = damage;
 			target->Inventory->ModifyDamage(olddam, mod, damage, true);
 			if (olddam != damage && damage <= 0)
+			{ // Still allow FORCEPAIN
+				if (!(target->flags5 & MF5_NOPAIN) && inflictor != NULL &&
+					(inflictor->flags6 & MF6_FORCEPAIN) && !(inflictor->flags5 & MF5_PAINLESS))
+				{
+					goto dopain;
+				}
 				return;
+			}
 		}
 
 		if (!(flags & DMG_NO_FACTOR))
 		{
 			damage = FixedMul(damage, target->DamageFactor);
-			if (damage < 0)
-				return;
-			damage = DamageTypeDefinition::ApplyMobjDamageFactor(damage, mod, target->GetClass()->ActorInfo->DamageFactors);
+			if (damage >= 0)
+			{
+				damage = DamageTypeDefinition::ApplyMobjDamageFactor(damage, mod, target->GetClass()->ActorInfo->DamageFactors);
+			}
 			if (damage <= 0)
+			{ // Still allow FORCEPAIN
+				if (!(target->flags5 & MF5_NOPAIN) && inflictor != NULL &&
+					(inflictor->flags6 & MF6_FORCEPAIN) && !(inflictor->flags5 & MF5_PAINLESS))
+				{
+					goto dopain;
+				}
 				return;
+			}
 		}
 
 		damage = target->TakeSpecialDamage (inflictor, source, damage, mod);
@@ -1133,8 +1161,11 @@ void P_DamageMobj (AActor *target, AActor *inflictor, AActor *source, int damage
 				if (damage <= 0)
 				{
 					// If MF6_FORCEPAIN is set, make the player enter the pain state.
-					if (inflictor != NULL && (inflictor->flags6 & MF6_FORCEPAIN))
-						goto dopain;
+				if (!(target->flags5 & MF5_NOPAIN) && inflictor != NULL &&
+					(inflictor->flags6 & MF6_FORCEPAIN) && !(inflictor->flags5 & MF5_PAINLESS))
+				{
+					goto dopain;
+				}
 					return;
 				}
 			}

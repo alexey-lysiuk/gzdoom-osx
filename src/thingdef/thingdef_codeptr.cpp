@@ -501,9 +501,15 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_SeekerMissile)
 
 	if ((flags & SMF_LOOK) && (self->tracer == 0) && (pr_seekermissile()<chance))
 	{
-		self->tracer = P_RoughMonsterSearch (self, distance);
+		self->tracer = P_RoughMonsterSearch (self, distance, true);
 	}
-	P_SeekerMissile(self, clamp<int>(ang1, 0, 90) * ANGLE_1, clamp<int>(ang2, 0, 90) * ANGLE_1, !!(flags & SMF_PRECISE), !!(flags & SMF_CURSPEED));
+	if (!P_SeekerMissile(self, clamp<int>(ang1, 0, 90) * ANGLE_1, clamp<int>(ang2, 0, 90) * ANGLE_1, !!(flags & SMF_PRECISE), !!(flags & SMF_CURSPEED)))
+	{
+		if (flags & SMF_LOOK)
+		{ // This monster is no longer seekable, so let us look for another one next time.
+			self->tracer = NULL;
+		}
+	}
 }
 
 //==========================================================================
@@ -919,7 +925,7 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_CustomMissile)
 							pitch += R_PointToAngle2(0,0, (fixed_t)velocity.Length(), missile->velz);
 					}
 					ang = pitch >> ANGLETOFINESHIFT;
-					missilespeed = FixedMul(finecosine[ang], missile->Speed);
+					missilespeed = abs(FixedMul(finecosine[ang], missile->Speed));
 					missile->velz = FixedMul(finesine[ang], missile->Speed);
 				}
 				else
@@ -1401,7 +1407,6 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_RailAttack)
 	ACTION_PARAM_CLASS(SpawnClass, 14);
 	
 	if(Range==0) Range=8192*FRACUNIT;
-	if(Duration==0) Duration=35;
 	if(Sparsity==0) Sparsity=1.0;
 
 	if (!self->player) return;
@@ -1464,7 +1469,6 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_CustomRailgun)
 	ACTION_PARAM_CLASS(SpawnClass, 14);
 
 	if(Range==0) Range=8192*FRACUNIT;
-	if(Duration==0) Duration=35;
 	if(Sparsity==0) Sparsity=1.0;
 
 	AActor *linetarget;

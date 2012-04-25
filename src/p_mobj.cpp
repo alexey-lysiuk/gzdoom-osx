@@ -1884,8 +1884,6 @@ fixed_t P_XYMovement (AActor *mo, fixed_t scrollx, fixed_t scrolly)
 						goto explode;
 					}
 
-
-
 					// Reflect the missile along angle
 					mo->angle = angle;
 					angle >>= ANGLETOFINESHIFT;
@@ -2487,7 +2485,7 @@ void P_NightmareRespawn (AActor *mobj)
 	}
 
 	// If there are 3D floors, we need to find floor/ceiling again.
-	P_FindFloorCeiling(mo, FFCF_SAMESECTOR | FFCF_ONLY3DFLOORS | FFCF_3DMIDTEXRESTRICT);
+	P_FindFloorCeiling(mo, FFCF_SAMESECTOR | FFCF_ONLY3DFLOORS | FFCF_3DRESTRICT);
 
 	if (z == ONFLOORZ)
 	{
@@ -4098,9 +4096,12 @@ APlayerPawn *P_SpawnPlayer (FMapThing *mthing, bool tempplayer)
     mobj->id = playernum;
 
 	// [RH] Set player sprite based on skin
-	mobj->sprite = skins[p->userinfo.skin].sprite;
-	mobj->scaleX = skins[p->userinfo.skin].ScaleX;
-	mobj->scaleY = skins[p->userinfo.skin].ScaleY;
+	if (!(mobj->flags4 & MF4_NOSKIN))
+	{
+		mobj->sprite = skins[p->userinfo.skin].sprite;
+		mobj->scaleX = skins[p->userinfo.skin].ScaleX;
+		mobj->scaleY = skins[p->userinfo.skin].ScaleY;
+	}
 
 	p->DesiredFOV = p->FOV = 90.f;
 	p->camera = p->mo;
@@ -4516,7 +4517,7 @@ AActor *P_SpawnMapThing (FMapThing *mthing, int position)
 	mobj->SpawnPoint[2] = mthing->z;
 	mobj->SpawnAngle = mthing->angle;
 	mobj->SpawnFlags = mthing->flags;
-	P_FindFloorCeiling(mobj, FFCF_ONLYSPAWNPOS);
+	P_FindFloorCeiling(mobj, FFCF_SAMESECTOR | FFCF_ONLY3DFLOORS | FFCF_3DRESTRICT);
 
 	if (!(mobj->flags2 & MF2_ARGSDEFINED))
 	{
@@ -4660,6 +4661,7 @@ void P_SpawnBlood (fixed_t x, fixed_t y, fixed_t z, angle_t dir, int damage, AAc
 		// Moved out of the blood actor so that replacing blood is easier
 		if (gameinfo.gametype & GAME_DoomStrifeChex)
 		{
+			FState *state = th->FindState(NAME_Spray);
 			if (gameinfo.gametype == GAME_Strife)
 			{
 				if (damage > 13)
@@ -4667,18 +4669,41 @@ void P_SpawnBlood (fixed_t x, fixed_t y, fixed_t z, angle_t dir, int damage, AAc
 					FState *state = th->FindState(NAME_Spray);
 					if (state != NULL) th->SetState (state);
 				}
-				else damage+=2;
+				else damage += 2;
 			}
+			int advance = 0;
 			if (damage <= 12 && damage >= 9)
 			{
-				th->SetState (th->SpawnState + 1);
+				advance = 1;
 			}
 			else if (damage < 9)
 			{
-				th->SetState (th->SpawnState + 2);
+				advance = 2;
+			}
+
+			PClass *cls = th->GetClass();
+
+			while (cls != RUNTIME_CLASS(AActor))
+			{
+				FActorInfo *ai = cls->ActorInfo;
+				if (ai->OwnsState(th->SpawnState))
+				{
+					for (; advance > 0; --advance)
+					{
+						// [RH] Do not set to a state we do not own.
+						if (!ai->OwnsState(th->SpawnState + advance))
+						{
+							th->SetState(th->SpawnState + advance);
+							goto statedone;
+						}
+					}
+				}
+				cls = cls->ParentClass;
 			}
 		}
 	}
+
+statedone:
 
 	if (bloodtype >= 1)
 		P_DrawSplash2 (40, x, y, z, dir, 2, bloodcolor);

@@ -68,6 +68,8 @@
 		8A19382C150A5F38003ED92C /* HID_Name_Lookup.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A422113150A0478001D28A0 /* HID_Name_Lookup.c */; };
 		8A19382D150A5F3B003ED92C /* HID_Error_Handler.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A422112150A0478001D28A0 /* HID_Error_Handler.c */; };
 		8A3AC15B14BE294E000D402B /* GZDoom.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A3AC15A14BE294E000D402B /* GZDoom.xib */; };
+		8A3DA66D1547DB5100D1302A /* thingdef_function.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A3DA66C1547DB5100D1302A /* thingdef_function.cpp */; };
+		8A3DA66E1547DB5100D1302A /* thingdef_function.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A3DA66C1547DB5100D1302A /* thingdef_function.cpp */; };
 		8A42210D150A0458001D28A0 /* libhid_utilities_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A422108150A0420001D28A0 /* libhid_utilities_gzdoom.a */; };
 		8A422121150A0478001D28A0 /* HID_Queue_Utilities.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A422114150A0478001D28A0 /* HID_Queue_Utilities.c */; };
 		8A422122150A0478001D28A0 /* HID_Utilities.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A422115150A0478001D28A0 /* HID_Utilities.c */; };
@@ -1306,6 +1308,8 @@
 		49A94D1514F4FCC8008312F3 /* gl_auxilium.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gl_auxilium.h; sourceTree = "<group>"; };
 		49E9287713978BF600CCEBBC /* doom.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = doom.icns; sourceTree = "<group>"; };
 		8A3AC15A14BE294E000D402B /* GZDoom.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GZDoom.xib; sourceTree = "<group>"; };
+		8A3DA66C1547DB5100D1302A /* thingdef_function.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = thingdef_function.cpp; sourceTree = "<group>"; };
+		8A3DA6941547DC2A00D1302A /* gl_builddraw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gl_builddraw.cpp; sourceTree = "<group>"; };
 		8A422108150A0420001D28A0 /* libhid_utilities_gzdoom.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libhid_utilities_gzdoom.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A422111150A0478001D28A0 /* HID_Config_Utilities.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = HID_Config_Utilities.c; sourceTree = "<group>"; };
 		8A422112150A0478001D28A0 /* HID_Error_Handler.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = HID_Error_Handler.c; sourceTree = "<group>"; };
@@ -3762,6 +3766,7 @@
 				8AF27E41139126C00095D9A0 /* system */,
 				8AF27E4C139126C00095D9A0 /* textures */,
 				8AF27E5C139126C00095D9A0 /* utility */,
+				8A3DA6941547DC2A00D1302A /* gl_builddraw.cpp */,
 				8AF27E0E139126C00095D9A0 /* gl_functions.h */,
 			);
 			path = gl;
@@ -4133,6 +4138,7 @@
 				8AF27FA2139126C00095D9A0 /* thingdef_exp.cpp */,
 				8AF27FA3139126C00095D9A0 /* thingdef_exp.h */,
 				8AF27FA4139126C00095D9A0 /* thingdef_expression.cpp */,
+				8A3DA66C1547DB5100D1302A /* thingdef_function.cpp */,
 				8AF27FA5139126C00095D9A0 /* thingdef_parse.cpp */,
 				8AF27FA6139126C00095D9A0 /* thingdef_properties.cpp */,
 				8AF27FA7139126C00095D9A0 /* thingdef_states.cpp */,
@@ -5040,6 +5046,7 @@
 				8A9F544914BB0F2900F3369B /* thingdef_data.cpp in Sources */,
 				8A9F544A14BB0F2900F3369B /* thingdef_exp.cpp in Sources */,
 				8A9F544B14BB0F2900F3369B /* thingdef_expression.cpp in Sources */,
+				8A3DA66D1547DB5100D1302A /* thingdef_function.cpp in Sources */,
 				8A9F544C14BB0F2900F3369B /* thingdef_parse.cpp in Sources */,
 				8A9F544D14BB0F2900F3369B /* thingdef_properties.cpp in Sources */,
 				8A9F544E14BB0F2900F3369B /* thingdef_states.cpp in Sources */,
@@ -5678,6 +5685,7 @@
 				8AF281B0139126C10095D9A0 /* thingdef_data.cpp in Sources */,
 				8AF281B1139126C10095D9A0 /* thingdef_exp.cpp in Sources */,
 				8AF281B2139126C10095D9A0 /* thingdef_expression.cpp in Sources */,
+				8A3DA66E1547DB5100D1302A /* thingdef_function.cpp in Sources */,
 				8AF281B3139126C10095D9A0 /* thingdef_parse.cpp in Sources */,
 				8AF281B4139126C10095D9A0 /* thingdef_properties.cpp in Sources */,
 				8AF281B5139126C10095D9A0 /* thingdef_states.cpp in Sources */,
