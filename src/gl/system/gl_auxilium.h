@@ -37,6 +37,8 @@
 
 #include "gl/system/gl_framebuffer.h"
 
+#include <pthread.h>
+
 
 namespace GLAuxilium
 {
@@ -425,7 +427,12 @@ public:
 	
 	static BackBuffer* GetInstance();
 	
+	static BackBuffer* LockInstance();
+	void UnlockInstance();
+	
 	PostProcess& GetPostProcess();
+	
+	void DrawToFront();
 	
 	
 	struct Parameters
@@ -445,20 +452,25 @@ public:
 	void SetGammaTable( const uint16_t* red, const uint16_t* green, const uint16_t* blue );
 	
 private:
-	static BackBuffer*  s_instance;
+	static BackBuffer*     s_instance;
+	static pthread_mutex_t s_instanceMutex;
 	
-	RenderTarget        m_renderTarget;
-	ShaderProgram       m_gammaProgram;
+	RenderTarget           m_renderTarget;
+	//RenderTarget           m_copyRenderTarget;
 	
-	Texture1D           m_gammaTexture;
+	Texture2D              m_copyTexture;
+	pthread_mutex_t        m_copyTextureMutex;
 	
-	static const size_t GAMMA_TABLE_SIZE = 256;
-	uint32_t            m_gammaTable[ GAMMA_TABLE_SIZE ];
+	ShaderProgram          m_gammaProgram;
+	Texture1D              m_gammaTexture;
 	
-	PostProcess         m_postProcess;
+	static const size_t    GAMMA_TABLE_SIZE = 256;
+	uint32_t               m_gammaTable[ GAMMA_TABLE_SIZE ];
 	
-	static Parameters   s_parameters;
+	PostProcess            m_postProcess;
 	
+	static Parameters      s_parameters;
+
 	void DrawRenderTarget();
 	
 }; // class BackBuffer

@@ -502,7 +502,8 @@ CapabilityChecker::CapabilityChecker()
 // ---------------------------------------------------------------------------
 
 
-BackBuffer* BackBuffer::s_instance;
+BackBuffer*     BackBuffer::s_instance;
+pthread_mutex_t BackBuffer::s_instanceMutex = PTHREAD_MUTEX_INITIALIZER;
 
 
 BackBuffer::Parameters BackBuffer::s_parameters = 
@@ -526,13 +527,15 @@ BackBuffer::BackBuffer( int width, int height, bool fullscreen )
 , m_gammaProgram( NULL, "shaders/glsl/gamma_correction.fp" )
 , m_postProcess( &m_renderTarget )
 {
-	s_instance = this;
-		
 	const bool isScaled = fabsf( s_parameters.pixelScale - 1.0f ) > 0.01f;
 	
 	m_renderTarget.GetColorTexture().SetFilter( isScaled 
 		? TEXTURE_FILTER_LINEAR 
 		: TEXTURE_FILTER_NEAREST );
+	
+	m_copyTexture.SetFilter( TEXTURE_FILTER_NEAREST );
+	
+	pthread_mutex_init( &m_copyTextureMutex, NULL );
 	
 	// Create gamma correction texture
 	
@@ -548,11 +551,19 @@ BackBuffer::BackBuffer( int width, int height, bool fullscreen )
 	
 	m_gammaProgram.SetUniform( "backbuffer", 0 );
 	m_gammaProgram.SetUniform( "gammaTable", 1 );
+	
+	pthread_mutex_lock( &s_instanceMutex );
+	s_instance = this;
+	pthread_mutex_unlock( &s_instanceMutex );
 }
 
 BackBuffer::~BackBuffer()
 {
+	pthread_mutex_lock( &s_instanceMutex );
 	s_instance = NULL;
+	pthread_mutex_unlock( &s_instanceMutex );
+	
+	pthread_mutex_destroy( &m_copyTextureMutex );
 }
 
 
@@ -579,9 +590,22 @@ void BackBuffer::Update()
 	DrawRateStuff();
 	GLRenderer->Flush();
 	
-	DrawRenderTarget();
+	//m_workRenderTarget.Unbind();
 	
-	Swap();
+	pthread_mutex_lock( &m_copyTextureMutex );
+	m_copyTexture.Bind();
+	
+	glCopyTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, 0, 0, Width, Height, 0 );
+	gl.Finish();
+	
+	m_copyTexture.Unbind();
+	pthread_mutex_unlock( &m_copyTextureMutex );
+	
+	m_renderTarget.Unbind();
+	
+//	DrawRenderTarget();
+//	
+//	Swap();
 	Unlock();
 	
 	CheckBench();
@@ -590,11 +614,13 @@ void BackBuffer::Update()
 
 void BackBuffer::GetScreenshotBuffer( const BYTE*& buffer, int& pitch, ESSType& color_type )
 {
+//	pthread_mutex_lock( &m_copyTextureMutex );
+
 	m_renderTarget.Bind();
-	
 	Super::GetScreenshotBuffer( buffer, pitch, color_type );
-	
 	m_renderTarget.Unbind();
+	
+//	pthread_mutex_unlock( &m_copyTextureMutex );
 }
 
 
@@ -603,20 +629,56 @@ BackBuffer* BackBuffer::GetInstance()
 	return s_instance;
 }
 
+BackBuffer* BackBuffer::LockInstance()
+{
+	if ( NULL != s_instance )
+	{
+		pthread_mutex_lock( &s_instanceMutex );
+	}
+	
+	return s_instance;
+}
+
+void BackBuffer::UnlockInstance()
+{
+	assert( NULL != s_instance );
+	
+	pthread_mutex_unlock( &s_instanceMutex );
+}
+
+
 PostProcess& BackBuffer::GetPostProcess()
 {
 	return m_postProcess;
 }
 
+
+void BackBuffer::DrawToFront()
+{
+	pthread_mutex_lock( &m_copyTextureMutex );
+	DrawRenderTarget();
+//	Swap();
+	pthread_mutex_unlock( &m_copyTextureMutex );
 	
+	Swap();
+}
+
 void BackBuffer::DrawRenderTarget()
 {
-	m_renderTarget.Unbind();
+	//m_renderTarget.Unbind();
 	
-	Texture2D& colorTexture = m_renderTarget.GetColorTexture();
+	//Texture2D& colorTexture = m_copyRenderTarget.GetColorTexture();
 	
 	gl.ActiveTexture( GL_TEXTURE0 );
-	colorTexture.Bind();
+	//colorTexture.Bind();
+	m_copyTexture.Bind();
+/*
+	static bool dump;
+	if (dump)
+	{
+		m_copyTexture.SaveAsPNG( "/Volumes/ramdisk/test.png" );
+	}
+*/
 	gl.ActiveTexture( GL_TEXTURE1 );
 	m_gammaTexture.Bind();
 	gl.ActiveTexture( GL_TEXTURE0 );
@@ -627,10 +689,12 @@ void BackBuffer::DrawRenderTarget()
 	gl.Viewport( s_parameters.shiftX, s_parameters.shiftY, s_parameters.width, s_parameters.height );
 	
 	m_gammaProgram.Bind();
-	colorTexture.Draw2D( Width, Height );
+	//colorTexture.Draw2D( Width, Height );
+	m_copyTexture.Draw2D( Width, Height );
 	m_gammaProgram.Unbind();
 	
 	gl.Viewport( viewport[0], viewport[1], viewport[2], viewport[3] );
+	//gl.Viewport( 0, 0, 1280, 800 );
 }
 
 

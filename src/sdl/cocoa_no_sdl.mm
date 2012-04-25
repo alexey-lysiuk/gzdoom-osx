@@ -675,17 +675,112 @@ void ProcessMouseWheelEvent( NSEvent* theEvent )
 // ---------------------------------------------------------------------------
 
 
-@interface FullscreenView : NSOpenGLView
+@interface FullscreenView : NSView
 {
-
+@private
+	NSOpenGLPixelFormat* m_pixelFormat;
+	
+	NSOpenGLContext*     m_mainOpenGLContext;
+	NSOpenGLContext*     m_renderOpenGLContext;
+	
 }
+
+- (id)initWithFrame:(NSRect)frameRect pixelFormat:(NSOpenGLPixelFormat*)format;
+- (void)dealloc;
+
+- (void)lockFocus;
+- (void)update;
+
+- (BOOL)isOpaque;
+
+- (NSOpenGLContext*)mainOpenGLContext;
+- (NSOpenGLContext*)renderOpenGLContext;
 
 - (void)resetCursorRects;
 
 @end
 
 
+static FullscreenView* s_openGLView;
+
+
 @implementation FullscreenView
+
+- (id)initWithFrame:(NSRect)frameRect pixelFormat:(NSOpenGLPixelFormat*)format
+{
+	self = [super initWithFrame:frameRect];
+	
+	if ( nil != self )
+	{
+        m_pixelFormat         = format; //[format retain];
+		
+		m_mainOpenGLContext   = [[NSOpenGLContext alloc] initWithFormat:m_pixelFormat shareContext:nil];
+		m_renderOpenGLContext = [[NSOpenGLContext alloc] initWithFormat:m_pixelFormat shareContext:m_mainOpenGLContext];
+		
+		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(viewFrameUpdated:)
+													 name:NSViewGlobalFrameDidChangeNotification
+												   object:self];
+		
+		s_openGLView = self;
+    }
+	
+    return self;
+}
+
+- (void)viewFrameUpdated:(NSNotification*)notification
+{
+	[self update];
+}
+
+- (void)dealloc
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self 
+													name:NSViewGlobalFrameDidChangeNotification
+												  object:self];
+	
+	[m_renderOpenGLContext dealloc];
+	[m_mainOpenGLContext dealloc];
+	
+	[m_pixelFormat release];
+	
+	[super dealloc];
+}
+
+- (void)lockFocus
+{
+	// make sure we are ready to draw
+	[super lockFocus];
+	
+	// when we are about to draw, make sure we are linked to the view
+	// It is not possible to call setView: earlier (will yield 'invalid drawable')
+	if ( self != [m_renderOpenGLContext view] )
+	{
+		[m_renderOpenGLContext setView:self];
+	}
+}
+
+- (void)update
+{
+	[m_renderOpenGLContext update];
+}
+
+- (BOOL)isOpaque
+{
+	return YES;
+}
+
+
+- (NSOpenGLContext*)mainOpenGLContext
+{
+	return m_mainOpenGLContext;
+}
+
+- (NSOpenGLContext*)renderOpenGLContext
+{
+	return m_renderOpenGLContext;
+}
+
 
 - (void)resetCursorRects
 {
@@ -700,10 +795,94 @@ void ProcessMouseWheelEvent( NSEvent* theEvent )
 // ---------------------------------------------------------------------------
 
 
+pthread_t s_renderThread;
+
+
+static void* RenderThreadFunc( void* )
+{
+	while ( true )
+	{
+		//		if ( g_exitRequested )
+		//		{
+		//			//ST_Endoom(); // never returns
+		//			
+		//			pthread_join( s_gameThread, NULL );
+		//			
+		//			return;
+		//		}
+		
+		GLAuxilium::BackBuffer* const backBuffer = GLAuxilium::BackBuffer::LockInstance();
+		
+		if ( NULL == backBuffer || NULL == s_openGLView )
+		{
+			usleep( 1000 );
+		}
+		else
+		{
+			static bool isInitialized;
+			
+			if ( !isInitialized )
+			{
+//				[[s_openGLView openGLContext] makeCurrentContext];
+				[[s_openGLView renderOpenGLContext] makeCurrentContext];
+				
+				gl.MatrixMode( GL_MODELVIEW );
+				gl.LoadIdentity();
+				gl.MatrixMode( GL_PROJECTION );
+				gl.LoadIdentity();
+				gl.Ortho( 0.0, backBuffer->GetWidth(), backBuffer->GetHeight(), 0.0, -1.0, 1.0 );
+				
+				gl.Enable( GL_TEXTURE_2D );
+				
+				isInitialized = true;
+				
+				
+				
+				backBuffer->SetVSync(true);
+			}
+			
+			//			frameBuffer->DrawRenderTarget();
+			//			frameBuffer->Swap();
+			/*			
+			 frameBuffer->SetVSync( true );
+			 frameBuffer->DrawToFront();
+			 */
+			
+			StackAutoreleasePool pool;
+			
+			if ( [s_openGLView lockFocusIfCanDraw] )
+			{
+				backBuffer->DrawToFront();
+				backBuffer->UnlockInstance();
+				
+				//[[s_openGLView renderOpenGLContext] flushBuffer];
+				//[[s_openGLView renderOpenGLContext] flushBuffer];
+				[s_openGLView unlockFocus];
+			}
+			else
+			{
+				//asm("nop");
+				usleep( 1000 );
+			}
+		}
+		
+		//[[NSRunLoop mainRunLoop] limitDateForMode:NSDefaultRunLoopMode];
+		//usleep(1000);
+	}
+	
+	return NULL;
+}
+
+
+// ---------------------------------------------------------------------------
+
+
 @interface ApplicationDelegate : NSResponder
 {
 @private
     FullscreenWindow* m_window;
+	
+	//NSOpenGLContext* m_renderContext;
 	
 	bool m_openGLInitialized;
 	int  m_multisample;
@@ -730,6 +909,8 @@ void ProcessMouseWheelEvent( NSEvent* theEvent )
 
 - (void)invalidateCursorRects;
 
+//- (NSOpenGLContext*)renderContext;
+
 @end
 
 
@@ -743,6 +924,8 @@ static ApplicationDelegate* s_applicationDelegate;
 	StackAutoreleasePool pool;
 	
 	self = [super init];
+	
+//	m_renderContext     = nil;
 	
 	m_openGLInitialized = false;
 	m_multisample       = 0;
@@ -762,6 +945,8 @@ static ApplicationDelegate* s_applicationDelegate;
 
 - (void)dealloc
 {
+//	[m_renderContext release];
+	
 	[m_window release];
 	
 	[super dealloc];
@@ -861,12 +1046,18 @@ static ApplicationDelegate* s_applicationDelegate;
 	
 	attributes[i] = 0;
 	
-	NSOpenGLPixelFormat *pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:attributes];
+	NSOpenGLPixelFormat* pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:attributes];
 	
 	const NSRect contentRect = [m_window contentRectForFrameRect:[m_window frame]];
-	NSOpenGLView* glView = [[FullscreenView alloc] initWithFrame:contentRect
-													 pixelFormat:pixelFormat];
-	[[glView openGLContext] makeCurrentContext];
+	FullscreenView* glView = [[FullscreenView alloc] initWithFrame:contentRect
+													   pixelFormat:pixelFormat];
+	
+//	NSOpenGLContext* mainThreadContext = [glView openGLContext];
+//	[mainThreadContext makeCurrentContext];
+
+	[[glView mainOpenGLContext] makeCurrentContext];
+	
+//	m_renderContext = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:mainThreadContext];
 	
 	[m_window setContentView:glView];
 	
@@ -874,6 +1065,8 @@ static ApplicationDelegate* s_applicationDelegate;
 	
 	GetContext( gl );
 	gl.LoadExtensions();
+	
+	pthread_create( &s_renderThread, NULL, RenderThreadFunc, NULL );
 }
 
 - (void)changeVideoResolution:(bool)fullscreen width:(int)width height:(int)height
@@ -881,8 +1074,6 @@ static ApplicationDelegate* s_applicationDelegate;
 	StackAutoreleasePool pool;
 	
 	[self initializeOpenGL];
-	
-	CGLContextObj context = CGLGetCurrentContext();
 	
 	GLAuxilium::BackBuffer::Parameters& backbufferParameters = GLAuxilium::BackBuffer::GetParameters();
 	
@@ -926,13 +1117,13 @@ static ApplicationDelegate* s_applicationDelegate;
 		[m_window center];
 	}
 	
-	const NSRect viewRect = [[m_window contentView] frame];
+//	const NSRect viewRect = [[m_window contentView] frame];
 	
-	gl.Viewport( 0, 0, viewRect.size.width, viewRect.size.height );
-	gl.ClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
-	gl.Clear( GL_COLOR_BUFFER_BIT );
+//	gl.Viewport( 0, 0, viewRect.size.width, viewRect.size.height );
+//	gl.ClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+//	gl.Clear( GL_COLOR_BUFFER_BIT );
 	
-	CGLFlushDrawable( context );
+//	CGLFlushDrawable( CGLGetCurrentContext() );
 	
 	static NSString* const TITLE_STRING = 
 		[NSString stringWithUTF8String:GAMESIG " " DOTVERSIONSTR " (" __DATE__ ")"];
@@ -1009,6 +1200,12 @@ static ApplicationDelegate* s_applicationDelegate;
 {
 	[m_window invalidateCursorRectsForView:[m_window contentView]];
 }
+
+
+//- (NSOpenGLContext*)renderContext
+//{
+//	return m_renderContext;
+//}
 
 @end
 
@@ -1173,7 +1370,7 @@ void InitTimer()
 
 void ReleaseTimer()
 {
-	s_timerExitRequested	= true;
+	s_timerExitRequested = true;
 	
 	pthread_join( s_timerThread, NULL );
 	

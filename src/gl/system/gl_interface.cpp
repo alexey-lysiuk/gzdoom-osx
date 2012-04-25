@@ -864,7 +864,8 @@ static void APIENTRY iSwapBuffers()
 static BOOL APIENTRY SetVSync( int vsync )
 {
 #if defined (__APPLE__)
-	return kCGLNoError == CGLSetParameter( CGLGetCurrentContext(), kCGLCPSwapInterval, &vsync );
+	//return kCGLNoError == CGLSetParameter( CGLGetCurrentContext(), kCGLCPSwapInterval, &vsync );
+	return false;
 #else // !__APPLE__
 	// empty placeholder
 	return false;
