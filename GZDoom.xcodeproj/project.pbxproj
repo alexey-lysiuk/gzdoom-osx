@@ -67,6 +67,21 @@
 		49E9287913978BF600CCEBBC /* doom.icns in Resources */ = {isa = PBXBuildFile; fileRef = 49E9287713978BF600CCEBBC /* doom.icns */; };
 		8A19382C150A5F38003ED92C /* HID_Name_Lookup.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A422113150A0478001D28A0 /* HID_Name_Lookup.c */; };
 		8A19382D150A5F3B003ED92C /* HID_Error_Handler.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A422112150A0478001D28A0 /* HID_Error_Handler.c */; };
+		8A1D337E154D6E1300BA2C16 /* libfluidsynth.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A1D337D154D6E0700BA2C16 /* libfluidsynth.a */; };
+		8A1D337F154D6E2300BA2C16 /* libfluidsynth.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A1D337D154D6E0700BA2C16 /* libfluidsynth.a */; };
+		8A1D33A4154D6EA100BA2C16 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F450139252F9001F54B0 /* AudioUnit.framework */; };
+		8A1D33A8154D6EC000BA2C16 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A1D33A7154D6EC000BA2C16 /* CoreMIDI.framework */; };
+		8A1D33B3154D6EEF00BA2C16 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A1D33B2154D6EEF00BA2C16 /* CoreAudio.framework */; };
+		8A1D33BF154D6F1800BA2C16 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A1D33B2154D6EEF00BA2C16 /* CoreAudio.framework */; };
+		8A1D33C0154D6F1800BA2C16 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A1D33A7154D6EC000BA2C16 /* CoreMIDI.framework */; };
+		8A1D33E2154D6F8900BA2C16 /* libglib-2.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A1D33E1154D6F8900BA2C16 /* libglib-2.0.a */; };
+		8A1D33E3154D6F8900BA2C16 /* libglib-2.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A1D33E1154D6F8900BA2C16 /* libglib-2.0.a */; };
+		8A1D33E7154D6FD200BA2C16 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A1D33E6154D6FD200BA2C16 /* libiconv.dylib */; };
+		8A1D33E8154D6FF900BA2C16 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A1D33E6154D6FD200BA2C16 /* libiconv.dylib */; };
+		8A1D33EE154D702000BA2C16 /* libgthread-2.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A1D33EC154D702000BA2C16 /* libgthread-2.0.a */; };
+		8A1D33EF154D702000BA2C16 /* libintl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A1D33ED154D702000BA2C16 /* libintl.a */; };
+		8A1D33F0154D702000BA2C16 /* libgthread-2.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A1D33EC154D702000BA2C16 /* libgthread-2.0.a */; };
+		8A1D33F1154D702000BA2C16 /* libintl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A1D33ED154D702000BA2C16 /* libintl.a */; };
 		8A3AC15B14BE294E000D402B /* GZDoom.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A3AC15A14BE294E000D402B /* GZDoom.xib */; };
 		8A3DA66D1547DB5100D1302A /* thingdef_function.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A3DA66C1547DB5100D1302A /* thingdef_function.cpp */; };
 		8A3DA66E1547DB5100D1302A /* thingdef_function.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A3DA66C1547DB5100D1302A /* thingdef_function.cpp */; };
@@ -1307,6 +1322,13 @@
 		49A94D1414F4FCC8008312F3 /* gl_auxilium.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gl_auxilium.cpp; sourceTree = "<group>"; };
 		49A94D1514F4FCC8008312F3 /* gl_auxilium.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gl_auxilium.h; sourceTree = "<group>"; };
 		49E9287713978BF600CCEBBC /* doom.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = doom.icns; sourceTree = "<group>"; };
+		8A1D337D154D6E0700BA2C16 /* libfluidsynth.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfluidsynth.a; path = thirdparty/fluidsynth/lib/libfluidsynth.a; sourceTree = "<group>"; };
+		8A1D33A7154D6EC000BA2C16 /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = System/Library/Frameworks/CoreMIDI.framework; sourceTree = SDKROOT; };
+		8A1D33B2154D6EEF00BA2C16 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		8A1D33E1154D6F8900BA2C16 /* libglib-2.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libglib-2.0.a"; path = "thirdparty/fluidsynth/lib/libglib-2.0.a"; sourceTree = "<group>"; };
+		8A1D33E6154D6FD200BA2C16 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
+		8A1D33EC154D702000BA2C16 /* libgthread-2.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libgthread-2.0.a"; path = "thirdparty/fluidsynth/lib/libgthread-2.0.a"; sourceTree = "<group>"; };
+		8A1D33ED154D702000BA2C16 /* libintl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libintl.a; path = thirdparty/fluidsynth/lib/libintl.a; sourceTree = "<group>"; };
 		8A3AC15A14BE294E000D402B /* GZDoom.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GZDoom.xib; sourceTree = "<group>"; };
 		8A3DA66C1547DB5100D1302A /* thingdef_function.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = thingdef_function.cpp; sourceTree = "<group>"; };
 		8A3DA6941547DC2A00D1302A /* gl_builddraw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gl_builddraw.cpp; sourceTree = "<group>"; };
@@ -2475,12 +2497,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A1D33A4154D6EA100BA2C16 /* AudioUnit.framework in Frameworks */,
 				8A9F547414BB0F2900F3369B /* Cocoa.framework in Frameworks */,
+				8A1D33B3154D6EEF00BA2C16 /* CoreAudio.framework in Frameworks */,
+				8A1D33A8154D6EC000BA2C16 /* CoreMIDI.framework in Frameworks */,
 				8A9F547514BB0F2900F3369B /* IOKit.framework in Frameworks */,
 				8A9F547614BB0F2900F3369B /* OpenGL.framework in Frameworks */,
 				8A9F547714BB0F2900F3369B /* libbz2.dylib in Frameworks */,
+				8A1D33E7154D6FD200BA2C16 /* libiconv.dylib in Frameworks */,
 				8A9F547814BB0F2900F3369B /* libz.dylib in Frameworks */,
 				8A9F547914BB0F2900F3369B /* libfmodex.dylib in Frameworks */,
+				8A1D337E154D6E1300BA2C16 /* libfluidsynth.a in Frameworks */,
+				8A1D33E2154D6F8900BA2C16 /* libglib-2.0.a in Frameworks */,
+				8A1D33EE154D702000BA2C16 /* libgthread-2.0.a in Frameworks */,
+				8A1D33EF154D702000BA2C16 /* libintl.a in Frameworks */,
 				8A9F547B14BB0F2900F3369B /* libjpeg_gzdoom.a in Frameworks */,
 				8A9F547C14BB0F2900F3369B /* liblzma_gzdoom.a in Frameworks */,
 				8A9F547D14BB0F2900F3369B /* libgme_gzdoom.a in Frameworks */,
@@ -2521,12 +2551,19 @@
 				8A74F451139252F9001F54B0 /* AudioUnit.framework in Frameworks */,
 				8A74F4671392532C001F54B0 /* Carbon.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
+				8A1D33BF154D6F1800BA2C16 /* CoreAudio.framework in Frameworks */,
+				8A1D33C0154D6F1800BA2C16 /* CoreMIDI.framework in Frameworks */,
 				8A74F38F13925284001F54B0 /* IOKit.framework in Frameworks */,
 				8A74F2A2139235E0001F54B0 /* OpenGL.framework in Frameworks */,
 				8AF2794A1390F0C20095D9A0 /* libbz2.dylib in Frameworks */,
+				8A1D33E8154D6FF900BA2C16 /* libiconv.dylib in Frameworks */,
 				8AF27A491390F4910095D9A0 /* libz.dylib in Frameworks */,
 				8A74F2BA1392360F001F54B0 /* libfmodex.dylib in Frameworks */,
 				8AF62EBE142F25D0003F3556 /* libSDL_gzdoom.a in Frameworks */,
+				8A1D337F154D6E2300BA2C16 /* libfluidsynth.a in Frameworks */,
+				8A1D33E3154D6F8900BA2C16 /* libglib-2.0.a in Frameworks */,
+				8A1D33F0154D702000BA2C16 /* libgthread-2.0.a in Frameworks */,
+				8A1D33F1154D702000BA2C16 /* libintl.a in Frameworks */,
 				8AC81C411391321300F49DC3 /* libjpeg_gzdoom.a in Frameworks */,
 				8AC81C421391321300F49DC3 /* liblzma_gzdoom.a in Frameworks */,
 				8AC81C431391321300F49DC3 /* libgme_gzdoom.a in Frameworks */,
@@ -2605,11 +2642,18 @@
 				8A74F450139252F9001F54B0 /* AudioUnit.framework */,
 				8A74F4661392532C001F54B0 /* Carbon.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+				8A1D33B2154D6EEF00BA2C16 /* CoreAudio.framework */,
+				8A1D33A7154D6EC000BA2C16 /* CoreMIDI.framework */,
 				8A74F38E13925284001F54B0 /* IOKit.framework */,
 				8A74F2A1139235E0001F54B0 /* OpenGL.framework */,
 				8AF279491390F0C20095D9A0 /* libbz2.dylib */,
+				8A1D33E6154D6FD200BA2C16 /* libiconv.dylib */,
 				8AF27A461390F47C0095D9A0 /* libz.dylib */,
 				8A74F2B91392360F001F54B0 /* libfmodex.dylib */,
+				8A1D337D154D6E0700BA2C16 /* libfluidsynth.a */,
+				8A1D33E1154D6F8900BA2C16 /* libglib-2.0.a */,
+				8A1D33EC154D702000BA2C16 /* libgthread-2.0.a */,
+				8A1D33ED154D702000BA2C16 /* libintl.a */,
 			);
 			name = Dependencies;
 			sourceTree = "<group>";
