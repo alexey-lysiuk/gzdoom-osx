@@ -58,7 +58,9 @@ Place, Suite 330, Boston, MA 02111-1307, USA.
 #else
 #  define SEPARATOR "/"
 #  include <unistd.h>
-#  include <malloc.h>
+#  ifndef __APPLE__
+#    include <malloc.h>
+#  endif /* __APPLE__ */
 #  include <memory.h>
 #endif
 
