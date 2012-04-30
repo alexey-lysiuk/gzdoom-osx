@@ -12,6 +12,7 @@ cd "`dirname \"$0\"`/.."
 echo "Preparing directories..."
 rm -r ${DEPLOY_IMAGE_DIR} 2>/dev/null
 mkdir ${DEPLOY_IMAGE_DIR}
+ln -s /Applications ${DEPLOY_IMAGE_DIR}/Applications
 
 echo "Copying game..."
 cp -R build/Release_SDL/${SOURCE_BUNDLE_NAME}/ ${DEPLOY_SDL_DIR}
