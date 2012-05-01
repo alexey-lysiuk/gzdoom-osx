@@ -224,6 +224,11 @@
 		8A334311154ECF6D0034C0C0 /* usedidx.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A3342F9154ECF6D0034C0C0 /* usedidx.c */; };
 		8A334312154ECF6D0034C0C0 /* version.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A3342FB154ECF6D0034C0C0 /* version.c */; };
 		8A334313154ECF6D0034C0C0 /* wadio.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A3342FC154ECF6D0034C0C0 /* wadio.c */; };
+		8AEF5E1D15501797001D1D51 /* lswad.c in Sources */ = {isa = PBXBuildFile; fileRef = 8AEF5E1B15501797001D1D51 /* lswad.c */; };
+		8AEF5E5715501950001D1D51 /* sysdep.c in Sources */ = {isa = PBXBuildFile; fileRef = 8AEF5E4C1550190B001D1D51 /* sysdep.c */; };
+		8AEF5EB01550204E001D1D51 /* mkwad.c in Sources */ = {isa = PBXBuildFile; fileRef = 8AEF5EAE1550204E001D1D51 /* mkwad.c */; };
+		8AEF5ECB155021BF001D1D51 /* lump_dir.c in Sources */ = {isa = PBXBuildFile; fileRef = 8AEF5E441550190B001D1D51 /* lump_dir.c */; };
+		8AEF5ED1155021CE001D1D51 /* lump_cpy.c in Sources */ = {isa = PBXBuildFile; fileRef = 8AEF5E431550190B001D1D51 /* lump_cpy.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -231,8 +236,22 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 8A3342CA154ECF140034C0C0 /* deutex */;
+			remoteGlobalIDString = 8A3342CA154ECF140034C0C0;
 			remoteInfo = deutex;
+		};
+		8AEF5E1615501769001D1D51 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8AEF5E1115501764001D1D51 /* lswad */;
+			remoteInfo = lswad;
+		};
+		8AEF5EA815502035001D1D51 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8AEF5EA315502031001D1D51 /* mkwad */;
+			remoteInfo = mkwad;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -684,6 +703,32 @@
 		8A3342FB154ECF6D0034C0C0 /* version.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = version.c; sourceTree = "<group>"; };
 		8A3342FC154ECF6D0034C0C0 /* wadio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = wadio.c; sourceTree = "<group>"; };
 		8A3342FD154ECF6D0034C0C0 /* wadio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wadio.h; sourceTree = "<group>"; };
+		8AEF5E1215501764001D1D51 /* lswad */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = lswad; sourceTree = BUILT_PRODUCTS_DIR; };
+		8AEF5E1B15501797001D1D51 /* lswad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lswad.c; sourceTree = "<group>"; };
+		8AEF5E421550190B001D1D51 /* cmdlib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cmdlib.c; sourceTree = "<group>"; };
+		8AEF5E431550190B001D1D51 /* lump_cpy.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lump_cpy.c; sourceTree = "<group>"; };
+		8AEF5E441550190B001D1D51 /* lump_dir.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lump_dir.c; sourceTree = "<group>"; };
+		8AEF5E471550190B001D1D51 /* mygetopt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mygetopt.c; sourceTree = "<group>"; };
+		8AEF5E481550190B001D1D51 /* palettes.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = palettes.c; sourceTree = "<group>"; };
+		8AEF5E491550190B001D1D51 /* scriplib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = scriplib.c; sourceTree = "<group>"; };
+		8AEF5E4A1550190B001D1D51 /* strfunc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = strfunc.c; sourceTree = "<group>"; };
+		8AEF5E4B1550190B001D1D51 /* swapfunc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = swapfunc.c; sourceTree = "<group>"; };
+		8AEF5E4C1550190B001D1D51 /* sysdep.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sysdep.c; sourceTree = "<group>"; };
+		8AEF5E4D1550190B001D1D51 /* unixlike.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unixlike.c; sourceTree = "<group>"; };
+		8AEF5E4E1550190B001D1D51 /* wadfile.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = wadfile.c; sourceTree = "<group>"; };
+		8AEF5E7515501A83001D1D51 /* cmdlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cmdlib.h; sourceTree = "<group>"; };
+		8AEF5E7615501A83001D1D51 /* lump_cpy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lump_cpy.h; sourceTree = "<group>"; };
+		8AEF5E7715501A83001D1D51 /* lump_dir.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lump_dir.h; sourceTree = "<group>"; };
+		8AEF5E7915501A83001D1D51 /* mygetopt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mygetopt.h; sourceTree = "<group>"; };
+		8AEF5E7A15501A83001D1D51 /* scriplib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scriplib.h; sourceTree = "<group>"; };
+		8AEF5E7B15501A83001D1D51 /* strfunc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = strfunc.h; sourceTree = "<group>"; };
+		8AEF5E7C15501A83001D1D51 /* swapfunc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = swapfunc.h; sourceTree = "<group>"; };
+		8AEF5E7D15501A83001D1D51 /* sysdep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sysdep.h; sourceTree = "<group>"; };
+		8AEF5E7E15501A83001D1D51 /* unixlike.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unixlike.h; sourceTree = "<group>"; };
+		8AEF5E7F15501A83001D1D51 /* wad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wad.h; sourceTree = "<group>"; };
+		8AEF5E8015501A83001D1D51 /* wadfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wadfile.h; sourceTree = "<group>"; };
+		8AEF5EA415502031001D1D51 /* mkwad */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mkwad; sourceTree = BUILT_PRODUCTS_DIR; };
+		8AEF5EAE1550204E001D1D51 /* mkwad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mkwad.c; sourceTree = "<group>"; };
 		8DD76F6C0486A84900D96B5E /* yadex */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = yadex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -697,6 +742,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		8A3342C9154ECF140034C0C0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8AEF5E1015501764001D1D51 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8AEF5EA215502031001D1D51 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -740,6 +799,8 @@
 			children = (
 				8A33422F154EC8AE0034C0C0 /* acc */,
 				8A3342CB154ECF140034C0C0 /* deutex */,
+				8AEF5E1215501764001D1D51 /* lswad */,
+				8AEF5EA415502031001D1D51 /* mkwad */,
 				8DD76F6C0486A84900D96B5E /* yadex */,
 				8A334263154EC94B0034C0C0 /* zdbsp */,
 			);
@@ -1225,6 +1286,10 @@
 			isa = PBXGroup;
 			children = (
 				8A3342D2154ECF6D0034C0C0 /* deutex */,
+				8AEF5E7415501A83001D1D51 /* include */,
+				8AEF5E411550190B001D1D51 /* lib */,
+				8AEF5E1915501797001D1D51 /* lswad */,
+				8AEF5EAA1550204E001D1D51 /* mkwad */,
 			);
 			name = xwadtools;
 			sourceTree = "<group>";
@@ -1294,6 +1359,62 @@
 			name = config;
 			sourceTree = "<group>";
 		};
+		8AEF5E1915501797001D1D51 /* lswad */ = {
+			isa = PBXGroup;
+			children = (
+				8AEF5E1B15501797001D1D51 /* lswad.c */,
+			);
+			name = lswad;
+			path = xwadtools/lswad;
+			sourceTree = "<group>";
+		};
+		8AEF5E411550190B001D1D51 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				8AEF5E421550190B001D1D51 /* cmdlib.c */,
+				8AEF5E431550190B001D1D51 /* lump_cpy.c */,
+				8AEF5E441550190B001D1D51 /* lump_dir.c */,
+				8AEF5E471550190B001D1D51 /* mygetopt.c */,
+				8AEF5E481550190B001D1D51 /* palettes.c */,
+				8AEF5E491550190B001D1D51 /* scriplib.c */,
+				8AEF5E4A1550190B001D1D51 /* strfunc.c */,
+				8AEF5E4B1550190B001D1D51 /* swapfunc.c */,
+				8AEF5E4C1550190B001D1D51 /* sysdep.c */,
+				8AEF5E4D1550190B001D1D51 /* unixlike.c */,
+				8AEF5E4E1550190B001D1D51 /* wadfile.c */,
+			);
+			name = lib;
+			path = xwadtools/lib;
+			sourceTree = "<group>";
+		};
+		8AEF5E7415501A83001D1D51 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				8AEF5E7515501A83001D1D51 /* cmdlib.h */,
+				8AEF5E7615501A83001D1D51 /* lump_cpy.h */,
+				8AEF5E7715501A83001D1D51 /* lump_dir.h */,
+				8AEF5E7915501A83001D1D51 /* mygetopt.h */,
+				8AEF5E7A15501A83001D1D51 /* scriplib.h */,
+				8AEF5E7B15501A83001D1D51 /* strfunc.h */,
+				8AEF5E7C15501A83001D1D51 /* swapfunc.h */,
+				8AEF5E7D15501A83001D1D51 /* sysdep.h */,
+				8AEF5E7E15501A83001D1D51 /* unixlike.h */,
+				8AEF5E7F15501A83001D1D51 /* wad.h */,
+				8AEF5E8015501A83001D1D51 /* wadfile.h */,
+			);
+			name = include;
+			path = xwadtools/include;
+			sourceTree = "<group>";
+		};
+		8AEF5EAA1550204E001D1D51 /* mkwad */ = {
+			isa = PBXGroup;
+			children = (
+				8AEF5EAE1550204E001D1D51 /* mkwad.c */,
+			);
+			name = mkwad;
+			path = xwadtools/mkwad;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1339,10 +1460,44 @@
 			buildRules = (
 			);
 			dependencies = (
+				8AEF5E1715501769001D1D51 /* PBXTargetDependency */,
 			);
 			name = deutex;
 			productName = deutex;
 			productReference = 8A3342CB154ECF140034C0C0 /* deutex */;
+			productType = "com.apple.product-type.tool";
+		};
+		8AEF5E1115501764001D1D51 /* lswad */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8AEF5E1815501791001D1D51 /* Build configuration list for PBXNativeTarget "lswad" */;
+			buildPhases = (
+				8AEF5E0F15501764001D1D51 /* Sources */,
+				8AEF5E1015501764001D1D51 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8AEF5EA915502035001D1D51 /* PBXTargetDependency */,
+			);
+			name = lswad;
+			productName = lswad;
+			productReference = 8AEF5E1215501764001D1D51 /* lswad */;
+			productType = "com.apple.product-type.tool";
+		};
+		8AEF5EA315502031001D1D51 /* mkwad */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8AEF5EB11550204F001D1D51 /* Build configuration list for PBXNativeTarget "mkwad" */;
+			buildPhases = (
+				8AEF5EA115502031001D1D51 /* Sources */,
+				8AEF5EA215502031001D1D51 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = mkwad;
+			productName = mkwad;
+			productReference = 8AEF5EA415502031001D1D51 /* mkwad */;
 			productType = "com.apple.product-type.tool";
 		};
 		8DD76F620486A84900D96B5E /* yadex */ = {
@@ -1368,7 +1523,7 @@
 /* Begin PBXProject section */
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = 1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "tools" */;
+			buildConfigurationList = 1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "Tools" */;
 			compatibilityVersion = "Xcode 3.1";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -1384,6 +1539,8 @@
 			targets = (
 				8A33422E154EC8AE0034C0C0 /* acc */,
 				8A3342CA154ECF140034C0C0 /* deutex */,
+				8AEF5E1115501764001D1D51 /* lswad */,
+				8AEF5EA315502031001D1D51 /* mkwad */,
 				8DD76F620486A84900D96B5E /* yadex */,
 				8A334262154EC94B0034C0C0 /* zdbsp */,
 			);
@@ -1454,6 +1611,25 @@
 				8A334311154ECF6D0034C0C0 /* usedidx.c in Sources */,
 				8A334312154ECF6D0034C0C0 /* version.c in Sources */,
 				8A334313154ECF6D0034C0C0 /* wadio.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8AEF5E0F15501764001D1D51 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8AEF5E1D15501797001D1D51 /* lswad.c in Sources */,
+				8AEF5E5715501950001D1D51 /* sysdep.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8AEF5EA115502031001D1D51 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8AEF5ED1155021CE001D1D51 /* lump_cpy.c in Sources */,
+				8AEF5ECB155021BF001D1D51 /* lump_dir.c in Sources */,
+				8AEF5EB01550204E001D1D51 /* mkwad.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1631,6 +1807,16 @@
 			target = 8A3342CA154ECF140034C0C0 /* deutex */;
 			targetProxy = 8A3342CF154ECF1E0034C0C0 /* PBXContainerItemProxy */;
 		};
+		8AEF5E1715501769001D1D51 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8AEF5E1115501764001D1D51 /* lswad */;
+			targetProxy = 8AEF5E1615501769001D1D51 /* PBXContainerItemProxy */;
+		};
+		8AEF5EA915502035001D1D51 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8AEF5EA315502031001D1D51 /* mkwad */;
+			targetProxy = 8AEF5EA815502035001D1D51 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -1689,6 +1875,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				SDKROOT = macosx10.5;
+				USE_HEADERMAP = NO;
 				VALID_ARCHS = i386;
 			};
 			name = Debug;
@@ -1705,6 +1892,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				SDKROOT = macosx10.5;
+				USE_HEADERMAP = NO;
 				VALID_ARCHS = i386;
 			};
 			name = Release;
@@ -1827,6 +2015,86 @@
 			};
 			name = Release;
 		};
+		8AEF5E1415501764001D1D51 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					UNIX,
+				);
+				HEADER_SEARCH_PATHS = xwadtools/include;
+				INSTALL_PATH = /usr/local/bin;
+				PREBINDING = NO;
+				PRODUCT_NAME = lswad;
+			};
+			name = Debug;
+		};
+		8AEF5E1515501764001D1D51 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					UNIX,
+				);
+				HEADER_SEARCH_PATHS = xwadtools/include;
+				INSTALL_PATH = /usr/local/bin;
+				PREBINDING = NO;
+				PRODUCT_NAME = lswad;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		8AEF5EA615502032001D1D51 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					UNIX,
+				);
+				HEADER_SEARCH_PATHS = xwadtools/include;
+				INSTALL_PATH = /usr/local/bin;
+				PREBINDING = NO;
+				PRODUCT_NAME = mkwad;
+			};
+			name = Debug;
+		};
+		8AEF5EA715502032001D1D51 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					UNIX,
+				);
+				HEADER_SEARCH_PATHS = xwadtools/include;
+				INSTALL_PATH = /usr/local/bin;
+				PREBINDING = NO;
+				PRODUCT_NAME = mkwad;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1839,7 +2107,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "tools" */ = {
+		1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "Tools" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DEB923608733DC60010E9CD /* Debug */,
@@ -1871,6 +2139,24 @@
 			buildConfigurations = (
 				8A3342CD154ECF140034C0C0 /* Debug */,
 				8A3342CE154ECF140034C0C0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8AEF5E1815501791001D1D51 /* Build configuration list for PBXNativeTarget "lswad" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8AEF5E1415501764001D1D51 /* Debug */,
+				8AEF5E1515501764001D1D51 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8AEF5EB11550204F001D1D51 /* Build configuration list for PBXNativeTarget "mkwad" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8AEF5EA615502032001D1D51 /* Debug */,
+				8AEF5EA715502032001D1D51 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
