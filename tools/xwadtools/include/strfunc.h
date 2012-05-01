@@ -39,7 +39,7 @@ char *strdup (char *);
 #endif
 
 /* some environments have those already */
-#if !defined(linux) && !defined(__CYGWIN32__) && !defined(MSDOS) && !defined(__sun)
+#if !defined(linux) && !defined(__CYGWIN32__) && !defined(MSDOS) && !defined(__sun) && !defined(__APPLE__)
 int strcasecmp (const char *, const char *);
 int strncasecmp (const char *, const char *, int);
 #endif
@@ -51,7 +51,9 @@ char *strlwr (char *);
 #endif
 
 /* those are for all OS's probably */
+#if !defined(__APPLE__)
 void strlcat (char *, const char *);
+#endif
 
 #ifdef __cplusplus
 }

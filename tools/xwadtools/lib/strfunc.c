@@ -21,7 +21,7 @@
 #include "strfunc.h"
 
 /* some environments have those already */
-#if !defined(linux) && !defined(__CYGWIN32__)
+#if !defined(linux) && !defined(__CYGWIN32__) && !defined(__APPLE__)
 int strcasecmp (const char *a, const char *b)
 {
     const char *p;
@@ -79,12 +79,14 @@ char *strlwr (char *start)
 	return start;
 }
 
+#if !defined(__APPLE__)
 void strlcat (char *to, const char *from)
 {
 	for (to += strlen(to); *from; to++, from++)
 		*to = tolower(*from);
 	*to = 0;
 }
+#endif
 
 #if defined(RISCOS)
 /* Simple string duplicator */
