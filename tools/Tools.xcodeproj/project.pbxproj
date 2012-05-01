@@ -229,6 +229,9 @@
 		8AEF5EB01550204E001D1D51 /* mkwad.c in Sources */ = {isa = PBXBuildFile; fileRef = 8AEF5EAE1550204E001D1D51 /* mkwad.c */; };
 		8AEF5ECB155021BF001D1D51 /* lump_dir.c in Sources */ = {isa = PBXBuildFile; fileRef = 8AEF5E441550190B001D1D51 /* lump_dir.c */; };
 		8AEF5ED1155021CE001D1D51 /* lump_cpy.c in Sources */ = {isa = PBXBuildFile; fileRef = 8AEF5E431550190B001D1D51 /* lump_cpy.c */; };
+		8AEF5EE915502796001D1D51 /* format.c in Sources */ = {isa = PBXBuildFile; fileRef = 8AEF5EE015502796001D1D51 /* format.c */; };
+		8AEF5EEB15502796001D1D51 /* version.c in Sources */ = {isa = PBXBuildFile; fileRef = 8AEF5EE515502796001D1D51 /* version.c */; };
+		8AEF5EEC15502796001D1D51 /* wadext2.c in Sources */ = {isa = PBXBuildFile; fileRef = 8AEF5EE715502796001D1D51 /* wadext2.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -729,6 +732,12 @@
 		8AEF5E8015501A83001D1D51 /* wadfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wadfile.h; sourceTree = "<group>"; };
 		8AEF5EA415502031001D1D51 /* mkwad */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mkwad; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AEF5EAE1550204E001D1D51 /* mkwad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mkwad.c; sourceTree = "<group>"; };
+		8AEF5ED91550277F001D1D51 /* wadext2 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = wadext2; sourceTree = BUILT_PRODUCTS_DIR; };
+		8AEF5EE015502796001D1D51 /* format.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = format.c; sourceTree = "<group>"; };
+		8AEF5EE115502796001D1D51 /* format.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = format.h; sourceTree = "<group>"; };
+		8AEF5EE515502796001D1D51 /* version.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = version.c; sourceTree = "<group>"; };
+		8AEF5EE715502796001D1D51 /* wadext2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = wadext2.c; sourceTree = "<group>"; };
+		8AEF5EE815502796001D1D51 /* wadext2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wadext2.h; sourceTree = "<group>"; };
 		8DD76F6C0486A84900D96B5E /* yadex */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = yadex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -762,6 +771,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8AEF5ED71550277F001D1D51 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8DD76F660486A84900D96B5E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -788,6 +804,7 @@
 			children = (
 				8A334233154EC8D50034C0C0 /* acc */,
 				8A3342C7154ECEFB0034C0C0 /* xwadtools */,
+				8AEF5EDD15502796001D1D51 /* wadext2 */,
 				8A3341E6154EC5C60034C0C0 /* yadex */,
 				8A33426C154EC9690034C0C0 /* zdbsp */,
 			);
@@ -801,6 +818,7 @@
 				8A3342CB154ECF140034C0C0 /* deutex */,
 				8AEF5E1215501764001D1D51 /* lswad */,
 				8AEF5EA415502031001D1D51 /* mkwad */,
+				8AEF5ED91550277F001D1D51 /* wadext2 */,
 				8DD76F6C0486A84900D96B5E /* yadex */,
 				8A334263154EC94B0034C0C0 /* zdbsp */,
 			);
@@ -1415,6 +1433,18 @@
 			path = xwadtools/mkwad;
 			sourceTree = "<group>";
 		};
+		8AEF5EDD15502796001D1D51 /* wadext2 */ = {
+			isa = PBXGroup;
+			children = (
+				8AEF5EE015502796001D1D51 /* format.c */,
+				8AEF5EE115502796001D1D51 /* format.h */,
+				8AEF5EE515502796001D1D51 /* version.c */,
+				8AEF5EE715502796001D1D51 /* wadext2.c */,
+				8AEF5EE815502796001D1D51 /* wadext2.h */,
+			);
+			path = wadext2;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1500,6 +1530,22 @@
 			productReference = 8AEF5EA415502031001D1D51 /* mkwad */;
 			productType = "com.apple.product-type.tool";
 		};
+		8AEF5ED81550277F001D1D51 /* wadext2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8AEF5EED15502797001D1D51 /* Build configuration list for PBXNativeTarget "wadext2" */;
+			buildPhases = (
+				8AEF5ED61550277F001D1D51 /* Sources */,
+				8AEF5ED71550277F001D1D51 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = wadext2;
+			productName = wadext2;
+			productReference = 8AEF5ED91550277F001D1D51 /* wadext2 */;
+			productType = "com.apple.product-type.tool";
+		};
 		8DD76F620486A84900D96B5E /* yadex */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1DEB923108733DC60010E9CD /* Build configuration list for PBXNativeTarget "yadex" */;
@@ -1541,6 +1587,7 @@
 				8A3342CA154ECF140034C0C0 /* deutex */,
 				8AEF5E1115501764001D1D51 /* lswad */,
 				8AEF5EA315502031001D1D51 /* mkwad */,
+				8AEF5ED81550277F001D1D51 /* wadext2 */,
 				8DD76F620486A84900D96B5E /* yadex */,
 				8A334262154EC94B0034C0C0 /* zdbsp */,
 			);
@@ -1630,6 +1677,16 @@
 				8AEF5ED1155021CE001D1D51 /* lump_cpy.c in Sources */,
 				8AEF5ECB155021BF001D1D51 /* lump_dir.c in Sources */,
 				8AEF5EB01550204E001D1D51 /* mkwad.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8AEF5ED61550277F001D1D51 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8AEF5EE915502796001D1D51 /* format.c in Sources */,
+				8AEF5EEB15502796001D1D51 /* version.c in Sources */,
+				8AEF5EEC15502796001D1D51 /* wadext2.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2095,6 +2152,36 @@
 			};
 			name = Release;
 		};
+		8AEF5EDB15502780001D1D51 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/bin;
+				PREBINDING = NO;
+				PRODUCT_NAME = wadext2;
+			};
+			name = Debug;
+		};
+		8AEF5EDC15502780001D1D51 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/bin;
+				PREBINDING = NO;
+				PRODUCT_NAME = wadext2;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2157,6 +2244,15 @@
 			buildConfigurations = (
 				8AEF5EA615502032001D1D51 /* Debug */,
 				8AEF5EA715502032001D1D51 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8AEF5EED15502797001D1D51 /* Build configuration list for PBXNativeTarget "wadext2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8AEF5EDB15502780001D1D51 /* Debug */,
+				8AEF5EDC15502780001D1D51 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
