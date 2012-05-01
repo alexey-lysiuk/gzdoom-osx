@@ -558,6 +558,10 @@ bool AWeapon::DepleteAmmo (bool altFire, bool checkEnough, int ammouse)
 
 void AWeapon::PostMorphWeapon ()
 {
+	if (Owner == NULL)
+	{
+		return;
+	}
 	Owner->player->PendingWeapon = WP_NOCHANGE;
 	Owner->player->ReadyWeapon = this;
 	Owner->player->psprites[ps_weapon].sy = WEAPONBOTTOM;
@@ -1188,6 +1192,7 @@ void FWeaponSlots::AddExtraWeapons()
 			(cls->ActorInfo->GameFilter == GAME_Any || (cls->ActorInfo->GameFilter & gameinfo.gametype)) &&
 			cls->ActorInfo->Replacement == NULL &&	// Replaced weapons don't get slotted.
 			cls->IsDescendantOf(RUNTIME_CLASS(AWeapon)) &&
+			!(static_cast<AWeapon*>(GetDefaultByType(cls))->WeaponFlags & WIF_POWERED_UP) &&
 			!LocateWeapon(cls, NULL, NULL)			// Don't duplicate it if it's already present.
 			)
 		{
