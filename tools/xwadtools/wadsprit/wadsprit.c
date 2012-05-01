@@ -1,5 +1,7 @@
 /************************************************************************/
 /*      Copyright (C) 1999-2000 by Udo Munk (munkudo@aol.com)           */
+/*      Copyright (C) 2001      by André Majorel                        */
+/*                              (http://www.teaser.fr/~amajorel/)       */
 /*                                                                      */
 /*      Permission to use, copy, modify, and distribute this software   */
 /*      and its documentation for any purpose and without fee is        */
@@ -26,12 +28,32 @@
  * - Stupid Windows can't create files with \ in filename. So don't
  *   abort on write errors immediately, just count the errors and
  *   go on.
+ *
+ * 1.5 (AYM 2001-10-01)
+ * - Recognise SS_START.
+ * - Between S_START/SS_START and S_END, ignore any spurious S_START
+ *   or SS_START.
+ * - Outside S_START/SS_START and S_END, ignore any spurious S_END.
+ * - Case-insensitive lump name comparison (E.G. works with
+ *   "ss_start").
+ * - Use get_lump_by_num() instead of get_lump_by_name() (safer and
+ *   faster).
+ *
+ * 1.6 (AYM 2002-11-11)
+ * - New -w option.
+ * - Usage goes to standard output, not standard error.
+ * - Put options in alphabetical order.
+ * - Create the sprites/ directory with mode 777 and let umask do the
+ *   rest.
  */
 
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <sys/stat.h>
+#include <fnmatch.h>
 
 #include "sysdep.h"
 #include "strfunc.h"
@@ -39,7 +61,7 @@
 #include "lump_dir.h"
 #include "wadfile.h"
 
-#define VERSION "1.4"
+#define VERSION "1.6"
 
 extern unsigned char doom_rgb[];
 extern unsigned char heretic_rgb[];
@@ -48,6 +70,7 @@ extern unsigned char strife_rgb[];
 unsigned char *palette = doom_rgb;
 static unsigned char img_buf[320 * 200];
 static int preserve_case = 0;
+static char *wildcard = NULL;
 static int errors = 0;
 
 void usage(char *name, char *option)
@@ -55,10 +78,11 @@ void usage(char *name, char *option)
 	if (option)
 		fprintf(stderr, "%s: Unkown option: %s\n", name, option);
 
-	fprintf(stderr, "Usage: %s [-p] [-c pal] wadfile\n", name);
-	fprintf(stderr, "\t-p: preserve case of generated files\n");
-	fprintf(stderr, "\t-c pal: use color palette pal, where pal can be\n");
-	fprintf(stderr, "\t        doom, heretic, hexen or strife\n");
+	printf("Usage: %s [-c pal] [-p] [-w expr] wadfile\n", name);
+	printf("\t-c pal: use color palette pal, where pal can be\n");
+	printf("\t        doom, heretic, hexen or strife\n");
+	printf("\t-p: preserve case of generated files\n");
+	printf("\t-w expr: only extract sprites matching wildcard expr\n");
 	exit(1);
 }
 
@@ -98,8 +122,9 @@ void write_ppm(char *name, short width, short height)
 	fclose(fp);
 }
 
-void decompile(wadfile_t *wf, char *name)
+void decompile(wadfile_t *wf, int num)
 {
+  	char		name[9];
 	unsigned char	*sprite;
 	short		width;
 	short		height;
@@ -113,8 +138,11 @@ void decompile(wadfile_t *wf, char *name)
 	int		n;
 	int		i;
 
+	name[0] = '\0';
+	strncat(name, wf->lp->lumps[num]->name, 8);
+
 	/* get sprite lump */
-	if ((sprite = (unsigned char *)get_lump_by_name(wf, name)) == NULL) {
+	if ((sprite = (unsigned char *)get_lump_by_num(wf, num)) == NULL) {
 		fprintf(stderr, "can't find sprite lump %s\n", name);
 		exit(1);
 	}
@@ -168,10 +196,6 @@ int main(int argc, char **argv)
 	wadfile_t	*wf;
 	int		i;
 	int		start_flag = 0;
-	char		name[9];
-
-	/* initialize */
-	memset(&name[0], 0, 9);
 
 	/* save program name for usage() */
 	program = *argv;
@@ -182,9 +206,6 @@ int main(int argc, char **argv)
 	while ((--argc > 0) && (**++argv == '-')) {
 	  for (s = *argv+1; *s != '\0'; s++) {
 		switch (*s) {
-		case 'p':
-			preserve_case++;
-			break;
 		case 'c':
 			argc--;
 			argv++;
@@ -198,6 +219,19 @@ int main(int argc, char **argv)
 				palette = strife_rgb;
 			else
 				usage(program, NULL);
+			break;
+		case 'p':
+			preserve_case++;
+			break;
+		case 'w':
+			argc--;
+			argv++;
+			wildcard = *argv;
+			{
+				char *p;
+				for (p = wildcard; *p != '\0'; p++)
+					*p = toupper(*((unsigned char *) p));
+			}
 			break;
 		default:
 			usage(program, --s);
@@ -216,23 +250,39 @@ int main(int argc, char **argv)
 	 * make sprites directory, ignore errors, we'll handle that later
 	 * when we try to write the graphics files into it
 	 */
-	mkdir("sprites", 0755);
+	mkdir("sprites", 0777);
 
 	/* loop over all lumps and look for the sprites */
 	for (i = 0; i < wf->wh.numlumps; i++) {
 		/* start processing after S_START */
-		if (!strncmp(wf->lp->lumps[i]->name, "S_START", 7)) {
+		if (!start_flag
+		    && !lump_name_cmp(wf->lp->lumps[i]->name, "S_START")) {
 			start_flag = 1;
 			printf("found S_START, start decompiling sprites\n");
 			continue;
-		} else if (!strncmp(wf->lp->lumps[i]->name, "S_END", 5)) {
+		} else if (!start_flag
+		    && !lump_name_cmp(wf->lp->lumps[i]->name, "SS_START")) {
+			start_flag = 1;
+			printf("found SS_START, start decompiling sprites\n");
+			continue;
+		} else if (start_flag
+		    && !lump_name_cmp(wf->lp->lumps[i]->name, "S_END")) {
 			start_flag = 0;
 			printf("found S_END, done\n");
 			break;
 		} else {
 			if (start_flag) {
-			  strncpy(&name[0], wf->lp->lumps[i]->name, 8);
-			  decompile(wf, &name[0]);
+			  char name[9];
+			  size_t n;
+
+			  for (n = 0; n < 8; n++) {
+			    name[n] = toupper(wf->lp->lumps[i]->name[n]);
+			  }
+			  name[n] = '\0';
+			  if (wildcard != NULL
+			  && fnmatch(wildcard, name, 0) != 0)
+			    continue;
+			  decompile(wf, i);
 			}
 		}
 	}

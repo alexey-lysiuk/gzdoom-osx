@@ -18,6 +18,8 @@
 #ifndef __WADFILE_H__
 #define __WADFILE_H__
 
+#include <stddef.h>			/* size_t */
+
 /* magic number for WAD file structure */
 #define WFILE_MAGIC (('W'<<24)+('F'<<16)+('I'<<8)+'L')
 
@@ -33,6 +35,7 @@ wadfile_t *open_wad(const char *);
 void close_wad(wadfile_t *);
 int check_lump_name(wadfile_t *, char *);
 void *get_lump_by_name(wadfile_t *, char *);
+void *get_lump_by_num(wadfile_t *wf, size_t lnum);
 void *get_map_lump(wadfile_t *, char *, char *, int *);
 int lump_name_cmp(const char *, const char *);
 

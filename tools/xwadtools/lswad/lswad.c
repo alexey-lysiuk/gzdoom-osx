@@ -1,6 +1,6 @@
 /************************************************************************/
 /*      Copyright (C) 1998, 1999 by Udo Munk (munkudo@aol.com)          */
-/*	Copyright (C) 1999, 2000 by Andre Majorel (amajorel@teaser.fr)	*/
+/*      Copyright (C) 1999-2001  by Andre Majorel (amajorel@teaser.fr)	*/
 /*                                                                      */
 /*      Permission to use, copy, modify, and distribute this software   */
 /*      and its documentation for any purpose and without fee is        */
@@ -28,6 +28,10 @@
  *
  * 1.8 (AYM 2000-01-06)
  * - Can now take more than one argument.
+ *
+ * 1.9 (AYM 2001-06-24)
+ * - Junk after first NUL in lump names is not shown anymore
+ * - With short listing, lump names are not padded anymore
  */
 
 #include <stdio.h>
@@ -74,16 +78,12 @@ void usage(char *option)
 	exit(1);
 }
 
-void print_name(char *n)
+void print_name(char *n, int pad)
 {
-	printf("%c%c%c%c%c%c%c%c", n[0] ? n[0] : ' ',
-				   n[1] ? n[1] : ' ',
-				   n[2] ? n[2] : ' ',
-				   n[3] ? n[3] : ' ',
-				   n[4] ? n[4] : ' ',
-				   n[5] ? n[5] : ' ',
-				   n[6] ? n[6] : ' ',
-				   n[7] ? n[7] : ' ');
+	if (pad)
+		printf("%-8.8s", n);
+	else
+		printf("%.8s", n);
 }
 
 int main(int argc, char **argv)
@@ -294,14 +294,14 @@ static int list_wad(const char *file)
 			break;
 		  } else {
 			if (list_flats && (lump.size > 0)) {
-				print_name(&lump.name[0]);
+				print_name(&lump.name[0], 0);
 				putchar('\n');
 			}
 		  }
 
-		/* list contents of the whole WAD file */
-		} else {
-		  print_name(&lump.name[0]);
+		/* list contents of the whole WAD file, long form */
+		} else if (lstflag || sflag) {
+		  print_name(&lump.name[0], 1);
 		  if (lstflag || sflag) {
 		  	if (kflag) {
 				printf("\t%8d", (lump.size + 512) / 1024);
@@ -318,6 +318,11 @@ static int list_wad(const char *file)
 				printf("\t%8d", lump.filepos);
 			}
 		  }
+		  putchar('\n');
+
+		/* list contents of the whole WAD file, short form */
+		} else {
+		  print_name(&lump.name[0], 0);
 		  putchar('\n');
 		}
 	}

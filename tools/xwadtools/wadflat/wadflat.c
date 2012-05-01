@@ -1,5 +1,6 @@
 /************************************************************************/
 /*      Copyright (C) 1998, 1999 by Udo Munk (munkudo@aol.com)          */
+/*      Copyright (C) 1999, 2001 by André Majorel (amajorel@teaser.fr)  */
 /*                                                                      */
 /*      Permission to use, copy, modify, and distribute this software   */
 /*      and its documentation for any purpose and without fee is        */
@@ -30,8 +31,20 @@
  * - Added support for Strife.
  * - Accept FF_START as start label too, to be able to extract flats from
  *   PWADS, where FF_START is used by convention.
+ *
+ * 1.4 (AYM 2001-08-30)
+ * - If there was another lump in the wad named like the flat, wadflat
+ *   would extract the wrong lump. Fixed by using get_lump_by_num()
+ *   instead of get_lump_by_name().
+ * - Changed directory mode from 0755 to 0777 on the theory that we
+ *   should not substitute for umask.
+ * - Accept FF_END as end label too, for compatibility with pwads made
+ *   with DeuTex 3.
+ * - Accept flats with a size of 4160 (64x65) for compatibility with
+ *   Heretic and 8192 (64x128) for compatibility with Hexen.
  */
 
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -44,7 +57,7 @@
 #include "lump_dir.h"
 #include "wadfile.h"
 
-#define VERSION "1.3"
+#define VERSION "1.4"
 
 extern unsigned char doom_rgb[];
 extern unsigned char heretic_rgb[];
@@ -65,17 +78,24 @@ void usage(char *name, char *option)
         exit(1);
 }
 
-void decompile(wadfile_t *wf, char *name)
+void decompile(wadfile_t *wf, size_t num)
 {
 	int		i;
 	FILE		*fp;
 	char		fn[50];
 	unsigned char	*flat;
+	char		name[9];
+	size_t		size;
+	int		width;
+	int		height;
+
+	name[0] = '\0';
+	strncat(name, wf->lp->lumps[num]->name, 8);
 
 	printf("  %s\n", name);
 
 	/* get flat lump */
-	if ((flat = (unsigned char *)get_lump_by_name(wf, name)) == NULL) {
+	if ((flat = (unsigned char *)get_lump_by_num(wf, num)) == NULL) {
 		fprintf(stderr, "can't get lump %s??\n", name);
 		exit(1);
 	}
@@ -91,12 +111,16 @@ void decompile(wadfile_t *wf, char *name)
 		exit(1);
 	}
 
+	size = wf->lp->lumps[num]->size;
+	width = 64;
+	height = size / width; 
+
 	fprintf(fp, "P6\n");
 	fprintf(fp, "# CREATOR: wadflat Release %s\n", VERSION);
-	fprintf(fp, "64 64\n");
+	fprintf(fp, "%d %d\n", width, height);
 	fprintf(fp, "255\n");
 
-	for (i = 0; i < 4096; i++) {
+	for (i = 0; i < size; i++) {
 		fputc((int) palette[*(flat+i) * 3],     fp);
 		fputc((int) palette[*(flat+i) * 3 + 1], fp);
 		fputc((int) palette[*(flat+i) * 3 + 2], fp);
@@ -113,10 +137,6 @@ int main(int argc, char **argv)
 	wadfile_t	*wf;
 	char		*s;
 	char		*program;
-	char		name[9];
-
-	/* initialize */
-	memset(&name[0], 0, 9);
 
         /* save program name for usage() */
         program = *argv;
@@ -158,32 +178,38 @@ int main(int argc, char **argv)
 	wf = open_wad(*argv);
 
 	/* just make flats directory, ignore errors, deal with it later */
-	mkdir("flats", 0755);
+	mkdir("flats", 0777);
 
 	/* loop over all lumps and look for the flats */
 	for (i = 0; i < wf->wh.numlumps; i++) {
 		/* start processing after F_START */
-		if (!strncmp(wf->lp->lumps[i]->name, "F_START", 7)) {
+		if (!lump_name_cmp(wf->lp->lumps[i]->name, "F_START")) {
 			if (start_flag)
 				continue;
 			start_flag = 1;
 			printf("found F_START, start decompiling flats\n");
 			continue;
 		/* also accept FF_START */
-		} else if (!strncmp(wf->lp->lumps[i]->name, "FF_START", 8)) {
+		} else if (!lump_name_cmp(wf->lp->lumps[i]->name, "FF_START")) {
 			if (start_flag)
 				continue;
 			start_flag = 1;
 			printf("found FF_START, start decompiling flats\n");
 			continue;
-		} else if (!strncmp(wf->lp->lumps[i]->name, "F_END", 5)) {
+		} else if (!lump_name_cmp(wf->lp->lumps[i]->name, "F_END")) {
 			start_flag = 0;
 			printf("found F_END, done\n");
 			break;
+		} else if (!lump_name_cmp(wf->lp->lumps[i]->name, "FF_END")) {
+			start_flag = 0;
+			printf("found FF_END, done\n");
+			break;
 		} else {
-			if (start_flag && (wf->lp->lumps[i]->size == 4096)) {
-			  strncpy(&name[0], wf->lp->lumps[i]->name, 8);
-			  decompile(wf, &name[0]);
+			if (start_flag
+			     && (wf->lp->lumps[i]->size == 4096
+			      || wf->lp->lumps[i]->size == 4160
+			      || wf->lp->lumps[i]->size == 8192)) {
+			  decompile(wf, i);
 			}
 		}
 	}

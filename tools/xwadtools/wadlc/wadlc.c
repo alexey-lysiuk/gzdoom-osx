@@ -32,9 +32,18 @@
  * UM 1999-07-08
  * - a BEHAVIOR lump with a size of 0 bytes crashes Hexen engines. Write
  *   one which has the memory footprint of an empty compiled script source.
+ *
+ * AYM 2004-01-29
+ * - removed arbitrary limits on the object counts (32766 vertices,
+ *   8192 sectors, 32766 sidedefs, 16383 linedefs)
+ * - added missing include <stdlib.h>
+ * - compile large levels faster by noticing when object names contain
+ *   the object number (for a 32,768-linedef test level, the time went
+ *   down from 100s to 2s).
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "sysdep.h"
 #include "wad.h"
@@ -55,9 +64,32 @@ void addentry(int *pos, int length, const char *name, FILE *wadfile)
     printf("Adding entry %s (%d bytes)\n", name, length);
 }
 
-int findmatch(const char *name, const char *table, int numentries, int length)
+int findmatch(const char *name, const char *table, int shortcut,
+    int numentries, int length)
 {
   int i = 0;
+
+  /* KLUDGE to speed things up, notice when names contain the object
+   * number and avoid scanning the whole array. For a more general fix,
+   * use a hash or a sorted array.
+   */
+  if (shortcut)
+  {
+    const char *p;
+    long num = 0;
+
+    /* Skip over the non-numeric prefix */
+    for (p = name; *p != '\0' && (*p < '0' || *p > '9'); p++)
+      ;
+    for (; *p >= '0' && *p <= '9'; p++)
+      num = 10 * num + *p - '0';
+    if (num >= numentries)
+    {
+      fprintf(stderr,"Bad object number: %s/%d", name, numentries);
+      exit(-1);
+    }
+    return num;
+  }
 
   while (strncmp(name, table, 8) && (i < numentries))
   {
@@ -103,15 +135,17 @@ int main(int argc, char *argv[])
 				 '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0'
 			       };
   
-  w_vertex_t	vertices[32766];
-  w_sector_t	sectors[8192];
-  sidedef_t	sidedefs[32766];
-  linedef_t	linedefs[16383];
-  linedef2_t	linedefs2[16383];
-  things_t	things[32767];
-  things2_t	things2[32767];
+  w_vertex_t	vertices[32768];
+  w_sector_t	sectors[32768];
+  sidedef_t	sidedefs[32768];
+  linedef_t	linedefs[32768];
+  linedef2_t	linedefs2[32768];
+  things_t	things[32768];
+  things2_t	things2[32768];
   int		numvertices = 0, numsectors = 0, numsidedefs = 0,
 		numlinedefs = 0, numthings = 0;
+  int		vertexshortcut = 1;
+  int		sectorshortcut = 1;
 
   char		entryname[9];
   int		entrypos;
@@ -171,6 +205,25 @@ int main(int argc, char *argv[])
 		lastitem = 1;
       else
       {
+	/* KLUDGE to speed things up, notice when vertex names contain
+	 * the vertex number and avoid the long scan of vertices[].
+	 */
+	{
+	  const char *p;
+	  long num = 0;
+	  int digits = 0;
+
+	  /* Skip over the non-numeric prefix */
+	  for (p = vertexname; *p != '\0' && (*p < '0' || *p > '9'); p++)
+	    ;
+	  for (; *p >= '0' && *p <= '9'; p++)
+	  {
+	    num = 10 * num + *p - '0';
+	    digits++;
+	  }
+	  if (digits == 0 || num != numvertices)
+	    vertexshortcut = 0;
+	}
 	fscanf(infile, " : %d %d ", &x, &y);
 	allowcomment(infile);
 	vertices[numvertices].x = x;
@@ -202,6 +255,25 @@ int main(int argc, char *argv[])
       {
 	fscanf(infile, " : %d %d %s %s %d %d %d ", &floorh, &ceilingh,
 	       floort, ceilingt, &brightness, &special, &tag);
+	/* KLUDGE to speed things up, notice when sector names contain
+	 * the sector number and avoid the long scan of sectors[].
+	 */
+	{
+	  const char *p;
+	  long num = 0;
+	  int digits = 0;
+
+	  /* Skip over the non-numeric prefix */
+	  for (p = sectorname; *p != '\0' && (*p < '0' || *p > '9'); p++)
+	    ;
+	  for (; *p >= '0' && *p <= '9'; p++)
+	  {
+	    num = 10 * num + *p - '0';
+	    digits++;
+	  }
+	  if (digits == 0 || num != numsectors)
+	    sectorshortcut = 0;
+	}
 	allowcomment(infile);
 	sectors[numsectors].floorheight = floorh;
 	sectors[numsectors].ceilingheight = ceilingh;
@@ -241,9 +313,11 @@ int main(int argc, char *argv[])
 	  fscanf(infile, " %s : %d %d %d ", tovertexname, &attrs, &type, &tag);
 	  allowcomment(infile);
 	  fromvertexindex = findmatch(fromvertexname, (char*)vertices,
-			              numvertices, sizeof(w_vertex_t));
+				      vertexshortcut, numvertices,
+				      sizeof(w_vertex_t));
 	  tovertexindex = findmatch(tovertexname, (char*)vertices,
-				    numvertices, sizeof(w_vertex_t));
+				    vertexshortcut, numvertices,
+				    sizeof(w_vertex_t));
 	}
 	else
 	{
@@ -253,15 +327,17 @@ int main(int argc, char *argv[])
 			  &arg4, &arg5);
 	  allowcomment(infile);
 	  fromvertexindex = findmatch(fromvertexname, (char*)vertices,
-				      numvertices, sizeof(w_vertex_t));
+				      vertexshortcut, numvertices,
+				      sizeof(w_vertex_t));
 	  tovertexindex = findmatch(tovertexname, (char*)vertices,
-				    numvertices, sizeof(w_vertex_t));
+				    vertexshortcut, numvertices,
+				    sizeof(w_vertex_t));
 	}
 	/* Read one or two SIDEDEFS */
 	fscanf(infile, " %s %d %d %s %s %s ", sectorname, &ox, &oy,
 	       uppert, lowert, normalt);
 	allowcomment(infile);
-	sectorindex = findmatch(sectorname, (char*)sectors,
+	sectorindex = findmatch(sectorname, (char*)sectors, sectorshortcut,
 				numsectors, sizeof(w_sector_t));
 	sidedefs[numsidedefs].sector = sectorindex;
 	sidedefs[numsidedefs].x = ox;
@@ -281,7 +357,7 @@ int main(int argc, char *argv[])
 	{
 	  fscanf(infile, " %d %d %s %s %s ", &ox, &oy, uppert, lowert, normalt);
 	  allowcomment(infile);
-	  sectorindex = findmatch(sectorname, (char*)sectors,
+	  sectorindex = findmatch(sectorname, (char*)sectors, sectorshortcut,
 				  numsectors, sizeof(w_sector_t));
 	  sidedefs[numsidedefs].sector = sectorindex;
 	  sidedefs[numsidedefs].x = ox;

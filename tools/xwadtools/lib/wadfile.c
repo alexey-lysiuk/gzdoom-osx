@@ -30,6 +30,10 @@
  *
  * UM 1999-08-23
  * Print file name which can't be opened by open_wad().
+ *
+ * AYM 2001-08-30
+ * Fixed typos.
+ * Added get_lump_by_num() so that wadflat works.
  */
 
 #include <stdio.h>
@@ -151,7 +155,7 @@ int check_lump_name(wadfile_t *wf, char *lname)
 
 /*
  * Find a lump by name in the WAD file directory. If found allocate
- * memory and read it's data.
+ * memory and read its data.
  */
 void *get_lump_by_name(wadfile_t *wf, char *lname)
 {
@@ -212,8 +216,50 @@ void *get_lump_by_name(wadfile_t *wf, char *lname)
 }
 
 /*
+ * Find a lump by name in the WAD file directory. If found allocate
+ * memory and read its data.
+ */
+void *get_lump_by_num(wadfile_t *wf, size_t lnum)
+{
+	void *lump = (void *)0;
+
+	/* is this a wadfile_t structure? */
+	if (wf->magic != WFILE_MAGIC) {
+	    fprintf(stderr, "get_lump_by_num(): not a wadfile_t structure\n");
+	    exit(1);
+	}
+
+	/* check lump number */
+	if (lnum >= wf->wh.numlumps) {
+	    fprintf(stderr, "get_lump_by_num(): lump num out of range\n");
+	    exit(1);
+	}
+
+	/* allocate memory for the lump data */
+	if ((lump = malloc(wf->lp->lumps[lnum]->size)) == NULL) {
+	    fprintf(stderr,
+		"get_lump_by_num(): can't allocate memory for lump data\n");
+	    exit(1);
+	}
+
+	/* seek to the lump in WAD file */
+        if (fseek(wf->fp, (long)wf->lp->lumps[lnum]->filepos, SEEK_SET) == -1) {
+	    fprintf(stderr, "get_lump_by_num(): can't seek to lump data\n");
+	    exit(1);
+        }
+
+	/* read the lump data */
+	if (fread(lump, wf->lp->lumps[lnum]->size, 1, wf->fp) != 1) {
+	    fprintf(stderr, "get_lump_by_num(): can't read lump data\n");
+	    exit(1);
+	}
+
+	return lump;
+}
+
+/*
  * Find a map lump by name in the WAD file directory. If found allocate
- * memory and read it's data.
+ * memory and read its data.
  */
 void *get_map_lump(wadfile_t *wf, char *map, char *lname, int *size)
 {
