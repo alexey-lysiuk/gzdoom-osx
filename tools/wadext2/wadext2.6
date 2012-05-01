@@ -1,0 +1,246 @@
+.TH WADEXT2 6 2001-08-11
+.SH NAME
+wadext2 \- dump the lumps of a wad to files
+.SH SYNOPSIS
+.B wadext2 \-\-help
+.br
+.B wadext2 \-\-version
+.br
+.B wadext2
+.RB [ \-nv ]
+.RB [ \-o
+.IR fmt ]
+.I file
+.SH DESCRIPTION
+wadext2 extracts all the lumps of a wad to separate files.
+It does not perform any conversion on the contents of the lumps; it just dumps
+them byte for byte.
+wadext2 does with wad files what \fBtar \-x\fP does with tar archives.
+
+The advantage of this program over \fBwadext\fP(6) is that the latter can only
+extract one lump at a time.
+\fBdeutex\fP(6), although it is more sophisticated than wadext2, is less
+suitable for certain tasks.
+Because it doesn't try to understand how the wad is structured, wadext2 works
+well with any wad.
+It does not need the wad to contain a PNAMES and a PLAYPAL.
+It doesn't reorder the directory or lose duplicate lumps.
+
+Each lump is written to a separate file whose name is obtained by expanding the
+format string.
+The default format string is "%04n_%l.lmp".
+For the Doom iwad, that gives:
+
+.RS
+.nf
+0000_playpal.lmp
+0001_colormap.lmp
+0002_endoom.lmp
+\&.
+\&.
+\&.
+2303_comp01.lmp
+2304_f2_end.lmp
+2305_f_end.lmp
+.fi
+.RE
+
+The format string can be changed through the \fB\-o\fP option.
+.SH OPTIONS
+.TP
+.B \-\-help
+Print usage to stdout and exit successfully.
+.TP
+.B \-n
+Do everything as normal but don't actually write any output files.
+This is useful as a wad validity test.
+
+.RS
+  wadext2 -n my.wad || echo "my.wad is corrupt"
+.RE
+.TP
+.BI \-o \ fmt
+Use \fIfmt\fP to name the output files.
+See
+.SM FORMAT STRING\c
+\&.
+The default format is "%04n_%l.lmp".
+.TP
+.B \-v
+Verbose.
+Print to stdout the name of each output file.
+Combined with \fB\-n\fP, this turns wadext2 into a slower, but more flexible
+\fBlswad\fP(6).
+For example:
+
+.RS
+  wadext2 \-nvo '%4n %HU06oh %6s %l' my.wad
+.RE
+
+.TP
+.B \-\-version
+Print version number to stdout and exit successfully.
+.SH FORMAT STRING
+The format string is somewhat like the one used by \fBprintf\fP(3), but with
+substantial differences.
+It is made of ordinary characters (all characters other than \fB\\\fP and
+\fB%\fP) peppered with zero or more escape sequences and conversion
+specifications.
+.SS Escape sequences
+The same as in C, except for \fB\\0\fP and \fB\\x\fP which are still missing.
+.TP
+.B \\\\a
+Alarm (C \fB\\a\fP,
+.SM ASCII
+BEL)
+.TP
+.B \\\\b
+Backspace (C \fB\\b\fP,
+.SM ASCII
+BS)
+.TP
+.B \\\\f
+Form-feed (C \fB\\f\fP,
+.SM ASCII
+FF)
+.TP
+.B \\\\n
+Newline (C \fB\\n\fP,
+.SM ASCII
+LF unless translated by libc)
+.TP
+.B \\\\r
+Carriage return (C \fB\\r\fP,
+.SM ASCII
+CR)
+.TP
+.B \\\\t
+Tab (C \fB\\t\fP,
+.SM ASCII
+HT)
+.TP
+.B \\\\v
+Vertical tab (C \fB\\v\fP,
+.SM ASCII
+VT)
+.TP
+.B \\\\\\\\
+Backslash
+.PP
+Escape sequence other than the above are considered fatal errors.
+.SS Conversion specifications
+The general format of a conversion specification is
+
+.RS
+\fB%\fP[\fIflags\fP][\fIwidth\fP][\fB.\fP\fIprecision\fP]\fIconversion\fP
+.RE
+
+To get a literal \fB%\fP, put \fB%%\fP in the format string.
+.SS Flags
+There can be any number of flags.
+If there are conflicting flags, the one that comes last overrides the others.
+.TP
+.B \-
+Align to the left.
+By default, conversions are aligned to the right of the width.
+.TP
+.B 0
+Pad with zeros.
+For numeric conversions, use \fB0\fP as the padding character.
+If the conversion is left aligned or is a string conversion, this flag is
+ignored and the conversion is padded with spaces.
+Flags \fB0\fP and \fB_\fP are mutually exclusive.
+.TP
+.B =
+Preserve case.
+For string conversions, explicitly prevent the conversion from changing the
+case of the characters, even when it does by default.
+Flags \fB=\fP, \fBL\fP and \fBU\fP are mutually exclusive.
+.TP
+.B D
+For numeric conversions, use decimal.
+Flags \fBD\fP and \fBH\fP are mutually exclusive.
+.TP
+.B H
+For numeric conversions, use hexadecimal.
+Flags \fBD\fP and \fBH\fP are mutually exclusive.
+.TP
+.B L
+Lower case.
+For string conversions, convert all characters to lower case with
+\fBtolower\fP(3).
+For hexadecimal conversion, use digits \fBa\-f\fP.
+Flags \fB=\fP, \fBL\fP and \fBU\fP are mutually exclusive.
+.TP
+.B U
+Upper case.
+For string conversions, convert all characters to upper case with
+\fBtoupper\fP(3).
+For hexadecimal conversion, use digits \fBA\-F\fP.
+Flags \fB=\fP, \fBL\fP and \fBU\fP are mutually exclusive.
+.TP
+.B _
+Pad with underscores.
+Flags \fB0\fP and \fB_\fP are mutually exclusive.
+.SS Width
+The optional \fIwidth\fP field is an unsigned decimal integer.
+It causes the conversion to use at least \fIwidth\fP character.
+.SS Precision
+If there is a dot, the unsigned decimal integer that follows is taken as the
+precision.
+For numeric conversions, the precision has no effect.
+For string conversions, the effect is to truncate to the first \fIprecision\fP
+characters.
+A precision field stripped down to \fB.\fP is equivalent to \fB.0\fP.
+.SS Conversion
+The following conversion characters are implemented:
+.TP
+.B l
+The name of the lump, a string of up to 8 characters.
+If the conversion specification does not include any case flags, the name is
+converted as if the \fBL\fP flag was present.
+.TP
+.B n
+The number of the lump, 0 being the first lump.
+.TP
+.B o
+The offset of the lump in the wad.
+If the conversion specification does not include any base flags, the offset is
+converted as if the \fBH\fP flag was present.
+.TP
+.B s
+The size of the lump in bytes.
+.SH EXIT VALUE
+\fB0\fP	OK
+.br
+\fB>0\fP	Errors occurred
+.SH BUGS
+Strange characters in lump names could cause files with obnoxious names to be
+created or even prevent the lump from being extracted.
+\fB%l\fP should include a quoting mechanism.
+
+In format, \fB\\[0-7]\fP and \fB\\x\fP not implemented yet.
+
+Reading from a non-seekable file such as \fB/dev/stdin\fP is not well
+supported.
+In particular, it will fail if the wad directory does not follow immediately
+the wad header or if the lumps in the directory are not in ascending offset
+order.
+
+There should be an option to extract or not labels.
+
+There should be an option to extract lumps by number or by name.
+
+Perhaps the program should accept more than one argument but then how would you
+know which output file belongs to which wad?
+
+There should be an inverse program.
+.SH AUTHOR
+André Majorel http://www.teaser.fr/~amajorel/
+.SH LEGAL
+wadext2 is copyright André Majorel 2001.
+It is distributed under the terms of the GNU General Public License.
+.SH SEE ALSO
+.BR deutex (6),
+.BR wadext (6),
+.BR xwadtools (6).
