@@ -1,0 +1,6 @@
+include "mapinfo/ultdoom.txt"
+
+gameinfo
+{
+	titlepage = "DMENUPIC"
+}

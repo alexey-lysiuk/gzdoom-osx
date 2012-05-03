@@ -209,7 +209,19 @@ IWad
 	MustContain = "E1M1", "FREEDOOM"
 	BannerColors = "32 54 43", "c6 dc d1"
 }
-	
+
+IWad
+{
+	Name = "DOOM (XBLA/Xbox 360)"
+	Autoname = "Doom1"
+	Game = "Doom"
+	Config = "Doom"
+	Mapinfo = "mapinfo/ultdoom_x360.txt"
+	Compatibility = "Shorttex"
+	MustContain = "E1M9", "E2M9", "E3M9", "E4M9", "DMENUPIC"
+	BannerColors = "54 54 54", "a8 a8 a8"
+}
+
 IWad
 {
 	Name = "The Ultimate DOOM"
@@ -273,6 +285,18 @@ IWad
 	BannerColors = "a8 00 00", "a8 a8 a8"
 }
 
+IWad
+{
+	Name = "DOOM II (XBLA/Xbox 360)"
+	Autoname = "Doom2"
+	Game = "Doom"
+	Config = "Doom"
+	Mapinfo = "mapinfo/doom2_x360.txt"
+	Compatibility = "Shorttex"
+	MustContain = "MAP01", "MAP33", "CWILV32", "DMENUPIC"
+	BannerColors = "a8 00 00", "a8 a8 a8"
+}
+
 // Doom 2 must be last to be checked becaude MAP01 is its only requirement
 IWad
 {
@@ -316,4 +340,10 @@ Names
 	"action2.wad"
 	"harm1.wad"
 	"hacx.wad"
+	"doom.disk"
+	"doom2.disk"
+	"doom_x360.disk"
+	"doom2_x360.disk"
+	"x360_doom.disk"
+	"x360_doom2.disk"
 }

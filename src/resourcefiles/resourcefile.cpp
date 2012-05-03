@@ -260,8 +260,9 @@ FResourceFile *CheckZip(const char *filename, FileReader *file, bool quiet);
 FResourceFile *Check7Z(const char *filename, FileReader *file, bool quiet);
 FResourceFile *CheckLump(const char *filename, FileReader *file, bool quiet);
 FResourceFile *CheckDir(const char *filename, FileReader *file, bool quiet);
+FResourceFile *CheckDisk(const char *filename, FileReader *file, bool quiet);
 
-static CheckFunc funcs[] = { CheckWad, CheckZip, Check7Z, CheckPak, CheckGRP, CheckRFF, CheckLump };
+static CheckFunc funcs[] = { CheckWad, CheckZip, Check7Z, CheckPak, CheckGRP, CheckRFF, CheckDisk, CheckLump };
 
 FResourceFile *FResourceFile::OpenResourceFile(const char *filename, FileReader *file, bool quiet)
 {
