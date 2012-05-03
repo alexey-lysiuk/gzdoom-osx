@@ -146,7 +146,6 @@
 		8A9F532214BB0F2900F3369B /* doomstat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D45139126C00095D9A0 /* doomstat.cpp */; };
 		8A9F532314BB0F2900F3369B /* dsectoreffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D49139126C00095D9A0 /* dsectoreffect.cpp */; };
 		8A9F532414BB0F2900F3369B /* dthinker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D4B139126C00095D9A0 /* dthinker.cpp */; };
-		8A9F532514BB0F2900F3369B /* empty.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D4D139126C00095D9A0 /* empty.cpp */; };
 		8A9F532614BB0F2900F3369B /* f_wipe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D4F139126C00095D9A0 /* f_wipe.cpp */; };
 		8A9F532714BB0F2900F3369B /* farchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D51139126C00095D9A0 /* farchive.cpp */; };
 		8A9F532814BB0F2900F3369B /* files.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D53139126C00095D9A0 /* files.cpp */; };
@@ -212,14 +211,12 @@
 		8A9F536414BB0F2900F3369B /* gi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DF9139126C00095D9A0 /* gi.cpp */; };
 		8A9F536514BB0F2900F3369B /* gl_data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DFD139126C00095D9A0 /* gl_data.cpp */; };
 		8A9F536614BB0F2900F3369B /* gl_portaldata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DFF139126C00095D9A0 /* gl_portaldata.cpp */; };
-		8A9F536714BB0F2900F3369B /* gl_sections.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E00139126C00095D9A0 /* gl_sections.cpp */; };
 		8A9F536814BB0F2900F3369B /* gl_setup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E02139126C00095D9A0 /* gl_setup.cpp */; };
 		8A9F536914BB0F2900F3369B /* gl_vertexbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E03139126C00095D9A0 /* gl_vertexbuffer.cpp */; };
 		8A9F536A14BB0F2900F3369B /* a_dynlight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E06139126C00095D9A0 /* a_dynlight.cpp */; };
 		8A9F536B14BB0F2900F3369B /* gl_dynlight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E07139126C00095D9A0 /* gl_dynlight.cpp */; };
 		8A9F536C14BB0F2900F3369B /* gl_dynlight1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E09139126C00095D9A0 /* gl_dynlight1.cpp */; };
 		8A9F536D14BB0F2900F3369B /* gl_glow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E0A139126C00095D9A0 /* gl_glow.cpp */; };
-		8A9F536E14BB0F2900F3369B /* gl_lightbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E0C139126C00095D9A0 /* gl_lightbuffer.cpp */; };
 		8A9F536F14BB0F2900F3369B /* gl_models.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E18139126C00095D9A0 /* gl_models.cpp */; };
 		8A9F537014BB0F2900F3369B /* gl_models_md2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E1A139126C00095D9A0 /* gl_models_md2.cpp */; };
 		8A9F537114BB0F2900F3369B /* gl_models_md3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E1B139126C00095D9A0 /* gl_models_md3.cpp */; };
@@ -249,7 +246,6 @@
 		8A9F538914BB0F2900F3369B /* gl_framebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E43139126C00095D9A0 /* gl_framebuffer.cpp */; };
 		8A9F538A14BB0F2900F3369B /* gl_interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E45139126C00095D9A0 /* gl_interface.cpp */; };
 		8A9F538B14BB0F2900F3369B /* gl_menu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E47139126C00095D9A0 /* gl_menu.cpp */; };
-		8A9F538C14BB0F2900F3369B /* gl_threads.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E49139126C00095D9A0 /* gl_threads.cpp */; };
 		8A9F538D14BB0F2900F3369B /* gl_wipe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E4B139126C00095D9A0 /* gl_wipe.cpp */; };
 		8A9F538E14BB0F2900F3369B /* gl_bitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E4D139126C00095D9A0 /* gl_bitmap.cpp */; };
 		8A9F538F14BB0F2900F3369B /* gl_hirestex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E50139126C00095D9A0 /* gl_hirestex.cpp */; };
@@ -268,7 +264,6 @@
 		8A9F539C14BB0F2900F3369B /* intermission.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E70139126C00095D9A0 /* intermission.cpp */; };
 		8A9F539D14BB0F2900F3369B /* intermission_parse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E72139126C00095D9A0 /* intermission_parse.cpp */; };
 		8A9F539E14BB0F2900F3369B /* keysections.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E73139126C00095D9A0 /* keysections.cpp */; };
-		8A9F539F14BB0F2900F3369B /* lumpconfigfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E77139126C00095D9A0 /* lumpconfigfile.cpp */; };
 		8A9F53A014BB0F2900F3369B /* m_alloc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E79139126C00095D9A0 /* m_alloc.cpp */; };
 		8A9F53A114BB0F2900F3369B /* m_argv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E7B139126C00095D9A0 /* m_argv.cpp */; };
 		8A9F53A214BB0F2900F3369B /* m_bbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E7D139126C00095D9A0 /* m_bbox.cpp */; };
@@ -296,7 +291,6 @@
 		8A9F53B814BB0F2900F3369B /* name.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EA3139126C00095D9A0 /* name.cpp */; };
 		8A9F53B914BB0F2900F3369B /* nodebuild.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EA6139126C00095D9A0 /* nodebuild.cpp */; };
 		8A9F53BA14BB0F2900F3369B /* nodebuild_classify_nosse2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EA8139126C00095D9A0 /* nodebuild_classify_nosse2.cpp */; };
-		8A9F53BB14BB0F2900F3369B /* nodebuild_classify_sse2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EA9139126C00095D9A0 /* nodebuild_classify_sse2.cpp */; };
 		8A9F53BC14BB0F2900F3369B /* nodebuild_events.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EAA139126C00095D9A0 /* nodebuild_events.cpp */; };
 		8A9F53BD14BB0F2900F3369B /* nodebuild_extract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EAB139126C00095D9A0 /* nodebuild_extract.cpp */; };
 		8A9F53BE14BB0F2900F3369B /* nodebuild_gl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EAC139126C00095D9A0 /* nodebuild_gl.cpp */; };
@@ -382,7 +376,6 @@
 		8A9F541114BB0F2900F3369B /* sdlglvideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3C139126C00095D9A0 /* sdlglvideo.cpp */; };
 		8A9F541314BB0F2900F3369B /* st_start.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F41139126C00095D9A0 /* st_start.cpp */; };
 		8A9F541414BB0F2900F3369B /* SFMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F51139126C00095D9A0 /* SFMT.cpp */; };
-		8A9F541514BB0F2900F3369B /* skins.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F53139126C00095D9A0 /* skins.cpp */; };
 		8A9F541614BB0F2900F3369B /* fmodsound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F57139126C00095D9A0 /* fmodsound.cpp */; };
 		8A9F541714BB0F2900F3369B /* i_music.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F59139126C00095D9A0 /* i_music.cpp */; };
 		8A9F541814BB0F2900F3369B /* i_sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F5C139126C00095D9A0 /* i_sound.cpp */; };
@@ -401,7 +394,6 @@
 		8A9F542514BB0F2900F3369B /* music_softsynth_mididevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F6B139126C00095D9A0 /* music_softsynth_mididevice.cpp */; };
 		8A9F542614BB0F2900F3369B /* music_stream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F6C139126C00095D9A0 /* music_stream.cpp */; };
 		8A9F542714BB0F2900F3369B /* music_timidity_mididevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F6D139126C00095D9A0 /* music_timidity_mididevice.cpp */; };
-		8A9F542814BB0F2900F3369B /* music_win_mididevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F6E139126C00095D9A0 /* music_win_mididevice.cpp */; };
 		8A9F542914BB0F2900F3369B /* music_xmi_midiout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F6F139126C00095D9A0 /* music_xmi_midiout.cpp */; };
 		8A9F542A14BB0F2900F3369B /* st_stuff.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F71139126C00095D9A0 /* st_stuff.cpp */; };
 		8A9F542B14BB0F2900F3369B /* statistics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F73139126C00095D9A0 /* statistics.cpp */; };
@@ -734,7 +726,6 @@
 		8AF28031139126C00095D9A0 /* doomstat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D45139126C00095D9A0 /* doomstat.cpp */; };
 		8AF28032139126C00095D9A0 /* dsectoreffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D49139126C00095D9A0 /* dsectoreffect.cpp */; };
 		8AF28033139126C00095D9A0 /* dthinker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D4B139126C00095D9A0 /* dthinker.cpp */; };
-		8AF28034139126C00095D9A0 /* empty.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D4D139126C00095D9A0 /* empty.cpp */; };
 		8AF28035139126C00095D9A0 /* f_wipe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D4F139126C00095D9A0 /* f_wipe.cpp */; };
 		8AF28036139126C00095D9A0 /* farchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D51139126C00095D9A0 /* farchive.cpp */; };
 		8AF28037139126C00095D9A0 /* files.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D53139126C00095D9A0 /* files.cpp */; };
@@ -800,14 +791,12 @@
 		8AF280BE139126C00095D9A0 /* gi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DF9139126C00095D9A0 /* gi.cpp */; };
 		8AF280BF139126C00095D9A0 /* gl_data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DFD139126C00095D9A0 /* gl_data.cpp */; };
 		8AF280C0139126C00095D9A0 /* gl_portaldata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27DFF139126C00095D9A0 /* gl_portaldata.cpp */; };
-		8AF280C1139126C00095D9A0 /* gl_sections.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E00139126C00095D9A0 /* gl_sections.cpp */; };
 		8AF280C2139126C00095D9A0 /* gl_setup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E02139126C00095D9A0 /* gl_setup.cpp */; };
 		8AF280C3139126C00095D9A0 /* gl_vertexbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E03139126C00095D9A0 /* gl_vertexbuffer.cpp */; };
 		8AF280C4139126C00095D9A0 /* a_dynlight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E06139126C00095D9A0 /* a_dynlight.cpp */; };
 		8AF280C5139126C00095D9A0 /* gl_dynlight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E07139126C00095D9A0 /* gl_dynlight.cpp */; };
 		8AF280C6139126C00095D9A0 /* gl_dynlight1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E09139126C00095D9A0 /* gl_dynlight1.cpp */; };
 		8AF280C7139126C00095D9A0 /* gl_glow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E0A139126C00095D9A0 /* gl_glow.cpp */; };
-		8AF280C8139126C00095D9A0 /* gl_lightbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E0C139126C00095D9A0 /* gl_lightbuffer.cpp */; };
 		8AF280CE139126C00095D9A0 /* gl_models.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E18139126C00095D9A0 /* gl_models.cpp */; };
 		8AF280CF139126C00095D9A0 /* gl_models_md2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E1A139126C00095D9A0 /* gl_models_md2.cpp */; };
 		8AF280D0139126C00095D9A0 /* gl_models_md3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E1B139126C00095D9A0 /* gl_models_md3.cpp */; };
@@ -837,7 +826,6 @@
 		8AF280E8139126C00095D9A0 /* gl_framebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E43139126C00095D9A0 /* gl_framebuffer.cpp */; };
 		8AF280E9139126C00095D9A0 /* gl_interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E45139126C00095D9A0 /* gl_interface.cpp */; };
 		8AF280EA139126C00095D9A0 /* gl_menu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E47139126C00095D9A0 /* gl_menu.cpp */; };
-		8AF280EB139126C00095D9A0 /* gl_threads.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E49139126C00095D9A0 /* gl_threads.cpp */; };
 		8AF280EC139126C00095D9A0 /* gl_wipe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E4B139126C00095D9A0 /* gl_wipe.cpp */; };
 		8AF280ED139126C00095D9A0 /* gl_bitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E4D139126C00095D9A0 /* gl_bitmap.cpp */; };
 		8AF280EF139126C00095D9A0 /* gl_hirestex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E50139126C00095D9A0 /* gl_hirestex.cpp */; };
@@ -856,7 +844,6 @@
 		8AF280FC139126C00095D9A0 /* intermission.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E70139126C00095D9A0 /* intermission.cpp */; };
 		8AF280FD139126C00095D9A0 /* intermission_parse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E72139126C00095D9A0 /* intermission_parse.cpp */; };
 		8AF280FE139126C00095D9A0 /* keysections.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E73139126C00095D9A0 /* keysections.cpp */; };
-		8AF280FF139126C00095D9A0 /* lumpconfigfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E77139126C00095D9A0 /* lumpconfigfile.cpp */; };
 		8AF28100139126C00095D9A0 /* m_alloc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E79139126C00095D9A0 /* m_alloc.cpp */; };
 		8AF28101139126C00095D9A0 /* m_argv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E7B139126C00095D9A0 /* m_argv.cpp */; };
 		8AF28102139126C00095D9A0 /* m_bbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E7D139126C00095D9A0 /* m_bbox.cpp */; };
@@ -884,7 +871,6 @@
 		8AF28118139126C00095D9A0 /* name.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EA3139126C00095D9A0 /* name.cpp */; };
 		8AF28119139126C00095D9A0 /* nodebuild.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EA6139126C00095D9A0 /* nodebuild.cpp */; };
 		8AF2811A139126C00095D9A0 /* nodebuild_classify_nosse2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EA8139126C00095D9A0 /* nodebuild_classify_nosse2.cpp */; };
-		8AF2811B139126C00095D9A0 /* nodebuild_classify_sse2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EA9139126C00095D9A0 /* nodebuild_classify_sse2.cpp */; };
 		8AF2811C139126C00095D9A0 /* nodebuild_events.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EAA139126C00095D9A0 /* nodebuild_events.cpp */; };
 		8AF2811D139126C00095D9A0 /* nodebuild_extract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EAB139126C00095D9A0 /* nodebuild_extract.cpp */; };
 		8AF2811E139126C00095D9A0 /* nodebuild_gl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EAC139126C00095D9A0 /* nodebuild_gl.cpp */; };
@@ -974,7 +960,6 @@
 		8AF28178139126C10095D9A0 /* sdlvideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3F139126C00095D9A0 /* sdlvideo.cpp */; };
 		8AF28179139126C10095D9A0 /* st_start.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F41139126C00095D9A0 /* st_start.cpp */; };
 		8AF2817B139126C10095D9A0 /* SFMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F51139126C00095D9A0 /* SFMT.cpp */; };
-		8AF2817C139126C10095D9A0 /* skins.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F53139126C00095D9A0 /* skins.cpp */; };
 		8AF2817D139126C10095D9A0 /* fmodsound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F57139126C00095D9A0 /* fmodsound.cpp */; };
 		8AF2817E139126C10095D9A0 /* i_music.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F59139126C00095D9A0 /* i_music.cpp */; };
 		8AF2817F139126C10095D9A0 /* i_sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F5C139126C00095D9A0 /* i_sound.cpp */; };
@@ -993,7 +978,6 @@
 		8AF2818C139126C10095D9A0 /* music_softsynth_mididevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F6B139126C00095D9A0 /* music_softsynth_mididevice.cpp */; };
 		8AF2818D139126C10095D9A0 /* music_stream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F6C139126C00095D9A0 /* music_stream.cpp */; };
 		8AF2818E139126C10095D9A0 /* music_timidity_mididevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F6D139126C00095D9A0 /* music_timidity_mididevice.cpp */; };
-		8AF2818F139126C10095D9A0 /* music_win_mididevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F6E139126C00095D9A0 /* music_win_mididevice.cpp */; };
 		8AF28190139126C10095D9A0 /* music_xmi_midiout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F6F139126C00095D9A0 /* music_xmi_midiout.cpp */; };
 		8AF28191139126C10095D9A0 /* st_stuff.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F71139126C00095D9A0 /* st_stuff.cpp */; };
 		8AF28192139126C10095D9A0 /* statistics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F73139126C00095D9A0 /* statistics.cpp */; };
@@ -4566,7 +4550,6 @@
 				8A9F532214BB0F2900F3369B /* doomstat.cpp in Sources */,
 				8A9F532314BB0F2900F3369B /* dsectoreffect.cpp in Sources */,
 				8A9F532414BB0F2900F3369B /* dthinker.cpp in Sources */,
-				8A9F532514BB0F2900F3369B /* empty.cpp in Sources */,
 				8A9F532614BB0F2900F3369B /* f_wipe.cpp in Sources */,
 				8A9F532714BB0F2900F3369B /* farchive.cpp in Sources */,
 				8A9F532814BB0F2900F3369B /* files.cpp in Sources */,
@@ -4632,14 +4615,12 @@
 				8A9F536414BB0F2900F3369B /* gi.cpp in Sources */,
 				8A9F536514BB0F2900F3369B /* gl_data.cpp in Sources */,
 				8A9F536614BB0F2900F3369B /* gl_portaldata.cpp in Sources */,
-				8A9F536714BB0F2900F3369B /* gl_sections.cpp in Sources */,
 				8A9F536814BB0F2900F3369B /* gl_setup.cpp in Sources */,
 				8A9F536914BB0F2900F3369B /* gl_vertexbuffer.cpp in Sources */,
 				8A9F536A14BB0F2900F3369B /* a_dynlight.cpp in Sources */,
 				8A9F536B14BB0F2900F3369B /* gl_dynlight.cpp in Sources */,
 				8A9F536C14BB0F2900F3369B /* gl_dynlight1.cpp in Sources */,
 				8A9F536D14BB0F2900F3369B /* gl_glow.cpp in Sources */,
-				8A9F536E14BB0F2900F3369B /* gl_lightbuffer.cpp in Sources */,
 				8A9F536F14BB0F2900F3369B /* gl_models.cpp in Sources */,
 				8A9F537014BB0F2900F3369B /* gl_models_md2.cpp in Sources */,
 				8A9F537114BB0F2900F3369B /* gl_models_md3.cpp in Sources */,
@@ -4669,7 +4650,6 @@
 				8A9F538914BB0F2900F3369B /* gl_framebuffer.cpp in Sources */,
 				8A9F538A14BB0F2900F3369B /* gl_interface.cpp in Sources */,
 				8A9F538B14BB0F2900F3369B /* gl_menu.cpp in Sources */,
-				8A9F538C14BB0F2900F3369B /* gl_threads.cpp in Sources */,
 				8A9F538D14BB0F2900F3369B /* gl_wipe.cpp in Sources */,
 				8A9F538E14BB0F2900F3369B /* gl_bitmap.cpp in Sources */,
 				8A9F538F14BB0F2900F3369B /* gl_hirestex.cpp in Sources */,
@@ -4688,7 +4668,6 @@
 				8A9F539C14BB0F2900F3369B /* intermission.cpp in Sources */,
 				8A9F539D14BB0F2900F3369B /* intermission_parse.cpp in Sources */,
 				8A9F539E14BB0F2900F3369B /* keysections.cpp in Sources */,
-				8A9F539F14BB0F2900F3369B /* lumpconfigfile.cpp in Sources */,
 				8A9F53A014BB0F2900F3369B /* m_alloc.cpp in Sources */,
 				8A9F53A114BB0F2900F3369B /* m_argv.cpp in Sources */,
 				8A9F53A214BB0F2900F3369B /* m_bbox.cpp in Sources */,
@@ -4716,7 +4695,6 @@
 				8A9F53B814BB0F2900F3369B /* name.cpp in Sources */,
 				8A9F53B914BB0F2900F3369B /* nodebuild.cpp in Sources */,
 				8A9F53BA14BB0F2900F3369B /* nodebuild_classify_nosse2.cpp in Sources */,
-				8A9F53BB14BB0F2900F3369B /* nodebuild_classify_sse2.cpp in Sources */,
 				8A9F53BC14BB0F2900F3369B /* nodebuild_events.cpp in Sources */,
 				8A9F53BD14BB0F2900F3369B /* nodebuild_extract.cpp in Sources */,
 				8A9F53BE14BB0F2900F3369B /* nodebuild_gl.cpp in Sources */,
@@ -4803,7 +4781,6 @@
 				8A9F541114BB0F2900F3369B /* sdlglvideo.cpp in Sources */,
 				8A9F541314BB0F2900F3369B /* st_start.cpp in Sources */,
 				8A9F541414BB0F2900F3369B /* SFMT.cpp in Sources */,
-				8A9F541514BB0F2900F3369B /* skins.cpp in Sources */,
 				8A9F541614BB0F2900F3369B /* fmodsound.cpp in Sources */,
 				8A9F541714BB0F2900F3369B /* i_music.cpp in Sources */,
 				8A9F541814BB0F2900F3369B /* i_sound.cpp in Sources */,
@@ -4822,7 +4799,6 @@
 				8A9F542514BB0F2900F3369B /* music_softsynth_mididevice.cpp in Sources */,
 				8A9F542614BB0F2900F3369B /* music_stream.cpp in Sources */,
 				8A9F542714BB0F2900F3369B /* music_timidity_mididevice.cpp in Sources */,
-				8A9F542814BB0F2900F3369B /* music_win_mididevice.cpp in Sources */,
 				8A9F542914BB0F2900F3369B /* music_xmi_midiout.cpp in Sources */,
 				8A9F542A14BB0F2900F3369B /* st_stuff.cpp in Sources */,
 				8A9F542B14BB0F2900F3369B /* statistics.cpp in Sources */,
@@ -5203,7 +5179,6 @@
 				8AF28031139126C00095D9A0 /* doomstat.cpp in Sources */,
 				8AF28032139126C00095D9A0 /* dsectoreffect.cpp in Sources */,
 				8AF28033139126C00095D9A0 /* dthinker.cpp in Sources */,
-				8AF28034139126C00095D9A0 /* empty.cpp in Sources */,
 				8AF28035139126C00095D9A0 /* f_wipe.cpp in Sources */,
 				8AF28036139126C00095D9A0 /* farchive.cpp in Sources */,
 				8AF28037139126C00095D9A0 /* files.cpp in Sources */,
@@ -5269,14 +5244,12 @@
 				8AF280BE139126C00095D9A0 /* gi.cpp in Sources */,
 				8AF280BF139126C00095D9A0 /* gl_data.cpp in Sources */,
 				8AF280C0139126C00095D9A0 /* gl_portaldata.cpp in Sources */,
-				8AF280C1139126C00095D9A0 /* gl_sections.cpp in Sources */,
 				8AF280C2139126C00095D9A0 /* gl_setup.cpp in Sources */,
 				8AF280C3139126C00095D9A0 /* gl_vertexbuffer.cpp in Sources */,
 				8AF280C4139126C00095D9A0 /* a_dynlight.cpp in Sources */,
 				8AF280C5139126C00095D9A0 /* gl_dynlight.cpp in Sources */,
 				8AF280C6139126C00095D9A0 /* gl_dynlight1.cpp in Sources */,
 				8AF280C7139126C00095D9A0 /* gl_glow.cpp in Sources */,
-				8AF280C8139126C00095D9A0 /* gl_lightbuffer.cpp in Sources */,
 				8AF280CE139126C00095D9A0 /* gl_models.cpp in Sources */,
 				8AF280CF139126C00095D9A0 /* gl_models_md2.cpp in Sources */,
 				8AF280D0139126C00095D9A0 /* gl_models_md3.cpp in Sources */,
@@ -5306,7 +5279,6 @@
 				8AF280E8139126C00095D9A0 /* gl_framebuffer.cpp in Sources */,
 				8AF280E9139126C00095D9A0 /* gl_interface.cpp in Sources */,
 				8AF280EA139126C00095D9A0 /* gl_menu.cpp in Sources */,
-				8AF280EB139126C00095D9A0 /* gl_threads.cpp in Sources */,
 				8AF280EC139126C00095D9A0 /* gl_wipe.cpp in Sources */,
 				8AF280ED139126C00095D9A0 /* gl_bitmap.cpp in Sources */,
 				8AF280EF139126C00095D9A0 /* gl_hirestex.cpp in Sources */,
@@ -5325,7 +5297,6 @@
 				8AF280FC139126C00095D9A0 /* intermission.cpp in Sources */,
 				8AF280FD139126C00095D9A0 /* intermission_parse.cpp in Sources */,
 				8AF280FE139126C00095D9A0 /* keysections.cpp in Sources */,
-				8AF280FF139126C00095D9A0 /* lumpconfigfile.cpp in Sources */,
 				8AF28100139126C00095D9A0 /* m_alloc.cpp in Sources */,
 				8AF28101139126C00095D9A0 /* m_argv.cpp in Sources */,
 				8AF28102139126C00095D9A0 /* m_bbox.cpp in Sources */,
@@ -5353,7 +5324,6 @@
 				8AF28118139126C00095D9A0 /* name.cpp in Sources */,
 				8AF28119139126C00095D9A0 /* nodebuild.cpp in Sources */,
 				8AF2811A139126C00095D9A0 /* nodebuild_classify_nosse2.cpp in Sources */,
-				8AF2811B139126C00095D9A0 /* nodebuild_classify_sse2.cpp in Sources */,
 				8AF2811C139126C00095D9A0 /* nodebuild_events.cpp in Sources */,
 				8AF2811D139126C00095D9A0 /* nodebuild_extract.cpp in Sources */,
 				8AF2811E139126C00095D9A0 /* nodebuild_gl.cpp in Sources */,
@@ -5442,7 +5412,6 @@
 				8AF28178139126C10095D9A0 /* sdlvideo.cpp in Sources */,
 				8AF28179139126C10095D9A0 /* st_start.cpp in Sources */,
 				8AF2817B139126C10095D9A0 /* SFMT.cpp in Sources */,
-				8AF2817C139126C10095D9A0 /* skins.cpp in Sources */,
 				8AF2817D139126C10095D9A0 /* fmodsound.cpp in Sources */,
 				8AF2817E139126C10095D9A0 /* i_music.cpp in Sources */,
 				8AF2817F139126C10095D9A0 /* i_sound.cpp in Sources */,
@@ -5461,7 +5430,6 @@
 				8AF2818C139126C10095D9A0 /* music_softsynth_mididevice.cpp in Sources */,
 				8AF2818D139126C10095D9A0 /* music_stream.cpp in Sources */,
 				8AF2818E139126C10095D9A0 /* music_timidity_mididevice.cpp in Sources */,
-				8AF2818F139126C10095D9A0 /* music_win_mididevice.cpp in Sources */,
 				8AF28190139126C10095D9A0 /* music_xmi_midiout.cpp in Sources */,
 				8AF28191139126C10095D9A0 /* st_stuff.cpp in Sources */,
 				8AF28192139126C10095D9A0 /* statistics.cpp in Sources */,
