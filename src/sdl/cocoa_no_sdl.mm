@@ -94,6 +94,8 @@ bool GUICapture;
 extern int paused, chatmodeon;
 extern constate_e ConsoleState;
 
+EXTERN_CVAR( Int, m_use_mouse );
+
 
 namespace
 {
@@ -187,8 +189,31 @@ bool IsInGame()
 
 void CheckNativeMouse()
 {
-	const bool focus      = [NSApp isActive];
-	const bool wantNative = !focus || !use_mouse || GUICapture || paused || demoplayback || !IsInGame();
+	bool windowed = ( NULL == screen ) || !screen->IsFullscreen();
+	bool wantNative;
+	
+	if ( windowed )
+	{
+		if ( ![NSApp isActive] || !use_mouse )
+		{
+			wantNative = true;
+		}
+		else if ( MENU_WaitKey == menuactive )
+		{
+			wantNative = false;
+		}
+		else
+		{
+			wantNative = ( !m_use_mouse || MENU_WaitKey != menuactive )
+				&& ( !IsInGame() || GUICapture || paused || demoplayback );
+		}
+	}
+	else
+	{
+		// ungrab mouse when in the menu with mouse control on.		
+		wantNative = m_use_mouse 
+			&& ( MENU_On == menuactive || MENU_OnNoPause == menuactive );
+	}
 	
 	if ( wantNative != s_nativeMouse )
 	{
