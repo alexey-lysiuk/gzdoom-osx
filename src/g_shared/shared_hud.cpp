@@ -78,13 +78,15 @@ CVAR (Int, hud_armor_red, 25, CVAR_ARCHIVE)					// armor amount less than which 
 CVAR (Int, hud_armor_yellow, 50, CVAR_ARCHIVE)				// armor amount less than which status is yellow 
 CVAR (Int, hud_armor_green, 100, CVAR_ARCHIVE)				// armor amount above is blue, below is green    
 
+CVAR (Bool, hud_berserk_health, false, CVAR_ARCHIVE);		// when found berserk pack instead of health box
+
 CVAR (Int, hudcolor_titl, CR_YELLOW, CVAR_ARCHIVE)			// color of automap title
 CVAR (Int, hudcolor_time, CR_RED, CVAR_ARCHIVE)				// color of level/hub time
 CVAR (Int, hudcolor_ltim, CR_ORANGE, CVAR_ARCHIVE)			// color of single level time
 CVAR (Int, hudcolor_ttim, CR_GOLD, CVAR_ARCHIVE)			// color of total time
 CVAR (Int, hudcolor_xyco, CR_GREEN, CVAR_ARCHIVE)			// color of coordinates
 
-CVAR (Int, hudcolor_statnames, CR_RED, CVAR_ARCHIVE)		// For the letters befóre the stats
+CVAR (Int, hudcolor_statnames, CR_RED, CVAR_ARCHIVE)		// For the letters befï¿³re the stats
 CVAR (Int, hudcolor_stats, CR_GREEN, CVAR_ARCHIVE)			// For the stats values themselves
 
 
@@ -95,6 +97,7 @@ static FFont * IndexFont;					// The font for the inventory indices
 
 // Icons
 static FTexture * healthpic;				// Health icon
+static FTexture * berserkpic;				// Berserk icon (Doom only)
 static FTexture * fragpic;					// Frags icon
 static FTexture * invgems[4];				// Inventory arrows
 
@@ -275,8 +278,15 @@ static void DrawHealth(int health, int x, int y)
 		health < hud_health_yellow ? CR_GOLD :
 		health <= hud_health_green ? CR_GREEN :
 		CR_BLUE;
-	
-	DrawImageToBox(healthpic, x, y, 31, 17);
+
+	const bool haveBerserk = hud_berserk_health
+		&& NULL != berserkpic
+		&& NULL != StatusBar
+		&& NULL != StatusBar->CPlayer
+		&& NULL != StatusBar->CPlayer->mo
+		&& NULL != StatusBar->CPlayer->mo->FindInventory< APowerStrength >();
+
+	DrawImageToBox(haveBerserk ? berserkpic : healthpic, x, y, 31, 17);
 	DrawHudNumber(HudFont, fontcolor, health, x + 33, y + 17);
 }
 
@@ -936,6 +946,7 @@ void HUD_InitHud()
 
 	default:
 		healthpic = TexMan.FindTexture("MEDIA0");
+		berserkpic = TexMan.FindTexture("PSTRA0");
 		HudFont=FFont::FindFont("HUDFONT_DOOM");
 		break;
 	}
