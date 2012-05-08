@@ -109,6 +109,8 @@
 		8A8D68B713C84344001D368F /* r_swrenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D68B313C84344001D368F /* r_swrenderer.cpp */; };
 		8A8D68B813C84344001D368F /* r_utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D68B513C84344001D368F /* r_utility.cpp */; };
 		8A938D1113B6039F002627DE /* actorptrselect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A938D0F13B6039F002627DE /* actorptrselect.cpp */; };
+		8A942A3E1553CC25005083CD /* v_blend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A942A3D1553CC25005083CD /* v_blend.cpp */; };
+		8A942A3F1553CC25005083CD /* v_blend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A942A3D1553CC25005083CD /* v_blend.cpp */; };
 		8A9633AA14F90431000E4D55 /* sdlvideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3F139126C00095D9A0 /* sdlvideo.cpp */; };
 		8A9F530014BB0F2900F3369B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8A9F530114BB0F2900F3369B /* doom.icns in Resources */ = {isa = PBXBuildFile; fileRef = 49E9287713978BF600CCEBBC /* doom.icns */; };
@@ -1324,6 +1326,7 @@
 		8A8D68B613C84344001D368F /* r_utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = r_utility.h; sourceTree = "<group>"; };
 		8A938D0F13B6039F002627DE /* actorptrselect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = actorptrselect.cpp; sourceTree = "<group>"; };
 		8A938D1013B6039F002627DE /* actorptrselect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = actorptrselect.h; sourceTree = "<group>"; };
+		8A942A3D1553CC25005083CD /* v_blend.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = v_blend.cpp; sourceTree = "<group>"; };
 		8A9F548414BB0F2900F3369B /* GZDoom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GZDoom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AD870F1140A4EC5007A06A9 /* Credits.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Credits.html; sourceTree = "<group>"; };
 		8AF278CA1390F0370095D9A0 /* libjpeg_gzdoom.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libjpeg_gzdoom.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3372,6 +3375,7 @@
 				8AF27F82139126C00095D9A0 /* tempfiles.cpp */,
 				8AF27F83139126C00095D9A0 /* tempfiles.h */,
 				8AF27F84139126C00095D9A0 /* templates.h */,
+				8A942A3D1553CC25005083CD /* v_blend.cpp */,
 				8AF27FBD139126C00095D9A0 /* v_collection.cpp */,
 				8AF27FBE139126C00095D9A0 /* v_collection.h */,
 				8AF27FBF139126C00095D9A0 /* v_draw.cpp */,
@@ -4847,6 +4851,7 @@
 				8A9F545514BB0F2900F3369B /* playmidi.cpp in Sources */,
 				8A9F545614BB0F2900F3369B /* resample.cpp in Sources */,
 				8A9F545714BB0F2900F3369B /* timidity.cpp in Sources */,
+				8A942A3E1553CC25005083CD /* v_blend.cpp in Sources */,
 				8A9F545814BB0F2900F3369B /* v_collection.cpp in Sources */,
 				8A9F545914BB0F2900F3369B /* v_draw.cpp in Sources */,
 				8A9F545A14BB0F2900F3369B /* v_font.cpp in Sources */,
@@ -5478,6 +5483,7 @@
 				8AF281C0139126C10095D9A0 /* playmidi.cpp in Sources */,
 				8AF281C2139126C10095D9A0 /* resample.cpp in Sources */,
 				8AF281C3139126C10095D9A0 /* timidity.cpp in Sources */,
+				8A942A3F1553CC25005083CD /* v_blend.cpp in Sources */,
 				8AF281C4139126C10095D9A0 /* v_collection.cpp in Sources */,
 				8AF281C5139126C10095D9A0 /* v_draw.cpp in Sources */,
 				8AF281C6139126C10095D9A0 /* v_font.cpp in Sources */,

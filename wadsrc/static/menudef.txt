@@ -726,6 +726,18 @@ OptionValue Crosshairs
 	// will be filled in from the XHAIRS lump
 }
 
+OptionValue ZDoomHexen
+{
+	0.0, "ZDoom"
+	1.0, "Hexen"
+}
+
+OptionValue ZDoomStrife
+{
+	0.0, "ZDoom"
+	1.0, "Strife"
+}
+
 OptionMenu "HUDOptions"
 {
 	Title "HUD Options"
@@ -743,6 +755,11 @@ OptionMenu "HUDOptions"
 	Option "Nametag color",				"nametagcolor", "TextColors", "displaynametags"
 	Option "Stretch status bar",		"st_scale", "OnOff"
 	Option "Use old ouch mug shot formula",	"st_oldouch", "OnOff"
+	StaticText " "
+	Option "Hexen weapon flashes",		"pf_hexenweaps",	"ZDoomHexen"
+	Option "Poison damage flashes",		"pf_poison",		"ZDoomHexen"
+	Option "Ice death flashes",			"pf_ice",			"ZDoomHexen"
+	Option "Poison Buildup flashes",	"pf_hazard",		"ZDoomStrife"
 }
 	
 //-------------------------------------------------------------------------------------------
@@ -1203,7 +1220,8 @@ OptionMenu "CompatibilityOptions"
 	Option "Cripple sound for silent BFG trick",		"compat_soundslots", "YesNo"
 	Option "Draw polyobjects like Hexen",				"compat_POLYOBJ", "YesNo"
 	Option "Ignore Y offsets on masked midtextures",	"compat_MASKEDMIDTEX", "YesNo"
-	Option "Cannot travel straight NSEW",			"compat_badangles", "YesNo"
+	Option "Cannot travel straight NSEW",				"compat_badangles", "YesNo"
+	Option "Use Doom's floor motion behavior",			"compat_floormove", "YesNo"
 	
 	Class "CompatibilityMenu"
 }
