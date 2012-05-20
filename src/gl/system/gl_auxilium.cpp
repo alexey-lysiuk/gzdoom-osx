@@ -312,6 +312,8 @@ static GLuint CreateShader( const GLenum type, const char* name )
 
 
 ShaderProgram::ShaderProgram( const char* const vertexName, const char* const fragmentName )
+: m_vertexShaderID(0)
+, m_fragmentShaderID(0)
 {
 	const bool hasVertexShader = NULL != vertexName && strlen( vertexName ) > 0;
 	if ( hasVertexShader )
