@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 42;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -1357,8 +1357,11 @@
 /* Begin PBXProject section */
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+			};
 			buildConfigurationList = 0073178E0858DB0500B2BC32 /* Build configuration list for PBXProject "SDL" */;
-			compatibilityVersion = "Xcode 2.4";
+			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
@@ -1692,6 +1695,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DOXYGEN_EXE = /Applications/Doxygen.app/Contents/Resources/doxygen;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = "Generate Doxygen DocSet";
 			};
 			name = Deployment_for_official_releases_using_10.4SDK_and_10.6SDK;
@@ -1700,6 +1704,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DOXYGEN_EXE = /Applications/Doxygen.app/Contents/Resources/doxygen;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = "Generate Doxygen DocSet";
 			};
 			name = Development_using_10.4SDK_and_10.6SDK;
@@ -1708,6 +1713,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DOXYGEN_EXE = /Applications/Doxygen.app/Contents/Resources/doxygen;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = "Generate Doxygen DocSet";
 			};
 			name = Development_native_only;
@@ -1716,6 +1722,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DOXYGEN_EXE = /Applications/Doxygen.app/Contents/Resources/doxygen;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = "Generate Doxygen DocSet";
 			};
 			name = Deployment_native_only;
@@ -1724,6 +1731,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DOXYGEN_EXE = /Applications/Doxygen.app/Contents/Resources/doxygen;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = "Generate Doxygen DocSet";
 			};
 			name = Development_legacy;
@@ -1732,6 +1740,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DOXYGEN_EXE = /Applications/Doxygen.app/Contents/Resources/doxygen;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = "Generate Doxygen DocSet";
 			};
 			name = Deployment_legacy;
@@ -1740,6 +1749,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DOXYGEN_EXE = /Applications/Doxygen.app/Contents/Resources/doxygen;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = "Generate Doxygen DocSet";
 			};
 			name = Default;
@@ -1766,6 +1776,7 @@
 					"SDL_VIDEO_DRIVER_X11_XV=1",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = /usr/X11R6/include;
 				INFOPLIST_FILE = "Info-Framework.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
@@ -1799,6 +1810,7 @@
 					"SDL_VIDEO_DRIVER_X11_XV=1",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = /usr/X11R6/include;
 				INFOPLIST_FILE = "Info-Framework.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
@@ -1833,6 +1845,7 @@
 					"SDL_VIDEO_DRIVER_X11_XV=1",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = /usr/X11R6/include;
 				INFOPLIST_FILE = "Info-Framework.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
@@ -1866,6 +1879,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_2 = "SDL_VIDEO_DRIVER_X11_DYNAMIC_XEXT=\\\"/usr/X11R6/lib/libXext.6.dylib\\\"";
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_3 = "SDL_VIDEO_DRIVER_X11_DYNAMIC_XRANDR=\\\"/usr/X11R6/lib/libXrandr.2.dylib\\\"";
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_4 = "SDL_VIDEO_DRIVER_X11_DYNAMIC_XRENDER=\\\"/usr/X11R6/lib/libXrender.1.dylib\\\"";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = /usr/X11R6/include;
 				OTHER_CFLAGS = "$(OTHER_CFLAGS_$(CURRENT_ARCH))";
 				OTHER_CFLAGS_i386 = "";
@@ -1896,6 +1910,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_2 = "SDL_VIDEO_DRIVER_X11_DYNAMIC_XEXT=\\\"/usr/X11R6/lib/libXext.6.dylib\\\"";
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_3 = "SDL_VIDEO_DRIVER_X11_DYNAMIC_XRANDR=\\\"/usr/X11R6/lib/libXrandr.2.dylib\\\"";
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_4 = "SDL_VIDEO_DRIVER_X11_DYNAMIC_XRENDER=\\\"/usr/X11R6/lib/libXrender.1.dylib\\\"";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = /usr/X11R6/include;
 				OTHER_CFLAGS = "$(OTHER_CFLAGS_$(CURRENT_ARCH))";
 				OTHER_CFLAGS_i386 = "";
@@ -1926,6 +1941,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_2 = "SDL_VIDEO_DRIVER_X11_DYNAMIC_XEXT=\\\"/usr/X11R6/lib/libXext.6.dylib\\\"";
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_3 = "SDL_VIDEO_DRIVER_X11_DYNAMIC_XRANDR=\\\"/usr/X11R6/lib/libXrandr.2.dylib\\\"";
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_4 = "SDL_VIDEO_DRIVER_X11_DYNAMIC_XRENDER=\\\"/usr/X11R6/lib/libXrender.1.dylib\\\"";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = /usr/X11R6/include;
 				OTHER_CFLAGS = "$(OTHER_CFLAGS_$(CURRENT_ARCH))";
 				OTHER_CFLAGS_i386 = "";
@@ -1937,6 +1953,7 @@
 		007317830858DB0500B2BC32 /* Development_using_10.4SDK_and_10.6SDK */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = SDLmain;
 			};
 			name = Development_using_10.4SDK_and_10.6SDK;
@@ -1944,6 +1961,7 @@
 		007317840858DB0500B2BC32 /* Deployment_for_official_releases_using_10.4SDK_and_10.6SDK */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = SDLmain;
 			};
 			name = Deployment_for_official_releases_using_10.4SDK_and_10.6SDK;
@@ -1951,6 +1969,7 @@
 		007317850858DB0500B2BC32 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = SDLmain;
 			};
 			name = Default;
@@ -1958,6 +1977,7 @@
 		007317870858DB0500B2BC32 /* Development_using_10.4SDK_and_10.6SDK */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = "Standard DMG";
 			};
 			name = Development_using_10.4SDK_and_10.6SDK;
@@ -1965,6 +1985,7 @@
 		007317880858DB0500B2BC32 /* Deployment_for_official_releases_using_10.4SDK_and_10.6SDK */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = "Standard DMG";
 			};
 			name = Deployment_for_official_releases_using_10.4SDK_and_10.6SDK;
@@ -1972,6 +1993,7 @@
 		007317890858DB0500B2BC32 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = "Standard DMG";
 			};
 			name = Default;
@@ -1979,6 +2001,7 @@
 		0073178B0858DB0500B2BC32 /* Development_using_10.4SDK_and_10.6SDK */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = "Developer Extras Package";
 			};
 			name = Development_using_10.4SDK_and_10.6SDK;
@@ -1986,6 +2009,7 @@
 		0073178C0858DB0500B2BC32 /* Deployment_for_official_releases_using_10.4SDK_and_10.6SDK */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = "Developer Extras Package";
 			};
 			name = Deployment_for_official_releases_using_10.4SDK_and_10.6SDK;
@@ -1993,6 +2017,7 @@
 		0073178D0858DB0500B2BC32 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = "Developer Extras Package";
 			};
 			name = Default;
@@ -2000,8 +2025,7 @@
 		0073178F0858DB0500B2BC32 /* Development_using_10.4SDK_and_10.6SDK */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_ALTIVEC_EXTENSIONS = YES;
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
@@ -2016,7 +2040,6 @@
 				MACOSX_DEPLOYMENT_TARGET_i386 = 10.4;
 				MACOSX_DEPLOYMENT_TARGET_ppc = 10.4;
 				MACOSX_DEPLOYMENT_TARGET_x86_64 = 10.6;
-				PREBINDING = NO;
 				SDKROOT_i386 = /Developer/SDKs/MacOSX10.4u.sdk;
 				SDKROOT_ppc = /Developer/SDKs/MacOSX10.4u.sdk;
 				SDKROOT_x86_64 = /Developer/SDKs/MacOSX10.6.sdk;
@@ -2028,8 +2051,7 @@
 		007317900858DB0500B2BC32 /* Deployment_for_official_releases_using_10.4SDK_and_10.6SDK */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				DEPLOYMENT_POSTPROCESSING = YES;
 				GCC_ALTIVEC_EXTENSIONS = YES;
 				GCC_AUTO_VECTORIZATION = YES;
@@ -2045,7 +2067,6 @@
 				MACOSX_DEPLOYMENT_TARGET_i386 = 10.4;
 				MACOSX_DEPLOYMENT_TARGET_ppc = 10.4;
 				MACOSX_DEPLOYMENT_TARGET_x86_64 = 10.6;
-				PREBINDING = NO;
 				SEPARATE_STRIP = YES;
 				STRIP_STYLE = "non-global";
 				WARNING_CFLAGS = "";
@@ -2056,8 +2077,7 @@
 		007317910858DB0500B2BC32 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_ALTIVEC_EXTENSIONS = YES;
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
@@ -2072,7 +2092,6 @@
 				MACOSX_DEPLOYMENT_TARGET_i386 = 10.4;
 				MACOSX_DEPLOYMENT_TARGET_ppc = 10.4;
 				MACOSX_DEPLOYMENT_TARGET_x86_64 = 10.6;
-				PREBINDING = NO;
 				SDKROOT_i386 = /Developer/SDKs/MacOSX10.4u.sdk;
 				SDKROOT_ppc = /Developer/SDKs/MacOSX10.4u.sdk;
 				SDKROOT_x86_64 = /Developer/SDKs/MacOSX10.6.sdk;
@@ -2103,6 +2122,7 @@
 					"SDL_VIDEO_DRIVER_X11_XV=1",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = /usr/X11R6/include;
 				INFOPLIST_FILE = "Info-Framework.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
@@ -2137,6 +2157,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_2 = "SDL_VIDEO_DRIVER_X11_DYNAMIC_XEXT=\\\"/usr/X11R6/lib/libXext.6.dylib\\\"";
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_3 = "SDL_VIDEO_DRIVER_X11_DYNAMIC_XRANDR=\\\"/usr/X11R6/lib/libXrandr.2.dylib\\\"";
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_4 = "SDL_VIDEO_DRIVER_X11_DYNAMIC_XRENDER=\\\"/usr/X11R6/lib/libXrender.1.dylib\\\"";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = /usr/X11R6/include;
 				OTHER_CFLAGS = "$(OTHER_CFLAGS_$(CURRENT_ARCH))";
 				OTHER_CFLAGS_i386 = "";
@@ -2148,6 +2169,7 @@
 		00B04D1E0CC7F3B100A95728 /* Deployment_legacy */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = SDLmain;
 			};
 			name = Deployment_legacy;
@@ -2155,6 +2177,7 @@
 		00B04D1F0CC7F3B100A95728 /* Deployment_legacy */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = "Standard DMG";
 			};
 			name = Deployment_legacy;
@@ -2162,6 +2185,7 @@
 		00B04D200CC7F3B100A95728 /* Deployment_legacy */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = "Developer Extras Package";
 			};
 			name = Deployment_legacy;
@@ -2169,8 +2193,7 @@
 		00B04D230CC7F3B100A95728 /* Deployment_legacy */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				DEPLOYMENT_POSTPROCESSING = YES;
 				GCC_ALTIVEC_EXTENSIONS = YES;
 				GCC_AUTO_VECTORIZATION = YES;
@@ -2186,7 +2209,6 @@
 				MACOSX_DEPLOYMENT_TARGET_i386 = 10.4;
 				MACOSX_DEPLOYMENT_TARGET_ppc = 10.4;
 				MACOSX_DEPLOYMENT_TARGET_x86_64 = 10.6;
-				PREBINDING = NO;
 				SDKROOT_i386 = /Developer/SDKs/MacOSX10.4u.sdk;
 				SDKROOT_ppc = /Developer/SDKs/MacOSX10.4u.sdk;
 				SDKROOT_x86_64 = /Developer/SDKs/MacOSX10.6.sdk;
@@ -2219,6 +2241,7 @@
 					"SDL_VIDEO_DRIVER_X11_XV=1",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = /usr/X11R6/include;
 				INFOPLIST_FILE = "Info-Framework.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
@@ -2252,6 +2275,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_2 = "SDL_VIDEO_DRIVER_X11_DYNAMIC_XEXT=\\\"/usr/X11R6/lib/libXext.6.dylib\\\"";
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_3 = "SDL_VIDEO_DRIVER_X11_DYNAMIC_XRANDR=\\\"/usr/X11R6/lib/libXrandr.2.dylib\\\"";
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_4 = "SDL_VIDEO_DRIVER_X11_DYNAMIC_XRENDER=\\\"/usr/X11R6/lib/libXrender.1.dylib\\\"";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = /usr/X11R6/include;
 				OTHER_CFLAGS = "$(OTHER_CFLAGS_$(CURRENT_ARCH))";
 				OTHER_CFLAGS_i386 = "";
@@ -2263,6 +2287,7 @@
 		00B04D260CC7F43D00A95728 /* Development_legacy */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = SDLmain;
 			};
 			name = Development_legacy;
@@ -2270,6 +2295,7 @@
 		00B04D270CC7F43D00A95728 /* Development_legacy */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = "Standard DMG";
 			};
 			name = Development_legacy;
@@ -2277,6 +2303,7 @@
 		00B04D280CC7F43D00A95728 /* Development_legacy */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = "Developer Extras Package";
 			};
 			name = Development_legacy;
@@ -2284,8 +2311,7 @@
 		00B04D2B0CC7F43D00A95728 /* Development_legacy */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_ALTIVEC_EXTENSIONS = YES;
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
@@ -2300,7 +2326,6 @@
 				MACOSX_DEPLOYMENT_TARGET_i386 = 10.4;
 				MACOSX_DEPLOYMENT_TARGET_ppc = 10.4;
 				MACOSX_DEPLOYMENT_TARGET_x86_64 = 10.6;
-				PREBINDING = NO;
 				SDKROOT_i386 = /Developer/SDKs/MacOSX10.4u.sdk;
 				SDKROOT_ppc = /Developer/SDKs/MacOSX10.4u.sdk;
 				SDKROOT_x86_64 = /Developer/SDKs/MacOSX10.6.sdk;
@@ -2320,7 +2345,6 @@
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				MACOSX_DEPLOYMENT_TARGET = "";
-				PREBINDING = NO;
 				SEPARATE_STRIP = YES;
 				STRIP_STYLE = "non-global";
 				WARNING_CFLAGS = "";
@@ -2350,6 +2374,7 @@
 					"SDL_VIDEO_DRIVER_X11_XV=1",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = /usr/X11R6/include;
 				INFOPLIST_FILE = "Info-Framework.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
@@ -2384,6 +2409,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_2 = "SDL_VIDEO_DRIVER_X11_DYNAMIC_XEXT=\\\"/usr/X11R6/lib/libXext.6.dylib\\\"";
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_3 = "SDL_VIDEO_DRIVER_X11_DYNAMIC_XRANDR=\\\"/usr/X11R6/lib/libXrandr.2.dylib\\\"";
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_4 = "SDL_VIDEO_DRIVER_X11_DYNAMIC_XRENDER=\\\"/usr/X11R6/lib/libXrender.1.dylib\\\"";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = /usr/X11R6/include;
 				OTHER_CFLAGS = "$(OTHER_CFLAGS_$(CURRENT_ARCH))";
 				OTHER_CFLAGS_i386 = "";
@@ -2395,6 +2421,7 @@
 		00CFA624106A567900758660 /* Deployment_native_only */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = SDLmain;
 			};
 			name = Deployment_native_only;
@@ -2402,6 +2429,7 @@
 		00CFA625106A567900758660 /* Deployment_native_only */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = "Standard DMG";
 			};
 			name = Deployment_native_only;
@@ -2409,6 +2437,7 @@
 		00CFA626106A567900758660 /* Deployment_native_only */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = "Developer Extras Package";
 			};
 			name = Deployment_native_only;
@@ -2423,7 +2452,6 @@
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				MACOSX_DEPLOYMENT_TARGET = "";
-				PREBINDING = NO;
 				WARNING_CFLAGS = "";
 				ZERO_LINK = NO;
 			};
@@ -2451,6 +2479,7 @@
 					"SDL_VIDEO_DRIVER_X11_XV=1",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = /usr/X11R6/include;
 				INFOPLIST_FILE = "Info-Framework.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
@@ -2484,6 +2513,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_2 = "SDL_VIDEO_DRIVER_X11_DYNAMIC_XEXT=\\\"/usr/X11R6/lib/libXext.6.dylib\\\"";
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_3 = "SDL_VIDEO_DRIVER_X11_DYNAMIC_XRANDR=\\\"/usr/X11R6/lib/libXrandr.2.dylib\\\"";
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_4 = "SDL_VIDEO_DRIVER_X11_DYNAMIC_XRENDER=\\\"/usr/X11R6/lib/libXrender.1.dylib\\\"";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = /usr/X11R6/include;
 				OTHER_CFLAGS = "$(OTHER_CFLAGS_$(CURRENT_ARCH))";
 				OTHER_CFLAGS_i386 = "";
@@ -2495,6 +2525,7 @@
 		00CFA62A106A568900758660 /* Development_native_only */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = SDLmain;
 			};
 			name = Development_native_only;
@@ -2502,6 +2533,7 @@
 		00CFA62B106A568900758660 /* Development_native_only */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = "Standard DMG";
 			};
 			name = Development_native_only;
@@ -2509,6 +2541,7 @@
 		00CFA62C106A568900758660 /* Development_native_only */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = "Developer Extras Package";
 			};
 			name = Development_native_only;
@@ -2524,7 +2557,7 @@
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SDKROOT = macosx10.6;
 				VALID_ARCHS = "i386 x86_64";
 				WARNING_CFLAGS = "";
 				ZERO_LINK = NO;
@@ -2553,6 +2586,7 @@
 					"SDL_VIDEO_DRIVER_X11_XV=1",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = /usr/X11R6/include;
 				INFOPLIST_FILE = "Info-Framework.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
@@ -2587,6 +2621,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_2 = "SDL_VIDEO_DRIVER_X11_DYNAMIC_XEXT=\\\"/usr/X11R6/lib/libXext.6.dylib\\\"";
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_3 = "SDL_VIDEO_DRIVER_X11_DYNAMIC_XRANDR=\\\"/usr/X11R6/lib/libXrandr.2.dylib\\\"";
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_4 = "SDL_VIDEO_DRIVER_X11_DYNAMIC_XRENDER=\\\"/usr/X11R6/lib/libXrender.1.dylib\\\"";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = /usr/X11R6/include;
 				OTHER_CFLAGS = "$(OTHER_CFLAGS_$(CURRENT_ARCH))";
 				OTHER_CFLAGS_i386 = "";
@@ -2598,6 +2633,7 @@
 		8A46CCC0142F104B00D35AB1 /* Deployment GZDoom */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = SDLmain;
 			};
 			name = "Deployment GZDoom";
@@ -2605,6 +2641,7 @@
 		8A46CCC1142F104B00D35AB1 /* Deployment GZDoom */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = "Standard DMG";
 			};
 			name = "Deployment GZDoom";
@@ -2612,6 +2649,7 @@
 		8A46CCC2142F104B00D35AB1 /* Deployment GZDoom */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = "Developer Extras Package";
 			};
 			name = "Deployment GZDoom";
@@ -2620,6 +2658,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DOXYGEN_EXE = /Applications/Doxygen.app/Contents/Resources/doxygen;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = "Generate Doxygen DocSet";
 			};
 			name = "Deployment GZDoom";

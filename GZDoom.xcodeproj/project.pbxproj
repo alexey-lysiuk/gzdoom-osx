@@ -4443,7 +4443,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\nGZDOOM_EXEC_DIR=${CONFIGURATION_BUILD_DIR}/${EXECUTABLE_FOLDER_PATH}\n\nif [ ! -e \"${GZDOOM_EXEC_DIR}\" ]; then\n\tmkdir -p \"${GZDOOM_EXEC_DIR}\"\nfi\n\nif [ ! -e \"${GZDOOM_EXEC_DIR}/libfmodex.dylib\" ]; then\n\tln \"${SRCROOT}/thirdparty/FMOD/lib/libfmodex.dylib\" \"${GZDOOM_EXEC_DIR}\"\nfi\n\nif [ -e \"${GZDOOM_EXEC_DIR}/${EXECUTABLE_NAME}\" ]; then\n\tinstall_name_tool -change ./libfmodex.dylib @executable_path/libfmodex.dylib \"${GZDOOM_EXEC_DIR}/${EXECUTABLE_NAME}\"\nfi\n\nZIPDIR_EXE=${BUILD_DIR}/${CONFIGURATION}${EFFECTIVE_PLATFORM_NAME}/zipdir\n\nif [ -e \"${ZIPDIR_EXE}\" ]; then\n\t\"${ZIPDIR_EXE}\" -ud \"${GZDOOM_EXEC_DIR}/gzdoom.pk3\" \"${SRCROOT}/wadsrc/static\"\nfi\n\nfor ITEM in \"${SRCROOT}\"/wads/*; do\n\tITEM_BASENAME=`basename \"${ITEM}\"`\n\t\n\tif [ ! -e \"${GZDOOM_EXEC_DIR}/${ITEM_BASENAME}\" ]; then\n\t\tln \"${ITEM}\" \"${GZDOOM_EXEC_DIR}/${ITEM_BASENAME}\"\n\tfi\ndone\n";
+			shellScript = "\nGZDOOM_EXEC_DIR=${CONFIGURATION_BUILD_DIR}/${EXECUTABLE_FOLDER_PATH}\n\nif [ ! -e \"${GZDOOM_EXEC_DIR}\" ]; then\n\tmkdir -p \"${GZDOOM_EXEC_DIR}\"\nfi\n\nif [ ! -e \"${GZDOOM_EXEC_DIR}/libfmodex.dylib\" ]; then\n\trsync -a \"${SRCROOT}/thirdparty/FMOD/lib/libfmodex.dylib\" \"${GZDOOM_EXEC_DIR}\"\nfi\n\nif [ -e \"${GZDOOM_EXEC_DIR}/${EXECUTABLE_NAME}\" ]; then\n\tinstall_name_tool -change ./libfmodex.dylib @executable_path/libfmodex.dylib \"${GZDOOM_EXEC_DIR}/${EXECUTABLE_NAME}\"\nfi\n\nZIPDIR_EXE=${BUILD_DIR}/${CONFIGURATION}${EFFECTIVE_PLATFORM_NAME}/zipdir\n\nif [ -e \"${ZIPDIR_EXE}\" ]; then\n\t\"${ZIPDIR_EXE}\" -ud \"${GZDOOM_EXEC_DIR}/gzdoom.pk3\" \"${SRCROOT}/wadsrc/static\"\nfi\n\nfor ITEM in \"${SRCROOT}\"/wads/*; do\n\tITEM_BASENAME=`basename \"${ITEM}\"`\n\t\n\tif [ ! -e \"${GZDOOM_EXEC_DIR}/${ITEM_BASENAME}\" ]; then\n\t\trsync -a \"${ITEM}\" \"${GZDOOM_EXEC_DIR}/${ITEM_BASENAME}\"\n\tfi\ndone\n";
 		};
 		49E92B3113991F2900CCEBBC /* Generate sc_man_scanner.h */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4499,7 +4499,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\nGZDOOM_EXEC_DIR=${CONFIGURATION_BUILD_DIR}/${EXECUTABLE_FOLDER_PATH}\n\nif [ ! -e \"${GZDOOM_EXEC_DIR}\" ]; then\n\tmkdir -p \"${GZDOOM_EXEC_DIR}\"\nfi\n\nif [ ! -e \"${GZDOOM_EXEC_DIR}/libfmodex.dylib\" ]; then\n\tln \"${SRCROOT}/thirdparty/FMOD/lib/libfmodex.dylib\" \"${GZDOOM_EXEC_DIR}\"\nfi\n\nif [ -e \"${GZDOOM_EXEC_DIR}/${EXECUTABLE_NAME}\" ]; then\n\tinstall_name_tool -change ./libfmodex.dylib @executable_path/libfmodex.dylib \"${GZDOOM_EXEC_DIR}/${EXECUTABLE_NAME}\"\nfi\n\nZIPDIR_EXE=${BUILD_DIR}/${CONFIGURATION}${EFFECTIVE_PLATFORM_NAME}/zipdir\n\nif [ -e \"${ZIPDIR_EXE}\" ]; then\n\t\"${ZIPDIR_EXE}\" -ud \"${GZDOOM_EXEC_DIR}/gzdoom.pk3\" \"${SRCROOT}/wadsrc/static\"\nfi\n\nfor ITEM in \"${SRCROOT}\"/wads/*; do\n\tITEM_BASENAME=`basename \"${ITEM}\"`\n\t\n\tif [ ! -e \"${GZDOOM_EXEC_DIR}/${ITEM_BASENAME}\" ]; then\n\t\tln \"${ITEM}\" \"${GZDOOM_EXEC_DIR}/${ITEM_BASENAME}\"\n\tfi\ndone\n";
+			shellScript = "\nGZDOOM_EXEC_DIR=${CONFIGURATION_BUILD_DIR}/${EXECUTABLE_FOLDER_PATH}\n\nif [ ! -e \"${GZDOOM_EXEC_DIR}\" ]; then\n\tmkdir -p \"${GZDOOM_EXEC_DIR}\"\nfi\n\nif [ ! -e \"${GZDOOM_EXEC_DIR}/libfmodex.dylib\" ]; then\n\trsync -a \"${SRCROOT}/thirdparty/FMOD/lib/libfmodex.dylib\" \"${GZDOOM_EXEC_DIR}\"\nfi\n\nif [ -e \"${GZDOOM_EXEC_DIR}/${EXECUTABLE_NAME}\" ]; then\n\tinstall_name_tool -change ./libfmodex.dylib @executable_path/libfmodex.dylib \"${GZDOOM_EXEC_DIR}/${EXECUTABLE_NAME}\"\nfi\n\nZIPDIR_EXE=${BUILD_DIR}/${CONFIGURATION}${EFFECTIVE_PLATFORM_NAME}/zipdir\n\nif [ -e \"${ZIPDIR_EXE}\" ]; then\n\t\"${ZIPDIR_EXE}\" -ud \"${GZDOOM_EXEC_DIR}/gzdoom.pk3\" \"${SRCROOT}/wadsrc/static\"\nfi\n\nfor ITEM in \"${SRCROOT}\"/wads/*; do\n\tITEM_BASENAME=`basename \"${ITEM}\"`\n\t\n\tif [ ! -e \"${GZDOOM_EXEC_DIR}/${ITEM_BASENAME}\" ]; then\n\t\trsync -a \"${ITEM}\" \"${GZDOOM_EXEC_DIR}/${ITEM_BASENAME}\"\n\tfi\ndone\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -5796,8 +5796,8 @@
 					thirdparty/hid_utilities,
 				);
 				INFOPLIST_FILE = "GZDoom-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				PRODUCT_NAME = GZDoom;
-				SDKROOT = macosx10.6;
 			};
 			name = Debug;
 		};
@@ -5820,8 +5820,8 @@
 					thirdparty/hid_utilities,
 				);
 				INFOPLIST_FILE = "GZDoom-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				PRODUCT_NAME = GZDoom;
-				SDKROOT = macosx10.6;
 			};
 			name = Release;
 		};
@@ -5970,6 +5970,7 @@
 					"$(inherited)",
 					thirdparty/SDL/lib,
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				PRODUCT_NAME = GZDoom;
 			};
 			name = Debug;
@@ -5985,6 +5986,7 @@
 					"$(inherited)",
 					thirdparty/SDL/lib,
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				PRODUCT_NAME = GZDoom;
 			};
 			name = Release;
@@ -6007,8 +6009,9 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx10.6;
 				USE_HEADERMAP = NO;
 				VALID_ARCHS = "i386 x86_64";
 			};
@@ -6028,8 +6031,9 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx10.6;
 				USE_HEADERMAP = NO;
 				VALID_ARCHS = "i386 x86_64";
 			};
