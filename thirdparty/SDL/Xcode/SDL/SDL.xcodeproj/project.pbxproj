@@ -205,7 +205,6 @@
 		046B91ED0A11B53500FB151C /* SDL_sysloadso.c in Sources */ = {isa = PBXBuildFile; fileRef = 046B91E90A11B53500FB151C /* SDL_sysloadso.c */; };
 		046B92130A11B8AD00FB151C /* SDL_dlcompat.c in Sources */ = {isa = PBXBuildFile; fileRef = 046B92100A11B8AD00FB151C /* SDL_dlcompat.c */; };
 		046B92140A11B8AD00FB151C /* SDL_dlcompat.c in Sources */ = {isa = PBXBuildFile; fileRef = 046B92100A11B8AD00FB151C /* SDL_dlcompat.c */; };
-		8A46CCC7142F112700D35AB1 /* libSDL_gzdoom.a in CopyFiles */ = {isa = PBXBuildFile; fileRef = BECDF6B30761BA81005FE872 /* libSDL_gzdoom.a */; };
 		8A46CCCF142F15B400D35AB1 /* SDL_syscdrom.c in Sources */ = {isa = PBXBuildFile; fileRef = B2A23A7B04157C5700A80002 /* SDL_syscdrom.c */; };
 		BECDF62B0761BA81005FE872 /* SDLMain.nib in Resources */ = {isa = PBXBuildFile; fileRef = 2EECDF2F0086C3A07F000001 /* SDLMain.nib */; };
 		BECDF62E0761BA81005FE872 /* SDL_audio.c in Sources */ = {isa = PBXBuildFile; fileRef = 01538330006D78D67F000001 /* SDL_audio.c */; };
@@ -321,19 +320,6 @@
 			remoteInfo = "Framework (Upgraded)";
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		8A46CCC9142F112A00D35AB1 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = ../../../../lib;
-			dstSubfolderSpec = 16;
-			files = (
-				8A46CCC7142F112700D35AB1 /* libSDL_gzdoom.a in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0014B7E809C0D8D2003A99D5 /* SDL_dgaevents_c.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SDL_dgaevents_c.h; sourceTree = "<group>"; };
@@ -1285,7 +1271,6 @@
 				BECDF66E0761BA81005FE872 /* Headers */,
 				BECDF6790761BA81005FE872 /* Sources */,
 				BECDF6B10761BA81005FE872 /* Frameworks */,
-				8A46CCC9142F112A00D35AB1 /* CopyFiles */,
 			);
 			buildRules = (
 			);
