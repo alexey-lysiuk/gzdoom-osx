@@ -1,5 +1,18 @@
 #!/bin/sh
 
+# ===============================================
+#
+#  IMPORTANT NOTE!
+#
+#  To work properly Xcode 4.x preferences must be changed as following:
+#  Locations / Derived Data  ->  Relative
+#  Locations / Derived Data / Advanced / Build Location  ->  Shared Folder
+#
+#  Both Cocoa and SDL version should be built in Release configuration
+#  before running this script
+#
+# ===============================================
+
 SOURCE_BUNDLE_NAME=GZDoom.app
 BUNDLE_EXECUTABLE_PATH=Contents/MacOS/GZDoom
 
@@ -15,8 +28,8 @@ mkdir ${DEPLOY_IMAGE_DIR}
 ln -s /Applications ${DEPLOY_IMAGE_DIR}/Applications
 
 echo "Copying game..."
-cp -R build/Release_SDL/${SOURCE_BUNDLE_NAME}/ ${DEPLOY_SDL_DIR}
-cp -R build/Release_Cocoa/${SOURCE_BUNDLE_NAME}/ ${DEPLOY_COCOA_DIR}
+cp -R DerivedData/Build/Products/Release_SDL/${SOURCE_BUNDLE_NAME}/ ${DEPLOY_SDL_DIR}
+cp -R DerivedData/Build/Products/Release_Cocoa/${SOURCE_BUNDLE_NAME}/ ${DEPLOY_COCOA_DIR}
 
 echo "Stripping executables..."
 strip ${DEPLOY_SDL_DIR}/${BUNDLE_EXECUTABLE_PATH}
