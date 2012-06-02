@@ -333,11 +333,6 @@ static void DoAttack (AActor *self, bool domelee, bool domissile,
 			{
 				missile->tracer=self->target;
 			}
-			// set the health value so that the missile works properly
-			if (missile->flags4&MF4_SPECTRAL)
-			{
-				missile->health=-2;
-			}
 			P_CheckMissileSpawn(missile);
 		}
 	}
@@ -967,10 +962,17 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_CustomMissile)
 					// automatic handling of seeker missiles
 					missile->tracer=self->target;
 				}
-				// set the health value so that the missile works properly
+				// we must redo the spectral check here because the owner is set after spawning so the FriendPlayer value may be wrong
 				if (missile->flags4&MF4_SPECTRAL)
 				{
-					missile->health=-2;
+					if (missile->target != NULL && missile->target->player != NULL)
+					{
+						missile->FriendPlayer = int(missile->target->player - players) + 1;
+					}
+					else
+					{
+						missile->FriendPlayer = 0;
+					}
 				}
 				P_CheckMissileSpawn(missile);
 			}
@@ -1121,11 +1123,6 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_CustomComboAttack)
 			{
 				missile->tracer=self->target;
 			}
-			// set the health value so that the missile works properly
-			if (missile->flags4&MF4_SPECTRAL)
-			{
-				missile->health=-2;
-			}
 			P_CheckMissileSpawn(missile);
 		}
 	}
@@ -1209,7 +1206,7 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_FireBullets)
 		if (!(Flags & FBF_NORANDOM))
 			damage *= ((pr_cwbullet()%3)+1);
 
-		P_LineAttack(self, bangle, Range, bslope, damage, NAME_None, PuffType);
+		P_LineAttack(self, bangle, Range, bslope, damage, NAME_Hitscan, PuffType);
 	}
 	else 
 	{
@@ -1235,7 +1232,7 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_FireBullets)
 			if (!(Flags & FBF_NORANDOM))
 				damage *= ((pr_cwbullet()%3)+1);
 
-			P_LineAttack(self, angle, Range, slope, damage, NAME_None, PuffType);
+			P_LineAttack(self, angle, Range, slope, damage, NAME_Hitscan, PuffType);
 		}
 	}
 }
@@ -1352,7 +1349,7 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_CustomPunch)
 
 	if (!PuffType) PuffType = PClass::FindClass(NAME_BulletPuff);
 
-	P_LineAttack (self, angle, Range, pitch, Damage, NAME_None, PuffType, true, &linetarget);
+	P_LineAttack (self, angle, Range, pitch, Damage, NAME_Melee, PuffType, true, &linetarget);
 
 	// turn to face target
 	if (linetarget)
@@ -4018,7 +4015,7 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_WolfAttack)
 			P_DamageMobj(self->target, self, self, damage, mod, DMG_THRUSTLESS);
 			if (spawnblood)
 			{
-				P_SpawnBlood(dx, dy, dz, angle, damage, self);
+				P_SpawnBlood(dx, dy, dz, angle, damage, self->target);
 				P_TraceBleed(damage, self->target, R_PointToAngle2(self->x, self->y, dx, dy), 0);
 			}
 		}

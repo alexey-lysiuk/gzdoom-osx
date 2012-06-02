@@ -788,6 +788,74 @@ bool AActor::GiveAmmo (const PClass *type, int amount)
 
 //============================================================================
 //
+// AActor :: ClearInventory
+//
+// Clears the inventory of a single actor.
+//
+//============================================================================
+
+void AActor::ClearInventory()
+{
+	// In case destroying an inventory item causes another to be destroyed
+	// (e.g. Weapons destroy their sisters), keep track of the pointer to
+	// the next inventory item rather than the next inventory item itself.
+	// For example, if a weapon is immediately followed by its sister, the
+	// next weapon we had tracked would be to the sister, so it is now
+	// invalid and we won't be able to find the complete inventory by
+	// following it.
+	//
+	// When we destroy an item, we leave invp alone, since the destruction
+	// process will leave it pointing to the next item we want to check. If
+	// we don't destroy an item, then we move invp to point to its Inventory
+	// pointer.
+	//
+	// It should be safe to assume that an item being destroyed will only
+	// destroy items further down in the chain, because if it was going to
+	// destroy something we already processed, we've already destroyed it,
+	// so it won't have anything to destroy.
+
+	AInventory **invp = &Inventory;
+
+	while (*invp != NULL)
+	{
+		AInventory *inv = *invp;
+		if (!(inv->ItemFlags & IF_UNDROPPABLE))
+		{
+			// For the sake of undroppable weapons, never remove ammo once
+			// it has been acquired; just set its amount to 0.
+			if (inv->IsKindOf(RUNTIME_CLASS(AAmmo)))
+			{
+				AAmmo *ammo = static_cast<AAmmo*>(inv);
+				ammo->Amount = 0;
+				invp = &inv->Inventory;
+			}
+			else
+			{
+				inv->Destroy ();
+			}
+		}
+		else if (inv->GetClass() == RUNTIME_CLASS(AHexenArmor))
+		{
+			AHexenArmor *harmor = static_cast<AHexenArmor *> (inv);
+			harmor->Slots[3] = harmor->Slots[2] = harmor->Slots[1] = harmor->Slots[0] = 0;
+			invp = &inv->Inventory;
+		}
+		else
+		{
+			invp = &inv->Inventory;
+		}
+	}
+	if (player != NULL)
+	{
+		player->ReadyWeapon = NULL;
+		player->PendingWeapon = WP_NOCHANGE;
+		player->psprites[ps_weapon].state = NULL;
+		player->psprites[ps_flash].state = NULL;
+	}
+}
+
+//============================================================================
+//
 // AActor :: CopyFriendliness
 //
 // Makes this actor hate (or like) the same things another actor does.
@@ -1376,8 +1444,8 @@ bool AActor::FloorBounceMissile (secplane_t &plane)
 		if (abs(velz) < (fixed_t)(Mass * GetGravity() / 64))
 			velz = 0;
 	}
-	else if (BounceFlags & BOUNCE_AutoOff)
-	{
+	else if (plane.c > 0 && BounceFlags & BOUNCE_AutoOff)
+	{ // AutoOff only works when bouncing off a floor, not a ceiling.
 		if (!(flags & MF_NOGRAVITY) && (velz < 3*FRACUNIT))
 			BounceFlags &= ~BOUNCE_TypeMask;
 	}
@@ -2117,7 +2185,7 @@ void P_ZMovement (AActor *mo, fixed_t oldfloorz)
 	{
 		fixed_t startvelz = mo->velz;
 
-		if (!mo->waterlevel || mo->flags & MF_CORPSE || (mo->player &&
+		if (mo->waterlevel == 0 || (mo->player &&
 			!(mo->player->cmd.ucmd.forwardmove | mo->player->cmd.ucmd.sidemove)))
 		{
 			// [RH] Double gravity only if running off a ledge. Coming down from
@@ -2131,18 +2199,40 @@ void P_ZMovement (AActor *mo, fixed_t oldfloorz)
 				mo->velz -= grav;
 			}
 		}
-		if (mo->waterlevel > 1)
+		if (mo->waterlevel > 1 || (mo->waterlevel == 1 && mo->player == NULL))
 		{
-			fixed_t sinkspeed = mo->flags & MF_CORPSE ? -WATER_SINK_SPEED/3 : -WATER_SINK_SPEED;
+			fixed_t sinkspeed;
 
-			if (mo->velz < sinkspeed)
-			{
-				mo->velz = (startvelz < sinkspeed) ? startvelz : sinkspeed;
+			if ((mo->flags & MF_SPECIAL) && !(mo->flags3 & MF3_ISMONSTER))
+			{ // Pickup items don't sink if placed and drop slowly if dropped
+				sinkspeed = (mo->flags & MF_DROPPED) ? -WATER_SINK_SPEED / 8 : 0;
 			}
 			else
 			{
-				mo->velz = startvelz + ((mo->velz - startvelz) >>
-					(mo->waterlevel == 1 ? WATER_SINK_SMALL_FACTOR : WATER_SINK_FACTOR));
+				sinkspeed = -WATER_SINK_SPEED;
+
+				// If it's not a player, scale sinkspeed by its mass, with
+				// 100 being equivalent to a player.
+				if (mo->player == NULL)
+				{
+					sinkspeed = Scale(sinkspeed, clamp(mo->Mass, 1, 4000), 100);
+				}
+			}
+			if (mo->velz < sinkspeed)
+			{ // Dropping too fast, so slow down toward sinkspeed.
+				mo->velz -= MAX(sinkspeed*2, -FRACUNIT*8);
+				if (mo->velz > sinkspeed)
+				{
+					mo->velz = sinkspeed;
+				}
+			}
+			else if (mo->velz > sinkspeed)
+			{ // Dropping too slow/going up, so trend toward sinkspeed.
+				mo->velz = startvelz + MAX(sinkspeed/3, -FRACUNIT*8);
+				if (mo->velz < sinkspeed)
+				{
+					mo->velz = sinkspeed;
+				}
 			}
 		}
 	}
@@ -2162,9 +2252,9 @@ void P_ZMovement (AActor *mo, fixed_t oldfloorz)
 			dist = P_AproxDistance (mo->x - mo->target->x, mo->y - mo->target->y);
 			delta = (mo->target->z + (mo->height>>1)) - mo->z;
 			if (delta < 0 && dist < -(delta*3))
-				mo->z -= mo->FloatSpeed, mo->velz = 0;
+				mo->z -= mo->FloatSpeed;
 			else if (delta > 0 && dist < (delta*3))
-				mo->z += mo->FloatSpeed, mo->velz = 0;
+				mo->z += mo->FloatSpeed;
 		}
 	}
 	if (mo->player && (mo->flags & MF_NOGRAVITY) && (mo->z > mo->floorz))
@@ -5253,8 +5343,8 @@ AActor *P_SpawnMissileXYZ (fixed_t x, fixed_t y, fixed_t z,
 	P_PlaySpawnSound(th, source);
 
 	// record missile's originator
-	if (owner)	th->target = owner;
-	else		th->target = source;
+	if (owner == NULL) owner = source;
+	th->target = owner;
 
 	float speed = (float)(th->Speed);
 
@@ -5295,6 +5385,18 @@ AActor *P_SpawnMissileXYZ (fixed_t x, fixed_t y, fixed_t z,
 
 	th->angle = R_PointToAngle2 (0, 0, th->velx, th->vely);
 
+	if (th->flags4 & MF4_SPECTRAL)
+	{
+		if (owner->player != NULL)
+		{
+			th->FriendPlayer = int(owner->player - players) + 1;
+		}
+		else
+		{
+			th->FriendPlayer = 0;
+		}
+	}
+
 	return (!checkspawn || P_CheckMissileSpawn (th)) ? th : NULL;
 }
 
@@ -5319,6 +5421,19 @@ AActor * P_OldSpawnMissile(AActor * source, AActor * owner, AActor * dest, const
 		dist = 1;
 
 	th->velz = (dest->z - source->z) / dist;
+
+	if (th->flags4 & MF4_SPECTRAL)
+	{
+		if (owner->player != NULL)
+		{
+			th->FriendPlayer = int(owner->player - players) + 1;
+		}
+		else
+		{
+			th->FriendPlayer = 0;
+		}
+	}
+
 	P_CheckMissileSpawn(th);
 	return th;
 }
@@ -5395,12 +5510,26 @@ AActor *P_SpawnMissileAngleZSpeed (AActor *source, fixed_t z,
 	mo = Spawn (type, source->x, source->y, z, ALLOW_REPLACE);
 
 	P_PlaySpawnSound(mo, source);
-	mo->target = owner != NULL ? owner : source; // Originator
+	if (owner == NULL) owner = source;
+	mo->target = owner;
 	mo->angle = angle;
 	angle >>= ANGLETOFINESHIFT;
 	mo->velx = FixedMul (speed, finecosine[angle]);
 	mo->vely = FixedMul (speed, finesine[angle]);
 	mo->velz = velz;
+
+	if (mo->flags4 & MF4_SPECTRAL)
+	{
+		if (owner->player != NULL)
+		{
+			mo->FriendPlayer = int(owner->player - players) + 1;
+		}
+		else
+		{
+			mo->FriendPlayer = 0;
+		}
+	}
+
 	return (!checkspawn || P_CheckMissileSpawn(mo)) ? mo : NULL;
 }
 
@@ -5512,8 +5641,16 @@ AActor *P_SpawnPlayerMissile (AActor *source, fixed_t x, fixed_t y, fixed_t z,
 	MissileActor->velz = (fixed_t)vec.Z;
 
 	if (MissileActor->flags4 & MF4_SPECTRAL)
-		MissileActor->health = -1;
-
+	{
+		if (source->player != NULL)
+		{
+			MissileActor->FriendPlayer = int(source->player - players) + 1;
+		}
+		else
+		{
+			MissileActor->FriendPlayer = 0;
+		}
+	}
 	if (P_CheckMissileSpawn (MissileActor))
 	{
 		return MissileActor;
@@ -5874,7 +6011,7 @@ int StoreDropItemChain(FDropItem *chain)
 	return DropItemList.Push (chain) + 1;
 }
 
-void PrintMiscActorInfo(AActor * query)
+void PrintMiscActorInfo(AActor *query)
 {
 	if (query)
 	{
@@ -5891,7 +6028,7 @@ void PrintMiscActorInfo(AActor * query)
 		static const char * renderstyles[]= {"None", "Normal", "Fuzzy", "SoulTrans",
 			"OptFuzzy", "Stencil", "Translucent", "Add", "Shaded", "TranslucentStencil"};
 
-		Printf("%s has the following flags:\n\tflags: %x", query->GetTag(), query->flags);
+		Printf("%s @ %p has the following flags:\n\tflags: %x", query->GetTag(), query, query->flags);
 		for (flagi = 0; flagi < 31; flagi++)
 			if (query->flags & 1<<flagi) Printf(" %s", FLAG_NAME(1<<flagi, flags));
 		Printf("\n\tflags2: %x", query->flags2);

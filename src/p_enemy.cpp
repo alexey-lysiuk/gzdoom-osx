@@ -431,7 +431,7 @@ bool P_Move (AActor *actor)
 
 	// [RH] Walking actors that are not on the ground cannot walk. We don't
 	// want to yank them to the ground here as Doom did, since that makes
-	// it difficult ot thrust them vertically in a reasonable manner.
+	// it difficult to thrust them vertically in a reasonable manner.
 	// [GZ] Let jumping actors jump.
 	if (!((actor->flags & MF_NOGRAVITY) || (actor->flags6 & MF6_CANJUMP))
 		&& actor->z > actor->floorz && !(actor->flags2 & MF2_ONMOBJ))
@@ -1127,7 +1127,7 @@ bool P_IsVisible(AActor *lookee, AActor *other, INTBOOL allaround, FLookExParams
 	else
 	{
 		mindist = maxdist = 0;
-		fov = allaround? 0 : ANGLE_180;
+		fov = allaround ? 0 : ANGLE_180;
 	}
 
 	fixed_t dist = P_AproxDistance (other->x - lookee->x, other->y - lookee->y);
@@ -1832,12 +1832,13 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_LookEx)
 	ACTION_PARAM_FIXED(minseedist, 1);
 	ACTION_PARAM_FIXED(maxseedist, 2);
 	ACTION_PARAM_FIXED(maxheardist, 3);
-	ACTION_PARAM_ANGLE(fov, 4);
+	ACTION_PARAM_DOUBLE(fov_f, 4);
 	ACTION_PARAM_STATE(seestate, 5);
 
 	AActor *targ = NULL; // Shuts up gcc
 	fixed_t dist;
-	FLookExParams params = {fov, minseedist, maxseedist, maxheardist, flags, seestate };
+	angle_t fov = (fov_f == 0) ? ANGLE_180 : angle_t(fov_f * ANGLE_90 / 90);
+	FLookExParams params = { fov, minseedist, maxseedist, maxheardist, flags, seestate };
 
 	if (self->flags5 & MF5_INCONVERSATION)
 		return;
