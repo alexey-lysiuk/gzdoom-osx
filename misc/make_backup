@@ -1,3 +1,3 @@
 #!/bin/sh
 cd "`dirname \"$0\"`/../.."
-zip -9rvy GZDoom-MacOSX-`date "+%Y_%m_%d_%H_%M_%S"` GZDoom -x .DS_Store -x *.mode1v3 -x *.pbxuser -x *.generated -x GZDoom/build/\* -x GZDoom/.deploy_image/\* -x GZDoom/thirdparty/SDL/Xcode/SDL/build/\* -x GZDoom/thirdparty/SDL/lib/\* -x GZDoom/tools/build/\*
+zip -9rvy GZDoom-MacOSX-`date "+%Y_%m_%d_%H_%M_%S"` GZDoom -x .DS_Store -x *.mode1v3 -x *.pbxuser -x *.generated -x GZDoom/build/\* -x GZDoom/DerivedData/\* -x GZDoom/.deploy_image/\* -x GZDoom/thirdparty/SDL/Xcode/SDL/build/\* -x GZDoom/thirdparty/SDL/lib/\* -x GZDoom/tools/build/\* -x GZDoom/tools/DerivedData/\*
