@@ -39,6 +39,7 @@
 #include "c_cvars.h"
 #include "m_argv.h"
 #include "m_misc.h"
+#include "gameconfigfile.h"
 #include <Cocoa/Cocoa.h>
 
 CVAR( String, macosx_additional_parameters, "", CVAR_ARCHIVE | CVAR_NOSET | CVAR_GLOBALCONFIG );
@@ -355,6 +356,7 @@ static void RestartWithParameters( const char* iwadPath, NSString* parameters )
 	
 	defaultiwad = ExtractFileBase( iwadPath );
 	
+	GameConfig->DoGameSetup( "Doom" );
 	M_SaveDefaults( NULL );
 	
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
