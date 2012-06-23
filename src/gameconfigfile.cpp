@@ -183,6 +183,10 @@ FGameConfigFile::FGameConfigFile ()
 	CreateSectionAtStart("Doom.Autoload");
 	CreateSectionAtStart("Global.Autoload");
 
+	// Add fix for Final Doom TNT: Evilution to auto-load
+	SetSection("TNT.Autoload", true);
+	SetValueForKey("Path", "tnt31.wad");
+	
 	// The same goes for auto-exec files.
 	CreateStandardAutoExec("Chex.AutoExec", true);
 	CreateStandardAutoExec("Strife.AutoExec", true);
