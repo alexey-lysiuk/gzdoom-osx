@@ -1,8 +1,9 @@
 {\rtf1\ansi\ansicpg1252\cocoartf1138\cocoasubrtf470
 {\fonttbl\f0\froman\fcharset0 Times-Roman;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue246;}
-{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid1\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid1}}
-{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid1\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid1}
+{\list\listtemplateid2\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid101\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid2}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}{\listoverride\listid2\listoverridecount0\ls2}}
 \paperw11900\paperh16840\margl1440\margr1440\vieww13960\viewh12080\viewkind0
 \deftab720
 \pard\pardeftab720\qc
@@ -27,7 +28,14 @@
 \b0 \
 \
 \pard\pardeftab720
-\cf0 Place your WADs in ~/Documents/GZDoom folder.\
+\cf0 Place your WADs in one of the following folders:\
+\pard\tx220\tx720\pardeftab720\li720\fi-720
+\ls1\ilvl0\cf0 {\listtext	\'95	}~/Library/Application Support/GZDoom\
+{\listtext	\'95	}~/Documents/GZDoom\
+\ls1\ilvl0{\listtext	\'95	}/Library/Application Support/GZDoom\
+\pard\tx566\pardeftab720
+\cf0 All game data are stored in ~/Library/Application Support/GZDoom folder.\
+\
 \pard\pardeftab720\qj
 \cf0 Check Documentation folder for additional information and licenses.\
 \
@@ -37,7 +45,7 @@
 \
 Starting from version 0.1.1 the binary distribution contains two application bundles:\
 \pard\tx220\tx720\pardeftab720\li720\fi-720\qj
-\ls1\ilvl0\cf0 {\listtext	\'95	}GZDoom_SDL, which is the original SDL-based port the same as old versions. Requires Mac OS X version 10.5 or higher.\
+\ls2\ilvl0\cf0 {\listtext	\'95	}GZDoom_SDL, which is the original SDL-based port the same as old versions. Requires Mac OS X version 10.5 or higher.\
 {\listtext	\'95	}GZDoom_Cocoa, which is the native Cocoa version. It has several improvements over SDL version like user-friendly fullscreen mode, support for system shortcuts and some limitations removed. However this version may have additional issues. Requires Mac OS X version 10.6 or higher.\
 \pard\pardeftab720\qj
 \cf0 There is no plans to improve the SDL version except regular integrations from (G)ZDoom SVN repository. So the Cocoa version is preferred to play with. In addition you can switch back to the SDL version anytime you want as both versions are compatible. If you have found any regression in the native version please report the issue {\field{\*\fldinst{HYPERLINK "https://code.google.com/p/gzdoom-macosx/issues/list"}}{\fldrslt here}}.\
@@ -63,13 +71,11 @@ All recent activity in main GZDoom SVN repository can be seen {\field{\*\fldinst
 \ul 0.1.4\
 \ulnone \
 + Added support for XBLA/Xbox 360 version of Doom I & II: direct .disk files handling and No Rest for the Living expansion available.\
-\pard\pardeftab720
-\cf0 + Added berserk power-up display (when found) instead of health box on alternate HUD. Use hud_berserk_health CVAR to enable this feature.\
++ Added berserk power-up display (when found) instead of health box on alternate HUD. Use hud_berserk_health CVAR to enable this feature.\
 * Fixed mouse cursor visibility
 \i  [Native version only]
 \i0 \
-\pard\pardeftab720
-\cf0 \
+\
 \ul 0.1.3\ulnone \
 + added simple FXAA as rendering post-processing technique 
 \i [Native version only]
