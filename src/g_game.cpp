@@ -1916,7 +1916,7 @@ FString G_BuildSaveName (const char *prefix, int slot)
 			char cpath[PATH_MAX];
 			FSRef folder;
 
-			if (noErr == FSFindFolder(kUserDomain, kDocumentsFolderType, kCreateFolder, &folder) &&
+			if (noErr == FSFindFolder(kUserDomain, kApplicationSupportFolderType, kCreateFolder, &folder) &&
 				noErr == FSRefMakePath(&folder, (UInt8*)cpath, PATH_MAX))
 			{
 				leader << cpath << "/" GAME_DIR "/Savegames/";

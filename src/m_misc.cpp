@@ -687,7 +687,7 @@ void M_ScreenShot (const char *filename)
 				char cpath[PATH_MAX];
 				FSRef folder;
 				
-				if (noErr == FSFindFolder(kUserDomain, kDocumentsFolderType, kCreateFolder, &folder) &&
+				if (noErr == FSFindFolder(kUserDomain, kApplicationSupportFolderType, kCreateFolder, &folder) &&
 					noErr == FSRefMakePath(&folder, (UInt8*)cpath, PATH_MAX))
 				{
 					autoname << cpath << "/" GAME_DIR "/Screenshots/";

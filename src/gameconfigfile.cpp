@@ -667,7 +667,7 @@ void FGameConfigFile::CreateStandardAutoExec(const char *section, bool start)
 		char cpath[PATH_MAX];
 		FSRef folder;
 		
-		if (noErr == FSFindFolder(kUserDomain, kDocumentsFolderType, kCreateFolder, &folder) &&
+		if (noErr == FSFindFolder(kUserDomain, kApplicationSupportFolderType, kCreateFolder, &folder) &&
 			noErr == FSRefMakePath(&folder, (UInt8*)cpath, PATH_MAX))
 		{
 			path << cpath << "/" GAME_DIR "/autoexec.cfg";
