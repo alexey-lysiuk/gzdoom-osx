@@ -182,10 +182,6 @@ FGameConfigFile::FGameConfigFile ()
 	CreateSectionAtStart("Doom1.Autoload");
 	CreateSectionAtStart("Doom.Autoload");
 	CreateSectionAtStart("Global.Autoload");
-
-	// Add fix for Final Doom TNT: Evilution to auto-load
-	SetSection("TNT.Autoload", true);
-	SetValueForKey("Path", "tnt31.wad");
 	
 	// The same goes for auto-exec files.
 	CreateStandardAutoExec("Chex.AutoExec", true);
@@ -220,6 +216,37 @@ FGameConfigFile::FGameConfigFile ()
 		"# any files listed under Doom.Autoload will be loaded for any version of Doom,\n"
 		"# but files listed under Doom2.Autoload will only load when you are\n"
 		"# playing Doom 2.\n\n");
+
+#ifdef __APPLE__
+	// Add fix for Final Doom TNT: Evilution to auto-load
+	
+	// TODO: It is Mac OS X specific because of POSIX's strcasestr() usage only
+	// Should be present on Linux in GNU LibC and implemented on Windows
+	
+	SetSection("TNT.Autoload", true);
+	
+	static const char TNT_FIX_WAD[] = "tnt31.wad";
+	static const char PATH_KEY   [] = "Path";
+	
+	bool needToAddTNTFix = true;
+	
+	const char* key   = NULL;
+	const char* value = NULL;
+	
+	while (NextInSection(key, value))
+	{
+		if (NULL != strcasestr(value, TNT_FIX_WAD))
+		{
+			needToAddTNTFix = false;
+			break;
+		}
+	}
+	
+	if (needToAddTNTFix)
+	{
+		SetValueForKey(PATH_KEY, TNT_FIX_WAD, true);
+	}
+#endif // __APPLE__
 }
 
 FGameConfigFile::~FGameConfigFile ()
