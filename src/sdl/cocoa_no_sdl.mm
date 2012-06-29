@@ -124,7 +124,7 @@ bool s_nativeMouse = true;
 // TODO: remove this magic!
 size_t s_skipMouseMoves;
 
-static NSCursor* s_cursor;
+NSCursor* s_cursor;
 
 
 void CheckGUICapture()
@@ -187,6 +187,30 @@ bool IsInGame()
 	}
 }
 
+void SetNativeMouse( bool wantNative )
+{
+	if ( wantNative != s_nativeMouse )
+	{
+		s_nativeMouse = wantNative;
+		
+		if ( !wantNative )
+		{
+			CenterCursor();
+		}
+		
+		CGAssociateMouseAndMouseCursorPosition( wantNative );
+		
+		if ( wantNative )
+		{
+			[NSCursor unhide];
+		}
+		else
+		{
+			[NSCursor hide];
+		}
+	}
+}
+
 void CheckNativeMouse()
 {
 	bool windowed = ( NULL == screen ) || !screen->IsFullscreen();
@@ -215,26 +239,7 @@ void CheckNativeMouse()
 			&& ( MENU_On == menuactive || MENU_OnNoPause == menuactive );
 	}
 	
-	if ( wantNative != s_nativeMouse )
-	{
-		s_nativeMouse = wantNative;
-		
-		if ( !wantNative )
-		{
-			CenterCursor();
-		}
-		
-		CGAssociateMouseAndMouseCursorPosition( wantNative );
-		
-		if ( wantNative )
-		{
-			[NSCursor unhide];
-		}
-		else
-		{
-			[NSCursor hide];
-		}
-	}
+	SetNativeMouse( wantNative );
 }
 
 } // unnamed namespace
@@ -755,6 +760,8 @@ void ProcessMouseWheelEvent( NSEvent* theEvent )
 
 - (void)invalidateCursorRects;
 
+- (void)setMainWindowVisible:(bool)visible;
+
 @end
 
 
@@ -1035,7 +1042,31 @@ static ApplicationDelegate* s_applicationDelegate;
 	[m_window invalidateCursorRectsForView:[m_window contentView]];
 }
 
+
+- (void)setMainWindowVisible:(bool)visible
+{
+	if ( visible )
+	{
+		[m_window orderFront:nil];
+	}
+	else
+	{
+		[m_window orderOut:nil];
+	}
+}
+
 @end
+
+
+// ---------------------------------------------------------------------------
+
+
+void I_SetMainWindowVisible( bool visible )
+{
+	[s_applicationDelegate setMainWindowVisible:visible];
+	
+	SetNativeMouse( !visible );
+}
 
 
 // ---------------------------------------------------------------------------
