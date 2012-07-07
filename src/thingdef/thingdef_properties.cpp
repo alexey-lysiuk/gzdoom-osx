@@ -1251,7 +1251,7 @@ DEFINE_PROPERTY(visibletoteam, I, Actor)
 //==========================================================================
 // [BB]
 //==========================================================================
-DEFINE_PROPERTY(visibletoplayerclass, S_s, Actor)
+DEFINE_PROPERTY(visibletoplayerclass, Ssssssssssssssssssss, Actor)
 {
 	info->VisibleToPlayerClass.Clear();
 	for(int i = 0;i < PROP_PARM_COUNT;++i)
@@ -1289,7 +1289,7 @@ DEFINE_PROPERTY(stamina, I, Actor)
 //==========================================================================
 //
 //==========================================================================
-DEFINE_CLASS_PROPERTY(restrictedto, S_s, Inventory)
+DEFINE_CLASS_PROPERTY(restrictedto, Ssssssssssssssssssss, Inventory)
 {
 	info->RestrictedToPlayerClass.Clear();
 	for(int i = 0;i < PROP_PARM_COUNT;++i)
@@ -1303,7 +1303,7 @@ DEFINE_CLASS_PROPERTY(restrictedto, S_s, Inventory)
 //==========================================================================
 //
 //==========================================================================
-DEFINE_CLASS_PROPERTY(forbiddento, S_s, Inventory)
+DEFINE_CLASS_PROPERTY(forbiddento, Ssssssssssssssssssss, Inventory)
 {
 	info->ForbiddenToPlayerClass.Clear();
 	for(int i = 0;i < PROP_PARM_COUNT;++i)
@@ -1473,16 +1473,23 @@ DEFINE_CLASS_PROPERTY(icon, S, Inventory)
 {
 	PROP_STRING_PARM(i, 0);
 
-	defaults->Icon = TexMan.CheckForTexture(i, FTexture::TEX_MiscPatch);
-	if (!defaults->Icon.isValid())
+	if (i == NULL || i[0] == '\0')
 	{
-		// Don't print warnings if the item is for another game or if this is a shareware IWAD. 
-		// Strife's teaser doesn't contain all the icon graphics of the full game.
-		if ((info->GameFilter == GAME_Any || info->GameFilter & gameinfo.gametype) &&
-			!(gameinfo.flags&GI_SHAREWARE) && Wads.GetLumpFile(bag.Lumpnum) != 0)
+		defaults->Icon.SetNull();
+	}
+	else
+	{
+		defaults->Icon = TexMan.CheckForTexture(i, FTexture::TEX_MiscPatch);
+		if (!defaults->Icon.isValid())
 		{
-			bag.ScriptPosition.Message(MSG_WARNING,
-				"Icon '%s' for '%s' not found\n", i, info->Class->TypeName.GetChars());
+			// Don't print warnings if the item is for another game or if this is a shareware IWAD. 
+			// Strife's teaser doesn't contain all the icon graphics of the full game.
+			if ((info->GameFilter == GAME_Any || info->GameFilter & gameinfo.gametype) &&
+				!(gameinfo.flags&GI_SHAREWARE) && Wads.GetLumpFile(bag.Lumpnum) != 0)
+			{
+				bag.ScriptPosition.Message(MSG_WARNING,
+					"Icon '%s' for '%s' not found\n", i, info->Class->TypeName.GetChars());
+			}
 		}
 	}
 }

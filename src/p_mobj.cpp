@@ -4235,6 +4235,7 @@ APlayerPawn *P_SpawnPlayer (FMapThing *mthing, bool tempplayer)
 	p->mo->ResetAirSupply(false);
 	p->Uncrouch();
 	p->MinPitch = p->MaxPitch = 0;	// will be filled in by PostBeginPlay()/netcode
+	p->cheats &= ~CF_FLY;
 
 	p->velx = p->vely = 0;		// killough 10/98: initialize bobbing to 0.
 
@@ -5754,7 +5755,7 @@ bool AActor::IsHostile (AActor *other)
 	return true;
 }
 
-int AActor::DoSpecialDamage (AActor *target, int damage)
+int AActor::DoSpecialDamage (AActor *target, int damage, FName damagetype)
 {
 	if (target->player && target->player->mo == target && damage < 1000 &&
 		(target->player->cheats & CF_GODMODE))
