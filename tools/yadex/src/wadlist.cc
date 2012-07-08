@@ -175,7 +175,7 @@ void Wad_list::del ()
   priv->iter = priv->list.erase (i);
   if (priv->iter == priv->list.begin ())
   {
-    priv->iter = 0;			// Catch bugs
+    priv->iter = priv->list.end ();			// Catch bugs
     priv->rewound = true;
   }
 }
