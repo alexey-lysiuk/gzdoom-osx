@@ -362,7 +362,8 @@ SWORD ModifierFlagsToGUIKeyModifiers( NSEvent* theEvent )
 	const NSUInteger modifiers( [theEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask );
 	return ( ( modifiers & NSShiftKeyMask     ) ? GKM_SHIFT : 0 )
 		 | ( ( modifiers & NSControlKeyMask   ) ? GKM_CTRL  : 0 )
-		 | ( ( modifiers & NSAlternateKeyMask ) ? GKM_ALT   : 0 );
+		 | ( ( modifiers & NSAlternateKeyMask ) ? GKM_ALT   : 0 )
+		 | ( ( modifiers & NSCommandKeyMask   ) ? GKM_META  : 0 );
 }
 
 void ProcessKeyboardFlagsEvent( NSEvent* theEvent )
@@ -453,14 +454,16 @@ void ProcessKeyboardEventInMenu( NSEvent* theEvent )
 		D_PostEvent( &event );
 	}
 	
-	if ( !iscntrl( event.data2 ) && EV_GUI_KeyUp != event.subtype )
+	if (   !iscntrl( event.data2 ) 
+		&& EV_GUI_KeyUp != event.subtype
+		&& !( event.data3 & GKM_META ) )
 	{
 		event.subtype = EV_GUI_Char;
 		event.data1   = event.data2;
-		event.data2   = [theEvent modifierFlags] & NSAlternateKeyMask;
+		event.data2   = event.data3 & GKM_ALT;
 		
 		D_PostEvent( &event );
-	}	
+	}
 }
 
 void ProcessKeyboardEvent( NSEvent* theEvent )
