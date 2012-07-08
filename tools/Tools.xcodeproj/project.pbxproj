@@ -246,14 +246,14 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 8AEF5E1115501764001D1D51 /* lswad */;
+			remoteGlobalIDString = 8AEF5E1115501764001D1D51;
 			remoteInfo = lswad;
 		};
 		8AEF5EA815502035001D1D51 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 8AEF5EA315502031001D1D51 /* mkwad */;
+			remoteGlobalIDString = 8AEF5EA315502031001D1D51;
 			remoteInfo = mkwad;
 		};
 /* End PBXContainerItemProxy section */
@@ -1926,12 +1926,12 @@
 					DEBUG,
 					_DEBUG,
 				);
-				GCC_VERSION = 4.2;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx10.6;
 				USE_HEADERMAP = NO;
 				VALID_ARCHS = i386;
 			};
@@ -1943,12 +1943,12 @@
 				ARCHS = i386;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
-				GCC_VERSION = 4.2;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx10.6;
 				USE_HEADERMAP = NO;
 				VALID_ARCHS = i386;
 			};
