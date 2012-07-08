@@ -1,0 +1,40 @@
+.TH WADSPY 6 2000-07-20
+.SH NAME
+wadspy \- estimate difficulty of Doom level
+.SH SYNOPSIS
+\fBwadspy\fP [\fB\-b\fP\fIskill\fP] [\fB\-m\fP \fIlevel\fP]
+.IR file \ ...
+.SH DESCRIPTION
+Wadspy prints statistics about the difficulty of the levels in one or more
+wads. See wadspy.txt for full explanations.
+.SH OPTIONS
+.TP
+\fB\-b\fP\fIskill\fP
+Print brief output for skill level \fIs\fP. \fIs\fP can be one of "\fB1\fP",
+"\fB2\fP", "\fB3\fP", "\fB4\fP", "\fB5\fP", "\fB1m\fP", "\fB2m\fP", "\fB3m\fP",
+"\fB4m\fP" or "\fB5m\fP" (case insensitive). The first five skills are for
+single player mode, the next five for multi-player mode.
+.TP
+\fB\-m\fP \fIlevel\fP
+Print output for level \fIlevel\fP only. \fIlevel\fP should be either
+\fBE[0-9]M[0-9]\fP or \fBMAP[0-9][0-9]\fP (case insensitive). Otherwise, Wadspy
+aborts with a non-zero exit code.
+.SH FILES
+None.
+.SH ENVIRONMENT
+None.
+.SH EXIT VALUE
+\fBO\fP	OK.
+.br
+\fB>0\fP	Error.
+.SH BUGS
+Does not work on big endian systems.
+.SH AUTHOR
+Oliver Brakmann <obrakmann@gmx.net>.
+Unix port and stuff by André Majorel <amajorel@teaser.fr>.
+
+Wadspy is copyright © Oliver Brakmann 2000 and available under the terms of the
+GNU general public license.
+
+Wadspy is derived from Wadwhat by Randall R. Spangler.
+.SH SEE ALSO

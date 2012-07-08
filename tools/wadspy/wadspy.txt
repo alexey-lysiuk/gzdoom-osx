@@ -1,0 +1,233 @@
+                               WADSPY v1.0c
+                             ================
+                               (2003/01/04)
+
+                  (c) by Oliver Brakmann <obrakmann@gmx.net>
+        based on WADWhat v1.1 (08/28/1994) (c) by Randall R. Spangler
+
+===============================================================================
+DISCLAIMER
+==========
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+
+  WADSpy is an adaption of
+  WADWHAT v1.1 (released 8/28/1994) (c) by Randall R. Spangler
+
+  This program includes software developed by the University of
+  California, Berkeley and its contributors.
+
+===============================================================================
+
+1. Introduction
+2. What it does
+3. How to use WADSpy
+4. The output
+5. On difficulty ratios
+6. Note to .WAD designers
+7. Bugs & limitations
+8. About the source
+9. Greetings
+
+
+1. Introduction
+----------------
+
+    The excellent program WADWhat has been around for six years by now. So
+    why did I change it?
+    Well, there is really only one reason to that: in a discussion on
+    rec.games.computer.doom.editing, it was decided that it is quite a pain
+    to have two versions of the same program around just to have it work
+    with both versions of Doom. So I decided that I'd try and change the
+    program to do just that.
+
+
+2. What it does
+----------------
+
+    WADSpy takes a look at a Doom map and shows which monsters are present
+    on each skill level. Then it calculates the total number of ammunition
+    available and, based on that and the number of all the monsters' health
+    points, generates a difficulty ratio.
+    Aside from that, it also lists all available player starts and thus
+    which play modes a level supports.
+
+    Complete list of features:
+    - shows which opposition you can expect in a level, either in a brief, one
+      line or a detailed long format.
+    - shows which maps are contained in a .WAD and which levels they replace.
+    - tells which play modes (single, coop, dm) a level supports.
+    - lists all available ammunition, armor and health.
+    - prints the average brightness, number of secrets, number of nukage
+      floors and the number of tagged linedefs.
+
+    What changes to WADWhat are there?
+    - new '-m' cmd-line parameter, which lets you specifiy a single level
+      from megawads (such as doom.wad or doom2.wad ;-) )
+    - thing counting code heavily optimized.
+    - brief output was changed somewhat to accommodate all the Doom II
+      monsters.
+      The downside of this is, however, that the brief output no longer shows
+      any player starting points.
+
+
+3. How to use WADSpy
+---------------------
+
+    ws.exe [-Bn[M]] [-M map] file1 [file2 ...]
+
+            -Bn     brief output at skill level n only
+            -BnM    brief output at skill level n only, multiplayer
+            -M      do output for level "map" only. (note the space)
+                    "map" can be either ExMy or MAPxy format.
+    Examples: ws.exe -b4 doom2.wad eternal.wad requiem.wad
+              ws.exe -m E4M1 doom.wad
+
+    I suggest that you either redirect WADSpy's output to a file or pipe it
+    to more.com or, for example, 4DOS' list command.
+
+        ws.exe -m E2M9 doom.wad | more
+
+4. The output
+--------------
+
+    Run on Doom II's IWAD with -B4, the output looks like this:
+
+WADSpy v1.0 (07/18/2000)             (c) by Oliver Brakmann <obrakmann@gmx.net>
+
+## Monsters                                              Weapons Equip    RATIO
+---tr-sg-cg-im-de-sp-ls-ca-hk-rv-ar-pe-mc-av-br-sd-cy-ic-cs2mrpb-bvsiral-------
+DOOM2.WAD:
+26  0  2 14 27  0  1 29 23  0  0  0  0  3  0  2  0  0  0 ..D456. B..IR..  0.617
+27 18 22 11 21 16  9  7  0 21 21  4  4 13  2  1  0  0  0 1.D4567 BVSI.AL  0.468
+28  3  5  6 24  6 17 12  1  7 17 12  5  2  4  0  2  0  0 1.D4567 BVS....  0.982
+29 13 21 11 22  0  1  0 15  5  6  0  4  4  1  3  0  1  0 ..D4.6. B.S.R..  0.720
+
+    The first column says which level is displayed, ie. in this case MAP26
+    to MAP29. In Doom I, it's similar, E2M7 would show 27 there.
+
+    The following columns show the monsters:
+    tr = Trooper            sg = Sergeant           cg = Chaingunner
+    im = Imp                de = Demon              sp = Spectre
+    ls = Lost Soul          ca = Cacodemon          hk = Hell Knight
+    rv = Revenant           ar = Arachnotron        pe = Pain Elemental
+    mc = Mancubus           av = Arch-Vile          br = Baron of Hell
+    sd = Spiderdemon        cy = Cyberdemon         ic = Icon Thrower
+
+    Please note: the brief output does not list the Wolfenstein guy where the
+    long output does. These are used for the ratio nonetheless in both cases.
+
+    The weapons are numbered as in the game, so 1 is the chainsaw, 3 the
+    shotgun and so forth. 'D' denotes the double-barrelled shotgun.
+
+    The next columns hold the items:
+    B = Backpack            V = Invulnerability     S = Strength/Berserk
+    I = Invisibilty         R = Radiation suit      A = Computer map
+    L = Light amp goggles
+
+    The last column shows the difficulty ratio. More on that now...
+
+
+5. On difficulty ratios
+------------------------
+
+    The difficulty ratio is the result of all the monsters' health points
+    divided by the total amount of ammunition (from all sources) available
+    in the map. In other words, the higher the ratio is, the more difficult
+    the map is. A ratio of greater than 1.0 means that you can't kill all the
+    monsters with all the ammo, but that you have to set them to fight among
+    themselves.
+    The difficulty ratio provided by WADSpy is supposed to indicate how
+    challenging a map is. This, of course, can only be an educated guess,
+    because the difficulty of a level is quite a complex thing. For optimal
+    results, one should also take into account the amount of health and
+    armor available, the layout of the level and also which non-monster
+    hazards there are (such as crushing ceilings and nukage floors).
+    Anyway, as a general rule of thumb, WADSpy serves its purpose quite
+    well, and so I give some sample ratios for some Doom levels.
+
+    Hardest regular Doom I map: E2M4    (0.778, Ultra-Violence)
+    Hardest secret Doom I map:  E2M9    (0.915, Ultra-Violence)
+    Hardest Episode 4 map:      E4M4    (0.994, Ultra-Violence)
+
+    Hardest Doom II map:        MAP08   (1.423, Ultra-Violence)
+    Easiest Doom II map:        MAP30   (0.013, Ultra-Violence)  ;-))
+    Hardest Plutonia map:       MAP11   (0.710, Ultra-Violence)
+    Hardest TNT map:            MAP07   (0.782, Ultra-Violence)
+
+
+6. Note to .WAD designers
+--------------------------
+
+    I suggest that every new level that is released has an entry in its
+    text file that gives its difficulty ratio, so that people know beforehand
+    if the level is a walk through the park or hell on earth ;-).
+    However, I caution you not to include the whole WADSpy output, because
+    that would give away spoilers.
+
+
+7. Bugs & limitations
+----------------------
+
+    Thanks to a report by Javier Almenara, a bug with opening files in
+    directories other than the current working directory was fixed.
+
+    To my knowledge, there are no bugs in this program (tho' the original
+    WADWhat gives other ratios for some levels. Reason as yet unknown)
+    You are welcome to send any bug reports to me at <obrakmann@gmx.net>.
+
+    This program is ignorant of:
+    - Skulls spawned by Pain Elementals
+    - Monsters spawned by Icon Throwers
+    - Monsters resurrected by Arch-Viles
+    - Splash damage from rockets and the BFG9000
+    - the players' starting with 50 bullets
+
+    Also,
+    - WADSpy assumes you do not use the BFG9000
+      (shooting 40 cells with the BFG results in 100 points of damage on a
+       direct hit, whereas with the Plasma Rifle you'd only get 80 points)
+    - there's a problem with the megasphere and the berserk pack, because
+      those two items do not _add_ health (& armor) to the player, but rather
+      set them to a fixed value. This cannot be correctly taken care of with
+      the counting system employed by WADSpy. So as of now, the berserk pack
+      _adds_ 100 health points and the megasphere both 200 points of health
+      and armor to the player. I'm aware that these values are way too high
+      but I don't know how to address this in a satisfying way. But the
+      newsgroup should be working on that.
+    - the brief output doesn't list the Wolfenstein guy, 'cause I can't fit
+      him on the screen. Damn 80 chars limit.
+    - for some odd reason, R. Spangler decided to only list the available
+      player starts, and not on which skill settings they appear.
+      I have kept to that, because I think that most start positions are
+      present on all skills anyway.
+
+
+8. About the source
+--------------------
+
+    If you use some of my code in any other program, I'd like you to at
+    least mention it. If you're doing that (using my source), you're also
+    bound to the GPL. See the file 'copying' for more information.
+
+    If you have any questions about the code, or have some suggestions,
+    you are again free to mail me at <obrakmann@gmx.net>.
+
+    Thanks to André Majorel, WADSpy now also compiles fine under Linux.
+    He also provided the Makefile and man page.
+
+Have fun,
+Oliver
