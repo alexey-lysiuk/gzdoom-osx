@@ -2166,6 +2166,27 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_FadeOut)
 
 //===========================================================================
 //
+// A_FadeBy
+//
+// fades the actor in or out and optionally destroys it when done
+//
+//===========================================================================
+DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_FadeBy)
+{
+	ACTION_PARAM_START(2);
+	ACTION_PARAM_FIXED(factor, 0);
+	ACTION_PARAM_FLOAT(remove, 1);
+
+	self->RenderStyle.Flags &= ~STYLEF_Alpha1;
+	self->alpha *= factor;
+	if (self->alpha <= 0 && remove)
+	{
+		self->Destroy();
+	}
+}
+
+//===========================================================================
+//
 // A_FadeTo
 //
 // fades the actor to a specified transparency by a specified amount and
@@ -3265,15 +3286,15 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_ChangeFlag)
 				level.total_items--;
 			}
 		}
-		// and secretd
+		// and same for secrets
 		if (secret_before != secret_after)
 		{
 			if (secret_after)
-			{ // It counts as an secret now.
+			{ // It counts as a secret now.
 				level.total_secrets++;
 			}
 			else
-			{ // It no longer counts as an secret
+			{ // It no longer counts as a secret
 				level.total_secrets--;
 			}
 		}

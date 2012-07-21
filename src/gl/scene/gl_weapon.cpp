@@ -43,6 +43,7 @@
 #include "v_video.h"
 #include "doomstat.h"
 #include "d_player.h"
+#include "gi.h"
 
 #include "gl/system/gl_cvars.h"
 #include "gl/renderer/gl_renderer.h"
@@ -113,6 +114,10 @@ void FGLRenderer::DrawPSprite (player_t * player,pspdef_t *psp,fixed_t sx, fixed
 
 	// killough 12/98: fix psprite positioning problem
 	texturemid = (100<<FRACBITS) - (sy-(tex->GetScaledTopOffset(GLUSE_PATCH)<<FRACBITS));
+
+	// Doom 64 hack
+	if (gameinfo.gametype == GAME_Doom64)
+		texturemid += 40<<FRACBITS;
 
 	AWeapon * wi=player->ReadyWeapon;
 	if (wi && wi->YAdjust)
@@ -240,7 +245,7 @@ void FGLRenderer::DrawPlayerSprites(sector_t * viewsector, bool hudModelStep)
 
 				if (lightbottom<player->viewz) 
 				{
-					cm = lightlist[i].extra_colormap;
+					cm = COLORMAP_SELECT(lightlist[i].extra_colormap, LIGHT_THING);
 					lightlevel = *lightlist[i].p_lightlevel;
 					break;
 				}
@@ -248,7 +253,7 @@ void FGLRenderer::DrawPlayerSprites(sector_t * viewsector, bool hudModelStep)
 		}
 		else 
 		{
-			cm=fakesec->ColorMap;
+			cm = COLORMAP(fakesec, LIGHT_THING);
 			if (glset.nocoloredspritelighting) cm.ClearColor();
 		}
 	}

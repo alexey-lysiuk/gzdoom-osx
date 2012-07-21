@@ -1067,7 +1067,7 @@ void FDrawInfo::CollectSectorStacksCeiling(subsector_t * sub, sector_t * anchor)
 	if (me->GetTexture(sector_t::ceiling) != anchor->GetTexture(sector_t::ceiling) ||
 		me->ceilingplane != anchor->ceilingplane ||
 		me->GetCeilingLight() != anchor->GetCeilingLight() ||
-		me->ColorMap != anchor->ColorMap ||
+		me->ColorMaps[LIGHT_GLOBAL] != anchor->ColorMaps[LIGHT_GLOBAL] ||
 		me->GetXOffset(sector_t::ceiling) != anchor->GetXOffset(sector_t::ceiling) || 
 		me->GetYOffset(sector_t::ceiling) != anchor->GetYOffset(sector_t::ceiling) || 
 		me->GetXScale(sector_t::ceiling) != anchor->GetXScale(sector_t::ceiling) || 
@@ -1115,7 +1115,7 @@ void FDrawInfo::CollectSectorStacksFloor(subsector_t * sub, sector_t * anchor)
 	if (me->GetTexture(sector_t::floor) != anchor->GetTexture(sector_t::floor) ||
 		me->floorplane != anchor->floorplane ||
 		me->GetFloorLight() != anchor->GetFloorLight() ||
-		me->ColorMap != anchor->ColorMap ||
+		me->ColorMaps[LIGHT_GLOBAL] != anchor->ColorMaps[LIGHT_GLOBAL] ||
 		me->GetXOffset(sector_t::floor) != anchor->GetXOffset(sector_t::floor) || 
 		me->GetYOffset(sector_t::floor) != anchor->GetYOffset(sector_t::floor) || 
 		me->GetXScale(sector_t::floor) != anchor->GetXScale(sector_t::floor) || 

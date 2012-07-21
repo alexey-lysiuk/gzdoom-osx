@@ -975,6 +975,9 @@ void R_DrawPSprite (pspdef_t* psp, int pspnum, AActor *owner, fixed_t sx, fixed_
 
 	vis->texturemid = MulScale16((BASEYCENTER<<FRACBITS) - sy, tex->yScale) + (tex->TopOffset << FRACBITS);
 
+    // Doom 64 hack
+    if (gameinfo.gametype == GAME_Doom64)
+        vis->texturemid += 40<<FRACBITS;
 
 	if (camera->player && (RenderTarget != screen ||
 		viewheight == RenderTarget->GetHeight() ||
@@ -1172,15 +1175,15 @@ void R_DrawPlayerSprites ()
 						break;
 					sec = rover->model;
 					if(rover->flags & FF_FADEWALLS)
-						basecolormap = sec->ColorMap;
+						basecolormap = sec->ColorMaps[LIGHT_THING];
 					else
-						basecolormap = viewsector->e->XFloor.lightlist[i].extra_colormap;
+						basecolormap = EXTRACOLORMAP(&viewsector->e->XFloor.lightlist[i], LIGHT_THING);
 				}
 				break;
 			}
 		if(!sec) {
 			sec = viewsector;
-			basecolormap = sec->ColorMap;
+			basecolormap = sec->ColorMaps[LIGHT_THING];
 		}
 		floorlight = ceilinglight = sec->lightlevel;
 	} else {
@@ -1190,7 +1193,7 @@ void R_DrawPlayerSprites ()
 			&ceilinglight, false);
 
 		// [RH] set basecolormap
-		basecolormap = sec->ColorMap;
+		basecolormap = COLORMAP(sec, LIGHT_THING);
 	}
 
 	// [RH] set foggy flag
@@ -1571,11 +1574,11 @@ void R_DrawSprite (vissprite_t *spr)
 					sec = rover->model;
 					if (rover->flags & FF_FADEWALLS)
 					{
-						mybasecolormap = sec->ColorMap;
+						mybasecolormap = sec->ColorMaps[LIGHT_THING];
 					}
 					else
 					{
-						mybasecolormap = spr->sector->e->XFloor.lightlist[i].extra_colormap;
+						mybasecolormap = EXTRACOLORMAP(&spr->sector->e->XFloor.lightlist[i], LIGHT_THING);
 					}
 				}
 				break;
@@ -2081,7 +2084,7 @@ void R_ProjectParticle (particle_t *particle, const sector_t *sector, int shade,
 			botplane = &heightsec->ceilingplane;
 			toppic = sector->GetTexture(sector_t::ceiling);
 			botpic = heightsec->GetTexture(sector_t::ceiling);
-			map = heightsec->ColorMap->Maps;
+			map = heightsec->ColorMaps[LIGHT_GLOBAL]->Maps;
 		}
 		else if (fakeside == FAKED_BelowFloor)
 		{
@@ -2089,7 +2092,7 @@ void R_ProjectParticle (particle_t *particle, const sector_t *sector, int shade,
 			botplane = &sector->floorplane;
 			toppic = heightsec->GetTexture(sector_t::floor);
 			botpic = sector->GetTexture(sector_t::floor);
-			map = heightsec->ColorMap->Maps;
+			map = heightsec->ColorMaps[LIGHT_GLOBAL]->Maps;
 		}
 		else
 		{
@@ -2097,7 +2100,7 @@ void R_ProjectParticle (particle_t *particle, const sector_t *sector, int shade,
 			botplane = &heightsec->floorplane;
 			toppic = heightsec->GetTexture(sector_t::ceiling);
 			botpic = heightsec->GetTexture(sector_t::floor);
-			map = sector->ColorMap->Maps;
+			map = sector->ColorMaps[LIGHT_GLOBAL]->Maps;
 		}
 	}
 	else
@@ -2106,7 +2109,7 @@ void R_ProjectParticle (particle_t *particle, const sector_t *sector, int shade,
 		botplane = &sector->floorplane;
 		toppic = sector->GetTexture(sector_t::ceiling);
 		botpic = sector->GetTexture(sector_t::floor);
-		map = sector->ColorMap->Maps;
+		map = sector->ColorMaps[LIGHT_GLOBAL]->Maps;
 	}
 
 	if (botpic != skyflatnum && particle->z < botplane->ZatPoint (particle->x, particle->y))

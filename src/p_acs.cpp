@@ -431,6 +431,11 @@ static void DoGiveInv (AActor *actor, const PClass *info, int amount)
 
 	// This shouldn't count for the item statistics!
 	item->ClearCounters();
+	if (item->flags5 & MF5_COUNTSECRET)
+	{
+		level.total_secrets--;
+		item->flags5 &= ~MF5_COUNTSECRET;
+	}
 	if (info->IsDescendantOf (RUNTIME_CLASS(ABasicArmorPickup)))
 	{
 		if (static_cast<ABasicArmorPickup*>(item)->SaveAmount != 0)
@@ -2493,6 +2498,11 @@ int DLevelScript::DoSpawn (int type, fixed_t x, fixed_t y, fixed_t z, int tid, i
 				// If this is a monster, subtract it from the total monster
 				// count, because it already added to it during spawning.
 				actor->ClearCounters();
+				// And finally for secrets
+				if (actor->flags5 & MF5_COUNTSECRET)
+				{
+					level.total_secrets--;
+				}
 				actor->Destroy ();
 				actor = NULL;
 			}

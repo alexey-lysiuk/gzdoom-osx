@@ -1,0 +1,37 @@
+/*******************************************************************************
+ *                         DEFAULT DOOM 64 STATUS BAR
+ *******************************************************************************
+ * If you wish to include this file into a custom status bar please use the 
+ * following command:
+ *
+ *     base Doom64;
+ *
+ * Using #include "sbarinfo/doom64.txt" will not be supported.
+ ******************************************************************************/
+
+height 0;
+resolution 320, 240;
+
+statusbar fullscreen, fullscreenoffsets, 0.5 // Original Doom 64 HUD
+{
+	// Health
+	drawimage "STHEALTH", 29, -37;
+	drawnumber 2147483647, BIGFONT, red, health, alignment(center), 49, -25;
+
+	// Ammo
+	drawnumber 2147483647, BIGFONT, red, ammo1, alignment(center), 0+center, -25;
+
+	// Armor
+	drawimage "STARMOR", -67, -37;
+	drawnumber 2147483647, BIGFONT, red, armor, alignment(center), -49, -25;
+
+	//keys
+    drawswitchableimage keyslot 2 && 5, "nullimage", "STKEYS0", "STKEYS3", "STKEYS3", 78, -24;
+    drawswitchableimage keyslot 3 && 6, "nullimage", "STKEYS1", "STKEYS4", "STKEYS4", 88, -24;
+    drawswitchableimage keyslot 1 && 4, "nullimage", "STKEYS2", "STKEYS5", "STKEYS5", 98, -24;
+}
+
+statusbar inventoryfullscreen, fullscreenoffsets // ZDoom HUD overlay.
+{
+	drawinventorybar Doom, translucent, 7, INDEXFONT, -106+center, -31;
+}

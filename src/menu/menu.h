@@ -2,8 +2,6 @@
 #define __M_MENU_MENU_H__
 
 
-
-
 #include "dobject.h"
 #include "d_player.h"
 #include "r_data/r_translate.h"

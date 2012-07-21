@@ -40,6 +40,7 @@ struct FGLSection;
 struct seg_t;
 
 #include "dthinker.h"
+#include "r_sky.h"
 
 #define MAXWIDTH 2880
 #define MAXHEIGHT 1800
@@ -342,6 +343,17 @@ struct secplane_t
 
 FArchive &operator<< (FArchive &arc, secplane_t &plane);
 
+enum
+{
+	LIGHT_GLOBAL,
+	LIGHT_FLOOR,
+	LIGHT_CEILING,
+	LIGHT_THING,
+	LIGHT_WALLUPPER,
+	LIGHT_WALLLOWER,
+	LIGHT_WALLBOTH,
+	LIGHT_MAX
+};
 
 #include "p_3dfloors.h"
 struct subsector_t;
@@ -370,6 +382,7 @@ enum
 	SECF_UNDERWATERMASK	= 32+64,
 	SECF_DRAWN			= 128,	// sector has been drawn at least once
 	SECF_HIDDEN			= 256,	// Do not draw on textured automap
+	SECF_SKYHACKED		= 512,	// Sector is involved with the Doom 64 Sky hack
 };
 
 enum
@@ -613,6 +626,8 @@ struct sector_t
 
 	FTextureID GetTexture(int pos) const
 	{
+		if((MoreFlags&SECF_SKYHACKED) && pos == ceiling)
+			return skyflatnum;
 		return planes[pos].Texture;
 	}
 
@@ -674,12 +689,13 @@ struct sector_t
 	secplane_t	floorplane, ceilingplane;
 
 	// [RH] give floor and ceiling even more properties
-	FDynamicColormap *ColorMap;	// [RH] Per-sector colormap
+	FDynamicColormap *ColorMaps[7];	// [RH] Per-sector colormaps
 
 
 	TObjPtr<AActor> SoundTarget;
 
 	short		special;
+	short		oldspecial;		// Keep track of what special it had during setup
 	short		tag;
 	short		lightlevel;
 	short		seqType;		// this sector's sound sequence
@@ -790,6 +806,13 @@ struct sector_t
 	};
 
 };
+
+// Colormap macro for compatibility with both Doom 64 colored sectors and classic ZDoom colored sectors:
+// returns the main colormap if it is set to a non-white value, the precise colormap otherwise.
+#define COLORMAP_SELECT(map, pos) \
+	((map)[LIGHT_GLOBAL]->Color.d == 0xffffff ? (map)[pos] : (map)[LIGHT_GLOBAL])
+#define COLORMAP(sector, pos) COLORMAP_SELECT((sector)->ColorMaps, pos)
+#define EXTRACOLORMAP(light, pos) COLORMAP_SELECT((light)->extra_colormap, pos)
 
 FArchive &operator<< (FArchive &arc, sector_t::splane &p);
 
@@ -971,8 +994,9 @@ struct line_t
 	fixed_t 	dx, dy;		// precalculated v2 - v1 for side checking
 	DWORD		flags;
 	DWORD		activation;	// activation type
+	DWORD		moreflags;	// More flags, for Doom 64 support
 	int			special;
-	fixed_t		Alpha;		// <--- translucency (0=invisibile, FRACUNIT=opaque)
+	fixed_t		Alpha;		// <--- translucency (0=invisible, FRACUNIT=opaque)
 	int			id;			// <--- same as tag or set with Line_SetIdentification
 	int			args[5];	// <--- hexen-style arguments (expanded to ZDoom's full width)
 	int			firstid, nextid;
@@ -1136,5 +1160,14 @@ struct visstyle_t
 	FRenderStyle	RenderStyle;
 };
 
+
+// Doom 64 Lights
+struct light_t
+{
+	FDynamicColormap	*ColorMap();
+
+	DWORD				color;
+	FDynamicColormap	*colorMap;
+};
 
 #endif

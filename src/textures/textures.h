@@ -438,6 +438,7 @@ public:
 	FTextureID CheckForTexture (const char *name, int usetype, BITFIELD flags=TEXMAN_TryAny);
 	FTextureID GetTexture (const char *name, int usetype, BITFIELD flags=0);
 	FTextureID FindTextureByLumpNum (int lumpnum);
+	FTextureID FromD64Hash(WORD hash) { return Doom64HashTable[hash]; }
 	int ListTextures (const char *name, TArray<FTextureID> &list);
 
 	void AddTexturesLump (const void *lumpdata, int lumpsize, int deflumpnum, int patcheslump, int firstdup=0, bool texture1=false);
@@ -538,6 +539,10 @@ private:
 	TArray<FSwitchDef *> mSwitchDefs;
 	TArray<FDoorAnimation> mAnimatedDoors;
 	TArray<BYTE *> BuildTileFiles;
+
+	FTextureID Doom64HashTable[65536];
+
+	WORD Doom64Hash (const char* name) const;
 };
 
 // A texture that doesn't really exist

@@ -1289,6 +1289,11 @@ static void HandleReply(player_t *player, bool isconsole, int nodenum, int reply
 				AInventory *item = static_cast<AInventory *>(Spawn(reply->GiveType, 0, 0, 0, NO_REPLACE));
 				// Items given here should not count as items!
 				item->ClearCounters();
+				if (item->flags5 & MF5_COUNTSECRET)
+				{
+					level.total_secrets--;
+					item->flags5 &= ~MF5_COUNTSECRET;
+				}
 				if (item->GetClass()->TypeName == NAME_FlameThrower)
 				{
 					// The flame thrower gives less ammo when given in a dialog

@@ -3877,8 +3877,12 @@ void AActor::HandleSpawnFlags ()
 	}
 	if (SpawnFlags & MTF_SECRET)
 	{
-		//Printf("Secret %s in sector %i!\n", GetTag(), Sector->sectornum);
+		Printf("Secret %s in sector %i!\n", GetTag(), Sector->sectornum);
 		flags5 |= MF5_COUNTSECRET;
+	}
+	if (SpawnFlags & MTF_DONTSPAWN)
+	{
+		Disable();
 	}
 }
 
@@ -3947,6 +3951,32 @@ void AActor::Deactivate (AActor *activator)
 			}
 		}
 	}
+}
+
+void AActor::Disable()
+{
+	UnlinkFromWorld();
+	flags |= (MF_NOBLOCKMAP|MF_NOSECTOR);
+	flags5 |= MF5_NOINTERACTION;
+	LinkToWorld();
+	Deactivate(NULL);
+	SetState(RUNTIME_CLASS(AActor)->ActorInfo->FindState(NAME_Spawn), true);
+	if (flags5 & MF5_COUNTSECRET) level.total_secrets--;
+	if (flags & MF_COUNTKILL) level.total_monsters--;
+	if (flags & MF_COUNTITEM) level.total_items--;
+}
+
+void AActor::Enable()
+{
+	UnlinkFromWorld();
+	flags &= ~(MF_NOBLOCKMAP|MF_NOSECTOR);
+	flags5 &= ~MF5_NOINTERACTION;
+	LinkToWorld();
+	Activate(NULL);
+	SetState(FindState(NAME_Spawn), true);
+	if (flags5 & MF5_COUNTSECRET) level.total_secrets++;
+	if (flags & MF_COUNTKILL) level.total_monsters++;
+	if (flags & MF_COUNTITEM) level.total_items++;
 }
 
 //
@@ -5964,6 +5994,7 @@ void PrintMiscActorInfo(AActor *query)
 {
 	if (query)
 	{
+		FString toprint = "";
 		int flagi;
 		int querystyle = STYLE_Count;
 		for (int style = STYLE_None; style < STYLE_Count; ++style)
@@ -5977,44 +6008,46 @@ void PrintMiscActorInfo(AActor *query)
 		static const char * renderstyles[]= {"None", "Normal", "Fuzzy", "SoulTrans",
 			"OptFuzzy", "Stencil", "Translucent", "Add", "Shaded", "TranslucentStencil"};
 
-		Printf("%s @ %p has the following flags:\n\tflags: %x", query->GetTag(), query, query->flags);
+		toprint.AppendFormat("%s @ %p has the following flags:\n\tflags: %x", query->GetTag(), query, query->flags);
 		for (flagi = 0; flagi < 31; flagi++)
-			if (query->flags & 1<<flagi) Printf(" %s", FLAG_NAME(1<<flagi, flags));
-		Printf("\n\tflags2: %x", query->flags2);
+			if (query->flags & 1<<flagi) toprint.AppendFormat(" %s", FLAG_NAME(1<<flagi, flags));
+		toprint.AppendFormat("\n\tflags2: %x", query->flags2);
 		for (flagi = 0; flagi < 31; flagi++)
-			if (query->flags2 & 1<<flagi) Printf(" %s", FLAG_NAME(1<<flagi, flags2));
-		Printf("\n\tflags3: %x", query->flags3);
+			if (query->flags2 & 1<<flagi) toprint.AppendFormat(" %s", FLAG_NAME(1<<flagi, flags2));
+		toprint.AppendFormat("\n\tflags3: %x", query->flags3);
 		for (flagi = 0; flagi < 31; flagi++)
-			if (query->flags3 & 1<<flagi) Printf(" %s", FLAG_NAME(1<<flagi, flags3));
-		Printf("\n\tflags4: %x", query->flags4);
+			if (query->flags3 & 1<<flagi) toprint.AppendFormat(" %s", FLAG_NAME(1<<flagi, flags3));
+		toprint.AppendFormat("\n\tflags4: %x", query->flags4);
 		for (flagi = 0; flagi < 31; flagi++)
-			if (query->flags4 & 1<<flagi) Printf(" %s", FLAG_NAME(1<<flagi, flags4));
-		Printf("\n\tflags5: %x", query->flags5);
+			if (query->flags4 & 1<<flagi) toprint.AppendFormat(" %s", FLAG_NAME(1<<flagi, flags4));
+		toprint.AppendFormat("\n\tflags5: %x", query->flags5);
 		for (flagi = 0; flagi < 31; flagi++)
-			if (query->flags5 & 1<<flagi) Printf(" %s", FLAG_NAME(1<<flagi, flags5));
-		Printf("\n\tflags6: %x", query->flags6);
+			if (query->flags5 & 1<<flagi) toprint.AppendFormat(" %s", FLAG_NAME(1<<flagi, flags5));
+		toprint.AppendFormat("\n\tflags6: %x", query->flags6);
 		for (flagi = 0; flagi < 31; flagi++)
-			if (query->flags6 & 1<<flagi) Printf(" %s", FLAG_NAME(1<<flagi, flags6));
-		Printf("\nIts bounce style and factors are %x and f:%f, w:%f; its bounce flags are:\n\tflagsb: %x", 
+			if (query->flags6 & 1<<flagi) toprint.AppendFormat(" %s", FLAG_NAME(1<<flagi, flags6));
+		toprint.AppendFormat("\nIts bounce style and factors are %x and f:%f, w:%f; its bounce flags are:\n\tflagsb: %x", 
 			query->BounceFlags, FIXED2FLOAT(query->bouncefactor), 
 			FIXED2FLOAT(query->wallbouncefactor), query->BounceFlags);
 		/*for (flagi = 0; flagi < 31; flagi++)
-			if (query->BounceFlags & 1<<flagi) Printf(" %s", flagnamesb[flagi]);*/
-		Printf("\nIts render style is %i:%s with alpha %f and the following render flags:\n\tflagsr: %x", 
+			if (query->BounceFlags & 1<<flagi) toprint.AppendFormat(" %s", flagnamesb[flagi]);*/
+		toprint.AppendFormat("\nIts render style is %i:%s with alpha %f and the following render flags:\n\tflagsr: %x", 
 			querystyle, (querystyle < STYLE_Count ? renderstyles[querystyle] : "Unknown"),
 			FIXED2FLOAT(query->alpha), query->renderflags);
 		/*for (flagi = 0; flagi < 31; flagi++)
-			if (query->renderflags & 1<<flagi) Printf(" %s", flagnamesr[flagi]);*/
-		Printf("\nIts thing special and arguments are %s(%i, %i, %i, %i, %i), and its specials are %i and %i.",
+			if (query->renderflags & 1<<flagi) toprint.AppendFormat(" %s", flagnamesr[flagi]);*/
+		toprint.AppendFormat("\nIts thing special and arguments are %s(%i, %i, %i, %i, %i), and its specials are %i and %i.",
 			(query->special ? LineSpecialsInfo[query->special]->name : "None"),
 			query->args[0], query->args[1], query->args[2], query->args[3], 
 			query->args[4],	query->special1, query->special2);
-		Printf("\nTID is %d", query->tid);
-		Printf("\nIts coordinates are x: %f, y: %f, z:%f, floor:%f, ceiling:%f.",
+		toprint.AppendFormat("\nIts coordinates are x: %f, y: %f, z:%f, floor:%f, ceiling:%f.",
 			FIXED2FLOAT(query->x), FIXED2FLOAT(query->y), FIXED2FLOAT(query->z),
 			FIXED2FLOAT(query->floorz), FIXED2FLOAT(query->ceilingz));
-		Printf("\nIts speed is %f and velocity is x:%f, y:%f, z:%f, combined:%f.\n",
+		toprint.AppendFormat("\nTID is %d", query->tid);
+		toprint.AppendFormat("\nIts speed is %f and velocity is x:%f, y:%f, z:%f, combined:%f.\n",
 			FIXED2FLOAT(query->Speed), FIXED2FLOAT(query->velx), FIXED2FLOAT(query->vely), FIXED2FLOAT(query->velz),
 			sqrt(pow(FIXED2FLOAT(query->velx), 2) + pow(FIXED2FLOAT(query->vely), 2) + pow(FIXED2FLOAT(query->velz), 2)));
+		if (query->target) toprint.AppendFormat("It is targeting a %s.\n", query->target->GetTag());
+		Printf(toprint);
 	}
 }

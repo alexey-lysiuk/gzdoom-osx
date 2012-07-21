@@ -255,7 +255,7 @@ sector_t * gl_FakeFlat(sector_t * sec, sector_t * dest, area_t in_area, bool bac
 		{
 			if (in_area==area_below)
 			{
-				dest->ColorMap=s->ColorMap;
+				dest->ColorMaps[LIGHT_GLOBAL] = s->ColorMaps[LIGHT_GLOBAL];
 				if (!(s->MoreFlags & SECF_NOFAKELIGHT))
 				{
 					dest->lightlevel  = s->lightlevel;
@@ -301,7 +301,7 @@ sector_t * gl_FakeFlat(sector_t * sec, sector_t * dest, area_t in_area, bool bac
 
 	if (in_area==area_below)
 	{
-		dest->ColorMap=s->ColorMap;
+		dest->ColorMaps[LIGHT_GLOBAL] = s->ColorMaps[LIGHT_GLOBAL];
 		dest->SetPlaneTexZ(sector_t::floor, sec->GetPlaneTexZ(sector_t::floor));
 		dest->SetPlaneTexZ(sector_t::ceiling, s->GetPlaneTexZ(sector_t::floor));
 		dest->floorplane=sec->floorplane;
@@ -351,7 +351,7 @@ sector_t * gl_FakeFlat(sector_t * sec, sector_t * dest, area_t in_area, bool bac
 	}
 	else if (in_area==area_above)
 	{
-		dest->ColorMap=s->ColorMap;
+		dest->ColorMaps[LIGHT_GLOBAL] = s->ColorMaps[LIGHT_GLOBAL];
 		dest->SetPlaneTexZ(sector_t::ceiling, sec->GetPlaneTexZ(sector_t::ceiling));
 		dest->SetPlaneTexZ(sector_t::floor, s->GetPlaneTexZ(sector_t::ceiling));
 		dest->ceilingplane= sec->ceilingplane;

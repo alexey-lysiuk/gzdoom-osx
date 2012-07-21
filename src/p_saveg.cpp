@@ -376,9 +376,9 @@ void P_SerializeWorld (FArchive &arc)
 		sec->e->Serialize(arc);
 		if (arc.IsStoring ())
 		{
-			arc << sec->ColorMap->Color
-				<< sec->ColorMap->Fade;
-			BYTE sat = sec->ColorMap->Desaturate;
+			arc << sec->ColorMaps[LIGHT_GLOBAL]->Color
+				<< sec->ColorMaps[LIGHT_GLOBAL]->Fade;
+			BYTE sat = sec->ColorMaps[LIGHT_GLOBAL]->Desaturate;
 			arc << sat;
 		}
 		else
@@ -387,7 +387,7 @@ void P_SerializeWorld (FArchive &arc)
 			BYTE desaturate;
 			arc << color << fade
 				<< desaturate;
-			sec->ColorMap = GetSpecialLights (color, fade, desaturate);
+			sec->ColorMaps[LIGHT_GLOBAL] = GetSpecialLights (color, fade, desaturate);
 		}
 		arc << sec->reflect[sector_t::ceiling] << sec->reflect[sector_t::floor];
 	}

@@ -1659,7 +1659,7 @@ void AM_drawSubsectors()
 		originx = f_x + ((originpt.x - m_x) * scale / float(1 << 24));
 		originy = f_y + (f_h - (originpt.y - m_y) * scale / float(1 << 24));
 		// Coloring for the polygon
-		colormap = sec->ColorMap;
+		colormap = COLORMAP(sec, LIGHT_FLOOR);
 
 		FTextureID maptex = sec->GetTexture(sector_t::floor);
 
@@ -1715,7 +1715,7 @@ void AM_drawSubsectors()
 
 			lightlist_t *light = P_GetPlaneLight(sec, floorplane, false);
 			floorlight = *light->p_lightlevel;
-			colormap = light->extra_colormap;
+			colormap = EXTRACOLORMAP(light, LIGHT_FLOOR);
 		}
 #endif
 

@@ -478,6 +478,8 @@
 		8A9F547D14BB0F2900F3369B /* libgme_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27A541390F4F40095D9A0 /* libgme_gzdoom.a */; };
 		8A9F547E14BB0F2900F3369B /* libdumb_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27B251390F5DC0095D9A0 /* libdumb_gzdoom.a */; };
 		8A9F547F14BB0F2900F3369B /* libgdtoa_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27C1C1390F7E20095D9A0 /* libgdtoa_gzdoom.a */; };
+		8AA8995115BAD70E00C6F16E /* p_macro.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AA8994F15BAD70E00C6F16E /* p_macro.cpp */; };
+		8AA8995215BAD70E00C6F16E /* p_macro.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AA8994F15BAD70E00C6F16E /* p_macro.cpp */; };
 		8AC81C411391321300F49DC3 /* libjpeg_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF278CA1390F0370095D9A0 /* libjpeg_gzdoom.a */; };
 		8AC81C421391321300F49DC3 /* liblzma_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF2795A1390F1200095D9A0 /* liblzma_gzdoom.a */; };
 		8AC81C431391321300F49DC3 /* libgme_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27A541390F4F40095D9A0 /* libgme_gzdoom.a */; };
@@ -1328,6 +1330,8 @@
 		8A938D1013B6039F002627DE /* actorptrselect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = actorptrselect.h; sourceTree = "<group>"; };
 		8A942A3D1553CC25005083CD /* v_blend.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = v_blend.cpp; sourceTree = "<group>"; };
 		8A9F548414BB0F2900F3369B /* GZDoom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GZDoom.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8AA8994F15BAD70E00C6F16E /* p_macro.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = p_macro.cpp; sourceTree = "<group>"; };
+		8AA8995015BAD70E00C6F16E /* p_macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = p_macro.h; sourceTree = "<group>"; };
 		8AD870F1140A4EC5007A06A9 /* Credits.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Credits.html; sourceTree = "<group>"; };
 		8AF278CA1390F0370095D9A0 /* libjpeg_gzdoom.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libjpeg_gzdoom.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AF2790B1390F0880095D9A0 /* jcomapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = jcomapi.c; sourceTree = "<group>"; };
@@ -3277,6 +3281,8 @@
 				8AF27ECD139126C00095D9A0 /* p_lnspec.cpp */,
 				8AF27ECE139126C00095D9A0 /* p_lnspec.h */,
 				8AF27ECF139126C00095D9A0 /* p_local.h */,
+				8AA8994F15BAD70E00C6F16E /* p_macro.cpp */,
+				8AA8995015BAD70E00C6F16E /* p_macro.h */,
 				8AF27ED0139126C00095D9A0 /* p_map.cpp */,
 				8AF27ED1139126C00095D9A0 /* p_maputl.cpp */,
 				8AF27ED2139126C00095D9A0 /* p_mobj.cpp */,
@@ -4724,6 +4730,7 @@
 				8A9F53D214BB0F2900F3369B /* p_lights.cpp in Sources */,
 				8A9F53D314BB0F2900F3369B /* p_linkedsectors.cpp in Sources */,
 				8A9F53D414BB0F2900F3369B /* p_lnspec.cpp in Sources */,
+				8AA8995115BAD70E00C6F16E /* p_macro.cpp in Sources */,
 				8A9F53D514BB0F2900F3369B /* p_map.cpp in Sources */,
 				8A9F53D614BB0F2900F3369B /* p_maputl.cpp in Sources */,
 				8A9F53D714BB0F2900F3369B /* p_mobj.cpp in Sources */,
@@ -5354,6 +5361,7 @@
 				8AF28132139126C00095D9A0 /* p_lights.cpp in Sources */,
 				8AF28133139126C00095D9A0 /* p_linkedsectors.cpp in Sources */,
 				8AF28134139126C00095D9A0 /* p_lnspec.cpp in Sources */,
+				8AA8995215BAD70E00C6F16E /* p_macro.cpp in Sources */,
 				8AF28135139126C00095D9A0 /* p_map.cpp in Sources */,
 				8AF28136139126C00095D9A0 /* p_maputl.cpp in Sources */,
 				8AF28137139126C00095D9A0 /* p_mobj.cpp in Sources */,

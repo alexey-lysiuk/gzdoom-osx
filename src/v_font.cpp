@@ -873,6 +873,22 @@ FSingleLumpFont::FSingleLumpFont (const char *name, int lump)
 {
 	assert(lump >= 0);
 
+	// Hack: Doom 64's CONFONT lump is just a 256x256 PNG picture with each
+	// character in a 16x16 square area, listed by rows. Let's ignore it for now.
+	// TODO: implement something better than this kludge. >:(
+	if (gameinfo.gametype == GAME_Doom64)
+	{
+		char foo[9];
+		static const char *bar[] = { "CONFONT", NULL };
+		Wads.GetLumpName(foo, lump);
+		// If we're trying to load the CONFONT, make sure it's from zdoom.pk3.
+		if (!stricmp(foo, bar[0]) && Wads.GetLumpFile(lump) > 0)
+		{
+			int lastlump = 0;
+			lump = Wads.FindLumpMulti(bar, &lastlump);
+		}
+	}
+
 	Name = copystring (name);
 
 	FMemLump data1 = Wads.ReadLump (lump);
@@ -2424,6 +2440,10 @@ void V_InitFonts()
 		else if (gameinfo.gametype == GAME_Strife)
 		{
 			BigFont = new FSingleLumpFont ("BigFont", Wads.GetNumForName ("SBIGFONT"));
+		}
+		else if (gameinfo.gametype == GAME_Doom64)
+		{
+			BigFont = new FFont ("BigFont", "FONTB%03d", HU_FONTSTART, HU_FONTSIZE, HU_FONTSTART);
 		}
 		else
 		{

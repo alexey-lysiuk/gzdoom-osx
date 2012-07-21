@@ -301,11 +301,10 @@ void FGLRenderer::DrawTexture(FTexture *img, DCanvas::DrawParms &parms)
 
 	FMaterial * gltex = FMaterial::ValidateTexture(img);
 
-	if (parms.colorOverlay && (parms.colorOverlay & 0xffffff) == 0)
+	if (parms.colorOverlay)
 	{
 		// Right now there's only black. Should be implemented properly later
 		light = 1.f - APART(parms.colorOverlay)/255.f;
-		parms.colorOverlay = 0;
 	}
 
 	if (!img->bHasCanvas)
@@ -396,26 +395,6 @@ void FGLRenderer::DrawTexture(FTexture *img, DCanvas::DrawParms &parms)
 	gl.TexCoord2f(u2, v2);
 	glVertex2d(x + w, y + h);
 	gl.End();
-
-	if (parms.colorOverlay)
-	{
-		gl_RenderState.SetTextureMode(TM_MASK);
-		gl_RenderState.BlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		gl_RenderState.BlendEquation(GL_FUNC_ADD);
-		gl_RenderState.Apply();
-		gl.Color4ub(RPART(parms.colorOverlay),GPART(parms.colorOverlay),BPART(parms.colorOverlay),APART(parms.colorOverlay));
-		gl.Begin(GL_TRIANGLE_STRIP);
-		gl.TexCoord2f(u1, v1);
-		glVertex2d(x, y);
-		gl.TexCoord2f(u1, v2);
-		glVertex2d(x, y + h);
-		gl.TexCoord2f(u2, v1);
-		glVertex2d(x + w, y);
-		gl.TexCoord2f(u2, v2);
-		glVertex2d(x + w, y + h);
-		gl.End();
-	}
-
 	gl_RenderState.EnableAlphaTest(true);
 	
 	gl.Scissor(0, 0, screen->GetWidth(), screen->GetHeight());

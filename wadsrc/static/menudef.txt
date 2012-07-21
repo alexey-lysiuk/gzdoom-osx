@@ -17,6 +17,12 @@ DEFAULTLISTMENU
 		Linespacing 16
 		Font "BigFont", "Red"
 	}
+	IfGame(Doom64)
+	{
+		Selector "M_CURS1", -36, -8
+		Linespacing 16
+		Font "BigFont", "Red"
+	}
 	IfGame(Strife)
 	{
 		Selector "M_CURS1", -28, -5
@@ -65,6 +71,10 @@ LISTMENU "MainMenu"
 		StaticPatch 278, 80, "FBULA0"
 		Position 110, 56
 	}
+	IfGame(Doom64)
+	{
+		Position 112, 120
+	}
 	
 	IfGame(Doom, Strife, Chex)
 	{
@@ -96,6 +106,15 @@ LISTMENU "MainMenu"
 		TextItem "$MNU_INFO", "i", "ReadThisMenu"
 		TextItem "$MNU_QUITGAME", "q", "QuitMenu"
 	}
+
+	IfGame(Doom64)
+	{
+		TextItem "$MNU_NEWGAME64", "n", "PlayerclassMenu"
+		TextItem "$MNU_OPTIONS64", "o", "OptionsMenu"
+		TextItem "$MNU_LOADGAME64", "l", "LoadGameMenu"
+		TextItem "$MNU_SAVEGAME64", "s", "SaveGameMenu"
+		TextItem "$MNU_QUITGAME64", "q", "QuitMenu"
+	}
 }
 
 //-------------------------------------------------------------------------------------------
@@ -115,7 +134,7 @@ LISTMENU "MainMenu"
 
 ListMenu "PlayerclassMenu"
 {
-	IfGame(Doom, Heretic, Hexen, Strife)
+	IfGame(Doom, Heretic, Hexen, Strife, Doom64)
 	{
 		NetgameMessage "$NETGAME"
 	}
@@ -127,6 +146,13 @@ ListMenu "PlayerclassMenu"
 	IfGame(Doom, Strife, Chex)
 	{
 		StaticTextCentered 160, 15, "$MNU_CHOOSECLASS"
+		Position 48, 63
+		PlayerDisplay 220, 63, "20 00 00", "80 00 40"
+		MouseWindow 0, 220
+	}
+	IfGame(Doom64)
+	{
+		StaticTextCentered 160, 15, "$MNU_CHOOSECLASS64"
 		Position 48, 63
 		PlayerDisplay 220, 63, "20 00 00", "80 00 40"
 		MouseWindow 0, 220
@@ -157,7 +183,7 @@ ListMenu "PlayerclassMenu"
 
 ListMenu "EpisodeMenu"
 {
-	IfGame(Doom, Heretic, Hexen, Strife)
+	IfGame(Doom, Heretic, Hexen, Strife, Doom64)
 	{
 		NetgameMessage "$NETGAME"
 	}
@@ -171,7 +197,7 @@ ListMenu "EpisodeMenu"
 		Position 48, 63
 		StaticPatch 54, 38, "M_EPISOD"
 	}
-	IfGame(Strife)
+	IfGame(Strife, Doom64)
 	{
 		Position 48, 63
 		StaticText 54, 38, "$MNU_EPISODE"
@@ -216,6 +242,11 @@ ListMenu "SkillMenu"
 		Position 160, 44
 		centermenu
 	}
+	IfGame (Doom64)
+	{
+		StaticText 64, 13, "$MNU_CHOOSESKILL64"
+		Position 112, 60
+	}
 }
 
 //-------------------------------------------------------------------------------------------
@@ -239,7 +270,7 @@ ListMenu "GameFilesMenu"
 
 ListMenu "LoadGameMenu"
 {
-	IfGame(Doom, Heretic, Hexen, Strife)
+	IfGame(Doom, Heretic, Hexen, Strife, Doom64)
 	{
 		NetgameMessage "$LOADNET"
 	}
@@ -251,7 +282,7 @@ ListMenu "LoadGameMenu"
 	{
 		StaticPatchCentered 160, -20, "M_LOADG"
 	}
-	IfGame(Heretic, Hexen)
+	IfGame(Heretic, Hexen, Doom64)
 	{
 		StaticTextCentered 160, -10, "$MNU_LOADGAME"
 	}
@@ -271,7 +302,7 @@ ListMenu "SaveGameMenu"
 	{
 		StaticPatchCentered 160, -20, "M_SAVEG"
 	}
-	IfGame(Heretic, Hexen)
+	IfGame(Heretic, Hexen, Doom64)
 	{
 		StaticTextCentered 160, -10, "$MNU_SAVEGAME"
 	}
@@ -384,7 +415,7 @@ ListMenu "PlayerMenu"
 	Linespacing 14
 	Position 48, 36
 
-	IfGame (Doom, Strife, Chex)
+	IfGame (Doom, Strife, Chex, Doom64)
 	{
 		PlayerNameBox "Name", 0, "Playerbox"
 		Selector "-", -16, -1
@@ -394,7 +425,7 @@ ListMenu "PlayerMenu"
 		PlayerNameBox "Name", 5, "Playerbox"
 		Selector "-", -16, 1
 	}
-	IfGame(Doom, Heretic, Strife, Chex)
+	IfGame(Doom, Heretic, Strife, Chex, Doom64)
 	{
 		MouseWindow 0, 220
 		PlayerDisplay 220, 80, "20 00 00", "80 00 40", 1, "PlayerDisplay"

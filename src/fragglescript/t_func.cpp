@@ -898,6 +898,7 @@ void FParser::SF_Spawn(void)
 				{
 					if (t_return.value.mobj->flags&MF_COUNTKILL) level.total_monsters--;
 					if (t_return.value.mobj->flags&MF_COUNTITEM) level.total_items--;
+					if (t_return.value.mobj->flags5&MF5_COUNTSECRET) level.total_secrets--;
 					t_return.value.mobj->Destroy();
 					t_return.value.mobj = NULL;
 				}
@@ -4213,7 +4214,8 @@ void FParser::SF_SetColor(void)
 		// set all sectors with tag
 		while ((i = T_FindSectorFromTag(tagnum, i)) >= 0)
 		{
-			sectors[i].ColorMap = GetSpecialLights (color, sectors[i].ColorMap->Fade, 0);
+			sectors[i].ColorMaps[LIGHT_GLOBAL] = 
+				GetSpecialLights (color, sectors[i].ColorMaps[LIGHT_GLOBAL]->Fade, 0);
 		}
 	}
 }

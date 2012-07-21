@@ -944,6 +944,11 @@ void HUD_InitHud()
 		HudFont=BigFont;	// Strife doesn't have anything nice so use the standard font
 		break;
 
+	case GAME_Doom64:
+		healthpic = TexMan.FindTexture("MEDIA0");
+		HudFont=BigFont;
+		break;
+
 	default:
 		healthpic = TexMan.FindTexture("MEDIA0");
 		berserkpic = TexMan.FindTexture("PSTRA0");

@@ -106,6 +106,11 @@ bool P_Thing_Spawn (int tid, AActor *source, int type, angle_t angle, bool fog, 
 				// If this is a monster, subtract it from the total monster
 				// count, because it already added to it during spawning.
 				mobj->ClearCounters();
+				// And for secrets
+				if (mobj->flags5 & MF5_COUNTSECRET)
+				{
+					level.total_secrets--;
+				}
 				mobj->Destroy ();
 			}
 		}
@@ -345,6 +350,11 @@ nolead:						mobj->angle = R_PointToAngle2 (mobj->x, mobj->y, targ->x, targ->y);
 						// If this is a monster, subtract it from the total monster
 						// count, because it already added to it during spawning.
 						mobj->ClearCounters();
+						// And for secrets
+						if (mobj->flags5 & MF5_COUNTSECRET)
+						{
+							level.total_secrets--;
+						}
 						mobj->Destroy ();
 					}
 					else
@@ -403,6 +413,7 @@ void P_RemoveThing(AActor * actor)
 	{
 		// be friendly to the level statistics. ;)
 		actor->ClearCounters();
+		if (actor->flags5&MF5_COUNTSECRET) level.total_secrets--;
 		actor->Destroy ();
 	}
 }

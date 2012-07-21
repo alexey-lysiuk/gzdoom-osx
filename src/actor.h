@@ -269,7 +269,7 @@ enum
 	/*					= 0x00000001,	*/
 	/*					= 0x00000002,	*/
 	MF5_NODROPOFF		= 0x00000004,	// cannot drop off under any circumstances.
-	/*					= 0x00000008,	*/
+	MF5_DONTSPAWN		= 0x00000008,	// From Doom 64: kinda like DORMANT, but more thorough
 	MF5_COUNTSECRET		= 0x00000010,	// From Doom 64: actor acts like a secret
 	MF5_AVOIDINGDROPOFF = 0x00000020,	// Used to move monsters away from dropoffs
 	MF5_NODAMAGE		= 0x00000040,	// Actor can be shot and reacts to being shot but takes no damage
@@ -596,6 +596,10 @@ public:
 
 	virtual void Activate (AActor *activator);
 	virtual void Deactivate (AActor *activator);
+
+	// For the Doom 64 triggered spawn effect
+	virtual void Disable ();
+	virtual void Enable ();
 
 	virtual void Tick ();
 

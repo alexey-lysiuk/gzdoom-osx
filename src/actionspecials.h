@@ -8,9 +8,9 @@ DEFINE_SPECIAL(Polyobj_MoveTimes8, 6, 4, 4, 4)
 DEFINE_SPECIAL(Polyobj_DoorSwing, 7, 4, 4, 4)
 DEFINE_SPECIAL(Polyobj_DoorSlide, 8, 5, 5, 5)
 DEFINE_SPECIAL(Line_Horizon, 9, -1, 0, 0)   // [RH] draw one-sided wall at horizon
-DEFINE_SPECIAL(Door_Close, 10, 2, 3, 3)
-DEFINE_SPECIAL(Door_Open, 11, 2, 3, 3)
-DEFINE_SPECIAL(Door_Raise, 12, 3, 4, 4)
+DEFINE_SPECIAL(Door_Close, 10, 2, 3, 5)
+DEFINE_SPECIAL(Door_Open, 11, 2, 3, 5)
+DEFINE_SPECIAL(Door_Raise, 12, 3, 4, 5)
 DEFINE_SPECIAL(Door_LockedRaise, 13, 4, 5, 5)
 DEFINE_SPECIAL(Door_Animated, 14, 4, 4, 4)
 DEFINE_SPECIAL(Autosave, 15, 0, 0, 0)   // [RH] Save the game *now*
@@ -145,6 +145,13 @@ DEFINE_SPECIAL(Sector_SetPlaneReflection, 159, 3, 3, 3)
 DEFINE_SPECIAL(Sector_Set3DFloor, 160, -1, -1, 5)
 DEFINE_SPECIAL(Sector_SetContents, 161, -1, -1, 3)
 
+// Doom 64 support specials
+DEFINE_SPECIAL(Door_Split, 162, 2, 5, 5)		// Doom 64 generalized doors
+DEFINE_SPECIAL(Macro_Command, 163, 2, 3, 3)		// Doom 64 macros and function they use
+DEFINE_SPECIAL(Macro_Delay, 164, 1, 2, 2)		// Doom 64 macro delay
+DEFINE_SPECIAL(Sector_Transform, 165, 3, 3, 3)	// Doom 64 functions for slowly changing sectors
+DEFINE_SPECIAL(Thing_Enable, 166, 1, 1, 1)		// Doom 64 delayed spawn enabler
+
 // [RH] Begin new specials for ZDoom
 DEFINE_SPECIAL(Ceiling_CrushAndRaiseDist, 168, 3, 5, 5)
 DEFINE_SPECIAL(Generic_Crusher2, 169, 5, 5, 5)
@@ -227,7 +234,7 @@ DEFINE_SPECIAL(Elevator_RaiseToNearest, 245, 2, 2, 2)
 DEFINE_SPECIAL(Elevator_MoveToFloor, 246, 2, 2, 2)
 DEFINE_SPECIAL(Elevator_LowerToNearest, 247, 2, 2, 2)
 DEFINE_SPECIAL(HealThing, 248, 1, 2, 2)
-DEFINE_SPECIAL(Door_CloseWaitOpen, 249, 3, 4, 4)
+DEFINE_SPECIAL(Door_CloseWaitOpen, 249, 3, 4, 5)
 DEFINE_SPECIAL(Floor_Donut, 250, 3, 3, 3)
 DEFINE_SPECIAL(FloorAndCeiling_LowerRaise, 251, 3, 4, 4)
 DEFINE_SPECIAL(Ceiling_RaiseToNearest, 252, 2, 2, 2)

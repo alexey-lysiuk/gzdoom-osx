@@ -288,6 +288,92 @@ void P_TranslateLineDef (line_t *ld, maplinedef_t *mld)
 	memset (ld->args, 0, sizeof(ld->args));
 }
 
+#if 0
+#include "debughacks.h"
+#else
+#define DEBUGSPAM {};
+#define KEYSPAM {};
+#endif
+
+void P_TranslateLineDef (line_t *ld, maplinedefdoom64_t *mld)
+{
+	enum Doom64SpecialFlags
+	{
+		ML_SPECIALMASK		= 0x00FF,
+		ML_FLAGMASK			= 0xFE00,
+		ML_MACROLINE		= 0x0100,
+		ML_REDKEYLOCK		= 0x0200,
+		ML_BLUEKEYLOCK		= 0x0400,
+		ML_YELLOWKEYLOCK	= 0x0800,
+		ML_ALLKEYSLOCK		= 0x0E00,
+		ML_LINECROSSTRIGGER	= 0x1000,
+		ML_SHOOTABLETRIGGER	= 0x2000,
+		ML_ACTIVATETRIGGER	= 0x4000,
+		ML_REPEATTRIGGER	= 0x8000,
+	};
+	// The main difference between the Doom linedef and Doom64 Linedef is the wider flags field.
+	// In effect, there are the "normal" flags on two bytes, then on a byte each the "render flags"
+	// and the "sidedef flags".
+	maplinedef_t tmp;
+	tmp.v1 = mld->v1;
+	tmp.v2 = mld->v2;
+	tmp.flags = (WORD) (mld->flags & 0x2FF);	// flags from 0x400 and above not supported
+
+	// Todo: address this point from the specs:
+	// * Unpeg Top Linedef flag also aligns the y offset of all textures to the nearest 64 grid
+
+	if (mld->special & ML_MACROLINE) tmp.special = 0;	// This is a macro line! It doesn't work normally
+	else tmp.special = mld->special & ML_SPECIALMASK;	// the upper byte is used for SPAC flags
+
+	tmp.tag = mld->tag;
+	tmp.sidenum[0] = mld->sidenum[0];
+	tmp.sidenum[1] = mld->sidenum[1];
+	P_TranslateLineDef (ld, &tmp);
+
+	// Use flags. Specs say the order is macro, red, blue, yellow key, cross, shootable, use, repeatable
+	if (mld->special & ML_FLAGMASK)
+	{
+		ld->activation = 0;
+		ld->locknumber = 0;
+		// Not sure this actually happens, or how the engine handles it if it does
+		if (mld->special & ML_ALLKEYSLOCK)		ld->locknumber = 229;
+
+		// Red key
+		if (mld->special & ML_REDKEYLOCK)		ld->locknumber = 129;
+
+		// Blue key
+		if (mld->special & ML_BLUEKEYLOCK)		ld->locknumber = 130;
+
+		// Yellow key
+		if (mld->special & ML_YELLOWKEYLOCK)	ld->locknumber = 131;
+
+		// cross - more investigation needed to check monster and projectile crossing
+		if (mld->special & ML_LINECROSSTRIGGER)	ld->activation |= SPAC_Cross;// |SPAC_MCross|SPAC_PCross);
+
+		// shootable
+		if (mld->special & ML_SHOOTABLETRIGGER)	ld->activation |= SPAC_Impact;
+
+		// use
+		if (mld->special & ML_ACTIVATETRIGGER)	ld->activation |= (SPAC_Use|SPAC_MUse);
+
+		// repeatable
+		if (mld->special & ML_REPEATTRIGGER)	ld->flags |= ML_REPEAT_SPECIAL;
+
+		// Special 125 is forbidden to player
+		if ((mld->special & 0xFF) == 125) ld->activation &= ~SPAC_PlayerActivate;
+	}
+
+	// Handle macros here because they can't be xlated 
+	if (mld->special & 0x100)
+	{
+		ld->special = Macro_Command;
+		ld->args[0] = mld->special & 0xFF;
+		ld->args[1] = mld->tag;
+		ld->args[2] = (ld->flags & ML_REPEAT_SPECIAL) ? 2 : 0;
+	}
+	//DEBUGSPAM
+}
+
 // Now that ZDoom again gives the option of using Doom's original teleport
 // behavior, only teleport dests in a sector with a 0 tag need to be
 // given a TID. And since Doom format maps don't have TIDs, we can safely

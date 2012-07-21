@@ -209,6 +209,7 @@ enum ELevelFlags
 	LEVEL2_POLYGRIND			= 0x02000000,	// Polyobjects grind corpses to gibs.
 	LEVEL2_RESETINVENTORY		= 0x04000000,	// Resets player inventory when starting this level (unless in a hub)
 	LEVEL2_RESETHEALTH			= 0x08000000,	// Resets player health when starting this level (unless in a hub)
+	LEVEL2_DOOM64HACK			= 0x80000000,	// Level is in Doom 64 format, so there are some oddities to address
 
 	LEVEL2_NOSTATISTICS			= 0x10000000,	// This level should not have statistics collected
 	LEVEL2_ENDGAME				= 0x20000000,	// This is an epilogue level that cannot be quit.
@@ -435,6 +436,8 @@ struct FLevelLocals
 	bool		IsJumpingAllowed() const;
 	bool		IsCrouchingAllowed() const;
 	bool		IsFreelookAllowed() const;
+
+	int			customvalue;			// Doom 64 needs this (special 204 "set level integer")
 };
 
 

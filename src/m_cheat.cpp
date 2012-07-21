@@ -572,6 +572,11 @@ void GiveSpawner (player_t *player, const PClass *type, int amount)
 			}
 		}
 		item->ClearCounters();
+		if(item->flags5 & MF5_COUNTSECRET)
+		{
+			level.total_secrets--;
+			item->flags5 &= ~MF5_COUNTSECRET;
+		} 
 		if (!item->CallTryPickup (player->mo))
 		{
 			item->Destroy ();

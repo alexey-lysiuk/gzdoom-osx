@@ -361,7 +361,7 @@ void GLSprite::SplitSprite(sector_t * frontsector, bool translucent)
 		{
 			copySprite=*this;
 			copySprite.lightlevel=*lightlist[i].p_lightlevel;
-			copySprite.Colormap.CopyLightColor(lightlist[i].extra_colormap);
+			copySprite.Colormap.CopyLightColor(COLORMAP_SELECT(lightlist[i].extra_colormap, LIGHT_THING));
 
 			if (glset.nocoloredspritelighting)
 			{
@@ -409,7 +409,7 @@ void GLSprite::SetSpriteColor(sector_t *sector, fixed_t center_y)
 		if (maplightbottom<center_y)
 		{
 			lightlevel=*lightlist[i].p_lightlevel;
-			Colormap.CopyLightColor(lightlist[i].extra_colormap);
+			Colormap.CopyLightColor(COLORMAP_SELECT(lightlist[i].extra_colormap, LIGHT_THING));
 
 			if (glset.nocoloredspritelighting)
 			{
@@ -714,7 +714,7 @@ void GLSprite::Process(AActor* thing,sector_t * sector)
 	}
 	else 
 	{
-		Colormap=rendersector->ColorMap;
+		Colormap = COLORMAP(rendersector, LIGHT_THING);
 		if (fullbright)
 		{
 			if (rendersector == &sectors[rendersector->sectornum] || in_area != area_below)	
@@ -887,7 +887,7 @@ void GLSprite::ProcessParticle (particle_t *particle, sector_t *sector)//, int s
 		TArray<lightlist_t> & lightlist=sector->e->XFloor.lightlist;
 		int lightbottom;
 
-		Colormap = sector->ColorMap;
+		Colormap = sector->ColorMaps[LIGHT_THING];
 		for(unsigned int i=0;i<lightlist.Size();i++)
 		{
 			if (i<lightlist.Size()-1) lightbottom = lightlist[i+1].plane.ZatPoint(particle->x,particle->y);
@@ -896,7 +896,7 @@ void GLSprite::ProcessParticle (particle_t *particle, sector_t *sector)//, int s
 			if (lightbottom < particle->y)
 			{
 				lightlevel = *lightlist[i].p_lightlevel;
-				Colormap.LightColor = (lightlist[i].extra_colormap)->Color;
+				Colormap.LightColor = (COLORMAP_SELECT(lightlist[i].extra_colormap, LIGHT_THING))->Color;
 				break;
 			}
 		}
@@ -904,7 +904,7 @@ void GLSprite::ProcessParticle (particle_t *particle, sector_t *sector)//, int s
 	else
 	{
 		lightlevel = 255;
-		Colormap = sector->ColorMap;
+		Colormap = COLORMAP(sector, LIGHT_WALLBOTH);
 		Colormap.ClearColor();
 	}
 

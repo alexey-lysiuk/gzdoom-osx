@@ -261,7 +261,8 @@ void GLWall::PutWall(bool translucent)
 void GLWall::Put3DWall(lightlist_t * lightlist, bool translucent)
 {
 	bool fadewall = (!translucent && lightlist->caster && (lightlist->caster->flags&FF_FADEWALLS) && 
-		!gl_isBlack((lightlist->extra_colormap)->Fade)) && gl_isBlack(Colormap.FadeColor);
+		!gl_isBlack((COLORMAP_SELECT(lightlist->extra_colormap, LIGHT_WALLBOTH))->Fade)) && gl_isBlack
+		(Colormap.FadeColor);
 
 	// only modify the light level if it doesn't originate from the seg's frontsector. This is to account for light transferring effects
 	if (lightlist->p_lightlevel != &seg->sidedef->sector->lightlevel)
@@ -270,7 +271,7 @@ void GLWall::Put3DWall(lightlist_t * lightlist, bool translucent)
 	}
 	// relative light won't get changed here. It is constant across the entire wall.
 
-	Colormap.CopyLightColor(lightlist->extra_colormap);
+	Colormap.CopyLightColor(COLORMAP_SELECT(lightlist->extra_colormap, LIGHT_WALLBOTH));
 	if (fadewall) lightlevel=255;
 	PutWall(translucent);
 
@@ -279,7 +280,7 @@ void GLWall::Put3DWall(lightlist_t * lightlist, bool translucent)
 		FMaterial *tex = gltexture;
 		type = RENDERWALL_COLORLAYER;
 		gltexture = NULL;
-		Colormap.LightColor = (lightlist->extra_colormap)->Fade;
+		Colormap.LightColor = (COLORMAP_SELECT(lightlist->extra_colormap, LIGHT_WALLBOTH))->Fade;
 		alpha = (255-(*lightlist->p_lightlevel))/255.f*1.f;
 		if (alpha>0.f) PutWall(true);
 
@@ -515,14 +516,14 @@ bool GLWall::DoHorizon(seg_t * seg,sector_t * fs, vertex_t * v1,vertex_t * v2)
 			type = RENDERWALL_HORIZON;
 			hi.plane.GetFromSector(fs, true);
 			hi.lightlevel = gl_ClampLight(fs->GetCeilingLight());
-			hi.colormap = fs->ColorMap;
+			hi.colormap = fs->ColorMaps[LIGHT_GLOBAL];
 
 			if (fs->e->XFloor.ffloors.Size())
 			{
 				light = P_GetPlaneLight(fs, &fs->ceilingplane, true);
 
 				if(!(fs->GetFlags(sector_t::ceiling)&PLANEF_ABSLIGHTING)) hi.lightlevel = gl_ClampLight(*light->p_lightlevel);
-				hi.colormap.LightColor = (light->extra_colormap)->Color;
+				hi.colormap.LightColor = (COLORMAP_SELECT(light->extra_colormap, LIGHT_WALLBOTH))->Color;
 			}
 
 			if (gl_fixedcolormap) hi.colormap.GetFixedColormap();
@@ -544,14 +545,14 @@ bool GLWall::DoHorizon(seg_t * seg,sector_t * fs, vertex_t * v1,vertex_t * v2)
 			type = RENDERWALL_HORIZON;
 			hi.plane.GetFromSector(fs, false);
 			hi.lightlevel = gl_ClampLight(fs->GetFloorLight());
-			hi.colormap = fs->ColorMap;
+			hi.colormap = fs->ColorMaps[LIGHT_GLOBAL];
 
 			if (fs->e->XFloor.ffloors.Size())
 			{
 				light = P_GetPlaneLight(fs, &fs->floorplane, false);
 
 				if(!(fs->GetFlags(sector_t::floor)&PLANEF_ABSLIGHTING)) hi.lightlevel = gl_ClampLight(*light->p_lightlevel);
-				hi.colormap.LightColor = (light->extra_colormap)->Color;
+				hi.colormap.LightColor = (COLORMAP_SELECT(light->extra_colormap, LIGHT_WALLBOTH))->Color;
 			}
 
 			if (gl_fixedcolormap) hi.colormap.GetFixedColormap();
@@ -793,6 +794,15 @@ void GLWall::DoMidTexture(seg_t * seg, bool drawfogboundary,
 						  fixed_t bch1, fixed_t bch2, fixed_t bfh1, fixed_t bfh2)
 								
 {
+	// Horrible hack because Doom 64 is full of mid textures that shouldn't
+	// be displayed for some reason. Not sure about the best way to detect them.
+	if (level.flags2 & LEVEL2_DOOM64HACK)
+	{
+		if (seg->linedef->sidedef[1] >= 0 && 
+			(seg->linedef->sidedef[0]->GetTexture(side_t::mid)
+			!= seg->linedef->sidedef[1]->GetTexture(side_t::mid)))
+			return;
+	}
 	FTexCoordInfo tci;
 	fixed_t topleft,bottomleft,topright,bottomright;
 	GLSeg glsave=glseg;
@@ -1111,7 +1121,7 @@ void GLWall::BuildFFBlock(seg_t * seg, F3DFloor * rover,
 			// this may not yet be done!
 			light=P_GetPlaneLight(rover->target, rover->top.plane,true);
 			Colormap.Clear();
-			Colormap.LightColor=(light->extra_colormap)->Fade;
+			Colormap.LightColor=(COLORMAP_SELECT(light->extra_colormap, LIGHT_WALLBOTH))->Fade;
 			// the fog plane defines the light level, not the front sector!
 			lightlevel=*light->p_lightlevel;
 			gltexture=NULL;
@@ -1515,7 +1525,9 @@ void GLWall::Process(seg_t *seg, sector_t * frontsector, sector_t * backsector)
 	glseg.y1= FIXED2FLOAT(v1->y);
 	glseg.x2= FIXED2FLOAT(v2->x);
 	glseg.y2= FIXED2FLOAT(v2->y);
-	Colormap=frontsector->ColorMap;
+	Colormap = COLORMAP(frontsector, LIGHT_WALLBOTH);
+	ColormapU = COLORMAP(frontsector, LIGHT_WALLUPPER);
+	ColormapL = COLORMAP(frontsector, LIGHT_WALLLOWER);
 	flags = (!gl_isBlack(Colormap.FadeColor) || level.flags&LEVEL_HASFADETABLE)? GLWF_FOGGY : 0;
 
 	int rel = 0;
@@ -1769,9 +1781,9 @@ void GLWall::ProcessLowerMiniseg(seg_t *seg, sector_t * frontsector, sector_t * 
 		lightlevel = gl_ClampLight(frontsector->lightlevel);
 		rellight = 0;
 
-		alpha = 1.0f;
+		alpha=1.0f;
 		RenderStyle = STYLE_Normal;
-		Colormap = frontsector->ColorMap;
+		Colormap = frontsector->ColorMaps[LIGHT_GLOBAL];
 
 		topflat = frontsector->GetTexture(sector_t::ceiling);	// for glowing textures
 		bottomflat = frontsector->GetTexture(sector_t::floor);
