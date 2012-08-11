@@ -3363,6 +3363,8 @@ enum EACSFunctions
 	ACSF_ACS_NamedLockedExecuteDoor,
 	ACSF_ACS_NamedExecuteWithResult,
 	ACSF_ACS_NamedExecuteAlways,
+	ACSF_UniqueTID,
+	ACSF_IsTIDUsed,
 
 	// ZDaemon
 	ACSF_GetTeamScore = 19620,
@@ -3877,6 +3879,14 @@ int DLevelScript::CallFunction(int argCount, int funcIndex, SDWORD *args)
 					activationline, activator, backSide,
 					scriptnum, arg1, arg2, arg3, arg4);
 			}
+			break;
+
+		case ACSF_UniqueTID:
+			return P_FindUniqueTID(argCount > 0 ? args[0] : 0, argCount > 1 ? args[1] : 0);
+			break;
+
+		case ACSF_IsTIDUsed:
+			return P_IsTIDUsed(args[0]);
 			break;
 
 		default:
@@ -6345,7 +6355,18 @@ scriptwait:
 		case PCD_GETACTORZ:
 			{
 				AActor *actor = SingleActorFromTID(STACK(1), activator);
-				STACK(1) = actor == NULL ? 0 : (&actor->x)[pcd - PCD_GETACTORX];
+				if (actor == NULL)
+				{
+					STACK(1) = 0;
+				}
+				else if (pcd == PCD_GETACTORZ)
+				{
+					STACK(1) = actor->z + actor->GetBobOffset();
+				}
+				else
+				{
+					STACK(1) =  (&actor->x)[pcd - PCD_GETACTORX];
+				}
 			}
 			break;
 
