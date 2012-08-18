@@ -2542,7 +2542,7 @@
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.7;
 				VALID_ARCHS = "i386 x86_64";
 				WARNING_CFLAGS = "";
 				ZERO_LINK = NO;
