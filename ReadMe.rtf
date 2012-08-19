@@ -1,9 +1,9 @@
-{\rtf1\ansi\ansicpg1252\cocoartf1138\cocoasubrtf470
-{\fonttbl\f0\froman\fcharset0 Times-Roman;}
+{\rtf1\ansi\ansicpg1252\cocoartf1187
+\cocoascreenfonts1{\fonttbl\f0\froman\fcharset0 Times-Roman;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue246;}
 {\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid1\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid1}}
 {\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}}
-\paperw11900\paperh16840\margl1440\margr1440\vieww13960\viewh12080\viewkind0
+\paperw11900\paperh16840\margl1440\margr1440\vieww19140\viewh13060\viewkind0
 \deftab720
 \pard\pardeftab720\qc
 
@@ -32,7 +32,7 @@
 \ls1\ilvl0\cf0 {\listtext	\'95	}~/Library/Application Support/GZDoom\
 {\listtext	\'95	}~/Documents/GZDoom\
 {\listtext	\'95	}/Library/Application Support/GZDoom\
-\ls1\ilvl0{\listtext	\'95	}GZDoom.app/Contents/MacOS\
+{\listtext	\'95	}GZDoom.app/Contents/MacOS\
 \pard\tx566\pardeftab720
 \cf0 All game data are stored in ~/Library/Application Support/GZDoom folder.\
 \
@@ -55,12 +55,20 @@ ZDoom homepage:	{\field{\*\fldinst{HYPERLINK "http://zdoom.org/"}}{\fldrslt \cf2
 
 \fs28 \
 The following list describes changes done in Mac OS X version only.\
-All recent activity in main GZDoom SVN repository can be seen {\field{\*\fldinst{HYPERLINK "http://cia.vc/stats/project/GZDoom"}}{\fldrslt here}}.\
+All recent changes in main GZDoom SVN repository can be seen {\field{\*\fldinst{HYPERLINK "http://mancubus.net/svn/gzdoom/"}}{\fldrslt here}}.\
 \
-\ul 0.1.4\
-\ulnone \
-+ Added support for XBLA/Xbox 360 version of Doom I & II: direct .disk files handling and No Rest for the Living expansion available.\
-+ Added berserk power-up display (when found) instead of health box on alternate HUD. Use hud_berserk_health CVAR to enable this feature.\
+\ul 0.1.5\ulnone \
+\pard\pardeftab720
+\cf0 * !!! All user data (WAD and configuration files, saved games, screenshots) moved to ~/Library/Application Support/GZDoom folder\
+- Removed SDL version from the binary distribution. It still can be compiled from source code\
++ Added Command key handling. Copy/paste in console and chat changed to Cmd+C/Cmd+V respectively\
++ Added automatic loading of TNT Evilution's map 31 patch fix\
+* Fixed visibility of main game window when IWAD selection window is shown\
+\
+\pard\pardeftab720
+\cf0 \ul 0.1.4\ulnone \
++ Added support for XBLA/Xbox 360 version of Doom I & II: direct .disk files handling and No Rest for the Living expansion available\
++ Added berserk power-up display (when found) instead of health box on alternate HUD. Use hud_berserk_health CVAR to enable this feature\
 * Fixed mouse cursor visibility
 \i  [Native version only]
 \i0 \
