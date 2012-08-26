@@ -269,6 +269,7 @@ void level_info_t::Reset()
 	teamdamage = 0.f;
 	specialactions.Clear();
 	DefaultEnvironment = 0;
+	PrecacheSounds.Clear();
 }
 
 
@@ -1029,7 +1030,7 @@ DEFINE_MAP_OPTION(specialaction, true)
 	sa->Action = P_FindLineSpecial(parse.sc.String, &min_arg, &max_arg);
 	if (sa->Action == 0 || min_arg < 0)
 	{
-		parse.sc.ScriptError("Unknown specialaction '%s'");
+		parse.sc.ScriptError("Unknown specialaction '%s'", parse.sc.String);
 	}
 	int j = 0;
 	while (j < 5 && parse.sc.CheckString(","))
@@ -1038,6 +1039,25 @@ DEFINE_MAP_OPTION(specialaction, true)
 		sa->Args[j++] = parse.sc.Number;
 	}
 	if (parse.format_type == parse.FMT_Old) parse.sc.SetCMode(false);
+}
+
+DEFINE_MAP_OPTION(PrecacheSounds, true)
+{
+	parse.ParseAssign();
+
+	do
+	{
+		parse.sc.MustGetString();
+		FSoundID snd = parse.sc.String;
+		if (snd == 0)
+		{
+			parse.sc.ScriptMessage("Unknown sound \"%s\"", parse.sc.String);
+		}
+		else
+		{
+			info->PrecacheSounds.Push(snd);
+		}
+	} while (parse.sc.CheckString(","));
 }
 
 DEFINE_MAP_OPTION(redirect, true)
@@ -1244,6 +1264,8 @@ MapFlagHandlers[] =
 	{ "endofgame",						MITYPE_SETFLAG2,	LEVEL2_ENDGAME, 0 },
 	{ "nostatistics",					MITYPE_SETFLAG2,	LEVEL2_NOSTATISTICS, 0 },
 	{ "noautosavehint",					MITYPE_SETFLAG2,	LEVEL2_NOAUTOSAVEHINT, 0 },
+	{ "forgetstate",					MITYPE_SETFLAG2,	LEVEL2_FORGETSTATE, 0 },
+	{ "rememberstate",					MITYPE_CLRFLAG2,	LEVEL2_FORGETSTATE, 0 },
 	{ "unfreezesingleplayerconversations",MITYPE_SETFLAG2,	LEVEL2_CONV_SINGLE_UNFREEZE, 0 },
 	{ "nobotnodes",						MITYPE_IGNORE,	0, 0 },		// Skulltag option: nobotnodes
 	{ "compat_shorttex",				MITYPE_COMPATFLAG, COMPATF_SHORTTEX, 0 },
