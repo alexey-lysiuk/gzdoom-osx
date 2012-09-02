@@ -326,7 +326,6 @@ void S_InitData ()
 	LastLocalSndInfo = LastLocalSndSeq = "";
 	S_ParseSndInfo (false);
 	S_ParseSndSeq (-1);
-	S_ParseMusInfo();
 }
 
 //==========================================================================
@@ -1784,7 +1783,7 @@ void S_SetSoundPaused (int state)
 			S_PauseSound(false, true);
 			if (GSnd !=  NULL)
 			{
-				GSnd->SetInactive(gamestate == GS_LEVEL ?
+				GSnd->SetInactive(gamestate == GS_LEVEL || gamestate == GS_TITLELEVEL ?
 					SoundRenderer::INACTIVE_Complete :
 					SoundRenderer::INACTIVE_Mute);
 			}
