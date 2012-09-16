@@ -755,7 +755,7 @@ bool I_WriteIniFailed ()
 
 static const char *pattern;
 
-#ifdef __APPLE__
+#if defined __APPLE__ && !defined __MAC_10_8
 static int matchfile (struct dirent *ent)
 #else
 static int matchfile (const struct dirent *ent)
