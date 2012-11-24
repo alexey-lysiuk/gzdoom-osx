@@ -155,11 +155,7 @@ static DWORD BaseTime;
 static int TicFrozen;
 
 // Signal based timer.
-#ifdef __APPLE__
-static semaphore_t timerWait;
-#else
-static sem_t timerWait;
-#endif
+static Semaphore timerWait;
 static int tics;
 static DWORD sig_start, sig_next;
 
@@ -218,11 +214,11 @@ int I_GetTimeSignaled (bool saveMS)
 int I_WaitForTicPolled (int prevtic)
 {
     int time;
-	
+
 	assert (TicFrozen == 0);
     while ((time = I_GetTimePolled(false)) <= prevtic)
 		;
-	
+
     return time;
 }
 
@@ -232,12 +228,7 @@ int I_WaitForTicSignaled (int prevtic)
 
 	while(tics <= prevtic)
 	{
-#ifdef __APPLE__
-		while(semaphore_wait(timerWait) != KERN_SUCCESS)
-			;
-#else
-		while(sem_wait(&timerWait) != 0);
-#endif
+		SEMAPHORE_WAIT(timerWait)
 	}
 
 	return tics;
@@ -283,15 +274,11 @@ int I_WaitForTicSelect (int prevtic)
 //
 void I_HandleAlarm (int sig)
 {
-		if(!TicFrozen)
+	if(!TicFrozen)
 		tics++;
-		sig_start = SDL_GetTicks();
-		sig_next = Scale((Scale (sig_start, TICRATE, 1000) + 1), 1000, TICRATE);
-#ifdef __APPLE__
-	semaphore_signal(timerWait);
-#else
-	sem_post(&timerWait);
-#endif
+	sig_start = SDL_GetTicks();
+	sig_next = Scale((Scale (sig_start, TICRATE, 1000) + 1), 1000, TICRATE);
+	SEMAPHORE_SIGNAL(timerWait)
 }
 
 //
@@ -301,12 +288,15 @@ void I_HandleAlarm (int sig)
 //
 void I_SelectTimer()
 {
-#ifdef __APPLE__
-	semaphore_create(mach_task_self(), &timerWait, 0, 0);
-#else
-	sem_init(&timerWait, 0, 0);
-#endif
+	SEMAPHORE_INIT(timerWait, 0, 0)
+#ifndef __sun
 	signal(SIGALRM, I_HandleAlarm);
+#else
+	struct sigaction alrmaction;
+	sigaction(SIGALRM, NULL, &alrmaction);
+	alrmaction.sa_handler = I_HandleAlarm;
+	sigaction(SIGALRM, &alrmaction, NULL);
+#endif
 
 	struct itimerval itv;
 	itv.it_interval.tv_sec = itv.it_value.tv_sec = 0;

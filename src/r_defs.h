@@ -41,8 +41,8 @@ struct seg_t;
 
 #include "dthinker.h"
 
-#define MAXWIDTH 2880
-#define MAXHEIGHT 1800
+#define MAXWIDTH 5760
+#define MAXHEIGHT 3600
 
 const WORD NO_INDEX = 0xffffu;
 const DWORD NO_SIDE = 0xffffffffu;
@@ -816,6 +816,7 @@ enum
 	WALLF_CLIP_MIDTEX	 = 16,	// Like the line counterpart, but only for this side.
 	WALLF_WRAP_MIDTEX	 = 32,	// Like the line counterpart, but only for this side.
 	WALLF_POLYOBJ		 = 64,	// This wall belongs to a polyobject.
+	WALLF_LIGHT_FOG      = 128,	// This wall's Light is used even in fog.
 };
 
 struct side_t
@@ -982,7 +983,7 @@ struct line_t
 	slopetype_t	slopetype;	// To aid move clipping.
 	sector_t	*frontsector, *backsector;
 	int 		validcount;	// if == validcount, already checked
-	int		locknumber;	// [Dusk] lock number for special
+	int			locknumber;	// [Dusk] lock number for special
 };
 
 // phares 3/14/98

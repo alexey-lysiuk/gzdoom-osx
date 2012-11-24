@@ -478,6 +478,10 @@
 		8A9F547D14BB0F2900F3369B /* libgme_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27A541390F4F40095D9A0 /* libgme_gzdoom.a */; };
 		8A9F547E14BB0F2900F3369B /* libdumb_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27B251390F5DC0095D9A0 /* libdumb_gzdoom.a */; };
 		8A9F547F14BB0F2900F3369B /* libgdtoa_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27C1C1390F7E20095D9A0 /* libgdtoa_gzdoom.a */; };
+		8AA9A1961660E80A007F75A4 /* opl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AA9A1921660E80A007F75A4 /* opl.cpp */; };
+		8AA9A1971660E80A007F75A4 /* OPL3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AA9A1951660E80A007F75A4 /* OPL3.cpp */; };
+		8AA9A1981660E8DC007F75A4 /* OPL3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AA9A1951660E80A007F75A4 /* OPL3.cpp */; };
+		8AA9A1991660E8E5007F75A4 /* opl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AA9A1921660E80A007F75A4 /* opl.cpp */; };
 		8AC81C411391321300F49DC3 /* libjpeg_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF278CA1390F0370095D9A0 /* libjpeg_gzdoom.a */; };
 		8AC81C421391321300F49DC3 /* liblzma_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF2795A1390F1200095D9A0 /* liblzma_gzdoom.a */; };
 		8AC81C431391321300F49DC3 /* libgme_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF27A541390F4F40095D9A0 /* libgme_gzdoom.a */; };
@@ -1328,6 +1332,10 @@
 		8A938D1013B6039F002627DE /* actorptrselect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = actorptrselect.h; sourceTree = "<group>"; };
 		8A942A3D1553CC25005083CD /* v_blend.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = v_blend.cpp; sourceTree = "<group>"; };
 		8A9F548414BB0F2900F3369B /* GZDoom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GZDoom.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8AA9A1921660E80A007F75A4 /* opl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = opl.cpp; sourceTree = "<group>"; };
+		8AA9A1931660E80A007F75A4 /* opl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = opl.h; sourceTree = "<group>"; };
+		8AA9A1941660E80A007F75A4 /* opl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = opl.h; sourceTree = "<group>"; };
+		8AA9A1951660E80A007F75A4 /* OPL3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OPL3.cpp; sourceTree = "<group>"; };
 		8AD870F1140A4EC5007A06A9 /* Credits.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Credits.html; sourceTree = "<group>"; };
 		8AF278CA1390F0370095D9A0 /* libjpeg_gzdoom.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libjpeg_gzdoom.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AF2790B1390F0880095D9A0 /* jcomapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = jcomapi.c; sourceTree = "<group>"; };
@@ -2078,7 +2086,6 @@
 		8AF27EAD139126C00095D9A0 /* nodebuild_utility.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = nodebuild_utility.cpp; sourceTree = "<group>"; };
 		8AF27EAF139126C00095D9A0 /* deftypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = deftypes.h; sourceTree = "<group>"; };
 		8AF27EB0139126C00095D9A0 /* fmopl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fmopl.cpp; sourceTree = "<group>"; };
-		8AF27EB1139126C00095D9A0 /* fmopl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fmopl.h; sourceTree = "<group>"; };
 		8AF27EB2139126C00095D9A0 /* mlopl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mlopl.cpp; sourceTree = "<group>"; };
 		8AF27EB3139126C00095D9A0 /* mlopl_io.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mlopl_io.cpp; sourceTree = "<group>"; };
 		8AF27EB4139126C00095D9A0 /* music_opl_mididevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = music_opl_mididevice.cpp; sourceTree = "<group>"; };
@@ -2602,6 +2609,15 @@
 				8A6BE7C0142F539000AFCF10 /* make_image */,
 			);
 			path = misc;
+			sourceTree = "<group>";
+		};
+		8AA9A1911660E80A007F75A4 /* dosbox */ = {
+			isa = PBXGroup;
+			children = (
+				8AA9A1921660E80A007F75A4 /* opl.cpp */,
+				8AA9A1931660E80A007F75A4 /* opl.h */,
+			);
+			path = dosbox;
 			sourceTree = "<group>";
 		};
 		8AF2790A1390F0880095D9A0 /* jpeg-6b */ = {
@@ -3851,16 +3867,18 @@
 		8AF27EAE139126C00095D9A0 /* oplsynth */ = {
 			isa = PBXGroup;
 			children = (
+				8AA9A1911660E80A007F75A4 /* dosbox */,
 				8AF27EAF139126C00095D9A0 /* deftypes.h */,
 				8AF27EB0139126C00095D9A0 /* fmopl.cpp */,
-				8AF27EB1139126C00095D9A0 /* fmopl.h */,
 				8AF27EB2139126C00095D9A0 /* mlopl.cpp */,
 				8AF27EB3139126C00095D9A0 /* mlopl_io.cpp */,
 				8AF27EB4139126C00095D9A0 /* music_opl_mididevice.cpp */,
 				8AF27EB5139126C00095D9A0 /* music_opldumper_mididevice.cpp */,
 				8AF27EB6139126C00095D9A0 /* muslib.h */,
+				8AA9A1941660E80A007F75A4 /* opl.h */,
 				8AF27EB7139126C00095D9A0 /* opl_mus_player.cpp */,
 				8AF27EB8139126C00095D9A0 /* opl_mus_player.h */,
+				8AA9A1951660E80A007F75A4 /* OPL3.cpp */,
 			);
 			path = oplsynth;
 			sourceTree = "<group>";
@@ -4703,12 +4721,14 @@
 				8A9F53BD14BB0F2900F3369B /* nodebuild_extract.cpp in Sources */,
 				8A9F53BE14BB0F2900F3369B /* nodebuild_gl.cpp in Sources */,
 				8A9F53BF14BB0F2900F3369B /* nodebuild_utility.cpp in Sources */,
+				8AA9A1961660E80A007F75A4 /* opl.cpp in Sources */,
 				8A9F53C014BB0F2900F3369B /* fmopl.cpp in Sources */,
 				8A9F53C114BB0F2900F3369B /* mlopl.cpp in Sources */,
 				8A9F53C214BB0F2900F3369B /* mlopl_io.cpp in Sources */,
 				8A9F53C314BB0F2900F3369B /* music_opl_mididevice.cpp in Sources */,
 				8A9F53C414BB0F2900F3369B /* music_opldumper_mididevice.cpp in Sources */,
 				8A9F53C514BB0F2900F3369B /* opl_mus_player.cpp in Sources */,
+				8AA9A1971660E80A007F75A4 /* OPL3.cpp in Sources */,
 				8A9F53C614BB0F2900F3369B /* p_3dfloors.cpp in Sources */,
 				8A9F53C714BB0F2900F3369B /* p_3dmidtex.cpp in Sources */,
 				8A9F53C814BB0F2900F3369B /* p_acs.cpp in Sources */,
@@ -5333,12 +5353,14 @@
 				8AF2811D139126C00095D9A0 /* nodebuild_extract.cpp in Sources */,
 				8AF2811E139126C00095D9A0 /* nodebuild_gl.cpp in Sources */,
 				8AF2811F139126C00095D9A0 /* nodebuild_utility.cpp in Sources */,
+				8AA9A1991660E8E5007F75A4 /* opl.cpp in Sources */,
 				8AF28120139126C00095D9A0 /* fmopl.cpp in Sources */,
 				8AF28121139126C00095D9A0 /* mlopl.cpp in Sources */,
 				8AF28122139126C00095D9A0 /* mlopl_io.cpp in Sources */,
 				8AF28123139126C00095D9A0 /* music_opl_mididevice.cpp in Sources */,
 				8AF28124139126C00095D9A0 /* music_opldumper_mididevice.cpp in Sources */,
 				8AF28125139126C00095D9A0 /* opl_mus_player.cpp in Sources */,
+				8AA9A1981660E8DC007F75A4 /* OPL3.cpp in Sources */,
 				8AF28126139126C00095D9A0 /* p_3dfloors.cpp in Sources */,
 				8AF28127139126C00095D9A0 /* p_3dmidtex.cpp in Sources */,
 				8AF28128139126C00095D9A0 /* p_acs.cpp in Sources */,
