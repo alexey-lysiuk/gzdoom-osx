@@ -658,9 +658,6 @@
 		8A33427B154EC9690034C0C0 /* nodebuild_extract.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = nodebuild_extract.cpp; sourceTree = "<group>"; };
 		8A33427C154EC9690034C0C0 /* nodebuild_gl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = nodebuild_gl.cpp; sourceTree = "<group>"; };
 		8A33427D154EC9690034C0C0 /* nodebuild_utility.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = nodebuild_utility.cpp; sourceTree = "<group>"; };
-		8A33427E154EC9690034C0C0 /* poly_bad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = poly_bad.png; sourceTree = "<group>"; };
-		8A33427F154EC9690034C0C0 /* poly_mov.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = poly_mov.png; sourceTree = "<group>"; };
-		8A334280154EC9690034C0C0 /* poly_new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = poly_new.png; sourceTree = "<group>"; };
 		8A334281154EC9690034C0C0 /* processor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = processor.cpp; sourceTree = "<group>"; };
 		8A334282154EC9690034C0C0 /* processor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = processor.h; sourceTree = "<group>"; };
 		8A334283154EC9690034C0C0 /* processor_udmf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = processor_udmf.cpp; sourceTree = "<group>"; };
@@ -674,7 +671,6 @@
 		8A33428B154EC9690034C0C0 /* wad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wad.h; sourceTree = "<group>"; };
 		8A33428C154EC9690034C0C0 /* workdata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = workdata.h; sourceTree = "<group>"; };
 		8A33428D154EC9690034C0C0 /* zdbsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zdbsp.h; sourceTree = "<group>"; };
-		8A33428E154EC9690034C0C0 /* zdbsp.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = zdbsp.html; sourceTree = "<group>"; };
 		8A3342A6154ECA7D0034C0C0 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		8A3342CB154ECF140034C0C0 /* deutex */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = deutex; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A3342D3154ECF6D0034C0C0 /* color.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = color.c; sourceTree = "<group>"; };
@@ -718,6 +714,7 @@
 		8A3342FD154ECF6D0034C0C0 /* wadio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wadio.h; sourceTree = "<group>"; };
 		8A350B4315A98FE50004D093 /* wadspy.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = wadspy.c; sourceTree = "<group>"; };
 		8A350B4915A990230004D093 /* wadspy */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = wadspy; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A53B50E167C75A3008547A0 /* xs_Float.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xs_Float.h; sourceTree = "<group>"; };
 		8AEF5E1215501764001D1D51 /* lswad */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = lswad; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AEF5E1B15501797001D1D51 /* lswad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lswad.c; sourceTree = "<group>"; };
 		8AEF5E421550190B001D1D51 /* cmdlib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cmdlib.c; sourceTree = "<group>"; };
@@ -1300,9 +1297,6 @@
 				8A33427B154EC9690034C0C0 /* nodebuild_extract.cpp */,
 				8A33427C154EC9690034C0C0 /* nodebuild_gl.cpp */,
 				8A33427D154EC9690034C0C0 /* nodebuild_utility.cpp */,
-				8A33427E154EC9690034C0C0 /* poly_bad.png */,
-				8A33427F154EC9690034C0C0 /* poly_mov.png */,
-				8A334280154EC9690034C0C0 /* poly_new.png */,
 				8A334281154EC9690034C0C0 /* processor.cpp */,
 				8A334282154EC9690034C0C0 /* processor.h */,
 				8A334283154EC9690034C0C0 /* processor_udmf.cpp */,
@@ -1315,8 +1309,8 @@
 				8A33428A154EC9690034C0C0 /* wad.cpp */,
 				8A33428B154EC9690034C0C0 /* wad.h */,
 				8A33428C154EC9690034C0C0 /* workdata.h */,
+				8A53B50E167C75A3008547A0 /* xs_Float.h */,
 				8A33428D154EC9690034C0C0 /* zdbsp.h */,
-				8A33428E154EC9690034C0C0 /* zdbsp.html */,
 			);
 			path = zdbsp;
 			sourceTree = "<group>";

@@ -22,7 +22,9 @@
 #include <assert.h>
 #include <string.h>
 #include <stdio.h>
-#include <math.h>
+#ifndef _WIN32
+#include <unistd.h>
+#endif
 
 #include "zdbsp.h"
 #include "nodebuild.h"
@@ -203,14 +205,16 @@ void FNodeBuilder::CreateSubsectorsForReal ()
 		}
 		for (unsigned int i = sub.firstline; i < SegList.Size(); ++i)
 		{
-			D(printf ("  Seg %5d%c%d(%5d,%5d)-%d(%5d,%5d)\n", SegList[i].SegPtr - &Segs[0],
+			D(printf ("  Seg %5d%c%d(%5d,%5d)-%d(%5d,%5d)  [%08x,%08x]-[%08x,%08x]\n", SegList[i].SegPtr - &Segs[0],
 				SegList[i].SegPtr->linedef == -1 ? '+' : ' ',
 				SegList[i].SegPtr->v1,
 				Vertices[SegList[i].SegPtr->v1].x>>16,
 				Vertices[SegList[i].SegPtr->v1].y>>16,
 				SegList[i].SegPtr->v2,
 				Vertices[SegList[i].SegPtr->v2].x>>16,
-				Vertices[SegList[i].SegPtr->v2].y>>16));
+				Vertices[SegList[i].SegPtr->v2].y>>16,
+				Vertices[SegList[i].SegPtr->v1].x, Vertices[SegList[i].SegPtr->v1].y,
+				Vertices[SegList[i].SegPtr->v2].x, Vertices[SegList[i].SegPtr->v2].y));
 			SegList[i].SegNum = DWORD(SegList[i].SegPtr - &Segs[0]);
 		}
 		Subsectors.Push (sub);
