@@ -115,7 +115,7 @@ void GLSprite::Draw(int pass)
 
 
 	bool additivefog = false;
-	int rel = extralight*gl_weaponlight;
+	int rel = getExtraLight();
 
 	if (pass==GLPASS_TRANSLUCENT)
 	{
@@ -303,6 +303,7 @@ void GLSprite::Draw(int pass)
 		Colormap.FadeColor = backupfade;
 
 	gl_RenderState.EnableTexture(true);
+	gl_RenderState.SetDynLight(0,0,0);
 }
 
 

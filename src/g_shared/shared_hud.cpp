@@ -78,7 +78,7 @@ CVAR (Int, hud_armor_red, 25, CVAR_ARCHIVE)					// armor amount less than which 
 CVAR (Int, hud_armor_yellow, 50, CVAR_ARCHIVE)				// armor amount less than which status is yellow 
 CVAR (Int, hud_armor_green, 100, CVAR_ARCHIVE)				// armor amount above is blue, below is green    
 
-CVAR (Bool, hud_berserk_health, false, CVAR_ARCHIVE);		// when found berserk pack instead of health box
+CVAR (Bool, hud_berserk_health, true, CVAR_ARCHIVE);		// when found berserk pack instead of health box
 
 CVAR (Int, hudcolor_titl, CR_YELLOW, CVAR_ARCHIVE)			// color of automap title
 CVAR (Int, hudcolor_time, CR_RED, CVAR_ARCHIVE)				// color of level/hub time
@@ -86,7 +86,7 @@ CVAR (Int, hudcolor_ltim, CR_ORANGE, CVAR_ARCHIVE)			// color of single level ti
 CVAR (Int, hudcolor_ttim, CR_GOLD, CVAR_ARCHIVE)			// color of total time
 CVAR (Int, hudcolor_xyco, CR_GREEN, CVAR_ARCHIVE)			// color of coordinates
 
-CVAR (Int, hudcolor_statnames, CR_RED, CVAR_ARCHIVE)		// For the letters bef￳re the stats
+CVAR (Int, hudcolor_statnames, CR_RED, CVAR_ARCHIVE)		// For the letters before the stats
 CVAR (Int, hudcolor_stats, CR_GREEN, CVAR_ARCHIVE)			// For the stats values themselves
 
 
@@ -270,8 +270,10 @@ static void DrawStatus(player_t * CPlayer, int x, int y)
 //
 //===========================================================================
 
-static void DrawHealth(int health, int x, int y)
+static void DrawHealth(player_t *CPlayer, int x, int y)
 {
+	int health = CPlayer->health;
+
 	// decide on the color first
 	int fontcolor =
 		health < hud_health_red ? CR_RED :
@@ -281,10 +283,7 @@ static void DrawHealth(int health, int x, int y)
 
 	const bool haveBerserk = hud_berserk_health
 		&& NULL != berserkpic
-		&& NULL != StatusBar
-		&& NULL != StatusBar->CPlayer
-		&& NULL != StatusBar->CPlayer->mo
-		&& NULL != StatusBar->CPlayer->mo->FindInventory< APowerStrength >();
+		&& NULL != CPlayer->mo->FindInventory< APowerStrength >();
 
 	DrawImageToBox(haveBerserk ? berserkpic : healthpic, x, y, 31, 17);
 	DrawHudNumber(HudFont, fontcolor, health, x + 33, y + 17);
@@ -868,7 +867,7 @@ void DrawHUD()
 			DrawStatus(CPlayer, 5, hudheight-75);
 			DrawFrags(CPlayer, 5, hudheight-70);
 		}
-		DrawHealth(CPlayer->health, 5, hudheight-45);
+		DrawHealth(CPlayer, 5, hudheight-45);
 		DrawArmor(CPlayer->mo->FindInventory<ABasicArmor>(), 
 			CPlayer->mo->FindInventory<AHexenArmor>(),	5, hudheight-20);
 		i=DrawKeys(CPlayer, hudwidth-4, hudheight-10);
@@ -983,6 +982,12 @@ void HUD_InitHud()
 				sc.MustGetString();
 				FTextureID tex = TexMan.CheckForTexture(sc.String, FTexture::TEX_MiscPatch);
 				if (tex.isValid()) healthpic = TexMan[tex];
+			}
+			else if (sc.Compare("Berserk"))
+			{
+				sc.MustGetString();
+				FTextureID tex = TexMan.CheckForTexture(sc.String, FTexture::TEX_MiscPatch);
+				if (tex.isValid()) berserkpic = TexMan[tex];
 			}
 			else
 			{
