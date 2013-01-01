@@ -98,12 +98,12 @@
 		8A74F4671392532C001F54B0 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F4661392532C001F54B0 /* Carbon.framework */; };
 		8A7C81C613BF3C0B000B654E /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3E139126C00095D9A0 /* SDLMain.m */; };
 		8A7D867D1537055C002D03BD /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E15139126C00095D9A0 /* Image.cpp */; };
-		8A7D867E1537055C002D03BD /* hq4x.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E13139126C00095D9A0 /* hq4x.cpp */; };
-		8A7D867F1537055D002D03BD /* hq3x.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E12139126C00095D9A0 /* hq3x.cpp */; };
-		8A7D86801537055D002D03BD /* hq2x.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E11139126C00095D9A0 /* hq2x.cpp */; };
-		8A7D86E715370D98002D03BD /* hq2x.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E11139126C00095D9A0 /* hq2x.cpp */; };
-		8A7D86E815370D98002D03BD /* hq3x.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E12139126C00095D9A0 /* hq3x.cpp */; };
-		8A7D86E915370D98002D03BD /* hq4x.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E13139126C00095D9A0 /* hq4x.cpp */; };
+		8A7D867E1537055C002D03BD /* hq4x.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E13139126C00095D9A0 /* hq4x.cpp */; settings = {COMPILER_FLAGS = "-O3"; }; };
+		8A7D867F1537055D002D03BD /* hq3x.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E12139126C00095D9A0 /* hq3x.cpp */; settings = {COMPILER_FLAGS = "-O3"; }; };
+		8A7D86801537055D002D03BD /* hq2x.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E11139126C00095D9A0 /* hq2x.cpp */; settings = {COMPILER_FLAGS = "-O3"; }; };
+		8A7D86E715370D98002D03BD /* hq2x.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E11139126C00095D9A0 /* hq2x.cpp */; settings = {COMPILER_FLAGS = "-O3"; }; };
+		8A7D86E815370D98002D03BD /* hq3x.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E12139126C00095D9A0 /* hq3x.cpp */; settings = {COMPILER_FLAGS = "-O3"; }; };
+		8A7D86E915370D98002D03BD /* hq4x.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E13139126C00095D9A0 /* hq4x.cpp */; settings = {COMPILER_FLAGS = "-O3"; }; };
 		8A7D86EA15370D98002D03BD /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27E15139126C00095D9A0 /* Image.cpp */; };
 		8A7FF48014BB2B220069731E /* cocoa_no_sdl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A7FF47F14BB2B220069731E /* cocoa_no_sdl.mm */; };
 		8A8D68B713C84344001D368F /* r_swrenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D68B313C84344001D368F /* r_swrenderer.cpp */; };
@@ -6022,11 +6022,9 @@
 					_DEBUG,
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx10.7;
 				USE_HEADERMAP = NO;
 				VALID_ARCHS = "i386 x86_64";
 			};
@@ -6044,11 +6042,9 @@
 				GCC_MODEL_TUNING = "";
 				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx10.7;
 				USE_HEADERMAP = NO;
 				VALID_ARCHS = "i386 x86_64";
 			};
