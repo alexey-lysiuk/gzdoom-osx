@@ -35,6 +35,7 @@ echo "Copying documentation..."
 mkdir ${DEPLOY_IMAGE_DIR}/Documentation
 cp -R docs/ ${DEPLOY_IMAGE_DIR}/Documentation
 cp ReadMe.rtf ${DEPLOY_IMAGE_DIR}
+cp homepage.webloc ${DEPLOY_IMAGE_DIR}/"Visit GZDoom for OS X Homepage.webloc"
 
 echo "Building image..."
 hdiutil create -srcfolder ${DEPLOY_IMAGE_DIR} -volname GZDoom -format UDBZ ${DEPLOY_IMAGE_DIR}/GZDoom.dmg
