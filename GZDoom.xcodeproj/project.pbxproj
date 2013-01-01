@@ -1938,10 +1938,10 @@
 		8AF27E0D139126C00095D9A0 /* gl_lightbuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gl_lightbuffer.h; sourceTree = "<group>"; };
 		8AF27E0E139126C00095D9A0 /* gl_functions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gl_functions.h; sourceTree = "<group>"; };
 		8AF27E10139126C00095D9A0 /* gl_hqresize.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gl_hqresize.cpp; sourceTree = "<group>"; };
-		8AF27E11139126C00095D9A0 /* hq2x.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hq2x.cpp; sourceTree = "<group>"; };
-		8AF27E12139126C00095D9A0 /* hq3x.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hq3x.cpp; sourceTree = "<group>"; };
-		8AF27E13139126C00095D9A0 /* hq4x.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hq4x.cpp; sourceTree = "<group>"; };
-		8AF27E14139126C00095D9A0 /* hqnx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hqnx.h; sourceTree = "<group>"; };
+		8AF27E11139126C00095D9A0 /* hq2x.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; path = hq2x.cpp; sourceTree = "<group>"; usesTabs = 0; };
+		8AF27E12139126C00095D9A0 /* hq3x.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; path = hq3x.cpp; sourceTree = "<group>"; usesTabs = 0; };
+		8AF27E13139126C00095D9A0 /* hq4x.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; path = hq4x.cpp; sourceTree = "<group>"; usesTabs = 0; };
+		8AF27E14139126C00095D9A0 /* hqnx.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.h; path = hqnx.h; sourceTree = "<group>"; usesTabs = 0; };
 		8AF27E15139126C00095D9A0 /* Image.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Image.cpp; sourceTree = "<group>"; };
 		8AF27E16139126C00095D9A0 /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Image.h; sourceTree = "<group>"; };
 		8AF27E18139126C00095D9A0 /* gl_models.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gl_models.cpp; sourceTree = "<group>"; };
