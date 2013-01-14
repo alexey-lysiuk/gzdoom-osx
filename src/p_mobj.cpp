@@ -328,8 +328,6 @@ void AActor::Serialize (FArchive &arc)
 				state->sprite == GetDefaultByType (player->cls)->SpawnState->sprite)
 			{ // Give player back the skin
 				sprite = skins[player->userinfo.skin].sprite;
-				scaleX = skins[player->userinfo.skin].ScaleX;
-				scaleY = skins[player->userinfo.skin].ScaleY;
 			}
 			if (Speed == 0)
 			{
@@ -2808,8 +2806,8 @@ bool AActor::Slam (AActor *thing)
 		if (!(flags2 & MF2_DORMANT))
 		{
 			int dam = GetMissileDamage (7, 1);
-			P_DamageMobj (thing, this, this, dam, NAME_Melee);
-			P_TraceBleed (dam, thing, this);
+			int newdam = P_DamageMobj (thing, this, this, dam, NAME_Melee);
+			P_TraceBleed (newdam > 0 ? newdam : dam, thing, this);
 			// The charging monster may have died by the target's actions here.
 			if (health > 0)
 			{
@@ -4140,7 +4138,7 @@ EXTERN_CVAR (Bool, chasedemo)
 
 extern bool demonew;
 
-APlayerPawn *P_SpawnPlayer (FPlayerStart *mthing, int playernum, bool tempplayer)
+APlayerPawn *P_SpawnPlayer (FPlayerStart *mthing, int playernum, int flags)
 {
 	player_t *p;
 	APlayerPawn *mobj, *oldactor;
@@ -4241,7 +4239,7 @@ APlayerPawn *P_SpawnPlayer (FPlayerStart *mthing, int playernum, bool tempplayer
 	{
 		G_PlayerReborn (playernum);
 	}
-	else if (oldactor != NULL && oldactor->player == p && !tempplayer)
+	else if (oldactor != NULL && oldactor->player == p && !(flags & SPF_TEMPPLAYER))
 	{
 		// Move the voodoo doll's inventory to the new player.
 		mobj->ObtainInventory (oldactor);
@@ -4272,8 +4270,6 @@ APlayerPawn *P_SpawnPlayer (FPlayerStart *mthing, int playernum, bool tempplayer
 	if (!(mobj->flags4 & MF4_NOSKIN))
 	{
 		mobj->sprite = skins[p->userinfo.skin].sprite;
-		mobj->scaleX = skins[p->userinfo.skin].ScaleX;
-		mobj->scaleY = skins[p->userinfo.skin].ScaleY;
 	}
 
 	p->DesiredFOV = p->FOV = 90.f;
@@ -4316,11 +4312,9 @@ APlayerPawn *P_SpawnPlayer (FPlayerStart *mthing, int playernum, bool tempplayer
 		p->cheats = CF_CHASECAM;
 
 	// setup gun psprite
-	if (!tempplayer)
-	{
-		// This can also start a script so don't do it for
-		// the dummy player.
-		P_SetupPsprites (p);
+	if (!(flags & SPF_TEMPPLAYER))
+	{ // This can also start a script so don't do it for the dummy player.
+		P_SetupPsprites (p, !!(flags & SPF_WEAPONFULLYUP));
 	}
 
 	if (deathmatch)
@@ -4366,7 +4360,7 @@ APlayerPawn *P_SpawnPlayer (FPlayerStart *mthing, int playernum, bool tempplayer
 	}
 
 	// [BC] Do script stuff
-	if (!tempplayer)
+	if (!(flags & SPF_TEMPPLAYER))
 	{
 		if (state == PST_ENTER || (state == PST_LIVE && !savegamerestore))
 		{
@@ -4552,7 +4546,7 @@ AActor *P_SpawnMapThing (FMapThing *mthing, int position)
 		AllPlayerStarts.Push(start);
 		if (!deathmatch && !(level.flags2 & LEVEL2_RANDOMPLAYERSTARTS))
 		{
-			return P_SpawnPlayer(&start, pnum);
+			return P_SpawnPlayer(&start, pnum, (level.flags2 & LEVEL2_PRERAISEWEAPON) ? SPF_WEAPONFULLYUP : 0);
 		}
 		return NULL;
 	}
