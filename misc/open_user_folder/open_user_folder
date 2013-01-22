@@ -1,0 +1,9 @@
+#!/bin/sh
+
+GZDOOM_USER_PATH=~/Library/Application\ Support/GZDoom/
+
+if [ ! -e "${GZDOOM_USER_PATH}" ]; then
+    mkdir -p "${GZDOOM_USER_PATH}"
+fi
+
+open "${GZDOOM_USER_PATH}"

@@ -31,11 +31,20 @@ cp -R DerivedData/Build/Products/Release_Cocoa/${SOURCE_BUNDLE_NAME} ${DEPLOY_IM
 echo "Stripping executables..."
 strip ${DEPLOY_IMAGE_DIR}/${SOURCE_BUNDLE_NAME}/${BUNDLE_EXECUTABLE_PATH}
 
-echo "Copying documentation..."
+echo "Copying supplementary files..."
 mkdir ${DEPLOY_IMAGE_DIR}/Documentation
 cp -R docs/ ${DEPLOY_IMAGE_DIR}/Documentation
 cp ReadMe.rtf ${DEPLOY_IMAGE_DIR}
 cp homepage.webloc ${DEPLOY_IMAGE_DIR}/"Visit GZDoom for OS X Homepage.webloc"
+
+USER_FOLDER_CONTENTS_PATH="${DEPLOY_IMAGE_DIR}/Open GZDoom User Folder.app/Contents"
+SOURCE_USER_FOLDER_PATH=misc/open_user_folder
+
+mkdir -p "${USER_FOLDER_CONTENTS_PATH}/MacOS"
+mkdir -p "${USER_FOLDER_CONTENTS_PATH}/Resources"
+cp ${SOURCE_USER_FOLDER_PATH}/Info.plist "${USER_FOLDER_CONTENTS_PATH}"
+cp ${SOURCE_USER_FOLDER_PATH}/open_user_folder "${USER_FOLDER_CONTENTS_PATH}/MacOS"
+ln -s /System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/DocumentsFolderIcon.icns "${USER_FOLDER_CONTENTS_PATH}/Resources/Folder.icns"
 
 echo "Building image..."
 hdiutil create -srcfolder ${DEPLOY_IMAGE_DIR} -volname GZDoom -format UDBZ ${DEPLOY_IMAGE_DIR}/GZDoom.dmg
