@@ -5,7 +5,7 @@
 // GZDoom_SDL and GZDoom_Cocoa targets only
 
 
-GCC_PREPROCESSOR_DEFINITIONS = $(inherited) NO_GTK=1 NEED_STRUPR=1 stricmp=strcasecmp strnicmp=strncasecmp __forceinline=inline NO_CLOCK_GETTIME DISABLE_SSE NOASM HAVE_FLUIDSYNTH
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) NO_GTK=1 NEED_STRUPR=1 stricmp=strcasecmp strnicmp=strncasecmp __forceinline=inline NO_CLOCK_GETTIME NOASM HAVE_FLUIDSYNTH
 
 DOOM_HEADER_SEARCH_PATHS = src src/g_doom src/g_heretic src/g_hexen src/g_raven src/g_shared src/g_strife src/sound src/textures
 PORT_HEADER_SEARCH_PATHS = src/Linux src/sdl

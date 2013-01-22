@@ -67,6 +67,8 @@
 		49E9287913978BF600CCEBBC /* doom.icns in Resources */ = {isa = PBXBuildFile; fileRef = 49E9287713978BF600CCEBBC /* doom.icns */; };
 		8A19382C150A5F38003ED92C /* HID_Name_Lookup.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A422113150A0478001D28A0 /* HID_Name_Lookup.c */; };
 		8A19382D150A5F3B003ED92C /* HID_Error_Handler.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A422112150A0478001D28A0 /* HID_Error_Handler.c */; };
+		8A1C9C6B16AE86B9009CC54F /* nodebuild_classify_sse2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EA9139126C00095D9A0 /* nodebuild_classify_sse2.cpp */; };
+		8A1C9C6C16AE86CF009CC54F /* nodebuild_classify_sse2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EA9139126C00095D9A0 /* nodebuild_classify_sse2.cpp */; };
 		8A1D337E154D6E1300BA2C16 /* libfluidsynth.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A1D337D154D6E0700BA2C16 /* libfluidsynth.a */; };
 		8A1D337F154D6E2300BA2C16 /* libfluidsynth.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A1D337D154D6E0700BA2C16 /* libfluidsynth.a */; };
 		8A1D33A4154D6EA100BA2C16 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74F450139252F9001F54B0 /* AudioUnit.framework */; };
@@ -292,7 +294,6 @@
 		8A9F53B714BB0F2900F3369B /* mus2midi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EA1139126C00095D9A0 /* mus2midi.cpp */; };
 		8A9F53B814BB0F2900F3369B /* name.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EA3139126C00095D9A0 /* name.cpp */; };
 		8A9F53B914BB0F2900F3369B /* nodebuild.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EA6139126C00095D9A0 /* nodebuild.cpp */; };
-		8A9F53BA14BB0F2900F3369B /* nodebuild_classify_nosse2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EA8139126C00095D9A0 /* nodebuild_classify_nosse2.cpp */; };
 		8A9F53BC14BB0F2900F3369B /* nodebuild_events.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EAA139126C00095D9A0 /* nodebuild_events.cpp */; };
 		8A9F53BD14BB0F2900F3369B /* nodebuild_extract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EAB139126C00095D9A0 /* nodebuild_extract.cpp */; };
 		8A9F53BE14BB0F2900F3369B /* nodebuild_gl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EAC139126C00095D9A0 /* nodebuild_gl.cpp */; };
@@ -876,7 +877,6 @@
 		8AF28117139126C00095D9A0 /* mus2midi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EA1139126C00095D9A0 /* mus2midi.cpp */; };
 		8AF28118139126C00095D9A0 /* name.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EA3139126C00095D9A0 /* name.cpp */; };
 		8AF28119139126C00095D9A0 /* nodebuild.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EA6139126C00095D9A0 /* nodebuild.cpp */; };
-		8AF2811A139126C00095D9A0 /* nodebuild_classify_nosse2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EA8139126C00095D9A0 /* nodebuild_classify_nosse2.cpp */; };
 		8AF2811C139126C00095D9A0 /* nodebuild_events.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EAA139126C00095D9A0 /* nodebuild_events.cpp */; };
 		8AF2811D139126C00095D9A0 /* nodebuild_extract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EAB139126C00095D9A0 /* nodebuild_extract.cpp */; };
 		8AF2811E139126C00095D9A0 /* nodebuild_gl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27EAC139126C00095D9A0 /* nodebuild_gl.cpp */; };
@@ -4716,7 +4716,7 @@
 				8A9F53B714BB0F2900F3369B /* mus2midi.cpp in Sources */,
 				8A9F53B814BB0F2900F3369B /* name.cpp in Sources */,
 				8A9F53B914BB0F2900F3369B /* nodebuild.cpp in Sources */,
-				8A9F53BA14BB0F2900F3369B /* nodebuild_classify_nosse2.cpp in Sources */,
+				8A1C9C6B16AE86B9009CC54F /* nodebuild_classify_sse2.cpp in Sources */,
 				8A9F53BC14BB0F2900F3369B /* nodebuild_events.cpp in Sources */,
 				8A9F53BD14BB0F2900F3369B /* nodebuild_extract.cpp in Sources */,
 				8A9F53BE14BB0F2900F3369B /* nodebuild_gl.cpp in Sources */,
@@ -5348,7 +5348,7 @@
 				8AF28117139126C00095D9A0 /* mus2midi.cpp in Sources */,
 				8AF28118139126C00095D9A0 /* name.cpp in Sources */,
 				8AF28119139126C00095D9A0 /* nodebuild.cpp in Sources */,
-				8AF2811A139126C00095D9A0 /* nodebuild_classify_nosse2.cpp in Sources */,
+				8A1C9C6C16AE86CF009CC54F /* nodebuild_classify_sse2.cpp in Sources */,
 				8AF2811C139126C00095D9A0 /* nodebuild_events.cpp in Sources */,
 				8AF2811D139126C00095D9A0 /* nodebuild_extract.cpp in Sources */,
 				8AF2811E139126C00095D9A0 /* nodebuild_gl.cpp in Sources */,
