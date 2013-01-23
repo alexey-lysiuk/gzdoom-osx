@@ -183,6 +183,7 @@ void FWadCollection::InitMultipleFiles (TArray<FString> &filenames)
 	}
 	RenameNerve();
 	RenameSprites();
+	FixMordethNamespace();
 
 	// [RH] Set up hash table
 	FirstLumpIndex = new DWORD[NumLumps];
@@ -826,38 +827,16 @@ void FWadCollection::RenameNerve ()
 	if (gameinfo.gametype != GAME_Doom)
 		return;
 
-	bool found = false;
-	BYTE cksum[16];
 	static const BYTE nerve[16] = { 0x96, 0x7d, 0x5a, 0xe2, 0x3d, 0xaf, 0x45, 0x19,
 		0x62, 0x12, 0xae, 0x1b, 0x60, 0x5d, 0xa3, 0xb0 };
-	size_t nervesize = 3819855; // NERVE.WAD's file size
-	int w = IWAD_FILENUM;
-	while (++w < GetNumWads())
-	{
-		FileReader *fr = GetFileReader(w);
-		if (fr == NULL)
-		{
-			continue;
-		}
-		if (fr->GetLength() != nervesize)
-		{
-			// Skip MD5 computation when there is a
-			// cheaper way to know this is not the file
-			continue;
-		}
-		fr->Seek(0, SEEK_SET);
-		MD5Context md5;
-		md5.Update(fr, fr->GetLength());
-		md5.Final(cksum);
-		if (memcmp(nerve, cksum, 16) == 0)
-		{
-			found = true;
-			break;
-		}
-	}
+	static const size_t nervesize = 3819855; // NERVE.WAD's file size
 
-	if (!found)
+	const int w = FindWadByChecksum(nervesize, nerve);
+
+	if (-1 == w)
+	{
 		return;
+	}
 
 	for (int i = GetFirstLump(w); i <= GetLastLump(w); i++)
 	{
@@ -875,6 +854,127 @@ void FWadCollection::RenameNerve ()
 			LumpInfo[i].lump->dwName = MAKE_ID('L', 'E', 'V', 'E');
 		}
 	}
+}
+
+//==========================================================================
+//
+// FixMordethNamespace
+//
+// Fixes namespaces for MORGRAP0.WAD, Mordeth graphics resource file
+// This allows to use it directly with -file command line parameter
+//
+//==========================================================================
+
+void FWadCollection::FixMordethNamespace()
+{
+	if (GAME_Doom != gameinfo.gametype)
+	{
+		return;
+	}
+
+	static const BYTE MORGRAP0_CHECKSUM[16] = { 0xbb, 0x63, 0x60, 0x1a, 0x03, 0xf1, 0xf3, 0x72,
+		0x0c, 0xdc, 0x6f, 0xcd, 0x33, 0x3a, 0x16, 0xaa };
+	static const size_t MORGRAP0_SIZE = 909841;
+
+	const int wadIndex = FindWadByChecksum(MORGRAP0_SIZE, MORGRAP0_CHECKSUM);
+
+	if (-1 == wadIndex)
+	{
+		return;
+	}
+
+	// The flats are GATE4, GRNLITE1, MFLR8_1, BLOOD1, BLOOD2, BLOOD3, CEIL3_1, GATE2, GATE3, and GATE1,
+	// in that order (but with many sprites interspersed). All remaining lumps are sprites.
+	// Information from http://doomwiki.org/wiki/Mordeth
+
+	static const DWORD MORGRAP0_FLATS[] =
+	{
+		MAKE_ID('C','E','I','L'), MAKE_ID('3', '_', '1','\0'),
+		MAKE_ID('B','L','O','O'), MAKE_ID('D', '1','\0','\0'),
+		MAKE_ID('B','L','O','O'), MAKE_ID('D', '2','\0','\0'),
+		MAKE_ID('B','L','O','O'), MAKE_ID('D', '3','\0','\0'),
+		MAKE_ID('G','A','T','E'), MAKE_ID('1','\0','\0','\0'),
+		MAKE_ID('G','A','T','E'), MAKE_ID('2','\0','\0','\0'),
+		MAKE_ID('G','A','T','E'), MAKE_ID('3','\0','\0','\0'),
+		MAKE_ID('G','A','T','E'), MAKE_ID('4','\0','\0','\0'),
+		MAKE_ID('G','R','N','L'), MAKE_ID('I', 'T', 'E', '1'),
+		MAKE_ID('M','F','L','R'), MAKE_ID('8', '_', '1','\0')
+	};
+
+	// Name of each flat occupies two DWORDs
+	static const size_t MORGRAP0_FLATS_COUNT = sizeof(MORGRAP0_FLATS) / (sizeof(DWORD) * 2);
+
+	for (int i = GetFirstLump(wadIndex), ei = GetLastLump(wadIndex); i <= ei; ++i)
+	{
+		assert(wadIndex == LumpInfo[i].wadnum);
+
+		FResourceLump* const lump = LumpInfo[i].lump;
+
+		for (size_t j = 0; j < MORGRAP0_FLATS_COUNT; ++j)
+		{
+			if (MORGRAP0_FLATS[j * 2] == lump->dwName)
+			{
+				const DWORD secondPart = static_cast<DWORD>(lump->qwName >> 32);
+				
+				if (secondPart == MORGRAP0_FLATS[j * 2 + 1])
+				{
+					lump->Namespace = ns_flats;
+					break;
+				}
+			}
+		}
+
+		if (ns_global == lump->Namespace)
+		{
+			lump->Namespace = ns_sprites;
+		}
+	}
+}
+
+//==========================================================================
+//
+// FindWadByChecksum
+//
+// Locates WAD in collection with given filesize and MD5 checsum
+// Returns WAD index or -1 if not found
+//
+//==========================================================================
+
+int FWadCollection::FindWadByChecksum(const size_t filesize, const BYTE checksum[16])
+{
+	int wadIndex = IWAD_FILENUM;
+
+	while (++wadIndex < GetNumWads())
+	{
+		FileReader* fileFeader = GetFileReader(wadIndex);
+
+		if (fileFeader == NULL)
+		{
+			continue;
+		}
+
+		if (fileFeader->GetLength() != filesize)
+		{
+			// Skip MD5 computation when there is a
+			// cheaper way to know this is not the file
+			continue;
+		}
+
+		fileFeader->Seek(0, SEEK_SET);
+
+		BYTE currentChecksum[16];
+
+		MD5Context md5;
+		md5.Update(fileFeader, fileFeader->GetLength());
+		md5.Final(currentChecksum);
+
+		if (0 == memcmp(checksum, currentChecksum, 16))
+		{
+			return wadIndex;
+		}
+	}
+
+	return -1;
 }
 
 //==========================================================================
