@@ -874,9 +874,9 @@ void FDiskFile::ReadEntries()
 
 bool FDiskFile::LoadWADs( bool quiet )
 {
-	return LoadWAD( "doom.wad",       &m_iwadReader, &m_iwad, quiet )
-		|| LoadWAD( "doom2.wad",      &m_iwadReader, &m_iwad, quiet )
-		&& LoadWAD( "nerve_demo.wad", &m_pwadReader, &m_pwad, quiet );
+	return     LoadWAD( "doom.wad",       &m_iwadReader, &m_iwad, quiet )
+		||   ( LoadWAD( "doom2.wad",      &m_iwadReader, &m_iwad, quiet )
+			&& LoadWAD( "nerve_demo.wad", &m_pwadReader, &m_pwad, quiet ) );
 }
 
 bool FDiskFile::LoadWAD( const char* name, FileReader** reader, FEmbeddedWadFile** wad, bool quiet )
