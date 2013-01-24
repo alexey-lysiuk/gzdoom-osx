@@ -829,7 +829,7 @@ void FWadCollection::RenameNerve ()
 
 	static const BYTE nerve[16] = { 0x96, 0x7d, 0x5a, 0xe2, 0x3d, 0xaf, 0x45, 0x19,
 		0x62, 0x12, 0xae, 0x1b, 0x60, 0x5d, 0xa3, 0xb0 };
-	static const size_t nervesize = 3819855; // NERVE.WAD's file size
+	static const long nervesize = 3819855; // NERVE.WAD's file size
 
 	const int w = FindWadByChecksum(nervesize, nerve);
 
@@ -874,7 +874,7 @@ void FWadCollection::FixMordethNamespace()
 
 	static const BYTE MORGRAP0_CHECKSUM[16] = { 0xbb, 0x63, 0x60, 0x1a, 0x03, 0xf1, 0xf3, 0x72,
 		0x0c, 0xdc, 0x6f, 0xcd, 0x33, 0x3a, 0x16, 0xaa };
-	static const size_t MORGRAP0_SIZE = 909841;
+	static const long MORGRAP0_SIZE = 909841;
 
 	const int wadIndex = FindWadByChecksum(MORGRAP0_SIZE, MORGRAP0_CHECKSUM);
 
@@ -940,7 +940,7 @@ void FWadCollection::FixMordethNamespace()
 //
 //==========================================================================
 
-int FWadCollection::FindWadByChecksum(const size_t filesize, const BYTE checksum[16])
+int FWadCollection::FindWadByChecksum(const long filesize, const BYTE checksum[16])
 {
 	int wadIndex = IWAD_FILENUM;
 
