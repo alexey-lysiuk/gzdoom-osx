@@ -550,6 +550,12 @@ BackBuffer::BackBuffer( int width, int height, bool fullscreen )
 	
 	m_gammaProgram.SetUniform( "backbuffer", 0 );
 	m_gammaProgram.SetUniform( "gammaTable", 1 );
+
+	// Fill render target with black color
+
+	m_renderTarget.Bind();
+	gl.Clear( GL_COLOR_BUFFER_BIT );
+	m_renderTarget.Unbind();
 }
 
 BackBuffer::~BackBuffer()
@@ -625,7 +631,16 @@ void BackBuffer::DrawRenderTarget()
 	
 	GLint viewport[4] = {0};
 	glGetIntegerv( GL_VIEWPORT, viewport );
-	
+
+	if (s_parameters.shiftX > 0.0f || s_parameters.shiftY > 0.0f)
+	{
+		// Clear whole screen if aspect ratio is different from native resolution
+		// to avoid drawing garbage instead of black bars
+
+		gl.Viewport( 0, 0, s_parameters.width + s_parameters.shiftX * 2, s_parameters.height + s_parameters.shiftY * 2 );
+		gl.Clear( GL_COLOR_BUFFER_BIT );
+	}
+
 	gl.Viewport( s_parameters.shiftX, s_parameters.shiftY, s_parameters.width, s_parameters.height );
 	
 	m_gammaProgram.Bind();
