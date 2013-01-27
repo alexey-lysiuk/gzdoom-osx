@@ -184,6 +184,7 @@ void FWadCollection::InitMultipleFiles (TArray<FString> &filenames)
 	RenameNerve();
 	RenameSprites();
 	FixMordethNamespace();
+	//AddMordethDecorate();
 
 	// [RH] Set up hash table
 	FirstLumpIndex = new DWORD[NumLumps];
@@ -929,6 +930,88 @@ void FWadCollection::FixMordethNamespace()
 			lump->Namespace = ns_sprites;
 		}
 	}
+
+//	const int decorateIndex = AddExternalFile("/Volumes/ramdisk/decorate.mordeth");
+//	strcpy(LumpInfo[decorateIndex].lump->Name, "DECORATE");
+//	LumpInfo[decorateIndex].wadnum = 1;
+//	++NumLumps;
+}
+
+//==========================================================================
+//
+// AddMordethDecorate
+//
+// Adds custom DECORATE if playing Mordeth WAD
+//
+//==========================================================================
+
+void FWadCollection::AddMordethDecorate()
+{
+	if (GAME_Doom != gameinfo.gametype)
+	{
+		return;
+	}
+
+	static const BYTE MORDETH_CHECKSUM[16] = { 0xdb, 0x99, 0xfe, 0xe8, 0x2e, 0x91, 0x24,
+		0xed, 0x6e, 0x1f, 0x00, 0x91, 0x51, 0x58, 0x9f, 0x73 };
+	static const long MORDETH_SIZE = 3076060;
+
+	const int wadIndex = FindWadByChecksum(MORDETH_SIZE, MORDETH_CHECKSUM);
+
+	if (-1 == wadIndex)
+	{
+		return;
+	}
+
+	class ResourceMemoryLump : public FResourceLump, private FMemLump
+	{
+	public:
+		explicit ResourceMemoryLump(const FString& source)
+		: FMemLump(source)
+		{
+			LumpSize = static_cast<int>( source.Len() );
+
+			LumpNameSetup("decorate.mordeth");
+		}
+
+	protected:
+		virtual int FillCache()
+		{
+			if (NULL == Cache)
+			{
+				Cache = new char[LumpSize];
+
+				memcpy(Cache, GetMem(), GetSize());
+
+				RefCount = 1;
+			}
+
+			return 1;
+		}
+	};
+
+	static const char MORDETH_DECORATE[] =
+	{
+		"ACTOR MordethFog1 : BloodyTwitch replaces BloodyTwitch"
+		"{"
+		"	RenderStyle Translucent"
+		"	Alpha 0.35"
+		"}"
+		"\n"
+		"ACTOR MordethFog2 : ShortBlueTorch replaces ShortBlueTorch"
+		"{"
+		"	RenderStyle Translucent"
+		"	Alpha 0.35"
+		"}"
+	};
+
+	ResourceMemoryLump* const decorateLump = new ResourceMemoryLump(MORDETH_DECORATE);
+
+	FWadCollection::LumpRecord* const decorateRecord = &LumpInfo[LumpInfo.Reserve(1)];
+	decorateRecord->lump   = decorateLump;
+	decorateRecord->wadnum = wadIndex;
+	
+	++NumLumps;
 }
 
 //==========================================================================

@@ -230,6 +230,7 @@ private:
 	void RenameSprites();
 	void RenameNerve();
 	void FixMordethNamespace();
+	void AddMordethDecorate();
 	int FindWadByChecksum(const long filesize, const BYTE checksum[16]);
 	void DeleteAll();
 };
