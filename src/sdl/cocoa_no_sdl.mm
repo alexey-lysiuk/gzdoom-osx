@@ -54,14 +54,12 @@
 #include "gccinlines.h"
 #include "bitmap.h"
 #include "c_console.h"
-#include "c_cvars.h"
 #include "d_event.h"
 #include "d_gui.h"
 #include "dikeys.h"
 #include "doomdef.h"
 #include "doomstat.h"
 #include "s_sound.h"
-#include "st_start.h"
 #include "textures.h"
 #include "version.h"
 
@@ -95,6 +93,8 @@ extern int paused, chatmodeon;
 extern constate_e ConsoleState;
 
 EXTERN_CVAR( Int, m_use_mouse );
+
+void I_ShutdownJoysticks();
 
 
 namespace
@@ -699,7 +699,9 @@ void ProcessMouseWheelEvent( NSEvent* theEvent )
 {
 	[super close];
 	
-	ST_Endoom();
+	I_ShutdownJoysticks();
+
+	[NSApp terminate:self];
 }
 
 @end
@@ -1392,7 +1394,10 @@ void SDL_Quit()
 	if ( NULL != s_applicationDelegate )
 	{
 		ReleaseTimer();
-		
+
+		[NSApp setDelegate:nil];
+		[NSApp deactivate];
+
 		[s_applicationDelegate release];
 		s_applicationDelegate = NULL;
 	}
