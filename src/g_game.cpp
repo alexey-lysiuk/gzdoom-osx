@@ -989,6 +989,15 @@ extern FTexture *Page;
 
 void G_Ticker ()
 {
+	if (demoplayback)
+	{
+		AActor* player_mobj = players[0].mo;
+		if (player_mobj)
+		{
+			printf("x = %f, y = %f, z = %f\n",FIXED2FLOAT(player_mobj->x),FIXED2FLOAT(player_mobj->y),FIXED2FLOAT(player_mobj->z));
+		}
+	}
+
 	int i;
 	gamestate_t	oldgamestate;
 
@@ -1188,6 +1197,8 @@ void G_Ticker ()
 	default:
 		break;
 	}
+
+
 }
 
 
@@ -2163,52 +2174,77 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 // DEMO RECORDING
 //
 
+#define DEMOMARKER		0x80
+
 void G_ReadDemoTiccmd (ticcmd_t *cmd, int player)
 {
-	int id = DEM_BAD;
+//	int id = DEM_BAD;
+//
+//	while (id != DEM_USERCMD && id != DEM_EMPTYUSERCMD)
+//	{
+//		if (!demorecording && demo_p >= zdembodyend)
+//		{
+//			// nothing left in the BODY chunk, so end playback.
+//			G_CheckDemoStatus ();
+//			break;
+//		}
+//
+//		id = ReadByte (&demo_p);
+//
+//		switch (id)
+//		{
+//		case DEM_STOP:
+//			// end of demo stream
+//			G_CheckDemoStatus ();
+//			break;
+//
+//		case DEM_USERCMD:
+//			UnpackUserCmd (&cmd->ucmd, &cmd->ucmd, &demo_p);
+//			break;
+//
+//		case DEM_EMPTYUSERCMD:
+//			// leave cmd->ucmd unchanged
+//			break;
+//
+//		case DEM_DROPPLAYER:
+//			{
+//				BYTE i = ReadByte (&demo_p);
+//				if (i < MAXPLAYERS)
+//				{
+//					playeringame[i] = false;
+//				}
+//			}
+//			break;
+//
+//		default:
+//			Net_DoCommand (id, &demo_p, player);
+//			break;
+//		}
+//	}
 
-	while (id != DEM_USERCMD && id != DEM_EMPTYUSERCMD)
-	{
-		if (!demorecording && demo_p >= zdembodyend)
-		{
-			// nothing left in the BODY chunk, so end playback.
-			G_CheckDemoStatus ();
-			break;
-		}
+    if (*demo_p == DEMOMARKER)
+    {
+		// end of demo data stream
+		G_CheckDemoStatus ();
+		return;
+    }
+    cmd->ucmd.forwardmove = ((signed char)*demo_p++) * 2048;
+    cmd->ucmd.sidemove = ((signed char)*demo_p++) * 2048;
 
-		id = ReadByte (&demo_p);
+    // If this is a longtics demo, read back in higher resolution
 
-		switch (id)
-		{
-		case DEM_STOP:
-			// end of demo stream
-			G_CheckDemoStatus ();
-			break;
+//    if (longtics)
+//    {
+//        cmd->angleturn = *demo_p++;
+//        cmd->angleturn |= (*demo_p++) << 8;
+//    }
+//    else
+    {
+        cmd->ucmd.yaw = ((unsigned char) *demo_p++)<<8;
+    }
 
-		case DEM_USERCMD:
-			UnpackUserCmd (&cmd->ucmd, &cmd->ucmd, &demo_p);
-			break;
-
-		case DEM_EMPTYUSERCMD:
-			// leave cmd->ucmd unchanged
-			break;
-
-		case DEM_DROPPLAYER:
-			{
-				BYTE i = ReadByte (&demo_p);
-				if (i < MAXPLAYERS)
-				{
-					playeringame[i] = false;
-				}
-			}
-			break;
-
-		default:
-			Net_DoCommand (id, &demo_p, player);
-			break;
-		}
-	}
-} 
+    cmd->ucmd.buttons = (unsigned char)*demo_p++;
+}
 
 bool stoprecording;
 
@@ -2550,31 +2586,40 @@ void G_DoPlayDemo (void)
 
 	C_BackupCVars ();		// [RH] Save cvars that might be affected by demo
 
-	if (ReadLong (&demo_p) != FORM_ID)
+//	if (ReadLong (&demo_p) != FORM_ID)
+//	{
+//		//demo_p -= 4;
+//
+//		//demover = *demo_p++;
+//
+//		const char *eek = "Cannot play non-ZDoom demos.\n";
+//
+//		C_ForgetCVars();
+//		M_Free(demobuffer);
+//		demo_p = demobuffer = NULL;
+//		if (singledemo)
+//		{
+//			I_Error ("%s", eek);
+//		}
+//		else
+//		{
+//			Printf (PRINT_BOLD, "%s", eek);
+//			gameaction = ga_nothing;
+//		}
+//	}
+//	else if (G_ProcessIFFDemo (mapname))
+//	{
+//		C_RestoreCVars();
+//		gameaction = ga_nothing;
+//		demoplayback = false;
+//	}
+//	else
 	{
-		const char *eek = "Cannot play non-ZDoom demos.\n";
+		demo_p += 13;
+		strcpy(mapname, "E1M5");
 
-		C_ForgetCVars();
-		M_Free(demobuffer);
-		demo_p = demobuffer = NULL;
-		if (singledemo)
-		{
-			I_Error ("%s", eek);
-		}
-		else
-		{
-			Printf (PRINT_BOLD, "%s", eek);
-			gameaction = ga_nothing;
-		}
-	}
-	else if (G_ProcessIFFDemo (mapname))
-	{
-		C_RestoreCVars();
-		gameaction = ga_nothing;
-		demoplayback = false;
-	}
-	else
-	{
+		playeringame[0] = 1;
+
 		// don't spend a lot of time in loadlevel 
 		precache = false;
 		demonew = true;
