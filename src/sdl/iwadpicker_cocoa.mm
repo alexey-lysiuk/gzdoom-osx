@@ -124,6 +124,7 @@ static const char* const tableHeaders[NUM_COLUMNS] = { "IWAD", "Game" };
 	NSDictionary* knownFileTypes = [NSDictionary dictionaryWithObjectsAndKeys:
 									@"-file "    , @"wad",
 									@"-file "    , @"pk3",
+									@"-file "    , @"zip",
 									@"-deh "     , @"deh",
 									@"-bex "     , @"bex",
 									@"-exec "    , @"cfg",
@@ -181,12 +182,15 @@ static const char* const tableHeaders[NUM_COLUMNS] = { "IWAD", "Game" };
 
 - (void)browseButtonPressed:(id) sender;
 {
+	NSArray* supportedExtensions = [NSArray arrayWithObjects:@"wad", @"pk3", @"zip", @"deh", @"bex", @"cfg", @"lmp", nil];
+
 	NSOpenPanel* openPanel = [NSOpenPanel openPanel];
 	[openPanel setAllowsMultipleSelection:YES];
 	[openPanel setCanChooseFiles:YES];
 	[openPanel setResolvesAliases:YES];
-		
-	if ( NSOKButton == [openPanel runModalForDirectory:nil file:nil] )
+	[openPanel setAllowedFileTypes:supportedExtensions];
+
+	if ( NSOKButton == [openPanel runModal] )
 	{
 		NSArray* files = [openPanel URLs];
 		NSString* parameters = [NSString string];
