@@ -352,6 +352,12 @@ void P_ZoomWeapon (player_t *player, FState *state)
 
 void P_DropWeapon (player_t *player)
 {
+	if (player == NULL)
+	{
+		return;
+	}
+	// Since the weapon is dropping, stop blocking switching.
+	player->WeaponState &= ~WF_DISABLESWITCH;
 	if (player->ReadyWeapon != NULL)
 	{
 		P_SetPsprite (player, ps_weapon, player->ReadyWeapon->GetDownState());
@@ -471,7 +477,7 @@ void P_BobWeapon (player_t *player, pspdef_t *psp, fixed_t *x, fixed_t *y)
 //
 //============================================================================
 
-void DoReadyWeaponToSwitch (AActor * self)
+void DoReadyWeaponToSwitch (AActor *self)
 {
 	// Prepare for switching action.
 	player_t *player;
@@ -479,7 +485,24 @@ void DoReadyWeaponToSwitch (AActor * self)
 		player->WeaponState |= WF_WEAPONSWITCHOK;
 }
 
-void DoReadyWeaponToFire (AActor * self, bool prim, bool alt)
+void DoReadyWeaponDisableSwitch (AActor *self, INTBOOL disable)
+{
+	// Discard all switch attempts?
+	player_t *player;
+	if (self && (player = self->player))
+	{
+		if (disable)
+		{
+			player->WeaponState |= WF_DISABLESWITCH;
+		}
+		else
+		{
+			player->WeaponState &= ~WF_DISABLESWITCH;
+		}
+	}
+}
+
+void DoReadyWeaponToFire (AActor *self, bool prim, bool alt)
 {
 	player_t *player;
 	AWeapon *weapon;
@@ -510,7 +533,7 @@ void DoReadyWeaponToFire (AActor * self, bool prim, bool alt)
 	return;
 }
 
-void DoReadyWeaponToBob (AActor * self)
+void DoReadyWeaponToBob (AActor *self)
 {
 	if (self && self->player && self->player->ReadyWeapon)
 	{
@@ -521,7 +544,7 @@ void DoReadyWeaponToBob (AActor * self)
 	}
 }
 
-void DoReadyWeaponToReload (AActor * self)
+void DoReadyWeaponToReload (AActor *self)
 {
 	// Prepare for reload action.
 	player_t *player;
@@ -530,7 +553,7 @@ void DoReadyWeaponToReload (AActor * self)
 	return;
 }
 
-void DoReadyWeaponToZoom (AActor * self)
+void DoReadyWeaponToZoom (AActor *self)
 {
 	// Prepare for reload action.
 	player_t *player;
@@ -540,7 +563,7 @@ void DoReadyWeaponToZoom (AActor * self)
 }
 
 // This function replaces calls to A_WeaponReady in other codepointers.
-void DoReadyWeapon(AActor * self)
+void DoReadyWeapon(AActor *self)
 {
 	DoReadyWeaponToBob(self);
 	DoReadyWeaponToFire(self);
@@ -558,6 +581,7 @@ enum EWRF_Options
 	WRF_NoFire = WRF_NoPrimary + WRF_NoSecondary,
 	WRF_AllowReload = 16,
 	WRF_AllowZoom = 32,
+	WRF_DisableSwitch = 64,
 };
 
 DEFINE_ACTION_FUNCTION_PARAMS(AInventory, A_WeaponReady)
@@ -570,6 +594,8 @@ DEFINE_ACTION_FUNCTION_PARAMS(AInventory, A_WeaponReady)
 	if (!(paramflags & WRF_NoBob))					DoReadyWeaponToBob(self);
 	if ((paramflags & WRF_AllowReload))				DoReadyWeaponToReload(self);
 	if ((paramflags & WRF_AllowZoom))				DoReadyWeaponToZoom(self);
+
+	DoReadyWeaponDisableSwitch(self, paramflags & WRF_DisableSwitch);
 }
 
 //---------------------------------------------------------------------------
@@ -625,21 +651,22 @@ void P_CheckWeaponFire (player_t *player)
 
 void P_CheckWeaponSwitch (player_t *player)
 {
-	AWeapon *weapon;
-
-	if (!player || !(weapon = player->ReadyWeapon))
-		return;
-
-	// Put the weapon away if the player has a pending weapon or has died.
-	if ((player->morphTics == 0 && player->PendingWeapon != WP_NOCHANGE) || player->health <= 0)
+	if (player == NULL)
 	{
-		P_DropWeapon(player);
 		return;
 	}
-	else if (player->morphTics != 0)
-	{
-		// morphed classes cannot change weapons so don't even try again.
+	if ((player->WeaponState & WF_DISABLESWITCH) || // Weapon changing has been disabled.
+		player->morphTics != 0)					// Morphed classes cannot change weapons.
+	{ // ...so throw away any pending weapon requests.
 		player->PendingWeapon = WP_NOCHANGE;
+	}
+
+	// Put the weapon away if the player has a pending weapon or has died, and
+	// we're at a place in the state sequence where dropping the weapon is okay.
+	if ((player->PendingWeapon != WP_NOCHANGE || player->health <= 0) &&
+		player->WeaponState & WF_WEAPONSWITCHOK)
+	{
+		P_DropWeapon(player);
 	}
 }
 
@@ -706,21 +733,21 @@ DEFINE_ACTION_FUNCTION_PARAMS(AInventory, A_ReFire)
 void A_ReFire(AActor *self, FState *state)
 {
 	player_t *player = self->player;
+	bool pending;
 
 	if (NULL == player)
 	{
 		return;
 	}
-	if ((player->cmd.ucmd.buttons&BT_ATTACK)
-		&& !player->ReadyWeapon->bAltFire
-		&& player->PendingWeapon == WP_NOCHANGE && player->health)
+	pending = player->PendingWeapon == WP_NOCHANGE && (player->WeaponState & WF_WEAPONSWITCHOK);
+	if ((player->cmd.ucmd.buttons & BT_ATTACK)
+		&& !player->ReadyWeapon->bAltFire && !pending && player->health > 0)
 	{
 		player->refire++;
 		P_FireWeapon (player, state);
 	}
-	else if ((player->cmd.ucmd.buttons&BT_ALTATTACK)
-		&& player->ReadyWeapon->bAltFire
-		&& player->PendingWeapon == WP_NOCHANGE && player->health)
+	else if ((player->cmd.ucmd.buttons & BT_ALTATTACK)
+		&& player->ReadyWeapon->bAltFire && !pending && player->health > 0)
 	{
 		player->refire++;
 		P_FireWeaponAlt (player, state);
@@ -799,10 +826,6 @@ DEFINE_ACTION_FUNCTION(AInventory, A_Lower)
 		P_SetPsprite (player,  ps_weapon, NULL);
 		return;
 	}
-/*	if (player->PendingWeapon != WP_NOCHANGE)
-	{ // [RH] Make sure we're actually changing weapons.
-		player->ReadyWeapon = player->PendingWeapon;
-	} */
 	// [RH] Clear the flash state. Only needed for Strife.
 	P_SetPsprite (player, ps_flash, NULL);
 	P_BringUpWeapon (player);
@@ -1037,7 +1060,7 @@ void P_MovePsprites (player_t *player)
 					psp->tics--;
 
 					// [BC] Apply double firing speed.
-					if ( psp->tics && (player->WeaponState & CF_DOUBLEFIRINGSPEED))
+					if ( psp->tics && (player->cheats & CF_DOUBLEFIRINGSPEED))
 						psp->tics--;
 
 					if(!psp->tics)
@@ -1049,10 +1072,7 @@ void P_MovePsprites (player_t *player)
 		}
 		player->psprites[ps_flash].sx = player->psprites[ps_weapon].sx;
 		player->psprites[ps_flash].sy = player->psprites[ps_weapon].sy;
-		if (player->WeaponState & WF_WEAPONSWITCHOK)
-		{
-			P_CheckWeaponSwitch (player);
-		}
+		P_CheckWeaponSwitch (player);
 		if (player->WeaponState & (WF_WEAPONREADY | WF_WEAPONREADYALT))
 		{
 			P_CheckWeaponFire (player);

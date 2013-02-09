@@ -84,6 +84,11 @@
 		8A1D33EF154D702000BA2C16 /* libintl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A1D33ED154D702000BA2C16 /* libintl.a */; };
 		8A1D33F0154D702000BA2C16 /* libgthread-2.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A1D33EC154D702000BA2C16 /* libgthread-2.0.a */; };
 		8A1D33F1154D702000BA2C16 /* libintl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A1D33ED154D702000BA2C16 /* libintl.a */; };
+		8A2C747E16C66D9500ABD7C8 /* blip_buf.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A2C747416C66C9C00ABD7C8 /* blip_buf.c */; };
+		8A2C747F16C66DA600ABD7C8 /* loadokt.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A2C747616C66CB600ABD7C8 /* loadokt.c */; };
+		8A2C748016C66DA600ABD7C8 /* loadokt2.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A2C747716C66CB600ABD7C8 /* loadokt2.c */; };
+		8A2C748116C66DBA00ABD7C8 /* readokt.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A2C747816C66CB600ABD7C8 /* readokt.c */; };
+		8A2C748216C66DBA00ABD7C8 /* readokt2.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A2C747916C66CB600ABD7C8 /* readokt2.c */; };
 		8A3AC15B14BE294E000D402B /* GZDoom.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A3AC15A14BE294E000D402B /* GZDoom.xib */; };
 		8A3DA66D1547DB5100D1302A /* thingdef_function.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A3DA66C1547DB5100D1302A /* thingdef_function.cpp */; };
 		8A3DA66E1547DB5100D1302A /* thingdef_function.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A3DA66C1547DB5100D1302A /* thingdef_function.cpp */; };
@@ -1295,6 +1300,12 @@
 		8A1D33E6154D6FD200BA2C16 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		8A1D33EC154D702000BA2C16 /* libgthread-2.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libgthread-2.0.a"; path = "thirdparty/fluidsynth/lib/libgthread-2.0.a"; sourceTree = "<group>"; };
 		8A1D33ED154D702000BA2C16 /* libintl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libintl.a; path = thirdparty/fluidsynth/lib/libintl.a; sourceTree = "<group>"; };
+		8A2C747316C66C8F00ABD7C8 /* blip_buf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blip_buf.h; sourceTree = "<group>"; };
+		8A2C747416C66C9C00ABD7C8 /* blip_buf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = blip_buf.c; sourceTree = "<group>"; };
+		8A2C747616C66CB600ABD7C8 /* loadokt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = loadokt.c; sourceTree = "<group>"; };
+		8A2C747716C66CB600ABD7C8 /* loadokt2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = loadokt2.c; sourceTree = "<group>"; };
+		8A2C747816C66CB600ABD7C8 /* readokt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = readokt.c; sourceTree = "<group>"; };
+		8A2C747916C66CB600ABD7C8 /* readokt2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = readokt2.c; sourceTree = "<group>"; };
 		8A3AC15A14BE294E000D402B /* GZDoom.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GZDoom.xib; sourceTree = "<group>"; };
 		8A3DA66C1547DB5100D1302A /* thingdef_function.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = thingdef_function.cpp; sourceTree = "<group>"; };
 		8A3DA6941547DC2A00D1302A /* gl_builddraw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gl_builddraw.cpp; sourceTree = "<group>"; };
@@ -2890,8 +2901,8 @@
 		8AF27B3B1390F5EE0095D9A0 /* include */ = {
 			isa = PBXGroup;
 			children = (
-				8AF27B3C1390F5EE0095D9A0 /* dumb.h */,
 				8AF27B3D1390F5EE0095D9A0 /* internal */,
+				8AF27B3C1390F5EE0095D9A0 /* dumb.h */,
 			);
 			path = include;
 			sourceTree = "<group>";
@@ -2900,6 +2911,7 @@
 			isa = PBXGroup;
 			children = (
 				8AF27B3E1390F5EE0095D9A0 /* barray.h */,
+				8A2C747316C66C8F00ABD7C8 /* blip_buf.h */,
 				8AF27B3F1390F5EE0095D9A0 /* dumb.h */,
 				8AF27B401390F5EE0095D9A0 /* it.h */,
 				8AF27B411390F5EE0095D9A0 /* riff.h */,
@@ -2942,6 +2954,7 @@
 			isa = PBXGroup;
 			children = (
 				8AF27B541390F5EE0095D9A0 /* barray.c */,
+				8A2C747416C66C9C00ABD7C8 /* blip_buf.c */,
 				8AF27B551390F5EE0095D9A0 /* clickrem.c */,
 				8AF27B561390F5EE0095D9A0 /* memfile.c */,
 				8AF27B571390F5EE0095D9A0 /* resamp2.inc */,
@@ -2976,6 +2989,8 @@
 				8AF27B6E1390F5EE0095D9A0 /* loadmod2.c */,
 				8AF27B6F1390F5EE0095D9A0 /* loadmtm.c */,
 				8AF27B701390F5EE0095D9A0 /* loadmtm2.c */,
+				8A2C747616C66CB600ABD7C8 /* loadokt.c */,
+				8A2C747716C66CB600ABD7C8 /* loadokt2.c */,
 				8AF27B711390F5EE0095D9A0 /* loadoldpsm.c */,
 				8AF27B721390F5EE0095D9A0 /* loadoldpsm2.c */,
 				8AF27B731390F5EE0095D9A0 /* loadpsm.c */,
@@ -2999,6 +3014,8 @@
 				8AF27B851390F5EE0095D9A0 /* readmod.c */,
 				8AF27B861390F5EE0095D9A0 /* readmod2.c */,
 				8AF27B871390F5EE0095D9A0 /* readmtm.c */,
+				8A2C747816C66CB600ABD7C8 /* readokt.c */,
+				8A2C747916C66CB600ABD7C8 /* readokt2.c */,
 				8AF27B881390F5EE0095D9A0 /* readoldpsm.c */,
 				8AF27B891390F5EE0095D9A0 /* readpsm.c */,
 				8AF27B8A1390F5EE0095D9A0 /* readptm.c */,
@@ -5057,6 +5074,7 @@
 				8AF27BB11390F5EE0095D9A0 /* rendsig.c in Sources */,
 				8AF27BB21390F5EE0095D9A0 /* unload.c in Sources */,
 				8AF27BB31390F5EE0095D9A0 /* barray.c in Sources */,
+				8A2C747E16C66D9500ABD7C8 /* blip_buf.c in Sources */,
 				8AF27BB41390F5EE0095D9A0 /* clickrem.c in Sources */,
 				8AF27BB51390F5EE0095D9A0 /* memfile.c in Sources */,
 				8AF27BB81390F5EE0095D9A0 /* resample.c in Sources */,
@@ -5081,6 +5099,8 @@
 				8AF27BCC1390F5EE0095D9A0 /* loadmod2.c in Sources */,
 				8AF27BCD1390F5EE0095D9A0 /* loadmtm.c in Sources */,
 				8AF27BCE1390F5EE0095D9A0 /* loadmtm2.c in Sources */,
+				8A2C747F16C66DA600ABD7C8 /* loadokt.c in Sources */,
+				8A2C748016C66DA600ABD7C8 /* loadokt2.c in Sources */,
 				8AF27BCF1390F5EE0095D9A0 /* loadoldpsm.c in Sources */,
 				8AF27BD01390F5EE0095D9A0 /* loadoldpsm2.c in Sources */,
 				8AF27BD11390F5EE0095D9A0 /* loadpsm.c in Sources */,
@@ -5104,6 +5124,8 @@
 				8AF27BE31390F5EE0095D9A0 /* readmod.c in Sources */,
 				8AF27BE41390F5EE0095D9A0 /* readmod2.c in Sources */,
 				8AF27BE51390F5EE0095D9A0 /* readmtm.c in Sources */,
+				8A2C748116C66DBA00ABD7C8 /* readokt.c in Sources */,
+				8A2C748216C66DBA00ABD7C8 /* readokt2.c in Sources */,
 				8AF27BE61390F5EE0095D9A0 /* readoldpsm.c in Sources */,
 				8AF27BE71390F5EE0095D9A0 /* readpsm.c in Sources */,
 				8AF27BE81390F5EE0095D9A0 /* readptm.c in Sources */,
