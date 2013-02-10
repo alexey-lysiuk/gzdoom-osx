@@ -95,7 +95,7 @@ void P_SetPsprite (player_t *player, int position, FState *state, bool nofunctio
 
 	if (position == ps_weapon && !nofunction)
 	{ // A_WeaponReady will re-set these as needed
-		player->cheats &= ~(CF_WEAPONREADY | CF_WEAPONREADYALT | CF_WEAPONBOBBING | CF_WEAPONRELOADOK | CF_WEAPONZOOMOK);
+		player->WeaponState &= ~(WF_WEAPONREADY | WF_WEAPONREADYALT | WF_WEAPONBOBBING | WF_WEAPONSWITCHOK | WF_WEAPONRELOADOK | WF_WEAPONZOOMOK);
 	}
 
 	psp = &player->psprites[position];
@@ -352,6 +352,12 @@ void P_ZoomWeapon (player_t *player, FState *state)
 
 void P_DropWeapon (player_t *player)
 {
+	if (player == NULL)
+	{
+		return;
+	}
+	// Since the weapon is dropping, stop blocking switching.
+	player->WeaponState &= ~WF_DISABLESWITCH;
 	if (player->ReadyWeapon != NULL)
 	{
 		P_SetPsprite (player, ps_weapon, player->ReadyWeapon->GetDownState());
@@ -397,7 +403,7 @@ void P_BobWeapon (player_t *player, pspdef_t *psp, fixed_t *x, fixed_t *y)
 	// [RH] Smooth transitions between bobbing and not-bobbing frames.
 	// This also fixes the bug where you can "stick" a weapon off-center by
 	// shooting it when it's at the peak of its swing.
-	bobtarget = (player->cheats & CF_WEAPONBOBBING) ? player->bob : 0;
+	bobtarget = (player->WeaponState & WF_WEAPONBOBBING) ? player->bob : 0;
 	if (curbob != bobtarget)
 	{
 		if (abs (bobtarget - curbob) <= 1*FRACUNIT)
@@ -471,15 +477,32 @@ void P_BobWeapon (player_t *player, pspdef_t *psp, fixed_t *x, fixed_t *y)
 //
 //============================================================================
 
-void DoReadyWeaponToSwitch (AActor * self)
+void DoReadyWeaponToSwitch (AActor *self)
 {
 	// Prepare for switching action.
 	player_t *player;
 	if (self && (player = self->player))
-		player->cheats |= CF_WEAPONSWITCHOK;
+		player->WeaponState |= WF_WEAPONSWITCHOK;
 }
 
-void DoReadyWeaponToFire (AActor * self, bool prim, bool alt)
+void DoReadyWeaponDisableSwitch (AActor *self, INTBOOL disable)
+{
+	// Discard all switch attempts?
+	player_t *player;
+	if (self && (player = self->player))
+	{
+		if (disable)
+		{
+			player->WeaponState |= WF_DISABLESWITCH;
+		}
+		else
+		{
+			player->WeaponState &= ~WF_DISABLESWITCH;
+		}
+	}
+}
+
+void DoReadyWeaponToFire (AActor *self, bool prim, bool alt)
 {
 	player_t *player;
 	AWeapon *weapon;
@@ -506,41 +529,41 @@ void DoReadyWeaponToFire (AActor * self, bool prim, bool alt)
 	}
 
 	// Prepare for firing action.
-	player->cheats |= ((prim ? CF_WEAPONREADY : 0) | (alt ? CF_WEAPONREADYALT : 0));
+	player->WeaponState |= ((prim ? WF_WEAPONREADY : 0) | (alt ? WF_WEAPONREADYALT : 0));
 	return;
 }
 
-void DoReadyWeaponToBob (AActor * self)
+void DoReadyWeaponToBob (AActor *self)
 {
 	if (self && self->player && self->player->ReadyWeapon)
 	{
 		// Prepare for bobbing action.
-		self->player->cheats |= CF_WEAPONBOBBING;
+		self->player->WeaponState |= WF_WEAPONBOBBING;
 		self->player->psprites[ps_weapon].sx = 0;
 		self->player->psprites[ps_weapon].sy = WEAPONTOP;
 	}
 }
 
-void DoReadyWeaponToReload (AActor * self)
+void DoReadyWeaponToReload (AActor *self)
 {
 	// Prepare for reload action.
 	player_t *player;
 	if (self && (player = self->player))
-		player->cheats |= CF_WEAPONRELOADOK;
+		player->WeaponState |= WF_WEAPONRELOADOK;
 	return;
 }
 
-void DoReadyWeaponToZoom (AActor * self)
+void DoReadyWeaponToZoom (AActor *self)
 {
 	// Prepare for reload action.
 	player_t *player;
 	if (self && (player = self->player))
-		player->cheats |= CF_WEAPONZOOMOK;
+		player->WeaponState |= WF_WEAPONZOOMOK;
 	return;
 }
 
 // This function replaces calls to A_WeaponReady in other codepointers.
-void DoReadyWeapon(AActor * self)
+void DoReadyWeapon(AActor *self)
 {
 	DoReadyWeaponToBob(self);
 	DoReadyWeaponToFire(self);
@@ -552,12 +575,13 @@ void DoReadyWeapon(AActor * self)
 enum EWRF_Options
 {
 	WRF_NoBob = 1,
-	WRF_NoFire = 12,
 	WRF_NoSwitch = 2,
 	WRF_NoPrimary = 4,
 	WRF_NoSecondary = 8,
+	WRF_NoFire = WRF_NoPrimary + WRF_NoSecondary,
 	WRF_AllowReload = 16,
 	WRF_AllowZoom = 32,
+	WRF_DisableSwitch = 64,
 };
 
 DEFINE_ACTION_FUNCTION_PARAMS(AInventory, A_WeaponReady)
@@ -565,30 +589,13 @@ DEFINE_ACTION_FUNCTION_PARAMS(AInventory, A_WeaponReady)
 	ACTION_PARAM_START(1);
 	ACTION_PARAM_INT(paramflags, 0);
 
-	if (!(paramflags & WRF_NoSwitch))
-	{
-		DoReadyWeaponToSwitch(self);
-	}
-	else if (self->player != NULL)
-	{
-		self->player->cheats &= ~CF_WEAPONSWITCHOK;
-	}
-	if ((paramflags & WRF_NoFire) != WRF_NoFire)
-	{
-		DoReadyWeaponToFire(self, !(paramflags & WRF_NoPrimary), !(paramflags & WRF_NoSecondary));
-	}
-	if (!(paramflags & WRF_NoBob))
-	{
-		DoReadyWeaponToBob(self);
-	}
-	if ((paramflags & WRF_AllowReload))
-	{
-		DoReadyWeaponToReload(self);
-	}
-	if ((paramflags & WRF_AllowZoom))
-	{
-		DoReadyWeaponToZoom(self);
-	}
+	if (!(paramflags & WRF_NoSwitch))				DoReadyWeaponToSwitch(self);
+	if ((paramflags & WRF_NoFire) != WRF_NoFire)	DoReadyWeaponToFire(self, !(paramflags & WRF_NoPrimary), !(paramflags & WRF_NoSecondary));
+	if (!(paramflags & WRF_NoBob))					DoReadyWeaponToBob(self);
+	if ((paramflags & WRF_AllowReload))				DoReadyWeaponToReload(self);
+	if ((paramflags & WRF_AllowZoom))				DoReadyWeaponToZoom(self);
+
+	DoReadyWeaponDisableSwitch(self, paramflags & WRF_DisableSwitch);
 }
 
 //---------------------------------------------------------------------------
@@ -609,7 +616,7 @@ void P_CheckWeaponFire (player_t *player)
 		return;
 
 	// Check for fire. Some weapons do not auto fire.
-	if ((player->cheats & CF_WEAPONREADY) && (player->cmd.ucmd.buttons & BT_ATTACK))
+	if ((player->WeaponState & WF_WEAPONREADY) && (player->cmd.ucmd.buttons & BT_ATTACK))
 	{
 		if (!player->attackdown || !(weapon->WeaponFlags & WIF_NOAUTOFIRE))
 		{
@@ -618,7 +625,7 @@ void P_CheckWeaponFire (player_t *player)
 			return;
 		}
 	}
-	else if ((player->cheats & CF_WEAPONREADYALT) && (player->cmd.ucmd.buttons & BT_ALTATTACK))
+	else if ((player->WeaponState & WF_WEAPONREADYALT) && (player->cmd.ucmd.buttons & BT_ALTATTACK))
 	{
 		if (!player->attackdown || !(weapon->WeaponFlags & WIF_NOAUTOFIRE))
 		{
@@ -644,26 +651,22 @@ void P_CheckWeaponFire (player_t *player)
 
 void P_CheckWeaponSwitch (player_t *player)
 {
-	AWeapon *weapon;
-
-	if (!player || !(weapon = player->ReadyWeapon))
+	if (player == NULL)
+	{
 		return;
+	}
+	if ((player->WeaponState & WF_DISABLESWITCH) || // Weapon changing has been disabled.
+		player->morphTics != 0)					// Morphed classes cannot change weapons.
+	{ // ...so throw away any pending weapon requests.
+		player->PendingWeapon = WP_NOCHANGE;
+	}
 
-	if (player->health <= 0)
-	{ // Dead, so put the weapon away.
-		P_SetPsprite(player, ps_weapon, weapon->GetDownState());
-	}
-	else if (!(player->cheats & CF_WEAPONSWITCHOK))
-	{ // Weapon changing has been disabled.
-		player->PendingWeapon = WP_NOCHANGE;
-	}
-	else if (player->morphTics == 0 && player->PendingWeapon != WP_NOCHANGE)
-	{ // Put the weapon away if the player has a pending weapon 
-		P_SetPsprite (player, ps_weapon, weapon->GetDownState());
-	}
-	else if (player->morphTics != 0)
-	{ // Morphed classes cannot change weapons, so don't even try again.
-		player->PendingWeapon = WP_NOCHANGE;
+	// Put the weapon away if the player has a pending weapon or has died, and
+	// we're at a place in the state sequence where dropping the weapon is okay.
+	if ((player->PendingWeapon != WP_NOCHANGE || player->health <= 0) &&
+		player->WeaponState & WF_WEAPONSWITCHOK)
+	{
+		P_DropWeapon(player);
 	}
 }
 
@@ -683,7 +686,7 @@ void P_CheckWeaponReload (player_t *player)
 		return;
 
 	// Check for reload.
-	if ((player->cheats & CF_WEAPONRELOADOK) && (player->cmd.ucmd.buttons & BT_RELOAD))
+	if ((player->WeaponState & WF_WEAPONRELOADOK) && (player->cmd.ucmd.buttons & BT_RELOAD))
 	{
 		P_ReloadWeapon (player, NULL);
 	}
@@ -705,7 +708,7 @@ void P_CheckWeaponZoom (player_t *player)
 		return;
 
 	// Check for zoom.
-	if ((player->cheats & CF_WEAPONZOOMOK) && (player->cmd.ucmd.buttons & BT_ZOOM))
+	if ((player->WeaponState & WF_WEAPONZOOMOK) && (player->cmd.ucmd.buttons & BT_ZOOM))
 	{
 		P_ZoomWeapon (player, NULL);
 	}
@@ -730,21 +733,21 @@ DEFINE_ACTION_FUNCTION_PARAMS(AInventory, A_ReFire)
 void A_ReFire(AActor *self, FState *state)
 {
 	player_t *player = self->player;
+	bool pending;
 
 	if (NULL == player)
 	{
 		return;
 	}
-	if ((player->cmd.ucmd.buttons&BT_ATTACK)
-		&& !player->ReadyWeapon->bAltFire
-		&& player->PendingWeapon == WP_NOCHANGE && player->health)
+	pending = player->PendingWeapon == WP_NOCHANGE && (player->WeaponState & WF_WEAPONSWITCHOK);
+	if ((player->cmd.ucmd.buttons & BT_ATTACK)
+		&& !player->ReadyWeapon->bAltFire && !pending && player->health > 0)
 	{
 		player->refire++;
 		P_FireWeapon (player, state);
 	}
-	else if ((player->cmd.ucmd.buttons&BT_ALTATTACK)
-		&& player->ReadyWeapon->bAltFire
-		&& player->PendingWeapon == WP_NOCHANGE && player->health)
+	else if ((player->cmd.ucmd.buttons & BT_ALTATTACK)
+		&& player->ReadyWeapon->bAltFire && !pending && player->health > 0)
 	{
 		player->refire++;
 		P_FireWeaponAlt (player, state);
@@ -823,10 +826,6 @@ DEFINE_ACTION_FUNCTION(AInventory, A_Lower)
 		P_SetPsprite (player,  ps_weapon, NULL);
 		return;
 	}
-/*	if (player->PendingWeapon != WP_NOCHANGE)
-	{ // [RH] Make sure we're actually changing weapons.
-		player->ReadyWeapon = player->PendingWeapon;
-	} */
 	// [RH] Clear the flash state. Only needed for Strife.
 	P_SetPsprite (player, ps_flash, NULL);
 	P_BringUpWeapon (player);
@@ -853,7 +852,7 @@ DEFINE_ACTION_FUNCTION(AInventory, A_Raise)
 	}
 	if (player->PendingWeapon != WP_NOCHANGE)
 	{
-		P_SetPsprite (player, ps_weapon, player->ReadyWeapon->GetDownState());
+		P_DropWeapon(player);
 		return;
 	}
 	psp = &player->psprites[ps_weapon];
@@ -1061,7 +1060,7 @@ void P_MovePsprites (player_t *player)
 					psp->tics--;
 
 					// [BC] Apply double firing speed.
-					if ( psp->tics && ( player->cheats & CF_DOUBLEFIRINGSPEED ))
+					if ( psp->tics && (player->cheats & CF_DOUBLEFIRINGSPEED))
 						psp->tics--;
 
 					if(!psp->tics)
@@ -1074,15 +1073,15 @@ void P_MovePsprites (player_t *player)
 		player->psprites[ps_flash].sx = player->psprites[ps_weapon].sx;
 		player->psprites[ps_flash].sy = player->psprites[ps_weapon].sy;
 		P_CheckWeaponSwitch (player);
-		if (player->cheats & (CF_WEAPONREADY | CF_WEAPONREADYALT))
+		if (player->WeaponState & (WF_WEAPONREADY | WF_WEAPONREADYALT))
 		{
 			P_CheckWeaponFire (player);
 		}
-		if (player->cheats & CF_WEAPONRELOADOK)
+		if (player->WeaponState & WF_WEAPONRELOADOK)
 		{
 			P_CheckWeaponReload (player);
 		}
-		if (player->cheats & CF_WEAPONZOOMOK)
+		if (player->WeaponState & WF_WEAPONZOOMOK)
 		{
 			P_CheckWeaponZoom (player);
 		}

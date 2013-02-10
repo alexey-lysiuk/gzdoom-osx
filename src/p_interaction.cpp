@@ -66,6 +66,7 @@ static FRandom pr_damagemobj ("ActorTakeDamage");
 static FRandom pr_lightning ("LightningDamage");
 static FRandom pr_poison ("PoisonDamage");
 static FRandom pr_switcher ("SwitchTarget");
+static FRandom pr_kickbackdir ("KickbackDir");
 
 CVAR (Bool, cl_showsprees, true, CVAR_ARCHIVE)
 CVAR (Bool, cl_showmultikills, true, CVAR_ARCHIVE)
@@ -1073,9 +1074,18 @@ int P_DamageMobj (AActor *target, AActor *inflictor, AActor *source, int damage,
 		if (kickback)
 		{
 			AActor *origin = (source && (flags & DMG_INFLICTOR_IS_PUFF))? source : inflictor;
-			
-			ang = R_PointToAngle2 (origin->x, origin->y,
-				target->x, target->y);
+
+			// If the origin and target are in exactly the same spot, choose a random direction.
+			// (Most likely cause is from telefragging somebody during spawning because they
+			// haven't moved from their spawn spot at all.)
+			if (origin->x == target->x && origin->y == target->y)
+			{
+				ang = pr_kickbackdir.GenRand32();
+			}
+			else
+			{
+				ang = R_PointToAngle2 (origin->x, origin->y, target->x, target->y);
+			}
 
 			// Calculate this as float to avoid overflows so that the
 			// clamping that had to be done here can be removed.
@@ -1511,6 +1521,10 @@ bool AActor::OkayToSwitchTarget (AActor *other)
 //
 // P_PoisonPlayer - Sets up all data concerning poisoning
 //
+// poisoner is the object directly responsible for poisoning the player,
+// such as a missile. source is the actor responsible for creating the
+// poisoner.
+//
 //==========================================================================
 
 bool P_PoisonPlayer (player_t *player, AActor *poisoner, AActor *source, int poison)
@@ -1526,7 +1540,7 @@ bool P_PoisonPlayer (player_t *player, AActor *poisoner, AActor *source, int poi
 	if (poison > 0)
 	{
 		player->poisoncount += poison;
-		player->poisoner = poisoner;
+		player->poisoner = source;
 		if (poisoner == NULL)
 		{
 			player->poisontype = player->poisonpaintype = NAME_None;
