@@ -118,7 +118,9 @@ FDirectory::FDirectory(const char * directory)
 	dirname = directory;
 	dirname.ReplaceChars('\\', '/');
 	if (dirname[dirname.Len()-1] != '/') dirname += '/';
-	free((void*)directory);
+	#ifdef _WIN32
+		free((void*)directory);
+	#endif // _WIN32
 	Filename = copystring(dirname);
 }
 
