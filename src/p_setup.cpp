@@ -142,6 +142,8 @@ int 			numgamesubsectors;
 bool			hasglnodes;
 
 TArray<FMapThing> MapThingsConverted;
+TMap<unsigned,unsigned>  MapThingsUserDataIndex;	// from mapthing idx -> user data idx
+TArray<FMapThingUserData> MapThingsUserData;
 
 int sidecount;
 sidei_t *sidetemp;
@@ -304,6 +306,7 @@ MapData *P_OpenMapData(const char * mapname)
 			// As such any special handling for other types of lumps is skipped.
 			map->MapLumps[0].Reader = map->file = Wads.ReopenLumpNum(lump_name);
 			map->Encrypted = Wads.IsEncryptedFile(lump_name);
+			map->InWad = true;
 
 			if (map->Encrypted)
 			{ // If it's encrypted, then it's a Blood file, presumably a map.
@@ -1636,7 +1639,7 @@ void P_LoadNodes (MapData * map)
 //===========================================================================
 CVAR(Bool, dumpspawnedthings, false, 0)
 
-void SpawnMapThing(int index, FMapThing *mt, int position)
+AActor *SpawnMapThing(int index, FMapThing *mt, int position)
 {
 	AActor *spawned = P_SpawnMapThing(mt, position);
 	if (dumpspawnedthings)
@@ -1646,6 +1649,42 @@ void SpawnMapThing(int index, FMapThing *mt, int position)
 			spawned? spawned->GetClass()->TypeName.GetChars() : "(none)");
 	}
 	T_AddSpawnedThing(spawned);
+	return spawned;
+}
+
+//===========================================================================
+//
+// SetMapThingUserData
+//
+//===========================================================================
+
+static void SetMapThingUserData(AActor *actor, unsigned udi)
+{
+	if (actor == NULL)
+	{
+		return;
+	}
+	while (MapThingsUserData[udi].Property != NAME_None)
+	{
+		FName varname = MapThingsUserData[udi].Property;
+		int value = MapThingsUserData[udi].Value;
+		PSymbol *sym = actor->GetClass()->Symbols.FindSymbol(varname, true);
+		PSymbolVariable *var;
+
+		udi++;
+
+		if (sym == NULL || sym->SymbolType != SYM_Variable ||
+			!(var = static_cast<PSymbolVariable *>(sym))->bUserVar ||
+			var->ValueType.Type != VAL_Int)
+		{
+			DPrintf("%s is not a user variable in class %s\n", varname.GetChars(),
+				actor->GetClass()->TypeName.GetChars());
+		}
+		else
+		{ // Set the value of the specified user variable.
+			*(int *)(reinterpret_cast<BYTE *>(actor) + var->offset) = value;
+		}
+	}
 }
 
 //===========================================================================
@@ -1684,7 +1723,7 @@ void P_LoadThings (MapData * map)
 	for (int i=0 ; i < numthings; i++, mt++)
 	{
 		// [RH] At this point, monsters unique to Doom II were weeded out
-		//		if the IWAD wasn't for Doom II. R_SpawnMapThing() can now
+		//		if the IWAD wasn't for Doom II. P_SpawnMapThing() can now
 		//		handle these and more cases better, so we just pass it
 		//		everything and let it decide what to do with them.
 
@@ -1779,7 +1818,12 @@ void P_SpawnThings (int position)
 
 	for (int i=0; i < numthings; i++)
 	{
-		SpawnMapThing (i, &MapThingsConverted[i], position);
+		AActor *actor = SpawnMapThing (i, &MapThingsConverted[i], position);
+		unsigned *udi = MapThingsUserDataIndex.CheckKey((unsigned)i);
+		if (udi != NULL)
+		{
+			SetMapThingUserData(actor, *udi);
+		}
 	}
 	for(int i=0; i<MAXPLAYERS; i++)
 	{
@@ -3500,6 +3544,8 @@ void P_SetupLevel (char *lumpname, int position)
 	wminfo.partime = 180;
 
 	MapThingsConverted.Clear();
+	MapThingsUserDataIndex.Clear();
+	MapThingsUserData.Clear();
 	linemap.Clear();
 	FCanvasTextureInfo::EmptyList ();
 	R_FreePastViewers ();
@@ -4070,6 +4116,8 @@ void P_SetupLevel (char *lumpname, int position)
 		}
 	}
 	MapThingsConverted.Clear();
+	MapThingsUserDataIndex.Clear();
+	MapThingsUserData.Clear();
 
 	if (glsegextras != NULL)
 	{
