@@ -296,6 +296,7 @@ IWad
 	Compatibility = "Shorttex", "Stairs"
 	MustContain = "MAP01", "REDTNT2"
 	BannerColors = "a8 00 00", "a8 a8 a8"
+	Load = "tnt31.wad"
 }
 
 IWad
@@ -346,6 +347,7 @@ IWad
 	Compatibility = "Shorttex"
 	MustContain = "MAP01"
 	BannerColors = "a8 00 00", "a8 a8 a8"
+	Load = "nerve.wad"
 }
 	
 
