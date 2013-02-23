@@ -117,8 +117,18 @@ private:
 	NSAutoreleasePool* m_pool;
 	
 };
-	
-	
+
+
+const size_t ARGC_MAX = 64;
+
+int   s_argc;
+char* s_argv[ARGC_MAX];
+
+TArray< FString > s_argvStorage;
+
+bool s_restartedFromWADPicker;
+
+
 bool s_nativeMouse = true;
 	
 // TODO: remove this magic!
@@ -753,7 +763,11 @@ void ProcessMouseWheelEvent( NSEvent* theEvent )
 - (void)applicationDidBecomeActive:(NSNotification*)aNotification;
 - (void)applicationWillResignActive:(NSNotification*)aNotification;
 
+- (void)applicationDidFinishLaunching:(NSNotification*)aNotification;
+
 - (void)applicationWillTerminate:(NSNotification*)aNotification;
+
+- (BOOL)application:(NSApplication*)theApplication openFile:(NSString*)filename;
 
 - (int)multisample;
 - (void)setMultisample:(int)multisample;
@@ -832,6 +846,38 @@ static ApplicationDelegate* s_applicationDelegate;
 	GZ_UNUSED( aNotification );
 	
 	S_SetSoundPaused(0);
+}
+
+
+- (void)applicationDidFinishLaunching:(NSNotification*)aNotification
+{
+	// When starting from command line with real executable path, e.g. GZDoom.app/Contents/MacOS/GZDoom
+	// application remains deactivated for an unknown reason.
+	// The following call resolves this issue
+	[NSApp activateIgnoringOtherApps:YES];
+
+	exit( SDL_main(s_argc, s_argv) );
+}
+
+
+- (BOOL)application:(NSApplication*)theApplication openFile:(NSString*)filename
+{
+	GZ_UNUSED( theApplication );
+
+	if ( s_restartedFromWADPicker
+		|| 0 == [filename length]
+		|| s_argc + 2 >= ARGC_MAX )
+	{
+		return FALSE;
+	}
+
+	s_argvStorage.Push( "-file" );
+	s_argv[s_argc++] = s_argvStorage.Last().LockBuffer();
+
+	s_argvStorage.Push( [filename UTF8String] );
+	s_argv[s_argc++] = s_argvStorage.Last().LockBuffer();
+
+	return TRUE;
 }
 
 
@@ -1365,26 +1411,6 @@ uint32_t SDL_GetTicks()
 int SDL_Init( Uint32 flags )
 {
 	GZ_UNUSED( flags );
-	
-	if ( NULL == s_applicationDelegate )
-	{
-		StackAutoreleasePool pool;
-		
-		[NSApplication sharedApplication];
-		[NSBundle loadNibNamed:@"GZDoom" owner:NSApp];
-		
-		s_applicationDelegate = [ApplicationDelegate new];		
-		[NSApp setDelegate:s_applicationDelegate];
-		
-		[NSApp finishLaunching];
-		
-		// When starting from command line with real executable path, e.g. GZDoom.app/Contents/MacOS/GZDoom
-		// application remains deactivated for an unknown reason.
-		// The following call resolves this issue
-		[NSApp activateIgnoringOtherApps:YES];
-		
-		InitTimer();
-	}
 
 	return 0;
 }
@@ -1728,3 +1754,49 @@ int SDL_SetPalette( SDL_Surface* surface, int flags, SDL_Color* colors, int firs
 }
 	
 } // extern "C"
+
+#ifdef main
+#undef main
+#endif // main
+
+int main(int argc, char** argv)
+{
+#if 0
+	CFOptionFlags responseFlags;
+	CFUserNotificationDisplayAlert(0, 0, NULL, NULL, NULL, CFSTR("Attach"), NULL, NULL, NULL, NULL, &responseFlags);
+#endif
+
+	for (int i = 0; i <= argc; ++i)
+	{
+		const char* const argument = argv[i];
+
+		if ( NULL == argument || '\0' == argument[0] )
+		{
+			continue;
+		}
+
+		if ( 0 == strcmp(argument, "-wad_picker_restart") )
+		{
+			s_restartedFromWADPicker = true;
+		}
+		else
+		{
+			s_argvStorage.Push(argument);
+			s_argv[s_argc++] = s_argvStorage.Last().LockBuffer();
+		}
+	}
+
+	StackAutoreleasePool pool;
+
+	[NSApplication sharedApplication];
+	[NSBundle loadNibNamed:@"GZDoom" owner:NSApp];
+
+	s_applicationDelegate = [ApplicationDelegate new];
+	[NSApp setDelegate:s_applicationDelegate];
+
+	InitTimer();
+
+	[NSApp run];
+
+	return 0;
+}

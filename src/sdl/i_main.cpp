@@ -240,7 +240,6 @@ void I_StartupJoysticks();
 void I_ShutdownJoysticks();
 
 #ifdef  COCOA_NO_SDL
-#	undef  main
 #	define VERSION_STRING "Native Cocoa version"
 #else   // !COCOA_NO_SDL
 #	define VERSION_STRING "SDL version"

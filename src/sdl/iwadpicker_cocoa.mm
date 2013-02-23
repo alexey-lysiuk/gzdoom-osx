@@ -374,7 +374,8 @@ static void RestartWithParameters( const char* iwadPath, NSString* parameters )
 		
 		NSString* executablePath = [NSString stringWithUTF8String:Args->GetArg(0)];
 		
-		NSMutableArray* arguments = [NSMutableArray arrayWithCapacity:commandLineParametersCount + 2];
+		NSMutableArray* arguments = [NSMutableArray arrayWithCapacity:commandLineParametersCount + 3];
+		[arguments addObject:@"-wad_picker_restart"];
 		[arguments addObject:@"-iwad"];
 		[arguments addObject:[NSString stringWithUTF8String:iwadPath]];
 		
