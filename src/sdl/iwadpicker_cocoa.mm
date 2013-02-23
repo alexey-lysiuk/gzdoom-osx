@@ -125,6 +125,8 @@ static const char* const tableHeaders[NUM_COLUMNS] = { "IWAD", "Game" };
 									@"-file "    , @"wad",
 									@"-file "    , @"pk3",
 									@"-file "    , @"zip",
+									@"-file "    , @"pk7",
+									@"-file "    , @"7z",
 									@"-deh "     , @"deh",
 									@"-bex "     , @"bex",
 									@"-exec "    , @"cfg",
@@ -182,7 +184,7 @@ static const char* const tableHeaders[NUM_COLUMNS] = { "IWAD", "Game" };
 
 - (void)browseButtonPressed:(id) sender;
 {
-	NSArray* supportedExtensions = [NSArray arrayWithObjects:@"wad", @"pk3", @"zip", @"deh", @"bex", @"cfg", @"lmp", nil];
+	NSArray* supportedExtensions = [NSArray arrayWithObjects:@"wad", @"pk3", @"zip", @"pk7", @"7z", @"deh", @"bex", @"cfg", @"lmp", nil];
 
 	NSOpenPanel* openPanel = [NSOpenPanel openPanel];
 	[openPanel setAllowsMultipleSelection:YES];
