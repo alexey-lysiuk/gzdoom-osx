@@ -49,6 +49,8 @@
 #include "doomstat.h"
 #include "g_level.h"
 
+#include <time.h>
+
 
 #define HUMETA_AltIcon 0x10f000
 
@@ -870,7 +872,7 @@ static void DrawTime()
 	const bool showMillis  = 1 == hud_showtime;
 	const bool showSeconds = showMillis || (0 == hud_showtime % 2);
 
-	char timeString[sizeof "HH:MM:SS.MMM"] = {0};
+	char timeString[sizeof "HH:MM:SS.MMM"];
 
 	if (showMillis)
 	{
