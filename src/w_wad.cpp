@@ -850,8 +850,8 @@ void FWadCollection::RenameNerve ()
 		{
 			LumpInfo[i].lump->Name[6] = LumpInfo[i].lump->Name[4];
 			LumpInfo[i].lump->Name[5] = '0';
-			LumpInfo[i].lump->Name[4] = 'L';
-			LumpInfo[i].lump->dwName = MAKE_ID('L', 'E', 'V', 'E');
+			LumpInfo[i].lump->Name[4] = 'E';
+			LumpInfo[i].lump->dwName = MAKE_ID('N', 'E', 'R', 'V');
 		}
 	}
 }
