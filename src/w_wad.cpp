@@ -181,6 +181,7 @@ void FWadCollection::InitMultipleFiles (TArray<FString> &filenames)
 	{
 		I_FatalError ("W_InitMultipleFiles: no files found");
 	}
+	RenameMasterLevels();
 	RenameNerve();
 	RenameSprites();
 	FixMordethNamespace();
@@ -809,6 +810,53 @@ void FWadCollection::RenameSprites ()
 					LumpInfo[i].lump->dwName = MAKE_ID('B', 'L', 'U', 'D');
 				}
 			}
+		}
+	}
+}
+
+//==========================================================================
+//
+// RenameMasterLevels
+//
+// Renames map headers and map name pictures in nerve.wad so as to load it
+// alongside Doom II and offer both episodes without causing conflicts.
+//
+//==========================================================================
+void FWadCollection::RenameMasterLevels()
+{
+	if (GAME_Doom != gameinfo.gametype)
+	{
+		return;
+	}
+
+	static const BYTE MLWAD_CHECKSUM[16] = { 0x84, 0xcb, 0x86, 0x40, 0xf5, 0x99, 0xc4, 0xa1,
+		0x7c, 0x8e, 0xb5, 0x26, 0xf9, 0x0d, 0x2b, 0x7a };
+	static const long MLWAD_SIZE = 3479715;
+	
+	const int wadIndex = FindWadByChecksum(MLWAD_SIZE, MLWAD_CHECKSUM);
+
+	if (-1 == wadIndex)
+	{
+		return;
+	}
+
+	for (int i = GetFirstLump(wadIndex); i <= GetLastLump(wadIndex); i++)
+	{
+		assert(LumpInfo[i].wadnum == wadIndex);
+
+		FResourceLump* const lump = LumpInfo[i].lump;
+
+		if (lump->dwName == MAKE_ID('C', 'W', 'I', 'L'))
+		{
+			lump->Name[0] = 'M';
+		}
+		else if ( (lump->dwName & 0x00FFFFFF) == (MAKE_ID('M', 'A', 'P', '?') & 0x00FFFFFF) )
+		{
+			lump->Name[7] = lump->Name[4];
+			lump->Name[6] = lump->Name[3];
+			lump->Name[5] = 'R';
+			lump->Name[4] = 'E';
+			lump->dwName = MAKE_ID('M', 'A', 'S', 'T');
 		}
 	}
 }

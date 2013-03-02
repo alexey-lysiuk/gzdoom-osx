@@ -2,10 +2,18 @@
 include "mapinfo/doomcommon.txt"
 
 clearepisodes
+
 episode map01
 {
 	name = "Hell On Earth"
 	key = "h"
+}
+
+episode "master01"
+{
+	name = "Master Levels"
+	key = "M"
+	optional
 }
 
 episode nerve01
@@ -431,6 +439,207 @@ cluster 10
 	entertext = lookup, "C6TEXT"
 }
 
+// Master Levels for Doom II
+
+map "MASTER01" lookup "HUSTR_MASTER01"
+{
+	next = "MASTER02"
+	secretnext = "MASTER02"
+	sky1 = "SKY1", 0
+	cluster = 12
+	music = "D_RUNNIN"
+}
+
+map "MASTER02" lookup "HUSTR_MASTER02"
+{
+	next = "MASTER03"
+	secretnext = "MASTER03"
+	sky1 = "SKY1", 0
+	cluster = 12
+	music = "D_STALKS"
+}
+
+map "MASTER03" lookup "HUSTR_MASTER03"
+{
+	next = "MASTER04"
+	secretnext = "MASTER04"
+	sky1 = "SKY1", 0
+	cluster = 12
+	music = "D_COUNTD"
+}
+
+map "MASTER04" lookup "HUSTR_MASTER04"
+{
+	next = "MASTER05"
+	secretnext = "MASTER05"
+	sky1 = "SKY1", 0
+	cluster = 12
+	music = "D_BETWEE"
+}
+
+map "MASTER05" lookup "HUSTR_MASTER05"
+{
+	next = "MASTER06"
+	secretnext = "MASTER06"
+	sky1 = "SKY1", 0
+	cluster = 12
+	music = "D_DOOM"
+}
+
+map "MASTER06" lookup "HUSTR_MASTER06"
+{
+	next = "MASTER07"
+	secretnext = "MASTER07"
+	sky1 = "SKY1", 0
+	cluster = 12
+	music = "D_THE_DA"
+}
+
+map "MASTER07" lookup "HUSTR_MASTER07"
+{
+	next = "MASTER08"
+	secretnext = "MASTER08"
+	sky1 = "SKY1", 0
+	cluster = 12
+	music = "D_SHAWN"
+}
+
+map "MASTER08" lookup "HUSTR_MASTER08"
+{
+	next = "MASTER09"
+	secretnext = "MASTER09"
+	sky1 = "SKY1", 0
+	cluster = 12
+	music = "D_DDTBLU"
+}
+
+map "MASTER09" lookup "HUSTR_MASTER09"
+{
+	next = "MASTER10"
+	secretnext = "MASTER10"
+	sky1 = "SKY1", 0
+	cluster = 12
+	music = "D_IN_CIT"
+}
+
+map "MASTER10" lookup "HUSTR_MASTER10"
+{
+	next = "MASTER11"
+	secretnext = "MASTER11"
+	sky1 = "SKY1", 0
+	cluster = 12
+	music = "D_DEAD"
+}
+
+map "MASTER11" lookup "HUSTR_MASTER11"
+{
+	next = "MASTER12"
+	secretnext = "MASTER12"
+	sky1 = "SKY1", 0
+	cluster = 12
+	music = "D_STLKS2"
+}
+
+map "MASTER12" lookup "HUSTR_MASTER12"
+{
+	next = "MASTER13"
+	secretnext = "MASTER13"
+	sky1 = "SKY2", 0
+	cluster = 12
+	music = "D_THEDA2"
+}
+
+map "MASTER13" lookup "HUSTR_MASTER13"
+{
+	next = "MASTER14"
+	secretnext = "MASTER14"
+	sky1 = "SKY2", 0
+	cluster = 12
+	music = "D_DOOM2"
+}
+
+map "MASTER14" lookup "HUSTR_MASTER14"
+{
+	next = "MASTER15"
+	secretnext = "MASTER15"
+	sky1 = "SKY2", 0
+	cluster = 12
+	map07special
+	music = "D_DDTBL2"
+}
+
+map "MASTER15" lookup "HUSTR_MASTER15"
+{
+	next = "MASTER16"
+	secretnext = "MASTER16"
+	sky1 = "SKY2", 0
+	cluster = 12
+	map07special
+	music = "D_RUNNI2"
+}
+
+map "MASTER16" lookup "HUSTR_MASTER16"
+{
+	next = "MASTER17"
+	secretnext = "MASTER17"
+	sky1 = "SKY2", 0
+	cluster = 12
+	map07special
+	music = "D_DEAD2"
+}
+
+map "MASTER17" lookup "HUSTR_MASTER17"
+{
+	next = "MASTER18"
+	secretnext = "MASTER18"
+	sky1 = "SKY2", 0
+	cluster = 12
+	music = "D_STLKS3"
+}
+
+map "MASTER18" lookup "HUSTR_MASTER18"
+{
+	next = "MASTER19"
+	secretnext = "MASTER19"
+	sky1 = "SKY2", 0
+	cluster = 12
+	music = "D_ROMERO"
+}
+
+map "MASTER19" lookup "HUSTR_MASTER19"
+{
+	next = "MASTER20"
+	secretnext = "MASTER20"
+	sky1 = "SKY2", 0
+	cluster = 12
+	music = "D_SHAWN2"
+}
+
+map "MASTER20" lookup "HUSTR_MASTER20"
+{
+	next = "MASTER21"
+	secretnext = "MASTER21"
+	sky1 = "SKY2", 0
+	cluster = 12
+	music = "D_MESSAG"
+}
+
+map "MASTER21" lookup "HUSTR_MASTER21"
+{
+	next = "EndGameC"
+	secretnext = "EndGameC"
+	sky1 = "SKY3", 0
+	cluster = 12
+	music = "D_COUNT2"
+}
+
+cluster 12
+{
+	flat = "SLIME16"
+	music = "$MUSIC_READ_M"
+	exittext = lookup, "MASTERLEVELS_TEXT"
+}
+
 // No Rest for the Living
 
 map NERVE01 lookup "NHUSTR_1"
@@ -536,7 +745,7 @@ map NERVE09 lookup "NHUSTR_9"
 
 cluster 11
 {
-	flat = "RROCK19"
+	flat = "SLIME16"
 	music = "$MUSIC_READ_M"
 	exittext = lookup, "NERVETEXT"
 }

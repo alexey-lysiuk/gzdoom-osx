@@ -194,6 +194,32 @@ HUSTR_31B = "level 31: idkfa";
 HUSTR_32B = "level 32: keen";
 HUSTR_33 = "level 33: betray";
 
+HUSTR_MASTER01 = "Attack";
+HUSTR_MASTER02 = "Canyon";
+HUSTR_MASTER03 = "The Catwalk";
+HUSTR_MASTER04 = "The Combine";
+HUSTR_MASTER05 = "The Fistula";
+HUSTR_MASTER06 = "The Garrison";
+HUSTR_MASTER07 = "Titan Manor";
+HUSTR_MASTER08 = "Paradox";
+HUSTR_MASTER09 = "Subspace";
+HUSTR_MASTER10 = "Subterra";
+HUSTR_MASTER11 = "Trapped on Titan";
+HUSTR_MASTER12 = "Virgil's Lead";
+HUSTR_MASTER13 = "Minos' Judgement";
+HUSTR_MASTER14 = "Bloodsea Keep";
+HUSTR_MASTER15 = "Mephisto's Maosoleum";
+HUSTR_MASTER16 = "Nessus";
+HUSTR_MASTER17 = "Geryon";
+HUSTR_MASTER18 = "Vesperas";
+HUSTR_MASTER19 = "Black Tower";
+HUSTR_MASTER20 = "Express Elevator (to Hell)";
+HUSTR_MASTER21 = "Bad Dream";
+
+MASTERLEVELS_TEXT =
+	"CONGRATULATIONS YOU HAVE FINISHED... \n\n"
+	"THE MASTER LEVELS\n";
+
 NHUSTR_1 = "the earth base";
 NHUSTR_2 = "the pain labs";
 NHUSTR_3 = "canyon of the dead";

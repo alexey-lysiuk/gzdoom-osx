@@ -228,6 +228,7 @@ protected:
 
 private:
 	void RenameSprites();
+	void RenameMasterLevels();
 	void RenameNerve();
 	void FixMordethNamespace();
 	int FindWadByChecksum(const long filesize, const BYTE checksum[16]);
