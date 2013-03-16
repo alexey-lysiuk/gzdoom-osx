@@ -118,9 +118,6 @@ FDirectory::FDirectory(const char * directory)
 	dirname = directory;
 	dirname.ReplaceChars('\\', '/');
 	if (dirname[dirname.Len()-1] != '/') dirname += '/';
-	#ifdef _WIN32
-		free((void*)directory);
-	#endif // _WIN32
 	Filename = copystring(dirname);
 }
 
@@ -338,7 +335,6 @@ FileReader *FDirectoryLump::NewReader()
 	{
 		FString fullpath = Owner->Filename;
 		fullpath += FullName;
-		printf("%s\n", fullpath.GetChars());
 		return new FileReader(fullpath);
 	}
 	catch (CRecoverableError &)
