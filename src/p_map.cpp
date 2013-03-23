@@ -1075,19 +1075,18 @@ bool PIT_CheckThing (AActor *thing, FCheckPosition &tm)
 					//     friendliness and hate status.
 					if (tm.thing->target->flags & MF_SHOOTABLE)
 					{
-						if (!(thing->flags3 & MF3_ISMONSTER))
+						// Question: Should monsters be allowed to shoot barrels in this mode?
+						// The old code does not.
+						if (thing->flags3 & MF3_ISMONSTER)
 						{
-							return false;	// Question: Should monsters be allowed to shoot barrels in this mode?
-											// The old code does not.
-						}
-
-						// Monsters that are clearly hostile can always hurt each other
-						if (!thing->IsHostile (tm.thing->target))
-						{
-							// The same if the shooter hates the target
-							if (thing->tid == 0 || tm.thing->target->TIDtoHate != thing->tid)
+							// Monsters that are clearly hostile can always hurt each other
+							if (!thing->IsHostile (tm.thing->target))
 							{
-								return false;
+								// The same if the shooter hates the target
+								if (thing->tid == 0 || tm.thing->target->TIDtoHate != thing->tid)
+								{
+									return false;
+								}
 							}
 						}
 					}
@@ -3942,7 +3941,7 @@ static bool ProcessNoPierceRailHit (FTraceResults &res)
 //
 //
 //==========================================================================
-void P_RailAttack (AActor *source, int damage, int offset, int color1, int color2, float maxdiff, int railflags, const PClass *puffclass, angle_t angleoffset, angle_t pitchoffset, fixed_t distance, int duration, float sparsity, float drift, const PClass *spawnclass)
+void P_RailAttack (AActor *source, int damage, int offset_xy, fixed_t offset_z, int color1, int color2, float maxdiff, int railflags, const PClass *puffclass, angle_t angleoffset, angle_t pitchoffset, fixed_t distance, int duration, float sparsity, float drift, const PClass *spawnclass)
 {
 	fixed_t vx, vy, vz;
 	angle_t angle, pitch;
@@ -3963,7 +3962,7 @@ void P_RailAttack (AActor *source, int damage, int offset, int color1, int color
 	x1 = source->x;
 	y1 = source->y;
 
-	shootz = source->z - source->floorclip + (source->height >> 1);
+	shootz = source->z - source->floorclip + (source->height >> 1) + offset_z;
 
 	if (!(railflags & RAF_CENTERZ))
 	{
@@ -3978,8 +3977,8 @@ void P_RailAttack (AActor *source, int damage, int offset, int color1, int color
 	}
 
 	angle = ((source->angle + angleoffset) - ANG90) >> ANGLETOFINESHIFT;
-	x1 += offset*finecosine[angle];
-	y1 += offset*finesine[angle];
+	x1 += offset_xy * finecosine[angle];
+	y1 += offset_xy * finesine[angle];
 
 	RailHits.Clear ();
 	start.X = FIXED2FLOAT(x1);
@@ -4478,7 +4477,7 @@ void P_RadiusAttack (AActor *bombspot, AActor *bombsource, int bombdamage, int b
 	AActor *thing;
 
 	if (flags & RADF_SOURCEISSPOT)
-	{ // The source is actually the same as the spot, even if that wasn't what we receized.
+	{ // The source is actually the same as the spot, even if that wasn't what we received.
 		bombsource = bombspot;
 	}
 
@@ -4567,11 +4566,12 @@ void P_RadiusAttack (AActor *bombspot, AActor *bombsource, int bombdamage, int b
 			}
 			points *= thing->GetClass()->Meta.GetMetaFixed(AMETA_RDFactor, FRACUNIT)/(double)FRACUNIT;
 
-			if (points > 0.f && P_CheckSight (thing, bombspot, SF_IGNOREVISIBILITY|SF_IGNOREWATERBOUNDARY))
+			// points and bombdamage should be the same sign
+			if ((points * bombdamage) > 0 && P_CheckSight (thing, bombspot, SF_IGNOREVISIBILITY|SF_IGNOREWATERBOUNDARY))
 			{ // OK to damage; target is in direct path
 				double velz;
 				double thrust;
-				int damage = (int)points;
+				int damage = abs((int)points);
 				int newdam = damage;
 
 				if (!(flags & RADF_NODAMAGE))
