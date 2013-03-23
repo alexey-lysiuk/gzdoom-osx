@@ -119,7 +119,6 @@
 		8A942A3E1553CC25005083CD /* v_blend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A942A3D1553CC25005083CD /* v_blend.cpp */; };
 		8A942A3F1553CC25005083CD /* v_blend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A942A3D1553CC25005083CD /* v_blend.cpp */; };
 		8A9633AA14F90431000E4D55 /* sdlvideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3F139126C00095D9A0 /* sdlvideo.cpp */; };
-		8A9F530014BB0F2900F3369B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8A9F530114BB0F2900F3369B /* doom.icns in Resources */ = {isa = PBXBuildFile; fileRef = 49E9287713978BF600CCEBBC /* doom.icns */; };
 		8A9F530214BB0F2900F3369B /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = 8AD870F1140A4EC5007A06A9 /* Credits.html */; };
 		8A9F530414BB0F2900F3369B /* autostart.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D0C139126C00095D9A0 /* autostart.cpp */; };
@@ -1050,7 +1049,6 @@
 		8AF281F2139126C10095D9A0 /* zstrformat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF28007139126C00095D9A0 /* zstrformat.cpp */; };
 		8AF281F3139126C10095D9A0 /* zstring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF28008139126C00095D9A0 /* zstring.cpp */; };
 		8AF62EBE142F25D0003F3556 /* libSDL_gzdoom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF62EB3142F259E003F3556 /* libSDL_gzdoom.a */; };
-		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
@@ -1275,7 +1273,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		497C93DF13C5A6F800E6B4A8 /* colormaps.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = colormaps.cpp; sourceTree = "<group>"; };
 		497C93E013C5A6F800E6B4A8 /* colormaps.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = colormaps.h; sourceTree = "<group>"; };
@@ -2544,7 +2541,6 @@
 				8AD870F1140A4EC5007A06A9 /* Credits.html */,
 				49E9287713978BF600CCEBBC /* doom.icns */,
 				8D1107310486CEB800E47090 /* GZDoom-Info.plist */,
-				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				8A3AC15A14BE294E000D402B /* GZDoom.xib */,
 			);
 			name = Resources;
@@ -4428,7 +4424,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8A9F530014BB0F2900F3369B /* InfoPlist.strings in Resources */,
 				8A9F530114BB0F2900F3369B /* doom.icns in Resources */,
 				8A9F530214BB0F2900F3369B /* Credits.html in Resources */,
 				8A3AC15B14BE294E000D402B /* GZDoom.xib in Resources */,
@@ -4439,7 +4434,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				49E9287913978BF600CCEBBC /* doom.icns in Resources */,
 				8AD870F3140A4EC5007A06A9 /* Credits.html in Resources */,
 			);
@@ -5695,17 +5689,6 @@
 			targetProxy = 8AF27A391390F4450095D9A0 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				089C165DFE840E0CC02AAC07 /* English */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		49E91DDF1393BF3900CCEBBC /* Debug */ = {
