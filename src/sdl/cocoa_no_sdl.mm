@@ -51,9 +51,10 @@
 
 #include <SDL.h>
 
-#include "gccinlines.h"
+#include "b_bot.h"
 #include "bitmap.h"
 #include "c_console.h"
+#include "cmdlib.h"
 #include "d_event.h"
 #include "d_gui.h"
 #include "dikeys.h"
@@ -1181,6 +1182,46 @@ bool I_SetCursor( FTexture* cursorpic )
 	[s_applicationDelegate invalidateCursorRects];
 	
 	return true;
+}
+
+
+// ---------------------------------------------------------------------------
+
+
+static FString MakeBotsConfigPath()
+{
+	NSArray* directories = [[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory
+																  inDomains:NSUserDomainMask];
+	const char* path = NULL;
+
+	if ([directories count] > 0)
+	{
+		path = [[[directories objectAtIndex:0] path] UTF8String];
+	}
+
+	if (NULL == path)
+	{
+		// There was a problem obtaining path so use hard-coded one
+		path = "~/Library/Application Support";
+	}
+
+	return FString(path) + "/" GAMENAME "/" BOTFILENAME;
+}
+
+FString GetBotsConfigPath()
+{
+	FString result = MakeBotsConfigPath();
+
+	if (!FileExists(result))
+	{
+		NSString* source = [[NSBundle mainBundle] pathForAuxiliaryExecutable:@BOTFILENAME];
+		
+		[[NSFileManager defaultManager] copyItemAtPath:source
+												toPath:[NSString stringWithUTF8String:result]
+												 error:nil];
+	}
+
+	return result;
 }
 
 
