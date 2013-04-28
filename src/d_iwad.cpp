@@ -523,7 +523,7 @@ int FIWadManager::IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, 
 
 	pickwad = 0;
 
-	if (!iwadparmfound && numwads > 1)
+	if ((!iwadparmfound && numwads > 1) || I_ForcePickIWAD())
 	{
 		int defiwad = 0;
 

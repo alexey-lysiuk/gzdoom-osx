@@ -39,8 +39,8 @@
 #endif
 
 #ifdef __APPLE__
-#include <CoreFoundation/CoreFoundation.h>
 #include <ApplicationServices/ApplicationServices.h>
+#include <CoreGraphics/CoreGraphics.h>
 #include <mach/mach_init.h>
 #include <mach/semaphore.h>
 #include <mach/task.h>
@@ -1056,6 +1056,16 @@ bool I_SetCursor(FTexture *cursorpic)
 
 #ifdef __APPLE__
 
+bool I_ForcePickIWAD()
+{
+	const CGEventFlags modifiers  = CGEventSourceFlagsState(kCGEventSourceStateCombinedSessionState);
+
+	return modifiers & kCGEventFlagMaskShift
+		|| modifiers & kCGEventFlagMaskControl
+		|| modifiers & kCGEventFlagMaskCommand;
+}
+
+
 void I_EnableApplicationEvents( bool on )
 {
 	static const char* const ENABLE_APP_EVENTS = "SDL_ENABLEAPPEVENTS";
@@ -1068,6 +1078,13 @@ void I_EnableApplicationEvents( bool on )
 	{
 		unsetenv( ENABLE_APP_EVENTS );
 	}
+}
+
+#else // !__APPLE__
+
+bool I_ForcePickIWAD()
+{
+	return false;
 }
 
 #endif // __APPLE__

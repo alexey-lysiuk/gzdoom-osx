@@ -1569,3 +1569,8 @@ unsigned int I_MakeRNGSeed()
 	CryptReleaseContext(prov, 0);
 	return seed;
 }
+
+bool I_ForcePickIWAD()
+{
+	return false;
+}
