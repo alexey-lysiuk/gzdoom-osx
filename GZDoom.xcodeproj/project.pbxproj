@@ -119,6 +119,8 @@
 		8A942A3E1553CC25005083CD /* v_blend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A942A3D1553CC25005083CD /* v_blend.cpp */; };
 		8A942A3F1553CC25005083CD /* v_blend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A942A3D1553CC25005083CD /* v_blend.cpp */; };
 		8A9633AA14F90431000E4D55 /* sdlvideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27F3F139126C00095D9A0 /* sdlvideo.cpp */; };
+		8A9906B0172D349500B2B92B /* i_system_cocoa.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A9906AF172D349500B2B92B /* i_system_cocoa.mm */; };
+		8A9906B1172D349500B2B92B /* i_system_cocoa.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A9906AF172D349500B2B92B /* i_system_cocoa.mm */; };
 		8A9F530114BB0F2900F3369B /* doom.icns in Resources */ = {isa = PBXBuildFile; fileRef = 49E9287713978BF600CCEBBC /* doom.icns */; };
 		8A9F530214BB0F2900F3369B /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = 8AD870F1140A4EC5007A06A9 /* Credits.html */; };
 		8A9F530414BB0F2900F3369B /* autostart.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF27D0C139126C00095D9A0 /* autostart.cpp */; };
@@ -1339,6 +1341,7 @@
 		8A938D0F13B6039F002627DE /* actorptrselect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = actorptrselect.cpp; sourceTree = "<group>"; };
 		8A938D1013B6039F002627DE /* actorptrselect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = actorptrselect.h; sourceTree = "<group>"; };
 		8A942A3D1553CC25005083CD /* v_blend.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = v_blend.cpp; sourceTree = "<group>"; };
+		8A9906AF172D349500B2B92B /* i_system_cocoa.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = i_system_cocoa.mm; sourceTree = "<group>"; };
 		8A9F548414BB0F2900F3369B /* GZDoom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GZDoom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AA9A1921660E80A007F75A4 /* opl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = opl.cpp; sourceTree = "<group>"; };
 		8AA9A1931660E80A007F75A4 /* opl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = opl.h; sourceTree = "<group>"; };
@@ -3932,6 +3935,7 @@
 				8AF27F37139126C00095D9A0 /* i_movie.cpp */,
 				8AF27F38139126C00095D9A0 /* i_system.cpp */,
 				8AF27F39139126C00095D9A0 /* i_system.h */,
+				8A9906AF172D349500B2B92B /* i_system_cocoa.mm */,
 				8AF27F3A139126C00095D9A0 /* i_video.h */,
 				8A422138150A0578001D28A0 /* iokit_joystick.cpp */,
 				8AF27F3B139126C00095D9A0 /* iwadpicker_cocoa.mm */,
@@ -4913,6 +4917,7 @@
 				49A94D1614F4FCC8008312F3 /* gl_auxilium.cpp in Sources */,
 				8A422139150A0578001D28A0 /* iokit_joystick.cpp in Sources */,
 				8A7FF48014BB2B220069731E /* cocoa_no_sdl.mm in Sources */,
+				8A9906B0172D349500B2B92B /* i_system_cocoa.mm in Sources */,
 				8A9F546E14BB0F2900F3369B /* iwadpicker_cocoa.mm in Sources */,
 				8A9F547014BB0F2900F3369B /* autozend.cpp in Sources */,
 			);
@@ -5549,6 +5554,7 @@
 				8A7D86E815370D98002D03BD /* hq3x.cpp in Sources */,
 				8A7D86E915370D98002D03BD /* hq4x.cpp in Sources */,
 				8A7D86EA15370D98002D03BD /* Image.cpp in Sources */,
+				8A9906B1172D349500B2B92B /* i_system_cocoa.mm in Sources */,
 				8AF28175139126C10095D9A0 /* iwadpicker_cocoa.mm in Sources */,
 				8A7C81C613BF3C0B000B654E /* SDLMain.m in Sources */,
 				8AF28013139126C00095D9A0 /* autozend.cpp in Sources */,
