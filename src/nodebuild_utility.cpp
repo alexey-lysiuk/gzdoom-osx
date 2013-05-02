@@ -69,7 +69,11 @@ static const int PO_LINE_EXPLICIT = 5;
 angle_t FNodeBuilder::PointToAngle (fixed_t x, fixed_t y)
 {
 	const double rad2bam = double(1<<30) / M_PI;
+#if defined __APPLE__ && !defined __llvm__ 
+	long double ang = atan2l (double(y), double(x));
+#else // !__APPLE__ || __llvm__
 	double ang = atan2 (double(y), double(x));
+#endif // __APPLE__ && !__llvm__
 	return angle_t(ang * rad2bam) << 1;
 }
 
