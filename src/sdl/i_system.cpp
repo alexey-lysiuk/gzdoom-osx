@@ -40,7 +40,9 @@
 
 #ifdef __APPLE__
 #include <ApplicationServices/ApplicationServices.h>
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1080
 #include <CoreGraphics/CoreGraphics.h>
+#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= 1080
 #include <mach/mach_init.h>
 #include <mach/semaphore.h>
 #include <mach/task.h>
