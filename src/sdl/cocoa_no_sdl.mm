@@ -1247,13 +1247,13 @@ timespec GetNextTickTime()
 	timeval tv;
 	gettimeofday( &tv, NULL );
 	
-	static const long MILISECONDS_IN_SECOND  = 1000;
-	static const long MICROSECONDS_IN_SECOND = 1000 * MILISECONDS_IN_SECOND;
+	static const long MILLISECONDS_IN_SECOND = 1000;
+	static const long MICROSECONDS_IN_SECOND = 1000 * MILLISECONDS_IN_SECOND;
 	static const long NANOSECONDS_IN_SECOND  = 1000 * MICROSECONDS_IN_SECOND;
 	
 	timespec ts;
 	ts.tv_sec = tv.tv_sec;
-	ts.tv_nsec = ( tv.tv_usec + MICROSECONDS_IN_SECOND / TICRATE ) * MILISECONDS_IN_SECOND;
+	ts.tv_nsec = ( tv.tv_usec + MICROSECONDS_IN_SECOND / TICRATE ) * MILLISECONDS_IN_SECOND;
 	
 	if ( ts.tv_nsec >= NANOSECONDS_IN_SECOND )
 	{
