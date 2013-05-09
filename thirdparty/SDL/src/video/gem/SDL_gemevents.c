@@ -47,11 +47,16 @@
 static unsigned char gem_currentkeyboard[ATARIBIOS_MAXKEYS];
 static unsigned char gem_previouskeyboard[ATARIBIOS_MAXKEYS];
 
+static short prevmx=0,prevmy=0,prevmb=0;
+
 /* Functions prototypes */
 
 static int do_messages(_THIS, short *message);
-static void do_keyboard(short kc, short ks);
-static void do_mouse(_THIS, short mx, short my, short mb, short ks);
+static void do_keyboard(short kc);
+static void do_keyboard_special(short ks);
+static void do_mouse_motion(_THIS, short mx, short my);
+static void do_mouse_buttons(_THIS, short mb);
+static int mouse_in_work_area(int winhandle, short mx, short my);
 
 /* Functions */
 
@@ -68,42 +73,27 @@ void GEM_InitOSKeymap(_THIS)
 
 void GEM_PumpEvents(_THIS)
 {
-	short prevkc, prevks;
-	static short maskmouseb=0;
+	short prevkc=0, mousex, mousey, mouseb, kstate;
 	int i;
-	SDL_keysym	keysym;
+	SDL_keysym keysym;
 
 	SDL_memset(gem_currentkeyboard,0,sizeof(gem_currentkeyboard));
-	prevkc = prevks = 0;
 
 	for (;;)
 	{
-		int quit, resultat, event_mask, mouse_event;
-		short buffer[8], kc;
-		short x2,y2,w2,h2;
-		short mousex, mousey, mouseb, dummy;
-		short kstate;
+		int quit, resultat;
+		short buffer[8], kc, dummy;
 
-		quit =
-			mouse_event =
-			x2=y2=w2=h2 = 0;
-
-		event_mask = MU_MESAG|MU_TIMER|MU_KEYBD|MU_BUTTON;
-		if (!GEM_fullscreen && (GEM_handle>=0)) {
-			wind_get (GEM_handle, WF_WORKXYWH, &x2, &y2, &w2, &h2);
-			event_mask |= MU_M1;
-			mouse_event = ( (SDL_GetAppState() & SDL_APPMOUSEFOCUS)
-				== SDL_APPMOUSEFOCUS) ? MO_LEAVE : MO_ENTER;
-		}
+		quit = 0;
 
 		resultat = evnt_multi(
-			event_mask,
-			0x101,7,maskmouseb,
-			mouse_event,x2,y2,w2,h2,
+			MU_MESAG|MU_TIMER|MU_KEYBD,
+			0,0,0,
+			0,0,0,0,0,
 			0,0,0,0,0,
 			buffer,
 			10,
-			&mousex,&mousey,&mouseb,&kstate,&kc,&dummy
+			&dummy,&dummy,&dummy,&kstate,&kc,&dummy
 		);
 
 		/* Message event ? */
@@ -112,34 +102,26 @@ void GEM_PumpEvents(_THIS)
 
 		/* Keyboard event ? */
 		if (resultat & MU_KEYBD) {
-			if ((prevkc != kc) || (prevks != kstate)) {
-				do_keyboard(kc,kstate);
+			do_keyboard_special(kstate);
+			if (prevkc != kc) {
+				do_keyboard(kc);
+				prevkc = kc;
 			} else {
 				/* Avoid looping, if repeating same key */
-				break;
+				quit = 1;
 			}
-		}
-
-		/* Mouse entering/leaving window */
-		if (resultat & MU_M1) {
-			if (this->input_grab == SDL_GRAB_OFF) {
-				/* Switch mouse focus state */
-				SDL_PrivateAppActive((mouse_event == MO_ENTER),
-					SDL_APPMOUSEFOCUS);
-			}
-			GEM_CheckMouseMode(this);
-		}
-
-		/* Mouse button event ? */
-		if (resultat & MU_BUTTON) {
-			do_mouse(this, mousex, mousey, mouseb, kstate);
-			maskmouseb = mouseb & 7;
 		}
 
 		/* Timer event ? */
 		if ((resultat & MU_TIMER) || quit)
 			break;
 	}
+
+	/* Update mouse state */
+	graf_mkstate(&mousex, &mousey, &mouseb, &kstate);
+	do_keyboard_special(kstate);
+	do_mouse_motion(this, mousex, mousey);
+	do_mouse_buttons(this, mouseb);
 
 	/* Now generate keyboard events */
 	for (i=0; i<ATARIBIOS_MAXKEYS; i++) {
@@ -275,7 +257,7 @@ static int do_messages(_THIS, short *message)
 	return quit;
 }
 
-static void do_keyboard(short kc, short ks)
+static void do_keyboard(short kc)
 {
 	int scancode;
 
@@ -283,7 +265,10 @@ static void do_keyboard(short kc, short ks)
 		scancode=(kc>>8) & (ATARIBIOS_MAXKEYS-1);
 		gem_currentkeyboard[scancode]=0xFF;
 	}
+}
 
+static void do_keyboard_special(short ks)
+{
 	/* Read special keys */
 	if (ks & K_RSHIFT)
 		gem_currentkeyboard[SCANCODE_RIGHTSHIFT]=0xFF;
@@ -295,13 +280,32 @@ static void do_keyboard(short kc, short ks)
 		gem_currentkeyboard[SCANCODE_LEFTALT]=0xFF;
 }
 
-static void do_mouse(_THIS, short mx, short my, short mb, short ks)
+static void do_mouse_motion(_THIS, short mx, short my)
 {
-	static short prevmousex=0, prevmousey=0, prevmouseb=0;
 	short x2, y2, w2, h2;
+
+	if (this->input_grab == SDL_GRAB_OFF) {
+		/* Switch mouse focus state */
+		if (!GEM_fullscreen && (GEM_handle>=0)) {
+			SDL_PrivateAppActive(
+				mouse_in_work_area(GEM_handle, mx,my),
+				SDL_APPMOUSEFOCUS);
+		}
+	}
+	GEM_CheckMouseMode(this);
 
 	/* Don't return mouse events if out of window */
 	if ((SDL_GetAppState() & SDL_APPMOUSEFOCUS)==0) {
+		return;
+	}
+
+	/* Relative mouse motion ? */
+	if (GEM_mouse_relative) {
+		if (GEM_usedevmouse) {
+			SDL_AtariDevMouse_PostMouseEvents(this, SDL_FALSE);
+		} else {
+			SDL_AtariXbios_PostMouseEvents(this, SDL_FALSE);
+		}
 		return;
 	}
 
@@ -311,65 +315,73 @@ static void do_mouse(_THIS, short mx, short my, short mb, short ks)
 	h2 = VDI_h;
 	if ((!GEM_fullscreen) && (GEM_handle>=0)) {
 		wind_get (GEM_handle, WF_WORKXYWH, &x2, &y2, &w2, &h2);
-
-		/* Do not generate mouse button event if out of window working area */
-		if ((mx<x2) || (mx>=x2+w2) || (my<y2) || (my>=y2+h2)) {
-			mb=prevmouseb;
-		}
 	}
 
-	/* Mouse motion ? */
-	if (GEM_mouse_relative) {
-		if (GEM_usedevmouse) {
-			SDL_AtariDevMouse_PostMouseEvents(this, SDL_FALSE);
-		} else {
-			SDL_AtariXbios_PostMouseEvents(this, SDL_FALSE);
-		}
-	} else {
-		if ((prevmousex!=mx) || (prevmousey!=my)) {
-			int posx, posy;
+	if ((prevmx!=mx) || (prevmy!=my)) {
+		int posx, posy;
 
-			/* Give mouse position relative to window position */
-			posx = mx - x2;
-			if (posx<0) posx = 0;
-			if (posx>w2) posx = w2-1;
-			posy = my - y2;
-			if (posy<0) posy = 0;
-			if (posy>h2) posy = h2-1;
+		/* Give mouse position relative to window position */
+		posx = mx - x2;
+		if (posx<0) posx = 0;
+		if (posx>w2) posx = w2-1;
+		posy = my - y2;
+		if (posy<0) posy = 0;
+		if (posy>h2) posy = h2-1;
 
-			SDL_PrivateMouseMotion(0, 0, posx, posy);
-		}
-		prevmousex = mx;
-		prevmousey = my;
+		SDL_PrivateMouseMotion(0, 0, posx, posy);
 	}
 
-	/* Mouse button ? */
-	if (prevmouseb!=mb) {
-		int i;
+	prevmx = mx;
+	prevmy = my;
+}
 
-		for (i=0;i<3;i++) {
-			int curbutton, prevbutton;
+static void do_mouse_buttons(_THIS, short mb)
+{
+	int i;
+
+	/* Don't return mouse events if out of window */
+	if ((SDL_GetAppState() & SDL_APPMOUSEFOCUS)==0)
+		return;
+
+	if (prevmb==mb)
+		return;
+
+	for (i=0;i<3;i++) {
+		int curbutton, prevbutton;
 		
-			curbutton = mb & (1<<i);
-			prevbutton = prevmouseb & (1<<i);
-		
-			if (curbutton && !prevbutton) {
-				SDL_PrivateMouseButton(SDL_PRESSED, i+1, 0, 0);
-			}
-			if (!curbutton && prevbutton) {
-				SDL_PrivateMouseButton(SDL_RELEASED, i+1, 0, 0);
-			}
+		curbutton = mb & (1<<i);
+		prevbutton = prevmb & (1<<i);
+	
+		if (curbutton && !prevbutton) {
+			SDL_PrivateMouseButton(SDL_PRESSED, i+1, 0, 0);
 		}
-		prevmouseb = mb;
+		if (!curbutton && prevbutton) {
+			SDL_PrivateMouseButton(SDL_RELEASED, i+1, 0, 0);
+		}
 	}
 
-	/* Read special keys */
-	if (ks & K_RSHIFT)
-		gem_currentkeyboard[SCANCODE_RIGHTSHIFT]=0xFF;
-	if (ks & K_LSHIFT)
-		gem_currentkeyboard[SCANCODE_LEFTSHIFT]=0xFF;
-	if (ks & K_CTRL)
-		gem_currentkeyboard[SCANCODE_LEFTCONTROL]=0xFF;
-	if (ks & K_ALT)
-		gem_currentkeyboard[SCANCODE_LEFTALT]=0xFF;
+	prevmb = mb;
+}
+
+/* Check if mouse in visible area of the window */
+static int mouse_in_work_area(int winhandle, short mx, short my)
+{
+	short todo[4];
+	short inside[4] = {mx,my,1,1};
+
+	/* Browse the rectangle list */
+	if (wind_get(winhandle, WF_FIRSTXYWH, &todo[0], &todo[1], &todo[2], &todo[3])!=0) {
+		while (todo[2] && todo[3]) {
+			if (rc_intersect((GRECT *)inside,(GRECT *)todo)) {
+				return 1;
+			}
+
+			if (wind_get(winhandle, WF_NEXTXYWH, &todo[0], &todo[1], &todo[2], &todo[3])==0) {
+				break;
+			}
+		}
+
+	}
+
+	return 0;
 }

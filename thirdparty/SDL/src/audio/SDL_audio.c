@@ -42,6 +42,9 @@ static AudioBootStrap *bootstrap[] = {
 #if SDL_AUDIO_DRIVER_ALSA
 	&ALSA_bootstrap,
 #endif
+#if SDL_AUDIO_DRIVER_SNDIO
+	&SNDIO_bootstrap,
+#endif
 #if SDL_AUDIO_DRIVER_BSD
 	&BSD_AUDIO_bootstrap,
 #endif
@@ -305,6 +308,11 @@ int SDL_AudioInit(const char *driver_name)
 	/* Check to make sure we don't overwrite 'current_audio' */
 	if ( current_audio != NULL ) {
 		SDL_AudioQuit();
+	}
+
+	/* SDL 2.0 uses the name "pulseaudio", so we'll support both */
+	if ( driver_name && SDL_strcasecmp(driver_name, "pulseaudio") == 0 ) {
+		driver_name = "pulse";
 	}
 
 	/* Select the proper audio driver */

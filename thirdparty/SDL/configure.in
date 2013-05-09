@@ -1,7 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(README)
 AC_CONFIG_HEADER(include/SDL_config.h)
-AC_GNU_SOURCE
 AC_CONFIG_AUX_DIRS($srcdir/build-scripts)
 
 dnl Set various version strings - taken gratefully from the GTk sources
@@ -78,7 +77,7 @@ case "$host" in
         BASE_LDFLAGS="-mno-cygwin"
         ;;
     *)
-        BASE_CFLAGS="-D_GNU_SOURCE=1"
+        BASE_CFLAGS=""
         BASE_LDFLAGS=""
         ;;
 esac
@@ -486,6 +485,35 @@ AC_HELP_STRING([--enable-esd-shared], [dynamically load ESD audio support [[defa
     fi
 }
 
+dnl Find Sndio
+CheckSndio()
+{
+    AC_ARG_ENABLE(sndio,
+AC_HELP_STRING([--enable-sndio], [support the sndio audio API [[default=yes]]]),
+                  , enable_sndioaudio=yes)
+    if test x$enable_audio = xyes -a x$enable_sndioaudio = xyes; then
+        AC_CHECK_HEADER(sndio.h, have_sndio_hdr=yes)
+        AC_CHECK_LIB(sndio, sio_open, have_sndio_lib=yes)
+
+        AC_MSG_CHECKING(for sndio support)
+        have_sndio=no
+
+        if test x$have_sndio_hdr = xyes -a x$have_sndio_lib = xyes; then
+            have_sndio=yes
+            SNDIO_LIBS="-lsndio"
+        fi
+
+        AC_MSG_RESULT($have_nas)
+
+        if test x$have_sndio = xyes; then
+            AC_DEFINE(SDL_AUDIO_DRIVER_SNDIO)
+            SOURCES="$SOURCES $srcdir/src/audio/sndio/*.c"
+            EXTRA_LDFLAGS="$EXTRA_LDFLAGS $SNDIO_LIBS"
+            have_audio=yes
+        fi
+    fi
+}
+
 dnl Find PulseAudio
 CheckPulseAudio()
 {
@@ -525,6 +553,14 @@ AC_HELP_STRING([--enable-pulseaudio-shared], [dynamically load PulseAudio suppor
                test x$enable_pulseaudio_shared = xyes && test x$pulse_lib != x; then
                 echo "-- dynamic libpulse-simple -> $pulse_lib"
                 AC_DEFINE_UNQUOTED(SDL_AUDIO_DRIVER_PULSE_DYNAMIC, "$pulse_lib")
+
+                case "$host" in
+                    # On Solaris, pulseaudio must be linked deferred explicitly
+                    # to prevent undefined symbol failures.
+                    *-*-solaris*)
+                        PULSE_LIBS=`echo $PULSE_LIBS | sed 's/\-l/-Wl,-l/g'`
+                        EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,-zdeferred $PULSE_LIBS -Wl,-znodeferred"
+                esac
             else
                 EXTRA_LDFLAGS="$EXTRA_LDFLAGS $PULSE_LIBS"
             fi
@@ -823,7 +859,7 @@ AC_HELP_STRING([--enable-altivec], [use altivec assembly blitters on PPC [[defau
             have_altivec_h_hdr=yes
             ])
             AC_MSG_RESULT($have_gcc_altivec)
-	fi
+        fi
 
         if test x$have_gcc_altivec = xno; then
             AC_MSG_CHECKING(for Altivec with GCC -faltivec option)
@@ -1004,6 +1040,12 @@ AC_HELP_STRING([--enable-x11-shared], [dynamically load X11 support [[default=ma
                 *-*-irix*) # IRIX 6.5 requires that we use /usr/lib32
                     x11_lib='libX11.so'
                     x11ext_lib='libXext.so'
+                    ;;
+                *-*-openbsd*)
+                    x11_lib='libX11.so'
+                    x11ext_lib='libXext.so'
+                    xrender_lib='libXrender.so'
+                    xrandr_lib='libXrandr.so'
                     ;;
                 *)
                     x11_lib=[`find_lib "libX11.so.*" "$X_LIBS -L/usr/X11/$base_libdir -L/usr/X11R6/$base_libdir" | sed 's/.*\/\(.*\)/\1/; q'`]
@@ -1884,9 +1926,20 @@ AC_HELP_STRING([--enable-pthread-sem], [use pthread semaphores [[default=yes]]])
             pthread_cflags="-D_REENTRANT"
             pthread_lib="-pthread"
             ;;
-        *-*-solaris*)
+        *-*-solaris2.9)
+            # From Solaris 9+, posix4's preferred name is rt.
             pthread_cflags="-D_REENTRANT"
-            pthread_lib="-lpthread -lposix4"
+            pthread_lib="-lpthread -lrt"
+            ;;
+        *-*-solaris2.10)
+            # Solaris 10+ merged pthread into libc.
+            pthread_cflags="-D_REENTRANT"
+            pthread_lib="-lrt"
+            ;;
+        *-*-solaris*)
+            # Solaris 11+ merged rt into libc.
+            pthread_cflags="-D_REENTRANT"
+            pthread_lib=""
             ;;
         *-*-sysv5*)
             pthread_cflags="-D_REENTRANT -Kthread"
@@ -2358,6 +2411,7 @@ case "$host" in
         CheckALSA
         CheckARTSC
         CheckESD
+        CheckSndio
         CheckPulseAudio
         CheckNAS
         CheckX11
@@ -2390,7 +2444,7 @@ case "$host" in
                 SOURCES="$SOURCES $srcdir/src/audio/sun/*.c"
                 have_audio=yes
             ;;
-            netbsd|openbsd)
+            netbsd)
                 AC_DEFINE(SDL_AUDIO_DRIVER_BSD)
                 SOURCES="$SOURCES $srcdir/src/audio/bsd/*.c"
                 have_audio=yes
