@@ -45,6 +45,7 @@
 #include "gl/system/gl_cvars.h"
 
 #if defined (unix) || defined (__APPLE__)
+#include "v_text.h"
 #include <SDL.h>
 #define wglGetProcAddress(x) (*SDL_GL_GetProcAddress)(x)
 #endif
@@ -864,6 +865,7 @@ static void APIENTRY iSwapBuffers()
 static BOOL APIENTRY SetVSync( int vsync )
 {
 #if defined (__APPLE__)
+	DPrintf(TEXTCOLOR_CYAN "Vertical synchronization is turned %s\n", vsync > 0 ? "on" : "off");
 	return kCGLNoError == CGLSetParameter( CGLGetCurrentContext(), kCGLCPSwapInterval, &vsync );
 #else // !__APPLE__
 	// empty placeholder
