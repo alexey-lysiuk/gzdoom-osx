@@ -458,7 +458,14 @@ private:
 	PostProcess         m_postProcess;
 	
 	static Parameters   s_parameters;
-	
+
+	uint32_t            m_frame;
+	uint32_t            m_framesToSwitchVSync;
+	uint32_t            m_lastFrame;
+	uint32_t            m_lastFrameTime;
+
+	void UpdateAutomaticVSync();
+
 	void DrawRenderTarget();
 	
 }; // class BackBuffer

@@ -1239,6 +1239,9 @@ unsigned int I_FPSTime()
 }
 
 
+bool g_isTicFrozen;
+
+
 namespace
 {
 
@@ -1278,7 +1281,6 @@ uint32_t s_timerStart;
 uint32_t s_timerNext;
 
 int  s_tics;
-bool s_isTicFrozen;
 
 
 void* TimerThreadFunc( void* )
@@ -1295,7 +1297,7 @@ void* TimerThreadFunc( void* )
 		pthread_mutex_lock( &s_timerMutex );
 		pthread_cond_timedwait( &s_timerEvent, &s_timerMutex, &timeToNextTick );
 		
-		if ( !s_isTicFrozen )
+		if ( !g_isTicFrozen )
 		{
 			__sync_add_and_fetch( &s_tics, 1 );
 		}
@@ -1345,7 +1347,7 @@ int I_GetTimeSelect( bool saveMS )
 
 int I_WaitForTicSelect( int prevTic )
 {
-	assert( !s_isTicFrozen );
+	assert( !g_isTicFrozen );
 	
 	while ( s_tics <= prevTic )
 	{
@@ -1362,7 +1364,7 @@ int I_WaitForTicSelect( int prevTic )
 
 void I_FreezeTimeSelect( bool frozen )
 {
-	s_isTicFrozen = frozen;
+	g_isTicFrozen = frozen;
 }
 
 

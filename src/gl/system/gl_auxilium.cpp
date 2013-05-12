@@ -33,6 +33,8 @@
 
 #include "gl/system/gl_auxilium.h"
 
+#include "doomstat.h"
+#include "c_console.h"
 #include "i_system.h"
 #include "m_png.h"
 #include "version.h"
@@ -40,6 +42,19 @@
 
 #include "gl/renderer/gl_renderer.h"
 #include "gl/utility/gl_clock.h"
+
+
+extern int paused;
+
+extern bool g_isTicFrozen;
+
+EXTERN_CVAR(Int, vid_vsync)
+
+CVAR(Int, vid_vsync_auto_switch_frames, 10, CVAR_ARCHIVE | CVAR_GLOBALCONFIG);
+CVAR(Int, vid_vsync_auto_fps, 60, CVAR_ARCHIVE | CVAR_GLOBALCONFIG);
+
+
+// ---------------------------------------------------------------------------
 
 
 namespace GLAuxilium
@@ -527,6 +542,10 @@ BackBuffer::BackBuffer( int width, int height, bool fullscreen )
 , m_renderTarget( width, height )
 , m_gammaProgram( NULL, "shaders/glsl/gamma_correction.fp" )
 , m_postProcess( &m_renderTarget )
+, m_frame(0)
+, m_framesToSwitchVSync(0)
+, m_lastFrame(0)
+, m_lastFrameTime(0)
 {
 	s_instance = this;
 		
@@ -576,6 +595,8 @@ bool BackBuffer::Lock( bool buffered )
 
 void BackBuffer::Update()
 {
+	UpdateAutomaticVSync();
+
 	if ( !CanUpdate() )
 	{
 		GLRenderer->Flush();
@@ -616,7 +637,93 @@ PostProcess& BackBuffer::GetPostProcess()
 	return m_postProcess;
 }
 
-	
+
+static bool IsVSyncEnabled()
+{
+#if defined (__APPLE__)
+	GLint result = 0;
+
+	CGLGetParameter(CGLGetCurrentContext(), kCGLCPSwapInterval, &result);
+
+	return result;
+#else // !__APPLE__
+	return false; // Not implemented
+#endif // __APPLE__
+}
+
+void BackBuffer::UpdateAutomaticVSync()
+{
+	++m_frame;
+
+	// Check and update vertical synchromization state of OpenGL context
+	// if automatic VSync is not active or game is not running (menu, console, pause etc)
+
+	const bool isVSync = IsVSyncEnabled();
+	const bool isGameRunning = GS_LEVEL == gamestate
+		&& !paused
+		&& !g_isTicFrozen
+		&& MENU_Off == menuactive
+		&& c_up == ConsoleState;
+
+	if (2 != vid_vsync || !isGameRunning)
+	{
+		m_framesToSwitchVSync = 0;
+		m_lastFrame           = 0;
+		m_lastFrameTime       = 0;
+
+		if (0 == vid_vsync && isVSync)
+		{
+			gl.SetVSync(0);
+		}
+		else if (vid_vsync > 0 && !isVSync)
+		{
+			gl.SetVSync(1);
+		}
+
+		return;
+	}
+
+	// Update automatic VSync state
+	// and change corresponding OpenGL context parameter if needed
+
+	const uint32_t frameTime = I_MSTime();
+
+	if (0 != m_lastFrameTime)
+	{
+		const uint32_t fps = 1000 / (frameTime - m_lastFrameTime);
+
+		if (   ( isVSync && fps <  vid_vsync_auto_fps)
+			|| (!isVSync && fps >= vid_vsync_auto_fps) )
+
+		{
+			if (m_frame == m_lastFrame + 1)
+			{
+				++m_framesToSwitchVSync;
+			}
+			else
+			{
+				m_framesToSwitchVSync = 0;
+			}
+
+			m_lastFrame = m_frame;
+		}
+		else
+		{
+			m_framesToSwitchVSync = 0;
+		}
+	}
+
+	if (m_framesToSwitchVSync >= vid_vsync_auto_switch_frames)
+	{
+		gl.SetVSync(isVSync ? 0 : 1);
+
+		m_framesToSwitchVSync = 0;
+	}
+
+	m_lastFrameTime = frameTime;
+}
+
+
 void BackBuffer::DrawRenderTarget()
 {
 	m_renderTarget.Unbind();
