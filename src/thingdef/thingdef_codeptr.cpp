@@ -1247,7 +1247,10 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_FireBullets)
 
 	if (!PuffType) PuffType = PClass::FindClass(NAME_BulletPuff);
 
-	S_Sound (self, CHAN_WEAPON, weapon->AttackSound, 1, ATTN_NORM);
+	if (weapon != NULL)
+	{
+		S_Sound (self, CHAN_WEAPON, weapon->AttackSound, 1, ATTN_NORM);
+	}
 
 	if ((NumberOfBullets==1 && !player->refire) || NumberOfBullets==0)
 	{
@@ -1409,7 +1412,10 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_CustomPunch)
 		if (LifeSteal)
 			P_GiveBody (self, (Damage * LifeSteal) >> FRACBITS);
 
-		S_Sound (self, CHAN_WEAPON, weapon->AttackSound, 1, ATTN_NORM);
+		if (weapon != NULL)
+		{
+			S_Sound (self, CHAN_WEAPON, weapon->AttackSound, 1, ATTN_NORM);
+		}
 
 		self->angle = R_PointToAngle2 (self->x,
 										self->y,
@@ -2877,7 +2883,7 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_PlayerSkinCheck)
 
 	ACTION_SET_RESULT(false);	// Jumps should never set the result for inventory state chains!
 	if (self->player != NULL &&
-		skins[self->player->userinfo.skin].othergame)
+		skins[self->player->userinfo.GetSkin()].othergame)
 	{
 		ACTION_JUMP(jump);
 	}
