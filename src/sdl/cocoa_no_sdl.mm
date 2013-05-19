@@ -799,16 +799,6 @@ static ApplicationDelegate* s_applicationDelegate;
 	m_openGLInitialized = false;
 	m_multisample       = 0;
 	
-	// Setup timer for event loop
-	
-	NSTimer* timer = [NSTimer timerWithTimeInterval:0
-											 target:self
-										   selector:@selector(processEvents:)
-										   userInfo:nil
-											repeats:YES];
-	[[NSRunLoop mainRunLoop] addTimer:timer
-							  forMode:NSDefaultRunLoopMode];
-	
 	return self;
 }
 
@@ -856,6 +846,16 @@ static ApplicationDelegate* s_applicationDelegate;
 	// application remains deactivated for an unknown reason.
 	// The following call resolves this issue
 	[NSApp activateIgnoringOtherApps:YES];
+
+	// Setup timer for custom event loop
+
+	NSTimer* timer = [NSTimer timerWithTimeInterval:0
+											 target:self
+										   selector:@selector(processEvents:)
+										   userInfo:nil
+											repeats:YES];
+	[[NSRunLoop mainRunLoop] addTimer:timer
+							  forMode:NSDefaultRunLoopMode];
 
 	exit( SDL_main(s_argc, s_argv) );
 }
