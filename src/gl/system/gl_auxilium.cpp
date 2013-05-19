@@ -688,7 +688,7 @@ void BackBuffer::UpdateAutomaticVSync()
 
 	const uint32_t frameTime = I_MSTime();
 
-	if (0 != m_lastFrameTime)
+	if (0 != m_lastFrameTime && frameTime != m_lastFrameTime)
 	{
 		const uint32_t fps = 1000 / (frameTime - m_lastFrameTime);
 
