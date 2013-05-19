@@ -101,25 +101,6 @@ void I_ShutdownJoysticks();
 namespace
 {
 
-class StackAutoreleasePool
-{
-public:
-	StackAutoreleasePool()
-	{
-		m_pool = [[NSAutoreleasePool alloc] init];
-	}
-	
-	~StackAutoreleasePool()
-	{
-		[m_pool release];
-	}
-	
-private:
-	NSAutoreleasePool* m_pool;
-	
-};
-
-
 const size_t ARGC_MAX = 64;
 
 int   s_argc;
@@ -262,8 +243,6 @@ void I_ProcessJoysticks();
 
 void I_GetEvent()
 {
-	StackAutoreleasePool pool;
-	
 	[[NSRunLoop mainRunLoop] limitDateForMode:NSDefaultRunLoopMode];
 }
 
@@ -792,8 +771,6 @@ static ApplicationDelegate* s_applicationDelegate;
 
 - (id)init
 {
-	StackAutoreleasePool pool;
-	
 	self = [super init];
 	
 	m_openGLInitialized = false;
@@ -909,8 +886,6 @@ static ApplicationDelegate* s_applicationDelegate;
 		return;
 	}
 	
-	StackAutoreleasePool pool;
-	
 	// Create window
 	
 	m_window = [[FullscreenWindow alloc] initWithContentRect:NSMakeRect(0, 0, 640, 480)
@@ -962,8 +937,6 @@ static ApplicationDelegate* s_applicationDelegate;
 
 - (void)changeVideoResolution:(bool)fullscreen width:(int)width height:(int)height
 {
-	StackAutoreleasePool pool;
-	
 	[self initializeOpenGL];
 	
 	CGLContextObj context = CGLGetCurrentContext();
@@ -1126,8 +1099,6 @@ void I_SetMainWindowVisible( bool visible )
 
 bool I_SetCursor( FTexture* cursorpic )
 {
-	StackAutoreleasePool pool;
-	
 	if ( NULL == cursorpic || FTexture::TEX_Null == cursorpic->UseType )
 	{
 		s_cursor = [NSCursor arrowCursor];
@@ -1829,7 +1800,7 @@ int main(int argc, char** argv)
 		}
 	}
 
-	StackAutoreleasePool pool;
+	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
 
 	[NSApplication sharedApplication];
 	[NSBundle loadNibNamed:@"GZDoom" owner:NSApp];
@@ -1840,6 +1811,8 @@ int main(int argc, char** argv)
 	InitTimer();
 
 	[NSApp run];
+
+	[pool release];
 
 	return 0;
 }
