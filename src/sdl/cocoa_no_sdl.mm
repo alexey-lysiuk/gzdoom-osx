@@ -494,8 +494,14 @@ void NSEventToGameMousePosition( NSEvent* inEvent, event_t* outEvent )
 	
 	const NSPoint screenPos = [NSEvent mouseLocation];
 	const NSPoint windowPos = [window convertScreenToBase:screenPos];
-	const NSPoint   viewPos = [view convertPointFromBase:windowPos];
-	
+
+	const NSPoint   viewPos =
+#ifdef NSAppKitVersionNumber10_7
+		NSAppKitVersionNumber >= NSAppKitVersionNumber10_7
+			? [view convertPointFromBacking:windowPos] :
+#endif // NSAppKitVersionNumber10_7
+		[view convertPointFromBase:windowPos];
+
 	const GLAuxilium::BackBuffer::Parameters& backbufferParameters = GLAuxilium::BackBuffer::GetParameters();
 	const float posX = (                            viewPos.x - backbufferParameters.shiftX ) / backbufferParameters.pixelScale;
 	const float posY = ( [view frame].size.height - viewPos.y - backbufferParameters.shiftY ) / backbufferParameters.pixelScale;
