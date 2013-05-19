@@ -1404,19 +1404,16 @@ void SDL_DestroyMutex( SDL_mutex* mutex )
 }
 
 
+static timeval s_startTicks;
+
 uint32_t SDL_GetTicks()
 {
-	static timeval start;
-	
-	static const int dummy = gettimeofday( &start, NULL );
-	GZ_UNUSED( dummy );
-	
 	timeval now;
 	gettimeofday( &now, NULL );
 	
 	const uint32_t ticks = 
-		  ( now.tv_sec  - start.tv_sec  ) * 1000
-		+ ( now.tv_usec - start.tv_usec ) / 1000;
+		  ( now.tv_sec  - s_startTicks.tv_sec  ) * 1000
+		+ ( now.tv_usec - s_startTicks.tv_usec ) / 1000;
 	
 	return ticks;
 }
@@ -1779,6 +1776,8 @@ int main(int argc, char** argv)
 	CFOptionFlags responseFlags;
 	CFUserNotificationDisplayAlert(0, 0, NULL, NULL, NULL, CFSTR("Attach"), NULL, NULL, NULL, NULL, &responseFlags);
 #endif
+
+	gettimeofday(&s_startTicks, NULL);
 
 	for (int i = 0; i <= argc; ++i)
 	{
