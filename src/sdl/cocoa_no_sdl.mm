@@ -138,9 +138,10 @@ void CenterCursor()
 	{
 		return;
 	}
-	
+
+	const NSRect  displayRect = [[window screen] frame];
 	const NSRect   windowRect = [window frame];
-	const CGPoint centerPoint = CGPointMake( NSMidX( windowRect ), NSMidY( windowRect ) );
+	const CGPoint centerPoint = CGPointMake( NSMidX( windowRect ), displayRect.size.height - NSMidY( windowRect ) );
 	
 	CGEventSourceRef eventSource = CGEventSourceCreate( kCGEventSourceStateCombinedSessionState );
 	
