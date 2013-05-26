@@ -97,6 +97,10 @@ protected:
 	int LastGotLine;
 	bool CMode;
 	bool Escape;
+
+private:
+	bool ScanWithSignedCType(const bool tokens);
+	bool ScanWithUnsignedCType(const bool tokens);
 };
 
 enum

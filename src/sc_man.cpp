@@ -38,6 +38,11 @@
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
+CVAR(Int, script_scanner_version, 0, CVAR_NOSET);
+// 0 - automatic detection
+// 1 - scanner with signed character type (before ZDoom r4179 and GZDoom r1537)
+// 2 - scanner with unsigned character type (starting from revisions above)
+
 // PRIVATE DATA DEFINITIONS ------------------------------------------------
 
 // CODE --------------------------------------------------------------------
@@ -387,7 +392,6 @@ void FScanner::SetEscape (bool esc)
 
 bool FScanner::ScanString (bool tokens)
 {
-	const char *marker, *tok;
 	bool return_val;
 
 	CheckOpen();
@@ -412,10 +416,34 @@ bool FScanner::ScanString (bool tokens)
 	LastGotPtr = ScriptPtr;
 	LastGotLine = Line;
 
-	// In case the generated scanner does not use marker, avoid compiler warnings.
-	marker;
-#include "sc_man_scanner.h"
+	return_val = 1 == script_scanner_version
+		? ScanWithSignedCType(tokens)
+		: ScanWithUnsignedCType(tokens);
+
 	LastGotToken = tokens;
+	return return_val;
+}
+
+bool FScanner::ScanWithSignedCType(const bool tokens)
+{
+	const char *marker, *tok;
+	bool return_val;
+
+#define YYCTYPE char
+#include "sc_man_scanner.h"
+
+	return return_val;
+}
+
+bool FScanner::ScanWithUnsignedCType(const bool tokens)
+{
+	const char *marker, *tok;
+	bool return_val;
+
+#undef YYCTYPE
+#define YYCTYPE unsigned char
+#include "sc_man_scanner.h"
+
 	return return_val;
 }
 
