@@ -46,6 +46,7 @@
 #include "m_argv.h"
 #include "i_system.h"
 #include "cmdlib.h"
+#include "c_cvars.h"
 #include "c_dispatch.h"
 #include "w_wad.h"
 #include "w_zip.h"
@@ -78,6 +79,10 @@ extern bool nospriterename;
 // PRIVATE FUNCTION PROTOTYPES ---------------------------------------------
 
 static void PrintLastError ();
+
+// EXTERNAL DATA DECLARATIONS ----------------------------------------------
+
+EXTERN_CVAR(Int, script_scanner_version);
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
@@ -185,6 +190,7 @@ void FWadCollection::InitMultipleFiles (TArray<FString> &filenames)
 	RenameNerve();
 	RenameSprites();
 	FixMordethNamespace();
+	SetScriptScannerVersion();
 
 	// [RH] Set up hash table
 	FirstLumpIndex = new DWORD[NumLumps];
@@ -976,6 +982,40 @@ void FWadCollection::FixMordethNamespace()
 		{
 			lump->Namespace = ns_sprites;
 		}
+	}
+}
+
+//==========================================================================
+//
+// SetScriptScannerVersion
+//
+//==========================================================================
+
+void FWadCollection::SetScriptScannerVersion()
+{
+	if (0 != script_scanner_version)
+	{
+		// Automatic detection is turned off
+		return;
+	}
+
+	// Compatibility fix for Knee-Deep in ZDoom version 1.0 and 1.1
+	// Decorate/Decorations.txt file contains wrong character with code 0xB4
+	// in floating point constant at line 996
+
+	static const BYTE KDIZD10_CHECKSUM[16] = { 0xca, 0x8a, 0x08, 0xf0, 0x34,
+		0x44, 0xc3, 0xb8, 0x15, 0xb2, 0xdf, 0xd1, 0x89, 0x0e, 0xfd, 0x28 };
+	static const long KDIZD10_SIZE = 24607213;
+
+	static const BYTE KDIZD11_CHECKSUM[16] = { 0x67, 0xd0, 0x7a, 0x76, 0x96,
+		0x04, 0x48, 0x73, 0x12, 0x4f, 0xe6, 0x19, 0xc6, 0x34, 0x20, 0xbc };
+	static const long KDIZD11_SIZE = 24850946;
+
+	if (   -1 != FindWadByChecksum(KDIZD10_SIZE, KDIZD10_CHECKSUM)
+		|| -1 != FindWadByChecksum(KDIZD11_SIZE, KDIZD11_CHECKSUM) )
+	{
+		// Use old script parser with signed character type
+		script_scanner_version = 1;
 	}
 }
 

@@ -231,6 +231,7 @@ private:
 	void RenameMasterLevels();
 	void RenameNerve();
 	void FixMordethNamespace();
+	void SetScriptScannerVersion();
 	int FindWadByChecksum(const long filesize, const BYTE checksum[16]);
 	void DeleteAll();
 };
