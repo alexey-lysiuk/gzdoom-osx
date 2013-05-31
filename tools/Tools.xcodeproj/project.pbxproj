@@ -225,6 +225,8 @@
 		8A334312154ECF6D0034C0C0 /* version.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A3342FB154ECF6D0034C0C0 /* version.c */; };
 		8A334313154ECF6D0034C0C0 /* wadio.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A3342FC154ECF6D0034C0C0 /* wadio.c */; };
 		8A350B5315A991370004D093 /* wadspy.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A350B4315A98FE50004D093 /* wadspy.c */; };
+		8A4527941758FB5100278F36 /* log.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A45278E1758FAF600278F36 /* log.c */; };
+		8A4527951758FB5B00278F36 /* sscript.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A4527901758FAF600278F36 /* sscript.c */; };
 		8AEF5E1D15501797001D1D51 /* lswad.c in Sources */ = {isa = PBXBuildFile; fileRef = 8AEF5E1B15501797001D1D51 /* lswad.c */; };
 		8AEF5E5715501950001D1D51 /* sysdep.c in Sources */ = {isa = PBXBuildFile; fileRef = 8AEF5E4C1550190B001D1D51 /* sysdep.c */; };
 		8AEF5EB01550204E001D1D51 /* mkwad.c in Sources */ = {isa = PBXBuildFile; fileRef = 8AEF5EAE1550204E001D1D51 /* mkwad.c */; };
@@ -714,6 +716,11 @@
 		8A3342FD154ECF6D0034C0C0 /* wadio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wadio.h; sourceTree = "<group>"; };
 		8A350B4315A98FE50004D093 /* wadspy.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = wadspy.c; sourceTree = "<group>"; };
 		8A350B4915A990230004D093 /* wadspy */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = wadspy; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A45278D1758FAF600278F36 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		8A45278E1758FAF600278F36 /* log.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = log.c; sourceTree = "<group>"; };
+		8A45278F1758FAF600278F36 /* log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = log.h; sourceTree = "<group>"; };
+		8A4527901758FAF600278F36 /* sscript.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sscript.c; sourceTree = "<group>"; };
+		8A4527911758FAF600278F36 /* sscript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sscript.h; sourceTree = "<group>"; };
 		8A53B50E167C75A3008547A0 /* xs_Float.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xs_Float.h; sourceTree = "<group>"; };
 		8AEF5E1215501764001D1D51 /* lswad */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = lswad; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AEF5E1B15501797001D1D51 /* lswad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lswad.c; sourceTree = "<group>"; };
@@ -1333,6 +1340,7 @@
 				8A3342D3154ECF6D0034C0C0 /* color.c */,
 				8A3342D4154ECF6D0034C0C0 /* color.h */,
 				8A3342D5154ECF6D0034C0C0 /* compose.c */,
+				8A45278D1758FAF600278F36 /* config.h */,
 				8A3342D8154ECF6D0034C0C0 /* deutex.c */,
 				8A3342DA154ECF6D0034C0C0 /* deutex.h */,
 				8A3342DC154ECF6D0034C0C0 /* endianio.c */,
@@ -1348,6 +1356,8 @@
 				8A3342E6154ECF6D0034C0C0 /* listdir.c */,
 				8A3342E7154ECF6D0034C0C0 /* lists.c */,
 				8A3342E8154ECF6D0034C0C0 /* lists.h */,
+				8A45278E1758FAF600278F36 /* log.c */,
+				8A45278F1758FAF600278F36 /* log.h */,
 				8A3342E9154ECF6D0034C0C0 /* lzw.c */,
 				8A3342EA154ECF6D0034C0C0 /* merge.c */,
 				8A3342EB154ECF6D0034C0C0 /* merge.h */,
@@ -1357,6 +1367,8 @@
 				8A3342EF154ECF6D0034C0C0 /* picture.h */,
 				8A3342F0154ECF6D0034C0C0 /* sound.c */,
 				8A3342F1154ECF6D0034C0C0 /* sound.h */,
+				8A4527901758FAF600278F36 /* sscript.c */,
+				8A4527911758FAF600278F36 /* sscript.h */,
 				8A3342F2154ECF6D0034C0C0 /* substit.c */,
 				8A3342F3154ECF6D0034C0C0 /* text.c */,
 				8A3342F4154ECF6D0034C0C0 /* text.h */,
@@ -1687,11 +1699,13 @@
 				8A334305154ECF6D0034C0C0 /* ident.c in Sources */,
 				8A334306154ECF6D0034C0C0 /* listdir.c in Sources */,
 				8A334307154ECF6D0034C0C0 /* lists.c in Sources */,
+				8A4527941758FB5100278F36 /* log.c in Sources */,
 				8A334308154ECF6D0034C0C0 /* lzw.c in Sources */,
 				8A334309154ECF6D0034C0C0 /* merge.c in Sources */,
 				8A33430A154ECF6D0034C0C0 /* mkwad.c in Sources */,
 				8A33430B154ECF6D0034C0C0 /* picture.c in Sources */,
 				8A33430C154ECF6D0034C0C0 /* sound.c in Sources */,
+				8A4527951758FB5B00278F36 /* sscript.c in Sources */,
 				8A33430D154ECF6D0034C0C0 /* substit.c in Sources */,
 				8A33430E154ECF6D0034C0C0 /* text.c in Sources */,
 				8A33430F154ECF6D0034C0C0 /* texture.c in Sources */,
@@ -1975,13 +1989,10 @@
 					DEBUG,
 					_DEBUG,
 				);
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
-				SDKROOT = macosx10.7;
 				USE_HEADERMAP = NO;
 				VALID_ARCHS = i386;
 			};
@@ -1993,13 +2004,10 @@
 				ARCHS = i386;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
-				SDKROOT = macosx10.7;
 				USE_HEADERMAP = NO;
 				VALID_ARCHS = i386;
 			};
