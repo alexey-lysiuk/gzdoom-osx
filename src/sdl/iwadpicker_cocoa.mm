@@ -41,6 +41,7 @@
 #include "m_misc.h"
 #include "gameconfigfile.h"
 #include <Cocoa/Cocoa.h>
+#include <wordexp.h>
 
 CVAR( String, macosx_additional_parameters, "", CVAR_ARCHIVE | CVAR_NOSET | CVAR_GLOBALCONFIG );
 
@@ -114,39 +115,36 @@ static const char* const tableHeaders[NUM_COLUMNS] = { "IWAD", "Game" };
 
 @end
 
-@interface NSString(AppendKnownFileType)
-- (NSString*)stringByAppendKnownFileType:(NSString *)filePath;
+static NSDictionary* s_knownFileTypes = [NSDictionary dictionaryWithObjectsAndKeys:
+	@"-file"    , @"wad",
+	@"-file"    , @"pk3",
+	@"-file"    , @"zip",
+	@"-file"    , @"pk7",
+	@"-file"    , @"7z",
+	@"-deh"     , @"deh",
+	@"-bex"     , @"bex",
+	@"-exec"    , @"cfg",
+	@"-playdemo", @"lmp",
+	nil];
+
+static NSArray* s_knownExtensions = [s_knownFileTypes allKeys];
+
+@interface NSMutableString(AppendKnownFileType)
+- (void)appendKnownFileType:(NSString *)filePath;
 @end
 
-@implementation NSString(AppendKnownFileType)
-- (NSString*)stringByAppendKnownFileType:(NSString *)filePath
+@implementation NSMutableString(AppendKnownFileType)
+- (void)appendKnownFileType:(NSString *)filePath
 {
-	NSDictionary* knownFileTypes = [NSDictionary dictionaryWithObjectsAndKeys:
-									@"-file "    , @"wad",
-									@"-file "    , @"pk3",
-									@"-file "    , @"zip",
-									@"-file "    , @"pk7",
-									@"-file "    , @"7z",
-									@"-deh "     , @"deh",
-									@"-bex "     , @"bex",
-									@"-exec "    , @"cfg",
-									@"-playdemo ", @"lmp",
-									nil];
-	
 	NSString* extension = [[filePath pathExtension] lowercaseString];
-	NSString* parameter = [knownFileTypes objectForKey:extension];
+	NSString* parameter = [s_knownFileTypes objectForKey:extension];
 	
-	if ( nil == parameter )
+	if (nil == parameter)
 	{
-		return self;
+		return;
 	}
-	
-	NSString* result = [NSString stringWithString:self];
-	result = [result stringByAppendingString:parameter];
-	result = [result stringByAppendingString:filePath];
-	result = [result stringByAppendingString:@" "];
-	
-	return result;
+
+	[self appendFormat:@"%@ \"%@\" ", parameter, filePath];
 }
 @end
 
@@ -184,30 +182,29 @@ static const char* const tableHeaders[NUM_COLUMNS] = { "IWAD", "Game" };
 
 - (void)browseButtonPressed:(id) sender;
 {
-	NSArray* supportedExtensions = [NSArray arrayWithObjects:@"wad", @"pk3", @"zip", @"pk7", @"7z", @"deh", @"bex", @"cfg", @"lmp", nil];
-
 	NSOpenPanel* openPanel = [NSOpenPanel openPanel];
 	[openPanel setAllowsMultipleSelection:YES];
 	[openPanel setCanChooseFiles:YES];
 	[openPanel setResolvesAliases:YES];
-	[openPanel setAllowedFileTypes:supportedExtensions];
+	[openPanel setAllowedFileTypes:s_knownExtensions];
 
-	if ( NSOKButton == [openPanel runModal] )
+	if (NSOKButton == [openPanel runModal])
 	{
 		NSArray* files = [openPanel URLs];
-		NSString* parameters = [NSString string];
+		NSMutableString* parameters = [NSMutableString string];
 		
-		for ( NSUInteger i = 0, ei = [files count]; i < ei; i++ )
+		for (NSUInteger i = 0, ei = [files count]; i < ei; ++i)
 		{
 			NSString* filePath = [[files objectAtIndex:i] path];
-			parameters = [parameters stringByAppendKnownFileType:filePath];
+			[parameters appendKnownFileType:filePath];
 		}
-		
-		if ( [parameters length] > 0 )
+
+		if ([parameters length] > 0)
 		{
 			NSString* newParameters = [parametersTextField stringValue];
-			if ( [newParameters length] > 0
-				&& NO == [newParameters hasSuffix:@" "] )
+
+			if ([newParameters length] > 0
+				&& NO == [newParameters hasSuffix:@" "])
 			{
 				newParameters = [newParameters stringByAppendingString:@" "];
 			}
@@ -378,27 +375,29 @@ static void RestartWithParameters( const char* iwadPath, NSString* parameters )
 		[arguments addObject:@"-wad_picker_restart"];
 		[arguments addObject:@"-iwad"];
 		[arguments addObject:[NSString stringWithUTF8String:iwadPath]];
-		
+
 		for ( int i = 1; i < commandLineParametersCount; ++i )
 		{
 			NSString* currentParameter = [NSString stringWithUTF8String:Args->GetArg(i)];
 			[arguments addObject:currentParameter];
 		}
-		
-		NSArray* additionalParameters = [parameters componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-		[arguments addObjectsFromArray:additionalParameters];
-	
-#if 0
-		NSTask* task = [[NSTask alloc] init];
-		[task setLaunchPath:executablePath];
-		[task setArguments:arguments];
-		
-		[task launch];
-		[task waitUntilExit];		
-#else
+
+		wordexp_t expansion;
+
+		if (0 == wordexp([parameters UTF8String], &expansion, 0))
+		{
+			for (size_t i = 0; i < expansion.we_wordc; ++i)
+			{
+				NSString* argumentString = [NSString stringWithCString:expansion.we_wordv[i]
+															  encoding:NSUTF8StringEncoding];
+				[arguments addObject:argumentString];
+			}
+
+			wordfree(&expansion);
+		}
+
 		[NSTask launchedTaskWithLaunchPath:executablePath arguments:arguments];
-#endif
-		
+
 		_exit(0); // to avoid atexit()'s functions
 	}
 	@catch ( NSException* e )
