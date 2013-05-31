@@ -2475,6 +2475,7 @@ static void LeadingHudMessage(void)
 // replacement: palrep | colorrep
 // palrep: exp : exp
 // colorrep: [exp,exp,exp]:[exp,exp,exp]
+// desatrep: %colorrep
 //==========================================================================
 
 static void LeadingCreateTranslation(void)
@@ -2486,6 +2487,8 @@ static void LeadingCreateTranslation(void)
 	PC_AppendCmd(PCD_STARTTRANSLATION);
 	while (tk_Token == TK_COMMA)
 	{
+		pcd_t translationcode;
+
 		TK_NextToken();
 		EvalExpression();	// Get first palette entry in range
 		TK_TokenMustBe(TK_COLON, ERR_MISSING_COLON);
@@ -2494,6 +2497,15 @@ static void LeadingCreateTranslation(void)
 		TK_TokenMustBe(TK_ASSIGN, ERR_MISSING_ASSIGN);
 
 		TK_NextToken();
+		if(tk_Token == TK_PERCENT)
+		{
+			translationcode = PCD_TRANSLATIONRANGE3;
+			TK_NextTokenMustBe(TK_LBRACKET, ERR_MISSING_LBRACKET);
+		}
+		else
+		{
+			translationcode = PCD_TRANSLATIONRANGE2;
+		}
 		if(tk_Token == TK_LBRACKET)
 		{ // Replacement is color range
 			int i, j;
@@ -2522,7 +2534,6 @@ static void LeadingCreateTranslation(void)
 					TK_NextToken();
 				}
 			}
-			PC_AppendCmd(PCD_TRANSLATIONRANGE2);
 		}
 		else
 		{ // Replacement is palette range
@@ -2530,8 +2541,9 @@ static void LeadingCreateTranslation(void)
 			TK_TokenMustBe(TK_COLON, ERR_MISSING_COLON);
 			TK_NextToken();
 			EvalExpression();
-			PC_AppendCmd(PCD_TRANSLATIONRANGE1);
+			translationcode = PCD_TRANSLATIONRANGE1;
 		}
+		PC_AppendCmd(translationcode);
 	}
 	PC_AppendCmd(PCD_ENDTRANSLATION);
 	TK_TokenMustBe(TK_RPAREN, ERR_MISSING_RPAREN);

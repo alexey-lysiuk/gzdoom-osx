@@ -103,7 +103,7 @@ special
 	 96:FloorAndCeiling_RaiseByValue(3),
 	 97:Ceiling_LowerAndCrushDist(3,5),
 	 98:Sector_SetTranslucent(3,4),
-
+	 99:Floor_RaiseAndCrushDoom(3,4),
 //	100:Scroll_Texture_Left
 //	101:Scroll_Texture_Right
 //	102:Scroll_Texture_Up
@@ -148,10 +148,10 @@ special
 	154:Teleport_NoStop(2, 3),
 
 	157:SetGlobalFogParameter(2),		// GZDoom only!
-	158:FS_Execute(1,4),				// GZDoom only!
+	158:FS_Execute(1,4),
 	159:Sector_SetPlaneReflection(3),	// GZDoom only!
-//	160:Sector_Set3DFloor				// GZDoom/Vavoom
-//	161:Sector_SetContents				// Vavoom
+//	160:Sector_Set3DFloor
+//	161:Sector_SetContents
 	
 	168:Ceiling_CrushAndRaiseDist(3,5),
 	169:Generic_Crusher2(5),
@@ -285,10 +285,26 @@ special
 	-41:ACS_NamedTerminate(2),
 	-42:ACS_NamedLockedExecute(5),
 	-43:ACS_NamedLockedExecuteDoor(5),
-	-44:ACS_NamedExecuteWithResult(1,4),
+	-44:ACS_NamedExecuteWithResult(1,5),
 	-45:ACS_NamedExecuteAlways(2,5),
 	-46:UniqueTID(0,2),
 	-47:IsTIDUsed(1),
-
+	-48:Sqrt(1),
+	-49:FixedSqrt(1),
+	-50:VectorLength(2),
+	-51:SetHUDClipRect(4,5),
+	-52:SetHUDWrapWidth(1),
+	-53:SetCVar(2),
+	-54:GetUserCVar(2),
+	-55:SetUserCVar(3),
+	-56:GetCVarString(1),
+	-57:SetCVarString(2),
+	-58:GetUserCVarString(2),
+	-59:SetUserCVarString(3),
+	
+	// ZDaemon's
+	-19260:GetTeamScore(1),
+	-19261:SetTeamScore(2),
+	
 	-1000:__EndOfList__(10);
 	
