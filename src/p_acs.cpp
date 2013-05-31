@@ -80,7 +80,6 @@ extern FILE *Logfile;
 
 FRandom pr_acs ("ACS");
 
-
 // I imagine this much stack space is probably overkill, but it could
 // potentially get used with recursive functions.
 #define STACK_SIZE 4096
@@ -142,35 +141,7 @@ struct FBehavior::ArrayInfo
 };
 
 TArray<FBehavior *> FBehavior::StaticModules;
-
-
-//============================================================================
-//
-// Global and world variables
-//
-//============================================================================
-
-// ACS variables with world scope
-SDWORD ACS_WorldVars[NUM_WORLDVARS];
-FWorldGlobalArray ACS_WorldArrays[NUM_WORLDVARS];
-
-// ACS variables with global scope
-SDWORD ACS_GlobalVars[NUM_GLOBALVARS];
-FWorldGlobalArray ACS_GlobalArrays[NUM_GLOBALVARS];
-
-
-//============================================================================
-//
-// On the fly strings
-//
-//============================================================================
-
-#define LIB_ACSSTRINGS_ONTHEFLY 0x7fff
-#define ACSSTRING_OR_ONTHEFLY (LIB_ACSSTRINGS_ONTHEFLY<<16)
-
-TArray<FString>
-	ACS_StringsOnTheFly,
-	ACS_StringBuilderStack;
+TArray<FString> ACS_StringBuilderStack;
 
 #define STRINGBUILDER_START(Builder) if (Builder.IsNotEmpty() || ACS_StringBuilderStack.Size()) { ACS_StringBuilderStack.Push(Builder); Builder = ""; }
 #define STRINGBUILDER_FINISH(Builder) if (!ACS_StringBuilderStack.Pop(Builder)) { Builder = ""; }
@@ -193,6 +164,571 @@ inline int uallong(const int &foo)
 {
 	const unsigned char *bar = (const unsigned char *)&foo;
 	return bar[0] | (bar[1] << 8) | (bar[2] << 16) | (bar[3] << 24);
+}
+#endif
+
+//============================================================================
+//
+// Global and world variables
+//
+//============================================================================
+
+// ACS variables with world scope
+SDWORD ACS_WorldVars[NUM_WORLDVARS];
+FWorldGlobalArray ACS_WorldArrays[NUM_WORLDVARS];
+
+// ACS variables with global scope
+SDWORD ACS_GlobalVars[NUM_GLOBALVARS];
+FWorldGlobalArray ACS_GlobalArrays[NUM_GLOBALVARS];
+
+
+//----------------------------------------------------------------------------
+//
+// Global ACS strings (Formerly known as On the fly strings)
+//
+// This special string table is part of the global state. Programmatically
+// generated strings (e.g. those returned by strparam) are stored here.
+// PCD_TAGSTRING also now stores strings in this table instead of simply
+// tagging strings with their library ID.
+//
+// Identical strings map to identical string identifiers.
+//
+// When the string table needs to grow to hold more strings, a garbage
+// collection is first attempted to see if more room can be made to store
+// strings without growing. A string is concidered in use if any value
+// in any of these variable blocks contains a valid ID in the global string
+// table:
+//   * All running scripts' local variables
+//   * All map variables
+//   * All world variables
+//   * All global variables
+// It's not important whether or not they are really used as strings, only
+// that they might be. A string is also concidered in use if its lock count
+// is non-zero, even if none of the above variable blocks referenced it.
+//
+// To keep track of local and map variables for nonresident maps in a hub,
+// when a map's state is archived, all strings found in its local and map
+// variables are locked. When a map is revisited in a hub, all strings found
+// in its local and map variables are unlocked. Locking and unlocking are
+// cumulative operations.
+//
+// What this all means is that:
+//   * Strings returned by strparam last indefinitely. No longer do they
+//     disappear at the end of the tic they were generated.
+//   * You can pass library strings around freely without having to worry
+//     about always having the same libraries loaded in the same order on
+//     every map that needs to use those strings.
+//
+//----------------------------------------------------------------------------
+
+ACSStringPool GlobalACSStrings;
+
+ACSStringPool::ACSStringPool()
+{
+	memset(PoolBuckets, 0xFF, sizeof(PoolBuckets));
+	FirstFreeEntry = 0;
+}
+
+//============================================================================
+//
+// ACSStringPool :: Clear
+//
+// Remove all strings from the pool.
+//
+//============================================================================
+
+void ACSStringPool::Clear()
+{
+	Pool.Clear();
+	memset(PoolBuckets, 0xFF, sizeof(PoolBuckets));
+	FirstFreeEntry = 0;
+}
+
+//============================================================================
+//
+// ACSStringPool :: AddString
+//
+// Returns a valid string identifier (including library ID) or -1 if we ran
+// out of room. Identical strings will return identical values.
+//
+//============================================================================
+
+int ACSStringPool::AddString(const char *str)
+{
+	size_t len = strlen(str);
+	unsigned int h = SuperFastHash(str, len);
+	unsigned int bucketnum = h % NUM_BUCKETS;
+	int i = FindString(str, len, h, bucketnum);
+	if (i >= 0)
+	{
+		return i | STRPOOL_LIBRARYID_OR;
+	}
+	FString fstr(str);
+	return InsertString(fstr, h, bucketnum);
+}
+
+int ACSStringPool::AddString(FString &str)
+{
+	unsigned int h = SuperFastHash(str.GetChars(), str.Len());
+	unsigned int bucketnum = h % NUM_BUCKETS;
+	int i = FindString(str, str.Len(), h, bucketnum);
+	if (i >= 0)
+	{
+		return i | STRPOOL_LIBRARYID_OR;
+	}
+	return InsertString(str, h, bucketnum);
+}
+
+//============================================================================
+//
+// ACSStringPool :: GetString
+//
+//============================================================================
+
+const char *ACSStringPool::GetString(int strnum)
+{
+	assert((strnum & LIBRARYID_MASK) == STRPOOL_LIBRARYID_OR);
+	strnum &= ~LIBRARYID_MASK;
+	if ((unsigned)strnum < Pool.Size() && Pool[strnum].Next != FREE_ENTRY)
+	{
+		return Pool[strnum].Str;
+	}
+	return NULL;
+}
+
+//============================================================================
+//
+// ACSStringPool :: LockString
+//
+// Prevents this string from being purged.
+//
+//============================================================================
+
+void ACSStringPool::LockString(int strnum)
+{
+	assert((strnum & LIBRARYID_MASK) == STRPOOL_LIBRARYID_OR);
+	strnum &= ~LIBRARYID_MASK;
+	assert((unsigned)strnum < Pool.Size());
+	Pool[strnum].LockCount++;
+}
+
+//============================================================================
+//
+// ACSStringPool :: UnlockString
+//
+// When equally mated with LockString, allows this string to be purged.
+//
+//============================================================================
+
+void ACSStringPool::UnlockString(int strnum)
+{
+	assert((strnum & LIBRARYID_MASK) == STRPOOL_LIBRARYID_OR);
+	strnum &= ~LIBRARYID_MASK;
+	assert((unsigned)strnum < Pool.Size());
+	assert(Pool[strnum].LockCount > 0);
+	Pool[strnum].LockCount--;
+}
+
+//============================================================================
+//
+// ACSStringPool :: MarkString
+//
+// Prevent this string from being purged during the next call to PurgeStrings.
+// This does not carry over to subsequent calls of PurgeStrings.
+//
+//============================================================================
+
+void ACSStringPool::MarkString(int strnum)
+{
+	assert((strnum & LIBRARYID_MASK) == STRPOOL_LIBRARYID_OR);
+	strnum &= ~LIBRARYID_MASK;
+	assert((unsigned)strnum < Pool.Size());
+	Pool[strnum].LockCount |= 0x80000000;
+}
+
+//============================================================================
+//
+// ACSStringPool :: LockStringArray
+//
+// Prevents several strings from being purged. Entries not in this pool will
+// be silently ignored. The idea here is to pass this function a block of
+// ACS variables. Everything that looks like it might be a string in the pool
+// is locked, even if it's not actually used as such. It's better to keep
+// more strings than we need than to throw away ones we do need.
+//
+//============================================================================
+
+void ACSStringPool::LockStringArray(const int *strnum, unsigned int count)
+{
+	for (unsigned int i = 0; i < count; ++i)
+	{
+		int num = strnum[i];
+		if ((num & LIBRARYID_MASK) == STRPOOL_LIBRARYID_OR)
+		{
+			num &= ~LIBRARYID_MASK;
+			if ((unsigned)num < Pool.Size())
+			{
+				Pool[num].LockCount++;
+			}
+		}
+	}
+}
+
+//============================================================================
+//
+// ACSStringPool :: UnlockStringArray
+//
+// Reverse of LockStringArray.
+//
+//============================================================================
+
+void ACSStringPool::UnlockStringArray(const int *strnum, unsigned int count)
+{
+	for (unsigned int i = 0; i < count; ++i)
+	{
+		int num = strnum[i];
+		if ((num & LIBRARYID_MASK) == STRPOOL_LIBRARYID_OR)
+		{
+			num &= ~LIBRARYID_MASK;
+			if ((unsigned)num < Pool.Size())
+			{
+				assert(Pool[num].LockCount > 0);
+				Pool[num].LockCount--;
+			}
+		}
+	}
+}
+
+//============================================================================
+//
+// ACSStringPool :: MarkStringArray
+//
+// Array version of MarkString.
+//
+//============================================================================
+
+void ACSStringPool::MarkStringArray(const int *strnum, unsigned int count)
+{
+	for (unsigned int i = 0; i < count; ++i)
+	{
+		int num = strnum[i];
+		if ((num & LIBRARYID_MASK) == STRPOOL_LIBRARYID_OR)
+		{
+			num &= ~LIBRARYID_MASK;
+			if ((unsigned)num < Pool.Size())
+			{
+				Pool[num].LockCount |= 0x80000000;
+			}
+		}
+	}
+}
+
+//============================================================================
+//
+// ACSStringPool :: MarkStringMap
+//
+// World/global variables version of MarkString.
+//
+//============================================================================
+
+void ACSStringPool::MarkStringMap(const FWorldGlobalArray &aray)
+{
+	FWorldGlobalArray::ConstIterator it(aray);
+	FWorldGlobalArray::ConstPair *pair;
+
+	while (it.NextPair(pair))
+	{
+		int num = pair->Value;
+		if ((num & LIBRARYID_MASK) == STRPOOL_LIBRARYID_OR)
+		{
+			num &= ~LIBRARYID_MASK;
+			if ((unsigned)num < Pool.Size())
+			{
+				Pool[num].LockCount |= 0x80000000;
+			}
+		}
+	}
+}
+
+//============================================================================
+//
+// ACSStringPool :: UnlockAll
+//
+// Resets every entry's lock count to 0. Used when doing a partial reset of
+// ACS state such as travelling to a new hub.
+//
+//============================================================================
+
+void ACSStringPool::UnlockAll()
+{
+	for (unsigned int i = 0; i < Pool.Size(); ++i)
+	{
+		Pool[i].LockCount = 0;
+	}
+}
+
+//============================================================================
+//
+// ACSStringPool :: PurgeStrings
+//
+// Remove all unlocked strings from the pool.
+//
+//============================================================================
+
+void ACSStringPool::PurgeStrings()
+{
+	// Clear the hash buckets. We'll rebuild them as we decide what strings
+	// to keep and which to toss.
+	memset(PoolBuckets, 0xFF, sizeof(PoolBuckets));
+	for (unsigned int i = 0; i < Pool.Size(); ++i)
+	{
+		PoolEntry *entry = &Pool[i];
+		if (entry->Next != FREE_ENTRY)
+		{
+			if (entry->LockCount == 0)
+			{ // Mark this entry as free.
+				entry->Next = FREE_ENTRY;
+				if (i < FirstFreeEntry)
+				{
+					FirstFreeEntry = i;
+				}
+			}
+			else
+			{
+				// Rehash this entry.
+				unsigned int h = entry->Hash % NUM_BUCKETS;
+				entry->Next = PoolBuckets[h];
+				PoolBuckets[h] = i;
+				// Remove MarkString's mark.
+				entry->LockCount &= 0x7FFFFFFF;
+			}
+		}
+	}
+}
+
+//============================================================================
+//
+// ACSStringPool :: FindString
+//
+// Finds a string in the pool. Does not include the library ID in the returned
+// value. Returns -1 if the string does not exist in the pool.
+//
+//============================================================================
+
+int ACSStringPool::FindString(const char *str, size_t len, unsigned int h, unsigned int bucketnum)
+{
+	unsigned int i = PoolBuckets[bucketnum];
+	while (i != NO_ENTRY)
+	{
+		PoolEntry *entry = &Pool[i];
+		assert(entry->Next != FREE_ENTRY);
+		if (entry->Hash == h && entry->Str.Len() == len &&
+			memcmp(entry->Str.GetChars(), str, len) == 0)
+		{
+			return i;
+		}
+		i = entry->Next;
+	}
+	return -1;
+}
+
+//============================================================================
+//
+// ACSStringPool :: InsertString
+//
+// Inserts a new string into the pool.
+//
+//============================================================================
+
+int ACSStringPool::InsertString(FString &str, unsigned int h, unsigned int bucketnum)
+{
+	if (Pool.Size() >= STRPOOL_LIBRARYID)
+	{
+		return -1;
+	}
+	unsigned int index = FirstFreeEntry;
+	if (index >= MIN_GC_SIZE && index == Pool.Max())
+	{ // We will need to grow the array. Try a garbage collection first.
+		P_CollectACSGlobalStrings();
+	}
+	if (index == Pool.Size())
+	{ // There were no free entries; make a new one.
+		Pool.Reserve(1);
+		FirstFreeEntry++;
+	}
+	else
+	{ // Scan for the next free entry
+		unsigned int i;
+		for (i = FirstFreeEntry + 1; i < Pool.Size() && Pool[i].Next != FREE_ENTRY; ++i)
+		{
+		}
+		FirstFreeEntry = i;
+	}
+	PoolEntry *entry = &Pool[index];
+	entry->Str = str;
+	entry->Hash = h;
+	entry->Next = PoolBuckets[bucketnum];
+	entry->LockCount = 0;
+	PoolBuckets[bucketnum] = index;
+	return index | STRPOOL_LIBRARYID_OR;
+}
+
+//============================================================================
+//
+// ACSStringPool :: ReadStrings
+//
+// Reads strings from a PNG chunk.
+//
+//============================================================================
+
+void ACSStringPool::ReadStrings(PNGHandle *png, DWORD id)
+{
+	Clear();
+
+	size_t len = M_FindPNGChunk(png, id);
+	if (len != 0)
+	{
+		FPNGChunkArchive arc(png->File->GetFile(), id, len);
+		int32 i, j, poolsize;
+		unsigned int h, bucketnum;
+		char *str = NULL;
+
+		arc << poolsize;
+
+		Pool.Resize(poolsize);
+		i = 0;
+		j = arc.ReadCount();
+		while (j >= 0)
+		{
+			// Mark skipped entries as free
+			for (; i < j; ++i)
+			{
+				Pool[i].Next = FREE_ENTRY;
+				Pool[i].LockCount = 0;
+			}
+			arc << str;
+			h = SuperFastHash(str, strlen(str));
+			bucketnum = h % NUM_BUCKETS;
+			Pool[i].Str = str;
+			Pool[i].Hash = h;
+			Pool[i].LockCount = arc.ReadCount();
+			Pool[i].Next = PoolBuckets[bucketnum];
+			PoolBuckets[bucketnum] = i;
+			i++;
+			j = arc.ReadCount();
+		}
+		if (str != NULL)
+		{
+			delete[] str;
+		}
+	}
+}
+
+//============================================================================
+//
+// ACSStringPool :: WriteStrings
+//
+// Writes strings to a PNG chunk.
+//
+//============================================================================
+
+void ACSStringPool::WriteStrings(FILE *file, DWORD id) const
+{
+	int32 i, poolsize = (int32)Pool.Size();
+	
+	if (poolsize == 0)
+	{ // No need to write if we don't have anything.
+		return;
+	}
+	FPNGChunkArchive arc(file, id);
+
+	arc << poolsize;
+	for (i = 0; i < poolsize; ++i)
+	{
+		PoolEntry *entry = &Pool[i];
+		if (entry->Next != FREE_ENTRY)
+		{
+			arc.WriteCount(i);
+			arc.WriteString(entry->Str);
+			arc.WriteCount(entry->LockCount);
+		}
+	}
+	arc.WriteCount(-1);
+}
+
+//============================================================================
+//
+// ACSStringPool :: Dump
+//
+// Lists all strings in the pool.
+//
+//============================================================================
+
+void ACSStringPool::Dump() const
+{
+	for (unsigned int i = 0; i < Pool.Size(); ++i)
+	{
+		if (Pool[i].Next != FREE_ENTRY)
+		{
+			Printf("%4u. (%2d) \"%s\"\n", i, Pool[i].LockCount, Pool[i].Str.GetChars());
+		}
+	}
+}
+
+//============================================================================
+//
+// P_MarkWorldVarStrings
+//
+//============================================================================
+
+void P_MarkWorldVarStrings()
+{
+	GlobalACSStrings.MarkStringArray(ACS_WorldVars, countof(ACS_WorldVars));
+	for (size_t i = 0; i < countof(ACS_WorldArrays); ++i)
+	{
+		GlobalACSStrings.MarkStringMap(ACS_WorldArrays[i]);
+	}
+}
+
+//============================================================================
+//
+// P_MarkGlobalVarStrings
+//
+//============================================================================
+
+void P_MarkGlobalVarStrings()
+{
+	GlobalACSStrings.MarkStringArray(ACS_GlobalVars, countof(ACS_GlobalVars));
+	for (size_t i = 0; i < countof(ACS_GlobalArrays); ++i)
+	{
+		GlobalACSStrings.MarkStringMap(ACS_GlobalArrays[i]);
+	}
+}
+
+//============================================================================
+//
+// P_CollectACSGlobalStrings
+//
+// Garbage collect ACS global strings.
+//
+//============================================================================
+
+void P_CollectACSGlobalStrings()
+{
+	FBehavior::StaticMarkLevelVarStrings();
+	P_MarkWorldVarStrings();
+	P_MarkGlobalVarStrings();
+	GlobalACSStrings.PurgeStrings();
+}
+
+#ifdef _DEBUG
+CCMD(acsgc)
+{
+	P_CollectACSGlobalStrings();
+}
+CCMD(globstr)
+{
+	GlobalACSStrings.Dump();
 }
 #endif
 
@@ -223,7 +759,7 @@ static FString ScriptPresentation(int script)
 
 //============================================================================
 //
-//
+// P_ClearACSVars
 //
 //============================================================================
 
@@ -243,12 +779,22 @@ void P_ClearACSVars(bool alsoglobal)
 		{
 			ACS_GlobalArrays[i].Clear ();
 		}
+		// Since we cleared all ACS variables, we know nothing refers to them
+		// anymore.
+		GlobalACSStrings.Clear();
+	}
+	else
+	{
+		// Purge any strings that aren't referenced by global variables, since
+		// they're the only possible references left.
+		P_MarkGlobalVarStrings();
+		GlobalACSStrings.PurgeStrings();
 	}
 }
 
 //============================================================================
 //
-//
+// WriteVars
 //
 //============================================================================
 
@@ -406,6 +952,7 @@ void P_ReadACSVars(PNGHandle *png)
 	ReadVars (png, ACS_GlobalVars, NUM_GLOBALVARS, MAKE_ID('g','v','A','r'));
 	ReadArrayVars (png, ACS_WorldArrays, NUM_WORLDVARS, MAKE_ID('w','a','R','r'));
 	ReadArrayVars (png, ACS_GlobalArrays, NUM_GLOBALVARS, MAKE_ID('g','a','R','r'));
+	GlobalACSStrings.ReadStrings(png, MAKE_ID('a','s','T','r'));
 }
 
 //============================================================================
@@ -420,6 +967,7 @@ void P_WriteACSVars(FILE *stdfile)
 	WriteVars (stdfile, ACS_GlobalVars, NUM_GLOBALVARS, MAKE_ID('g','v','A','r'));
 	WriteArrayVars (stdfile, ACS_WorldArrays, NUM_WORLDVARS, MAKE_ID('w','a','R','r'));
 	WriteArrayVars (stdfile, ACS_GlobalArrays, NUM_GLOBALVARS, MAKE_ID('g','a','R','r'));
+	GlobalACSStrings.WriteStrings(stdfile, MAKE_ID('a','s','T','r'));
 }
 
 //---- Inventory functions --------------------------------------//
@@ -891,6 +1439,84 @@ FBehavior *FBehavior::StaticGetModule (int lib)
 	return StaticModules[lib];
 }
 
+void FBehavior::StaticMarkLevelVarStrings()
+{
+	// Mark map variables.
+	for (DWORD modnum = 0; modnum < StaticModules.Size(); ++modnum)
+	{
+		StaticModules[modnum]->MarkMapVarStrings();
+	}
+	// Mark running scripts' local variables.
+	if (DACSThinker::ActiveThinker != NULL)
+	{
+		for (DLevelScript *script = DACSThinker::ActiveThinker->Scripts; script != NULL; script = script->GetNext())
+		{
+			script->MarkLocalVarStrings();
+		}
+	}
+}
+
+void FBehavior::StaticLockLevelVarStrings()
+{
+	// Lock map variables.
+	for (DWORD modnum = 0; modnum < StaticModules.Size(); ++modnum)
+	{
+		StaticModules[modnum]->LockMapVarStrings();
+	}
+	// Lock running scripts' local variables.
+	if (DACSThinker::ActiveThinker != NULL)
+	{
+		for (DLevelScript *script = DACSThinker::ActiveThinker->Scripts; script != NULL; script = script->GetNext())
+		{
+			script->LockLocalVarStrings();
+		}
+	}
+}
+
+void FBehavior::StaticUnlockLevelVarStrings()
+{
+	// Unlock map variables.
+	for (DWORD modnum = 0; modnum < StaticModules.Size(); ++modnum)
+	{
+		StaticModules[modnum]->UnlockMapVarStrings();
+	}
+	// Unlock running scripts' local variables.
+	if (DACSThinker::ActiveThinker != NULL)
+	{
+		for (DLevelScript *script = DACSThinker::ActiveThinker->Scripts; script != NULL; script = script->GetNext())
+		{
+			script->UnlockLocalVarStrings();
+		}
+	}
+}
+
+void FBehavior::MarkMapVarStrings() const
+{
+	GlobalACSStrings.MarkStringArray(MapVarStore, NUM_MAPVARS);
+	for (int i = 0; i < NumArrays; ++i)
+	{
+		GlobalACSStrings.MarkStringArray(ArrayStore[i].Elements, ArrayStore[i].ArraySize);
+	}
+}
+
+void FBehavior::LockMapVarStrings() const
+{
+	GlobalACSStrings.LockStringArray(MapVarStore, NUM_MAPVARS);
+	for (int i = 0; i < NumArrays; ++i)
+	{
+		GlobalACSStrings.LockStringArray(ArrayStore[i].Elements, ArrayStore[i].ArraySize);
+	}
+}
+
+void FBehavior::UnlockMapVarStrings() const
+{
+	GlobalACSStrings.UnlockStringArray(MapVarStore, NUM_MAPVARS);
+	for (int i = 0; i < NumArrays; ++i)
+	{
+		GlobalACSStrings.UnlockStringArray(ArrayStore[i].Elements, ArrayStore[i].ArraySize);
+	}
+}
+
 void FBehavior::StaticSerializeModuleStates (FArchive &arc)
 {
 	DWORD modnum;
@@ -1042,7 +1668,7 @@ FBehavior::FBehavior (int lumpnum, FileReader * fr, int len)
 	// 1. If not, corrupt modules cause memory leaks
 	// 2. Corrupt modules won't be reported when a level is being loaded if this function quits before
 	//    adding it to the list.
-    LibraryID = StaticModules.Push (this) << 16;
+    LibraryID = StaticModules.Push (this) << LIBRARYID_SHIFT;
 
 	if (fr == NULL) len = Wads.LumpLength (lumpnum);
 
@@ -1154,7 +1780,7 @@ FBehavior::FBehavior (int lumpnum, FileReader * fr, int len)
 		{
 			MapVars[i] = &MapVarStore[i];
 		}
-		//LibraryID = StaticModules.Push (this) << 16;
+		//LibraryID = StaticModules.Push (this) << LIBRARYID_SHIFT;
 	}
 	else
 	{
@@ -1254,7 +1880,8 @@ FBehavior::FBehavior (int lumpnum, FileReader * fr, int len)
 			{
 				for (DWORD i = 0; i < chunk[1]/4; ++i)
 				{
-					MapVarStore[chunk[i+2]] |= LibraryID;
+//					MapVarStore[chunk[i+2]] |= LibraryID;
+					MapVarStore[chunk[i+2]] = GlobalACSStrings.AddString(LookupString(MapVarStore[chunk[i+2]]));
 				}
 			}
 
@@ -1269,7 +1896,8 @@ FBehavior::FBehavior (int lumpnum, FileReader * fr, int len)
 						SDWORD *elems = ArrayStore[arraynum].Elements;
 						for (int j = ArrayStore[arraynum].ArraySize; j > 0; --j, ++elems)
 						{
-							*elems |= LibraryID;
+//							*elems |= LibraryID;
+							*elems = GlobalACSStrings.AddString(LookupString(*elems));
 						}
 					}
 				}
@@ -1293,8 +1921,14 @@ FBehavior::FBehavior (int lumpnum, FileReader * fr, int len)
 						{
 							// For ATAG, a value of 0 = Integer, 1 = String, 2 = FunctionPtr
 							// Our implementation uses the same tags for both String and FunctionPtr
-							if(*chunkData)
+							if (*chunkData == 2)
+							{
 								*elems |= LibraryID;
+							}
+							else if (*chunkData == 1)
+							{
+								*elems = GlobalACSStrings.AddString(LookupString(*elems));
+							}
 						}
 						i += 4+ArrayStore[arraynum].ArraySize;
 					}
@@ -1929,15 +2563,12 @@ BYTE *FBehavior::NextChunk (BYTE *chunk) const
 
 const char *FBehavior::StaticLookupString (DWORD index)
 {
-	DWORD lib = index >> 16;
-	
-	switch (lib)
-	{
-	case LIB_ACSSTRINGS_ONTHEFLY:
-		index &= 0xffff;
-		return (ACS_StringsOnTheFly.Size() > index) ? ACS_StringsOnTheFly[index].GetChars() : NULL;
-	}
+	DWORD lib = index >> LIBRARYID_SHIFT;
 
+	if (lib == STRPOOL_LIBRARYID)
+	{
+		return GlobalACSStrings.GetString(index);
+	}
 	if (lib >= (DWORD)StaticModules.Size())
 	{
 		return NULL;
@@ -2154,7 +2785,7 @@ void DACSThinker::Tick ()
 		script = next;
 	}
 
-	ACS_StringsOnTheFly.Clear();
+//	GlobalACSStrings.Clear();
 
 	if (ACS_StringBuilderStack.Size())
 	{
@@ -2220,7 +2851,7 @@ void DLevelScript::Serialize (FArchive &arc)
 
 	if (arc.IsStoring ())
 	{
-		WORD lib = activeBehavior->GetLibraryID() >> 16;
+		WORD lib = activeBehavior->GetLibraryID() >> LIBRARYID_SHIFT;
 		arc << lib;
 		i = activeBehavior->PC2Ofs (pc);
 		arc << i;
@@ -3477,6 +4108,10 @@ enum EACSFunctions
 	ACSF_SetCVar,
 	ACSF_GetUserCVar,
 	ACSF_SetUserCVar,
+	ACSF_GetCVarString,
+	ACSF_SetCVarString,
+	ACSF_GetUserCVarString,
+	ACSF_SetUserCVarString,
 
 	// ZDaemon
 	ACSF_GetTeamScore = 19620,	// (int team)
@@ -3577,7 +4212,7 @@ static int GetUserVariable(AActor *self, FName varname, int index)
 }
 
 // Converts fixed- to floating-point as required.
-static void DoSetCVar(FBaseCVar *cvar, int value, bool force=false)
+static void DoSetCVar(FBaseCVar *cvar, int value, bool is_string, bool force=false)
 {
 	UCVarValue val;
 	ECVarType type;
@@ -3589,7 +4224,12 @@ static void DoSetCVar(FBaseCVar *cvar, int value, bool force=false)
 	{
 		return;
 	}
-	if (cvar->GetRealType() == CVAR_Float)
+	if (is_string)
+	{
+		val.String = FBehavior::StaticLookupString(value);
+		type = CVAR_String;
+	}
+	else if (cvar->GetRealType() == CVAR_Float)
 	{
 		val.Float = FIXED2FLOAT(value);
 		type = CVAR_Float;
@@ -3610,11 +4250,16 @@ static void DoSetCVar(FBaseCVar *cvar, int value, bool force=false)
 }
 
 // Converts floating- to fixed-point as required.
-static int DoGetCVar(FBaseCVar *cvar)
+static int DoGetCVar(FBaseCVar *cvar, bool is_string)
 {
 	UCVarValue val;
 
-	if (cvar->GetRealType() == CVAR_Float)
+	if (is_string)
+	{
+		val = cvar->GetGenericRep(CVAR_String);
+		return GlobalACSStrings.AddString(val.String);
+	}
+	else if (cvar->GetRealType() == CVAR_Float)
 	{
 		val = cvar->GetGenericRep(CVAR_Float);
 		return FLOAT2FIXED(val.Float);
@@ -3626,7 +4271,7 @@ static int DoGetCVar(FBaseCVar *cvar)
 	}
 }
 
-static int GetUserCVar(int playernum, const char *cvarname)
+static int GetUserCVar(int playernum, const char *cvarname, bool is_string)
 {
 	if ((unsigned)playernum >= MAXPLAYERS || !playeringame[playernum])
 	{
@@ -3638,10 +4283,10 @@ static int GetUserCVar(int playernum, const char *cvarname)
 	{
 		return 0;
 	}
-	return DoGetCVar(cvar);
+	return DoGetCVar(cvar, is_string);
 }
 
-static int GetCVar(AActor *activator, const char *cvarname)
+static int GetCVar(AActor *activator, const char *cvarname, bool is_string)
 {
 	FBaseCVar *cvar = FindCVar(cvarname, NULL);
 	// Either the cvar doesn't exist, or it's for a mod that isn't loaded, so return 0.
@@ -3658,13 +4303,13 @@ static int GetCVar(AActor *activator, const char *cvarname)
 			{
 				return 0;
 			}
-			return GetUserCVar(int(activator->player - players), cvarname);
+			return GetUserCVar(int(activator->player - players), cvarname, is_string);
 		}
-		return DoGetCVar(cvar);
+		return DoGetCVar(cvar, is_string);
 	}
 }
 
-static int SetUserCVar(int playernum, const char *cvarname, int value)
+static int SetUserCVar(int playernum, const char *cvarname, int value, bool is_string)
 {
 	if ((unsigned)playernum >= MAXPLAYERS || !playeringame[playernum])
 	{
@@ -3677,7 +4322,7 @@ static int SetUserCVar(int playernum, const char *cvarname, int value)
 	{
 		return 0;
 	}
-	DoSetCVar(cvar, value);
+	DoSetCVar(cvar, value, is_string);
 
 	// If we are this player, then also reflect this change in the local version of this cvar.
 	if (playernum == consoleplayer)
@@ -3687,14 +4332,14 @@ static int SetUserCVar(int playernum, const char *cvarname, int value)
 		// but check just to be safe.
 		if (cvar != NULL)
 		{
-			DoSetCVar(cvar, value, true);
+			DoSetCVar(cvar, value, is_string, true);
 		}
 	}
 
 	return 1;
 }
 
-static int SetCVar(AActor *activator, const char *cvarname, int value)
+static int SetCVar(AActor *activator, const char *cvarname, int value, bool is_string)
 {
 	FBaseCVar *cvar = FindCVar(cvarname, NULL);
 	// Only mod-created cvars may be set.
@@ -3709,9 +4354,9 @@ static int SetCVar(AActor *activator, const char *cvarname, int value)
 		{
 			return 0;
 		}
-		return SetUserCVar(int(activator->player - players), cvarname, value);
+		return SetUserCVar(int(activator->player - players), cvarname, value, is_string);
 	}
-	DoSetCVar(cvar, value);
+	DoSetCVar(cvar, value, is_string);
 	return 1;
 }
 
@@ -4159,24 +4804,52 @@ int DLevelScript::CallFunction(int argCount, int funcIndex, SDWORD *args)
 			WrapWidth = argCount > 0 ? args[0] : 0;
 			break;
 
-		case ACSF_GetUserCVar:
-			if (argCount == 2)
+		case ACSF_GetCVarString:
+			if (argCount == 1)
 			{
-				return GetUserCVar(args[0], FBehavior::StaticLookupString(args[1]));
-			}
-			break;
-
-		case ACSF_SetUserCVar:
-			if (argCount == 3)
-			{
-				return SetUserCVar(args[0], FBehavior::StaticLookupString(args[1]), args[2]);
+				return GetCVar(activator, FBehavior::StaticLookupString(args[0]), true);
 			}
 			break;
 
 		case ACSF_SetCVar:
 			if (argCount == 2)
 			{
-				return SetCVar(activator, FBehavior::StaticLookupString(args[0]), args[1]);
+				return SetCVar(activator, FBehavior::StaticLookupString(args[0]), args[1], false);
+			}
+			break;
+
+		case ACSF_SetCVarString:
+			if (argCount == 2)
+			{
+				return SetCVar(activator, FBehavior::StaticLookupString(args[0]), args[1], true);
+			}
+			break;
+
+		case ACSF_GetUserCVar:
+			if (argCount == 2)
+			{
+				return GetUserCVar(args[0], FBehavior::StaticLookupString(args[1]), false);
+			}
+			break;
+
+		case ACSF_GetUserCVarString:
+			if (argCount == 2)
+			{
+				return GetUserCVar(args[0], FBehavior::StaticLookupString(args[1]), true);
+			}
+			break;
+
+		case ACSF_SetUserCVar:
+			if (argCount == 3)
+			{
+				return SetUserCVar(args[0], FBehavior::StaticLookupString(args[1]), args[2], false);
+			}
+			break;
+
+		case ACSF_SetUserCVarString:
+			if (argCount == 3)
+			{
+				return SetUserCVar(args[0], FBehavior::StaticLookupString(args[1]), args[2], true);
 			}
 			break;
 
@@ -4330,7 +5003,8 @@ int DLevelScript::RunScript ()
 			break;
 
 		case PCD_TAGSTRING:
-			Stack[sp-1] |= activeBehavior->GetLibraryID();
+			//Stack[sp-1] |= activeBehavior->GetLibraryID();
+			Stack[sp-1] = GlobalACSStrings.AddString(activeBehavior->LookupString(Stack[sp-1]));
 			break;
 
 		case PCD_PUSHNUMBER:
@@ -7046,7 +7720,7 @@ scriptwait:
 			break;
 
 		case PCD_GETCVAR:
-			STACK(1) = GetCVar(activator, FBehavior::StaticLookupString(STACK(1)));
+			STACK(1) = GetCVar(activator, FBehavior::StaticLookupString(STACK(1)), false);
 			break;
 
 		case PCD_SETHUDSIZE:
@@ -7430,15 +8104,7 @@ scriptwait:
 		case PCD_SAVESTRING:
 			// Saves the string
 			{
-				unsigned int str_otf = ACS_StringsOnTheFly.Push(work);
-				if (str_otf > 0xffff)
-				{
-					PushToStack(-1);
-				}
-				else
-				{
-					PushToStack((SDWORD)str_otf|ACSSTRING_OR_ONTHEFLY);
-				}
+				PushToStack(GlobalACSStrings.AddString(work));
 				STRINGBUILDER_FINISH(work);
 			}		
 			break;
