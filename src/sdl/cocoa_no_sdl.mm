@@ -358,9 +358,21 @@ SWORD ModifierFlagsToGUIKeyModifiers( NSEvent* theEvent )
 		 | ( ( modifiers & NSCommandKeyMask   ) ? GKM_META  : 0 );
 }
 
+bool ShouldGenerateGUICharEvent(NSEvent* theEvent)
+{
+	const NSUInteger modifiers( [theEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask );
+	return !(modifiers & NSControlKeyMask)
+		&& !(modifiers & NSAlternateKeyMask)
+		&& !(modifiers & NSCommandKeyMask)
+		&& !(modifiers & NSFunctionKeyMask);
+}
+
 void ProcessKeyboardFlagsEvent( NSEvent* theEvent )
 {
-	const  uint32_t      modifiers = [theEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask;
+	static const uint32_t FLAGS_MASK =
+		NSDeviceIndependentModifierFlagsMask & ~NSNumericPadKeyMask;
+
+	const  uint32_t      modifiers = [theEvent modifierFlags] & FLAGS_MASK;
 	static uint32_t   oldModifiers = 0;
 	const  uint32_t deltaModifiers = modifiers ^ oldModifiers;
 	
@@ -374,17 +386,23 @@ void ProcessKeyboardFlagsEvent( NSEvent* theEvent )
 	event.type  = modifiers > oldModifiers ? EV_KeyDown : EV_KeyUp;
 	event.data1 = ModifierToDIK( deltaModifiers );
 
-	// Caps Lock will generate one event per state change but not per actual key press or release
-	// So treat any event as key down
+	oldModifiers = modifiers;
+
+	// Caps Lock is a modifier key which generates one event per state change
+	// but not per actual key press or release. So treat any event as key down
+	// Also its event should be not be posted in menu and console
 	
 	if ( DIK_CAPITAL == event.data1 )
 	{
+		if (GUICapture)
+		{
+			return;
+		}
+
 		event.type = EV_KeyDown;
 	}
 	
 	D_PostEvent( &event );
-	
-	oldModifiers = modifiers;
 }
 
 void ProcessKeyboardEventInMenu( NSEvent* theEvent )
@@ -448,7 +466,7 @@ void ProcessKeyboardEventInMenu( NSEvent* theEvent )
 	
 	if (   !iscntrl( event.data2 ) 
 		&& EV_GUI_KeyUp != event.subtype
-		&& !( event.data3 & GKM_META ) )
+		&& ShouldGenerateGUICharEvent(theEvent) )
 	{
 		event.subtype = EV_GUI_Char;
 		event.data1   = event.data2;
