@@ -441,6 +441,7 @@ bool FScanner::ScanWithUnsignedCType(const bool tokens)
 	bool return_val;
 
 #undef YYCTYPE
+#undef YYMARKER
 #define YYCTYPE unsigned char
 #include "sc_man_scanner.h"
 
