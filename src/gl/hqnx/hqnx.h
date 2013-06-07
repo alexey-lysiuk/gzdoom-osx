@@ -26,13 +26,14 @@
 
 #include <mmintrin.h>
 
-#if defined __APPLE__ && !defined __x86_64__ && !defined __clang__
-// On LLVM GCC _mm_cvtsi64_m64() intrinsic is defined for x64 only
-static inline __m64 __attribute__((__always_inline__)) _mm_cvtsi64_m64(long long number)
+#if defined _WIN32 || defined __APPLE__ && !defined __x86_64__ && !defined __clang__
+// Visual Studio 2010 has no _mm_cvtsi64_m64() intrinsic
+// LLVM GCC defines _mm_cvtsi64_m64() intrinsic for x64 only
+static inline __m64 _mm_cvtsi64_m64(long long number)
 {
-  return reinterpret_cast<__m64>(number);
+  return *reinterpret_cast<__m64*>(&number);
 }
-#endif // __APPLE__ && !__x86_64__ && !__clang__
+#endif // _WIN32 || __APPLE__ && !__x86_64__ && !__clang__
 
 class hq_vec
 {

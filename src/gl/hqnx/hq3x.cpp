@@ -144,7 +144,7 @@ inline void Interp5(unsigned char * pc, int c1, int c2)
 #define PIXEL22_5   Interp5(pOut+BpL+BpL+8, c[6], c[8]);
 #define PIXEL22_C   *((int*)(pOut+BpL+BpL+8)) = c[5];
 
-int Diff(unsigned int w5, unsigned int w1);
+bool Diff(const unsigned int, const unsigned int);
 
 void DLL hq3x_32( int * pIn, unsigned char * pOut, int Xres, int Yres, int BpL )
 {

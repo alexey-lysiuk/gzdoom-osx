@@ -171,7 +171,7 @@ inline void Interp10(unsigned char * pc, int c1, int c2, int c3)
 #define PIXEL11_100   Interp10(pOut+BpL+4, c[5], c[6], c[8]);
 
 
-int Diff(unsigned int w5, unsigned int w1);
+bool Diff(const unsigned int, const unsigned int);
 
 void DLL hq2x_32( int * pIn, unsigned char * pOut, int Xres, int Yres, int BpL )
 {
