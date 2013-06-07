@@ -1321,7 +1321,6 @@
     <ClInclude Include="src\doomtype.h" />
     <ClInclude Include="src\dsectoreffect.h" />
     <ClInclude Include="src\dthinker.h" />
-    <ClInclude Include="src\f_finale.h" />
     <ClInclude Include="src\f_wipe.h" />
     <ClInclude Include="src\farchive.h" />
     <ClInclude Include="src\files.h" />
@@ -1446,7 +1445,6 @@
     <ClInclude Include="src\sound\i_sound.h" />
     <ClInclude Include="src\sound\i_soundinternal.h" />
     <ClInclude Include="src\oplsynth\DEFTYPES.H" />
-    <ClInclude Include="src\oplsynth\fmopl.h" />
     <ClInclude Include="src\oplsynth\muslib.h" />
     <ClInclude Include="src\oplsynth\opl.h" />
     <ClInclude Include="src\oplsynth\opl_mus_player.h" />
