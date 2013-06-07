@@ -969,7 +969,7 @@ void FDiskFile::DumpFiles()
 
 FResourceFile* CheckDisk( const char* filename, FileReader* file, bool quiet )
 {
-	const long fileSize = file->GetLength();
+	const DWORD fileSize = static_cast<DWORD>(file->GetLength());
 	
 	if ( fileSize >= 4 )
 	{
