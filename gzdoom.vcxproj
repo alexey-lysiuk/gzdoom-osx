@@ -76,6 +76,10 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <PreBuildEventUseInBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PreBuildEventUseInBuild>
+    <PreBuildEventUseInBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</PreBuildEventUseInBuild>
+    <PreBuildEventUseInBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</PreBuildEventUseInBuild>
+    <PreBuildEventUseInBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</PreBuildEventUseInBuild>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <PreBuildEvent>
@@ -96,7 +100,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>src\win32;src\sound;src;zlib;src\g_shared;src\g_doom;src\g_raven;src\g_heretic;src\g_hexen;src\g_strife;jpeg-6b;game-music-emu\gme;gdtoa;bzip2;lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>thirdparty\FMOD\inc;thirdparty\OpenGL;src\win32;src\sound;src;zlib;src\g_shared;src\g_doom;src\g_raven;src\g_heretic;src\g_hexen;src\g_strife;jpeg-6b;game-music-emu\gme;gdtoa;bzip2;lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;WIN32;_WIN32;_WINDOWS;HAVE_STRUPR;HAVE_FILELENGTH;NO_VA_COPY;BACKPATCH;HAVE_FLUIDSYNTH;DYN_FLUIDSYNTH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -148,6 +152,7 @@
       <LinkTimeCodeGeneration>
       </LinkTimeCodeGeneration>
       <SetChecksum>true</SetChecksum>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);thirdparty\FMOD\lib</AdditionalLibraryDirectories>
     </Link>
     <Manifest>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -169,7 +174,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>src\win32;src\sound;src;zlib;src\g_shared;src\g_doom;src\g_raven;src\g_heretic;src\g_hexen;src\g_strife;jpeg-6b;game-music-emu\gme;gdtoa;bzip2;lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>thirdparty\FMOD\inc;thirdparty\OpenGL;src\win32;src\sound;src;zlib;src\g_shared;src\g_doom;src\g_raven;src\g_heretic;src\g_hexen;src\g_strife;jpeg-6b;game-music-emu\gme;gdtoa;bzip2;lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WIN32;_WINDOWS;_CRTDBG_MAP_ALLOC;HAVE_STRUPR;HAVE_FILELENGTH;NO_VA_COPY;BACKPATCH;HAVE_FLUIDSYNTH;DYN_FLUIDSYNTH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -196,7 +201,7 @@
       <AdditionalDependencies>gdi32.lib;user32.lib;comctl32.lib;shell32.lib;advapi32.lib;comdlg32.lib;ole32.lib;dxguid.lib;dsound.lib;dinput8.lib;strmiids.lib;wsock32.lib;winmm.lib;setupapi.lib;ws2_32.lib;oleaut32.lib;fmodex_vc.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>../gzdoomd.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);thirdparty\FMOD\lib</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt;msvcrtd;msvcrt;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <DelayLoadDLLs>fmodex.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -225,7 +230,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>src\win32;src\sound;src;zlib;src\g_shared;src\g_doom;src\g_raven;src\g_heretic;src\g_hexen;src\g_strife;jpeg-6b;game-music-emu\gme;gdtoa;bzip2;lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>thirdparty\FMOD\inc;thirdparty\OpenGL;src\win32;src\sound;src;zlib;src\g_shared;src\g_doom;src\g_raven;src\g_heretic;src\g_hexen;src\g_strife;jpeg-6b;game-music-emu\gme;gdtoa;bzip2;lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;WIN32;_WIN32;_WIN64;_WINDOWS;HAVE_STRUPR;HAVE_FILELENGTH;NO_VA_COPY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -269,6 +274,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <SetChecksum>true</SetChecksum>
       <TargetMachine>MachineX64</TargetMachine>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);thirdparty\FMOD\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -284,7 +290,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>src\win32;src\sound;src;zlib;src\g_shared;src\g_doom;src\g_raven;src\g_heretic;src\g_hexen;src\g_strife;jpeg-6b;game-music-emu\gme;gdtoa;bzip2;lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>thirdparty\FMOD\inc;thirdparty\OpenGL;src\win32;src\sound;src;zlib;src\g_shared;src\g_doom;src\g_raven;src\g_heretic;src\g_hexen;src\g_strife;jpeg-6b;game-music-emu\gme;gdtoa;bzip2;lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WIN32;_WIN64;_WINDOWS;_CRTDBG_MAP_ALLOC;HAVE_STRUPR;HAVE_FILELENGTH;NO_VA_COPY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -312,7 +318,7 @@
       <AdditionalDependencies>dxguid.lib;ddraw.lib;dinput8.lib;comctl32.lib;strmiids.lib;wsock32.lib;winmm.lib;fmodex64_vc.lib;setupapi.lib;ws2_32.lib;oleaut32.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>../gzdoomd64.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);thirdparty\FMOD\lib</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>msvcrtd;libcmt;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <DelayLoadDLLs>fmodex64.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -1594,120 +1600,120 @@
     </CustomBuild>
     <CustomBuild Include="src\asm_ia32\a.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">nasm -g -o "$(IntDir)%(Filename).obj" -f win32 "%(FullPath)" -isrc/
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">thirdparty\nasm\nasm -g -o "$(IntDir)%(Filename).obj" -f win32 "%(FullPath)" -isrc/
 $(OutDir)fixrtext "$(IntDir)%(Filename).obj"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Assembling %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">nasm -g -o "$(IntDir)%(Filename).obj" -f win32 "%(FullPath)" -isrc/
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">thirdparty\nasm\nasm -g -o "$(IntDir)%(Filename).obj" -f win32 "%(FullPath)" -isrc/
 $(OutDir)fixrtext "$(IntDir)%(Filename).obj"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">nasm -o "$(IntDir)%(Filename).obj"  -f win32 "%(FullPath)" -isrc/
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">thirdparty\nasm\nasm -o "$(IntDir)%(Filename).obj"  -f win32 "%(FullPath)" -isrc/
 $(OutDir)fixrtext "$(IntDir)%(Filename).obj"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">nasm -o "$(IntDir)%(Filename).obj"  -f win32 "%(FullPath)" -isrc/
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">thirdparty\nasm\nasm -o "$(IntDir)%(Filename).obj"  -f win32 "%(FullPath)" -isrc/
 $(OutDir)fixrtext "$(IntDir)%(Filename).obj"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="src\asm_ia32\misc.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">nasm -g -o "$(IntDir)%(Filename).obj" -f win32 "%(FullPath)" -isrc/
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">thirdparty\nasm\nasm -g -o "$(IntDir)%(Filename).obj" -f win32 "%(FullPath)" -isrc/
 $(OutDir)fixrtext "$(IntDir)%(Filename).obj"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Assembling %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">nasm -g -o "$(IntDir)%(Filename).obj" -f win32 "%(FullPath)" -isrc/
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">thirdparty\nasm\nasm -g -o "$(IntDir)%(Filename).obj" -f win32 "%(FullPath)" -isrc/
 $(OutDir)fixrtext "$(IntDir)%(Filename).obj"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">nasm -o "$(IntDir)%(Filename).obj"  -f win32 "%(FullPath)" -isrc/
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">thirdparty\nasm\nasm -o "$(IntDir)%(Filename).obj"  -f win32 "%(FullPath)" -isrc/
 $(OutDir)fixrtext "$(IntDir)%(Filename).obj"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">nasm -o "$(IntDir)%(Filename).obj"  -f win32 "%(FullPath)" -isrc/
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">thirdparty\nasm\nasm -o "$(IntDir)%(Filename).obj"  -f win32 "%(FullPath)" -isrc/
 $(OutDir)fixrtext "$(IntDir)%(Filename).obj"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="src\asm_ia32\tmap.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">nasm -g -o "$(IntDir)%(Filename).obj" -f win32 "%(FullPath)" -isrc/
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">thirdparty\nasm\nasm -g -o "$(IntDir)%(Filename).obj" -f win32 "%(FullPath)" -isrc/
 $(OutDir)fixrtext "$(IntDir)%(Filename).obj"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Assembling %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">nasm -g -o "$(IntDir)%(Filename).obj" -f win32 "%(FullPath)" -isrc/
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">thirdparty\nasm\nasm -g -o "$(IntDir)%(Filename).obj" -f win32 "%(FullPath)" -isrc/
 $(OutDir)fixrtext "$(IntDir)%(Filename).obj"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">nasm -o "$(IntDir)%(Filename).obj"  -f win32 "%(FullPath)" -isrc/
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">thirdparty\nasm\nasm -o "$(IntDir)%(Filename).obj"  -f win32 "%(FullPath)" -isrc/
 $(OutDir)fixrtext "$(IntDir)%(Filename).obj"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">nasm -o "$(IntDir)%(Filename).obj"  -f win32 "%(FullPath)" -isrc/
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">thirdparty\nasm\nasm -o "$(IntDir)%(Filename).obj"  -f win32 "%(FullPath)" -isrc/
 $(OutDir)fixrtext "$(IntDir)%(Filename).obj"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="src\asm_ia32\tmap2.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">nasm -g -o "$(IntDir)%(Filename).obj" -f win32 "%(FullPath)" -isrc/
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">thirdparty\nasm\nasm -g -o "$(IntDir)%(Filename).obj" -f win32 "%(FullPath)" -isrc/
 $(OutDir)fixrtext "$(IntDir)%(Filename).obj"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Assembling %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">nasm -g -o "$(IntDir)%(Filename).obj" -f win32 "%(FullPath)" -isrc/
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">thirdparty\nasm\nasm -g -o "$(IntDir)%(Filename).obj" -f win32 "%(FullPath)" -isrc/
 $(OutDir)fixrtext "$(IntDir)%(Filename).obj"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">nasm -o "$(IntDir)%(Filename).obj"  -f win32 "%(FullPath)" -isrc/
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">thirdparty\nasm\nasm -o "$(IntDir)%(Filename).obj"  -f win32 "%(FullPath)" -isrc/
 $(OutDir)fixrtext "$(IntDir)%(Filename).obj"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">nasm -o "$(IntDir)%(Filename).obj"  -f win32 "%(FullPath)" -isrc/
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">thirdparty\nasm\nasm -o "$(IntDir)%(Filename).obj"  -f win32 "%(FullPath)" -isrc/
 $(OutDir)fixrtext "$(IntDir)%(Filename).obj"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="src\asm_ia32\tmap3.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">nasm -g -o "$(IntDir)%(Filename).obj" -f win32 "%(FullPath)" -isrc/
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">thirdparty\nasm\nasm -g -o "$(IntDir)%(Filename).obj" -f win32 "%(FullPath)" -isrc/
 $(OutDir)fixrtext "$(IntDir)%(Filename).obj"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Assembling %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">nasm -g -o "$(IntDir)%(Filename).obj" -f win32 "%(FullPath)" -isrc/
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">thirdparty\nasm\nasm -g -o "$(IntDir)%(Filename).obj" -f win32 "%(FullPath)" -isrc/
 $(OutDir)fixrtext "$(IntDir)%(Filename).obj"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">nasm -o "$(IntDir)%(Filename).obj"  -f win32 "%(FullPath)" -isrc/
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">thirdparty\nasm\nasm -o "$(IntDir)%(Filename).obj"  -f win32 "%(FullPath)" -isrc/
 $(OutDir)fixrtext "$(IntDir)%(Filename).obj"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Assembling %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">nasm -o "$(IntDir)%(Filename).obj"  -f win32 "%(FullPath)" -isrc/
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">thirdparty\nasm\nasm -o "$(IntDir)%(Filename).obj"  -f win32 "%(FullPath)" -isrc/
 $(OutDir)fixrtext "$(IntDir)%(Filename).obj"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
