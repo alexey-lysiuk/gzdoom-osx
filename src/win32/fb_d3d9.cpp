@@ -183,7 +183,7 @@ extern bool VidResizing;
 
 EXTERN_CVAR (Bool, fullscreen)
 EXTERN_CVAR (Float, Gamma)
-EXTERN_CVAR (Bool, vid_vsync)
+EXTERN_CVAR (Int, vid_vsync)
 EXTERN_CVAR (Float, transsouls)
 EXTERN_CVAR (Int, vid_refreshrate)
 

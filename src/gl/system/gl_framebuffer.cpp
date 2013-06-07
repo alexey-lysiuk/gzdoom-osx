@@ -66,7 +66,7 @@
 IMPLEMENT_CLASS(OpenGLFrameBuffer)
 EXTERN_CVAR (Float, vid_brightness)
 EXTERN_CVAR (Float, vid_contrast)
-EXTERN_CVAR (Bool, vid_vsync)
+EXTERN_CVAR (Int, vid_vsync)
 
 CVAR(Bool, gl_aalines, false, CVAR_ARCHIVE)
 

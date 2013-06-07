@@ -50,7 +50,7 @@
 
 #define SAFE_RELEASE(x)		{ if (x != NULL) { x->Release(); x = NULL; } }
 
-EXTERN_CVAR (Bool, vid_vsync)
+EXTERN_CVAR (Int, vid_vsync)
 
 extern HANDLE FPSLimitEvent;
 
