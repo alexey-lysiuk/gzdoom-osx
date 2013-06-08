@@ -1,0 +1,18 @@
+
+// This file contains sizes and MD5 checksums for PWADs with some issues
+// introduced by changing to the unsigned character type in the script scanner
+// If one of the matching file is found during loading of PWADs
+// and the automatic script scanner version detection is enabled
+// (script_scanner_version must be set to 0 which is default)
+// the game will automatically switch to the signed character type
+
+
+// Knee-Deep in ZDoom version 1.0 and 1.1
+// Decorate/Decorations.txt file contains wrong character with code 0xB4
+// in floating point constant at line 996
+24607213	ca8a08f03444c3b815b2dfd1890efd28	// kdizd.pk3
+24850946	67d07a7696044873124fe619c63420bc	// kdizd_11.pk3
+
+// GZDoom model pack from http://www-personal.umich.edu/~jimw/ClassicFPS/index.htm
+// uses 'non-breaking space' character with code 0xA0
+80294447	9bc8c003857762e72f72db81754ec1f2	// GZ-Models.pk3

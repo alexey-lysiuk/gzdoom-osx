@@ -57,6 +57,8 @@
 #include "doomerrors.h"
 #include "resourcefiles/resourcefile.h"
 #include "md5.h"
+#include "compatibility.h"
+#include "sc_man.h"
 
 // MACROS ------------------------------------------------------------------
 
@@ -186,11 +188,9 @@ void FWadCollection::InitMultipleFiles (TArray<FString> &filenames)
 	{
 		I_FatalError ("W_InitMultipleFiles: no files found");
 	}
-	RenameMasterLevels();
-	RenameNerve();
+
+	ApplyWadFixes();
 	RenameSprites();
-	FixMordethNamespace();
-	SetScriptScannerVersion();
 
 	// [RH] Set up hash table
 	FirstLumpIndex = new DWORD[NumLumps];
@@ -822,35 +822,37 @@ void FWadCollection::RenameSprites ()
 
 //==========================================================================
 //
-// RenameMasterLevels
+// ApplyWadFixes
 //
-// Renames map headers and map name pictures in nerve.wad so as to load it
-// alongside Doom II and offer both episodes without causing conflicts.
+// Applies various compatibility fixes for several PWAD files
+// Also it adds handling for Master Levels and No Rest for the Living
+// as episodes of Doom II
 //
 //==========================================================================
-void FWadCollection::RenameMasterLevels()
+
+namespace {
+
+typedef void (*WadFixFunction)(const int wadIndex);
+
+struct WadFix
 {
-	if (GAME_Doom != gameinfo.gametype)
+	long size;
+	FMD5Holder checksum;
+
+	WadFixFunction function;
+};
+
+typedef TArray<WadFix> WadFixList;
+
+
+void RenameMasterLevels(const int wadIndex)
+{
+	// CWILV?? -> MWILV??
+	// MAP??   -> MASTER??
+
+	for (int i = Wads.GetFirstLump(wadIndex), ei = Wads.GetLastLump(wadIndex); i <= ei; ++i)
 	{
-		return;
-	}
-
-	static const BYTE MLWAD_CHECKSUM[16] = { 0x84, 0xcb, 0x86, 0x40, 0xf5, 0x99, 0xc4, 0xa1,
-		0x7c, 0x8e, 0xb5, 0x26, 0xf9, 0x0d, 0x2b, 0x7a };
-	static const long MLWAD_SIZE = 3479715;
-	
-	const int wadIndex = FindWadByChecksum(MLWAD_SIZE, MLWAD_CHECKSUM);
-
-	if (-1 == wadIndex)
-	{
-		return;
-	}
-
-	for (int i = GetFirstLump(wadIndex); i <= GetLastLump(wadIndex); i++)
-	{
-		assert(LumpInfo[i].wadnum == wadIndex);
-
-		FResourceLump* const lump = LumpInfo[i].lump;
+		FResourceLump* const lump = Wads.GetResourceLump(i);
 
 		if (lump->dwName == MAKE_ID('C', 'W', 'I', 'L'))
 		{
@@ -867,76 +869,31 @@ void FWadCollection::RenameMasterLevels()
 	}
 }
 
-//==========================================================================
-//
-// RenameNerve
-//
-// Renames map headers and map name pictures in nerve.wad so as to load it
-// alongside Doom II and offer both episodes without causing conflicts.
-// MD5 checksum for NERVE.WAD: 967d5ae23daf45196212ae1b605da3b0
-//
-//==========================================================================
-void FWadCollection::RenameNerve ()
+void RenameNerve(const int wadIndex)
 {
-	if (gameinfo.gametype != GAME_Doom)
-		return;
+	// CWILV?? -> NWILV??
+	// MAP??   -> NERVE??
 
-	static const BYTE nerve[16] = { 0x96, 0x7d, 0x5a, 0xe2, 0x3d, 0xaf, 0x45, 0x19,
-		0x62, 0x12, 0xae, 0x1b, 0x60, 0x5d, 0xa3, 0xb0 };
-	static const long nervesize = 3819855; // NERVE.WAD's file size
-
-	const int w = FindWadByChecksum(nervesize, nerve);
-
-	if (-1 == w)
+	for (int i = Wads.GetFirstLump(wadIndex), ei = Wads.GetLastLump(wadIndex); i <= ei; ++i)
 	{
-		return;
-	}
+		FResourceLump* const lump = Wads.GetResourceLump(i);
 
-	for (int i = GetFirstLump(w); i <= GetLastLump(w); i++)
-	{
-		// Only rename the maps from NERVE.WAD
-		assert(LumpInfo[i].wadnum == w);
-		if (LumpInfo[i].lump->dwName == MAKE_ID('C', 'W', 'I', 'L'))
+		if (lump->dwName == MAKE_ID('C', 'W', 'I', 'L'))
 		{
-			LumpInfo[i].lump->Name[0] = 'N';
+			lump->Name[0] = 'N';
 		}
-		else if (LumpInfo[i].lump->dwName == MAKE_ID('M', 'A', 'P', '0'))
+		else if (lump->dwName == MAKE_ID('M', 'A', 'P', '0'))
 		{
-			LumpInfo[i].lump->Name[6] = LumpInfo[i].lump->Name[4];
-			LumpInfo[i].lump->Name[5] = '0';
-			LumpInfo[i].lump->Name[4] = 'E';
-			LumpInfo[i].lump->dwName = MAKE_ID('N', 'E', 'R', 'V');
+			lump->Name[6] = lump->Name[4];
+			lump->Name[5] = '0';
+			lump->Name[4] = 'E';
+			lump->dwName = MAKE_ID('N', 'E', 'R', 'V');
 		}
 	}
 }
 
-//==========================================================================
-//
-// FixMordethNamespace
-//
-// Fixes namespaces for MORGRAP0.WAD, Mordeth graphics resource file
-// This allows to use it directly with -file command line parameter
-//
-//==========================================================================
-
-void FWadCollection::FixMordethNamespace()
+void FixMordethNamespace(const int wadIndex)
 {
-	if (GAME_Doom != gameinfo.gametype)
-	{
-		return;
-	}
-
-	static const BYTE MORGRAP0_CHECKSUM[16] = { 0xbb, 0x63, 0x60, 0x1a, 0x03, 0xf1, 0xf3, 0x72,
-		0x0c, 0xdc, 0x6f, 0xcd, 0x33, 0x3a, 0x16, 0xaa };
-	static const long MORGRAP0_SIZE = 909841;
-
-	const int wadIndex = FindWadByChecksum(MORGRAP0_SIZE, MORGRAP0_CHECKSUM);
-
-	if (-1 == wadIndex)
-	{
-		return;
-	}
-
 	// The flats are GATE4, GRNLITE1, MFLR8_1, BLOOD1, BLOOD2, BLOOD3, CEIL3_1, GATE2, GATE3, and GATE1,
 	// in that order (but with many sprites interspersed). All remaining lumps are sprites.
 	// Information from http://doomwiki.org/wiki/Mordeth
@@ -958,18 +915,16 @@ void FWadCollection::FixMordethNamespace()
 	// Name of each flat occupies two DWORDs
 	static const size_t MORGRAP0_FLATS_COUNT = sizeof(MORGRAP0_FLATS) / (sizeof(DWORD) * 2);
 
-	for (int i = GetFirstLump(wadIndex), ei = GetLastLump(wadIndex); i <= ei; ++i)
+	for (int i = Wads.GetFirstLump(wadIndex), ei = Wads.GetLastLump(wadIndex); i <= ei; ++i)
 	{
-		assert(wadIndex == LumpInfo[i].wadnum);
-
-		FResourceLump* const lump = LumpInfo[i].lump;
+		FResourceLump* const lump = Wads.GetResourceLump(i);
 
 		for (size_t j = 0; j < MORGRAP0_FLATS_COUNT; ++j)
 		{
 			if (MORGRAP0_FLATS[j * 2] == lump->dwName)
 			{
 				const DWORD secondPart = static_cast<DWORD>(lump->qwName >> 32);
-				
+
 				if (secondPart == MORGRAP0_FLATS[j * 2 + 1])
 				{
 					lump->Namespace = ns_flats;
@@ -985,37 +940,174 @@ void FWadCollection::FixMordethNamespace()
 	}
 }
 
-//==========================================================================
-//
-// SetScriptScannerVersion
-//
-//==========================================================================
-
-void FWadCollection::SetScriptScannerVersion()
+void UseOldScriptScanner(const int)
 {
-	if (0 != script_scanner_version)
+	// Use old script parser with signed character type
+	script_scanner_version = 1;
+}
+
+WadFixList PrepareWadFixes()
+{
+	WadFixList result;
+
+	// Master Levels (masterlevels.wad) from PSN Doom Classic Complete
+	const WadFix masterLevelsFix =
 	{
-		// Automatic detection is turned off
-		return;
+		3479715,
+		{ 0x84, 0xcb, 0x86, 0x40, 0xf5, 0x99, 0xc4, 0xa1,
+		  0x7c, 0x8e, 0xb5, 0x26, 0xf9, 0x0d, 0x2b, 0x7a },
+		RenameMasterLevels
+	};
+	result.Push(masterLevelsFix);
+
+	// No Rest for the Living (nerve.wad) from XBLA Doom II or Doom III BFG Edition
+	const WadFix nerveFix =
+	{
+		3819855,
+		{ 0x96, 0x7d, 0x5a, 0xe2, 0x3d, 0xaf, 0x45, 0x19,
+		  0x62, 0x12, 0xae, 0x1b, 0x60, 0x5d, 0xa3, 0xb0 },
+		RenameNerve
+	};
+	result.Push(nerveFix);
+
+	const WadFix mordethFix =
+	{
+		909841,
+		{ 0xbb, 0x63, 0x60, 0x1a, 0x03, 0xf1, 0xf3, 0x72,
+		  0x0c, 0xdc, 0x6f, 0xcd, 0x33, 0x3a, 0x16, 0xaa },
+		FixMordethNamespace
+	};
+	result.Push(mordethFix);
+
+	if (0 == script_scanner_version)
+	{
+		// Automatic script scanner version detection is on
+
+		// Cannot use FWadCollection::GetNumForFullName() here
+		// as it requires lump hashing which is not initialized yet at this point
+
+		int compLump = -1;
+
+		for (int i = 0, ei = Wads.GetNumLumps(); i < ei; ++i)
+		{
+			FResourceLump* lump = Wads.GetResourceLump(i);
+
+			if (NULL == lump || NULL == lump->FullName)
+			{
+				continue;
+			}
+
+			if (0 == stricmp(lump->FullName, "compatibility_script_scanner.txt"))
+			{
+				compLump = i;
+				break;
+			}
+		}
+
+		FScanner sc(compLump);
+
+		while (sc.GetNumber())
+		{
+			WadFix scriptFix = { sc.Number, {}, UseOldScriptScanner };
+
+			sc.MustGetString();
+
+			if (32 != strlen(sc.String))
+			{
+				sc.ScriptError("MD5 signature must be exactly 32 characters long");
+			}
+			
+			for (size_t i = 0; i < 32; ++i)
+			{
+				int x = 0;
+
+				if (sc.String[i] >= '0' && sc.String[i] <= '9')
+				{
+					x = sc.String[i] - '0';
+				}
+				else
+				{
+					sc.String[i] |= 'a' ^ 'A';
+
+					if (sc.String[i] >= 'a' && sc.String[i] <= 'f')
+					{
+						x = sc.String[i] - 'a' + 10;
+					}
+					else
+					{
+						sc.ScriptError("MD5 signature must be a hexadecimal value");
+					}
+				}
+				
+				if (!(i & 1))
+				{
+					scriptFix.checksum.Bytes[i / 2] = x << 4;
+				}
+				else
+				{
+					scriptFix.checksum.Bytes[i / 2] |= x;
+				}
+			}
+
+			result.Push(scriptFix);
+		}
 	}
 
-	// Compatibility fix for Knee-Deep in ZDoom version 1.0 and 1.1
-	// Decorate/Decorations.txt file contains wrong character with code 0xB4
-	// in floating point constant at line 996
+	return result;
+}
 
-	static const BYTE KDIZD10_CHECKSUM[16] = { 0xca, 0x8a, 0x08, 0xf0, 0x34,
-		0x44, 0xc3, 0xb8, 0x15, 0xb2, 0xdf, 0xd1, 0x89, 0x0e, 0xfd, 0x28 };
-	static const long KDIZD10_SIZE = 24607213;
+} // unnamed namespace
 
-	static const BYTE KDIZD11_CHECKSUM[16] = { 0x67, 0xd0, 0x7a, 0x76, 0x96,
-		0x04, 0x48, 0x73, 0x12, 0x4f, 0xe6, 0x19, 0xc6, 0x34, 0x20, 0xbc };
-	static const long KDIZD11_SIZE = 24850946;
+void FWadCollection::ApplyWadFixes()
+{
+	const WadFixList fixes = PrepareWadFixes();
 
-	if (   -1 != FindWadByChecksum(KDIZD10_SIZE, KDIZD10_CHECKSUM)
-		|| -1 != FindWadByChecksum(KDIZD11_SIZE, KDIZD11_CHECKSUM) )
+	for (unsigned int wadIndex = 0, wadCount = Files.Size();
+		 wadIndex < wadCount;
+		 ++wadIndex)
 	{
-		// Use old script parser with signed character type
-		script_scanner_version = 1;
+		FileReader* const fileFeader = GetFileReader(wadIndex);
+
+		if (fileFeader == NULL)
+		{
+			continue;
+		}
+
+		const long fileSize = fileFeader->GetLength();
+		const WadFix* fix = NULL;
+
+		for (unsigned int fixIndex = 0, fixCount = fixes.Size();
+			 fixIndex < fixCount;
+			 ++fixIndex)
+		{
+			if (fileSize == fixes[fixIndex].size)
+			{
+				fix = &fixes[fixIndex];
+				break;
+			}
+		}
+
+		if (NULL == fix)
+		{
+			continue;
+		}
+
+		fileFeader->Seek(0, SEEK_SET);
+
+		BYTE fileChecksum[16];
+
+		MD5Context md5;
+		md5.Update(fileFeader, fileFeader->GetLength());
+		md5.Final(fileChecksum);
+
+		const bool isChecksumDifferent = 0 != memcmp(&fix->checksum, fileChecksum, sizeof(fix->checksum));
+
+		if (isChecksumDifferent)
+		{
+			continue;
+		}
+
+		fix->function(wadIndex);
 	}
 }
 
@@ -1343,6 +1435,21 @@ FileReader *FWadCollection::GetFileReader(int wadnum)
 		return NULL;
 	}
 	return Files[wadnum]->GetReader();
+}
+
+//==========================================================================
+//
+// GetResourceLump
+//
+// Retrieves the FResourceLump object for the given lump index
+//
+//==========================================================================
+
+FResourceLump *FWadCollection::GetResourceLump(int lump)
+{
+	return lump >= 0 && lump < LumpInfo.Size()
+		? LumpInfo[lump].lump
+		: NULL;
 }
 
 //==========================================================================
