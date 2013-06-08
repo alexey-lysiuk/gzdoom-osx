@@ -1701,7 +1701,7 @@ void TryRunTics (void)
 
 	// If paused, do not eat more CPU time than we need, because it
 	// will all be wasted anyway.
-	bool doWait = cl_capfps || r_NoInterpolate /*|| netgame*/;
+	bool doWait = false; //cl_capfps || r_NoInterpolate /*|| netgame*/;
 
 	// get real tics
 	if (doWait)
@@ -1757,117 +1757,117 @@ void TryRunTics (void)
 
 	frameon++;
 
-	if (debugfile)
-		fprintf (debugfile,
-				 "=======real: %i  avail: %i  game: %i\n",
-				 realtics, availabletics, counts);
+//	if (debugfile)
+//		fprintf (debugfile,
+//				 "=======real: %i  avail: %i  game: %i\n",
+//				 realtics, availabletics, counts);
+//
+//	if (!demoplayback)
+//	{
+//		// ideally nettics[0] should be 1 - 3 tics above lowtic
+//		// if we are consistantly slower, speed up time
+//
+//		// [RH] I had erroneously assumed frameskip[] had 4 entries
+//		// because there were 4 players, but that's not the case at
+//		// all. The game is comparing the lag behind the master for
+//		// four runs of TryRunTics. If our tic count is ahead of the
+//		// master all 4 times, the next run of NetUpdate will not
+//		// process any new input. If we have less input than the
+//		// master, the next run of NetUpdate will process extra tics
+//		// (because gametime gets decremented here).
+//
+//		// the key player does not adapt
+//		if (consoleplayer != Net_Arbitrator)
+//		{
+//			// I'm not sure about this when using a packet server, because
+//			// if left unmodified from the P2P version, it can make the game
+//			// very jerky. The way I have it written right now basically means
+//			// that it won't adapt. Fortunately, player prediction helps
+//			// alleviate the lag somewhat.
+//
+//			if (NetMode != NET_PacketServer)
+//			{
+//				mastertics = nettics[nodeforplayer[Net_Arbitrator]];
+//			}
+//			if (nettics[0] <= mastertics)
+//			{
+//				gametime--;
+//				if (debugfile) fprintf (debugfile, "-");
+//			}
+//			if (NetMode != NET_PacketServer)
+//			{
+//				frameskip[frameon&3] = (oldnettics > mastertics);
+//			}
+//			else
+//			{
+//				frameskip[frameon&3] = (oldnettics - mastertics) > 3;
+//			}
+//			if (frameskip[0] && frameskip[1] && frameskip[2] && frameskip[3])
+//			{
+//				skiptics = 1;
+//				if (debugfile) fprintf (debugfile, "+");
+//			}
+//			oldnettics = nettics[0];
+//		}
+//	}// !demoplayback
 
-	if (!demoplayback)
-	{
-		// ideally nettics[0] should be 1 - 3 tics above lowtic
-		// if we are consistantly slower, speed up time
-
-		// [RH] I had erroneously assumed frameskip[] had 4 entries
-		// because there were 4 players, but that's not the case at
-		// all. The game is comparing the lag behind the master for
-		// four runs of TryRunTics. If our tic count is ahead of the
-		// master all 4 times, the next run of NetUpdate will not
-		// process any new input. If we have less input than the
-		// master, the next run of NetUpdate will process extra tics
-		// (because gametime gets decremented here).
-
-		// the key player does not adapt
-		if (consoleplayer != Net_Arbitrator)
-		{
-			// I'm not sure about this when using a packet server, because
-			// if left unmodified from the P2P version, it can make the game
-			// very jerky. The way I have it written right now basically means
-			// that it won't adapt. Fortunately, player prediction helps
-			// alleviate the lag somewhat.
-
-			if (NetMode != NET_PacketServer)
-			{
-				mastertics = nettics[nodeforplayer[Net_Arbitrator]];
-			}
-			if (nettics[0] <= mastertics)
-			{
-				gametime--;
-				if (debugfile) fprintf (debugfile, "-");
-			}
-			if (NetMode != NET_PacketServer)
-			{
-				frameskip[frameon&3] = (oldnettics > mastertics);
-			}
-			else
-			{
-				frameskip[frameon&3] = (oldnettics - mastertics) > 3;
-			}
-			if (frameskip[0] && frameskip[1] && frameskip[2] && frameskip[3])
-			{
-				skiptics = 1;
-				if (debugfile) fprintf (debugfile, "+");
-			}
-			oldnettics = nettics[0];
-		}
-	}// !demoplayback
-
-	// wait for new tics if needed
-	while (lowtic < gametic + counts)
-	{
-		NetUpdate ();
-		lowtic = INT_MAX;
-
-		for (i = 0; i < doomcom.numnodes; i++)
-			if (nodeingame[i] && nettics[i] < lowtic)
-				lowtic = nettics[i];
-
-		lowtic = lowtic * ticdup;
-
-		if (lowtic < gametic)
-			I_Error ("TryRunTics: lowtic < gametic");
-
-		// [Ed850] Check to see the last time a packet was recieved.
-		// If it's longer then 3 seconds, a node has likely stalled. Check which one and re-request its last packet.
-		if(I_GetTime(false) - lastglobalrecvtime >= TICRATE*3)
-		{
-			int latenode = 0; // Node 0 is the local player, and should always be the highest
-			lastglobalrecvtime = I_GetTime(false); //Bump the count
-
-			if(NetMode == NET_PeerToPeer || consoleplayer == Net_Arbitrator)
-			{
-				for (i = 0; i < doomcom.numnodes; i++)
-					if (nodeingame[i] && nettics[i] < nettics[latenode])
-						latenode = i;
-			}
-			else if (nodeingame[nodeforplayer[Net_Arbitrator]] && 
-				nettics[nodeforplayer[Net_Arbitrator]] < nettics[0])
-			{	// Likely a packet server game. Only check the packet host.
-				latenode = Net_Arbitrator;
-			}
-
-			if (debugfile)
-				fprintf (debugfile, "lost tics from %i (%i to %i)\n",
-						 latenode, nettics[latenode], gametic);
-
-			if(latenode != 0) // Send resend request to late node (if not yourself... somehow). Also mark the node as waiting to display it in the hud.
-				remoteresend[latenode] = players[playerfornode[latenode]].waiting = hadlate = true;
-		}
-
-		// don't stay in here forever -- give the menu a chance to work
-		if (I_GetTime (false) - entertic >= TICRATE/3)
-		{
-			C_Ticker ();
-			M_Ticker ();
-			return;
-		}
-	}
-
-	if (hadlate)
-	{
-		hadlate = false;
-		for (i = 0; i < MAXPLAYERS; i++)
-			players[i].waiting = false;
-	}
+//	// wait for new tics if needed
+//	while (lowtic < gametic + counts)
+//	{
+//		NetUpdate ();
+//		lowtic = INT_MAX;
+//
+//		for (i = 0; i < doomcom.numnodes; i++)
+//			if (nodeingame[i] && nettics[i] < lowtic)
+//				lowtic = nettics[i];
+//
+//		lowtic = lowtic * ticdup;
+//
+//		if (lowtic < gametic)
+//			I_Error ("TryRunTics: lowtic < gametic");
+//
+//		// [Ed850] Check to see the last time a packet was recieved.
+//		// If it's longer then 3 seconds, a node has likely stalled. Check which one and re-request its last packet.
+//		if(I_GetTime(false) - lastglobalrecvtime >= TICRATE*3)
+//		{
+//			int latenode = 0; // Node 0 is the local player, and should always be the highest
+//			lastglobalrecvtime = I_GetTime(false); //Bump the count
+//
+//			if(NetMode == NET_PeerToPeer || consoleplayer == Net_Arbitrator)
+//			{
+//				for (i = 0; i < doomcom.numnodes; i++)
+//					if (nodeingame[i] && nettics[i] < nettics[latenode])
+//						latenode = i;
+//			}
+//			else if (nodeingame[nodeforplayer[Net_Arbitrator]] && 
+//				nettics[nodeforplayer[Net_Arbitrator]] < nettics[0])
+//			{	// Likely a packet server game. Only check the packet host.
+//				latenode = Net_Arbitrator;
+//			}
+//
+//			if (debugfile)
+//				fprintf (debugfile, "lost tics from %i (%i to %i)\n",
+//						 latenode, nettics[latenode], gametic);
+//
+//			if(latenode != 0) // Send resend request to late node (if not yourself... somehow). Also mark the node as waiting to display it in the hud.
+//				remoteresend[latenode] = players[playerfornode[latenode]].waiting = hadlate = true;
+//		}
+//
+//		// don't stay in here forever -- give the menu a chance to work
+//		if (I_GetTime (false) - entertic >= TICRATE/3)
+//		{
+//			C_Ticker ();
+//			M_Ticker ();
+//			return;
+//		}
+//	}
+//
+//	if (hadlate)
+//	{
+//		hadlate = false;
+//		for (i = 0; i < MAXPLAYERS; i++)
+//			players[i].waiting = false;
+//	}
 
 	// run the count tics
 	if (counts > 0)

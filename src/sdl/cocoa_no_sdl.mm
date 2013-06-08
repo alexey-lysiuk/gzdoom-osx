@@ -832,14 +832,14 @@ static ApplicationDelegate* s_applicationDelegate;
 {
 	GZ_UNUSED( aNotification );
 	
-	S_SetSoundPaused(1);
+	//S_SetSoundPaused(1);
 }
 
 - (void)applicationWillResignActive:(NSNotification*)aNotification
 {
 	GZ_UNUSED( aNotification );
 	
-	S_SetSoundPaused(0);
+	//S_SetSoundPaused(0);
 }
 
 
@@ -1452,6 +1452,10 @@ int SDL_Init( Uint32 flags )
 	return 0;
 }
 
+extern std::vector<timeval> timeval_vector;
+extern std::vector<int> tick_vector;
+	extern std::vector<timeval> glfinish_vector;
+
 void SDL_Quit()
 {
 	if ( NULL != s_applicationDelegate )
@@ -1463,6 +1467,55 @@ void SDL_Quit()
 
 		[s_applicationDelegate release];
 		s_applicationDelegate = NULL;
+
+
+		FILE* f = fopen("/Volumes/ramdisk/timeval.txt", "w");
+
+		if (!f)
+		{
+			return;
+		}
+
+		//for (const timeval& t : timeval_vector)
+		for (size_t i = 0, ei = timeval_vector.size(); i < ei; ++i)
+		{
+			const timeval& t = timeval_vector[i];
+
+			static timeval prev = s_startTicks;
+			static int frames = 0;
+
+			time_t nowtime = t.tv_sec;
+			struct tm *nowtm = localtime(&nowtime);
+
+			char tmbuf[64];
+			strftime(tmbuf, sizeof tmbuf, "%H:%M:%S", nowtm);
+
+			suseconds_t mks = t.tv_usec - prev.tv_usec;
+			if (t.tv_sec > prev.tv_sec)
+			{
+				fprintf(f, "-------------------------- %i frames\n", frames);
+				mks += 1000000;
+				frames = 0;
+			}
+
+			++frames;
+
+			const timeval& glfin = glfinish_vector[i];
+			const char* const important = (mks / 1000 > 16) ? "  -  !!!" : "";
+
+			fprintf(f, "%s.%03i.%03i  [ %04i ]  %03i.%03i  -  %03i.%03i%s\n", tmbuf,
+					t.tv_usec / 1000, t.tv_usec % 1000,
+					tick_vector[i],
+					mks / 1000, mks % 1000,
+					glfin.tv_usec / 1000, glfin.tv_usec % 1000,
+					important);
+
+			prev = t;
+
+//			fprintf(f, "%03i.%03i\n", t.tv_usec / 1000, t.tv_usec % 1000);
+		}
+
+		fclose(f);
 	}
 }
 

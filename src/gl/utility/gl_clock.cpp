@@ -192,7 +192,7 @@ void CheckBench()
 		AppendMissingTextureStats(compose);
 		compose.AppendFormat("%d fps\n\n", screen->GetLastFPS());
 
-		FILE *f = fopen("benchmarks.txt", "at");
+		FILE *f = fopen("/Volumes/ramdisk/benchmarks.txt", "at");
 		if (f != NULL)
 		{
 			fputs(compose.GetChars(), f);

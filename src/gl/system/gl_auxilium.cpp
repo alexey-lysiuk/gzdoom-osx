@@ -33,6 +33,8 @@
 
 #include "gl/system/gl_auxilium.h"
 
+
+
 #include "doomstat.h"
 #include "c_console.h"
 #include "i_system.h"
@@ -42,6 +44,14 @@
 
 #include "gl/renderer/gl_renderer.h"
 #include "gl/utility/gl_clock.h"
+
+
+#undef min
+#undef max
+#include <vector>
+#include <sys/time.h>
+std::vector<timeval> timeval_vector;
+std::vector<int> tick_vector;
 
 
 extern int paused;
@@ -593,9 +603,12 @@ bool BackBuffer::Lock( bool buffered )
 	return Super::Lock( buffered );
 }
 
+
+
+
 void BackBuffer::Update()
 {
-	UpdateAutomaticVSync();
+	//UpdateAutomaticVSync();
 
 	if ( !CanUpdate() )
 	{
@@ -612,7 +625,12 @@ void BackBuffer::Update()
 	
 	Swap();
 	Unlock();
-	
+
+	timeval now;
+	gettimeofday( &now, NULL );
+	timeval_vector.push_back(now);
+	tick_vector.push_back(gametic);
+
 	CheckBench();
 }
 

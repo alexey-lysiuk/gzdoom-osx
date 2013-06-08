@@ -63,6 +63,14 @@
 #include "gl/utility/gl_templates.h"
 #include "gl/gl_functions.h"
 
+
+#undef min
+#undef max
+#include <vector>
+#include <sys/time.h>
+std::vector<timeval> glfinish_vector;
+
+
 IMPLEMENT_CLASS(OpenGLFrameBuffer)
 EXTERN_CVAR (Float, vid_brightness)
 EXTERN_CVAR (Float, vid_contrast)
@@ -222,7 +230,29 @@ void OpenGLFrameBuffer::Swap()
 {
 	Finish.Reset();
 	Finish.Clock();
+
+
+	timeval before;
+	gettimeofday( &before, NULL );
+
+
 	gl.Finish();
+
+
+	timeval after;
+	gettimeofday( &after, NULL );
+
+	timeval diff;
+	timersub(&after, &before, &diff);
+
+	glfinish_vector.push_back(diff);
+
+//	if (diff.tv_usec / 1000 > 7)
+//	{
+//		paused = true;
+//	}
+
+
 	if (needsetgamma) 
 	{
 		//DoSetGamma();
