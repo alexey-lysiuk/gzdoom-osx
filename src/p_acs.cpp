@@ -73,6 +73,7 @@
 #include "po_man.h"
 #include "actorptrselect.h"
 #include "farchive.h"
+#include "decallib.h"
 
 #include "g_shared/a_pickups.h"
 
@@ -110,6 +111,10 @@ FRandom pr_acs ("ACS");
 #define NOT_TOP				4
 #define NOT_FLOOR			8
 #define NOT_CEILING			16
+
+// SpawnDecal flags
+#define SDF_ABSANGLE		1
+#define SDF_PERMANENT		2
 
 struct CallReturn
 {
@@ -198,6 +203,7 @@ FWorldGlobalArray ACS_GlobalArrays[NUM_GLOBALVARS];
 // strings without growing. A string is concidered in use if any value
 // in any of these variable blocks contains a valid ID in the global string
 // table:
+//   * The active area of the ACS stack
 //   * All running scripts' local variables
 //   * All map variables
 //   * All world variables
@@ -253,7 +259,7 @@ void ACSStringPool::Clear()
 //
 //============================================================================
 
-int ACSStringPool::AddString(const char *str)
+int ACSStringPool::AddString(const char *str, const SDWORD *stack, int stackdepth)
 {
 	size_t len = strlen(str);
 	unsigned int h = SuperFastHash(str, len);
@@ -264,10 +270,10 @@ int ACSStringPool::AddString(const char *str)
 		return i | STRPOOL_LIBRARYID_OR;
 	}
 	FString fstr(str);
-	return InsertString(fstr, h, bucketnum);
+	return InsertString(fstr, h, bucketnum, stack, stackdepth);
 }
 
-int ACSStringPool::AddString(FString &str)
+int ACSStringPool::AddString(FString &str, const SDWORD *stack, int stackdepth)
 {
 	unsigned int h = SuperFastHash(str.GetChars(), str.Len());
 	unsigned int bucketnum = h % NUM_BUCKETS;
@@ -276,7 +282,7 @@ int ACSStringPool::AddString(FString &str)
 	{
 		return i | STRPOOL_LIBRARYID_OR;
 	}
-	return InsertString(str, h, bucketnum);
+	return InsertString(str, h, bucketnum, stack, stackdepth);
 }
 
 //============================================================================
@@ -480,21 +486,27 @@ void ACSStringPool::PurgeStrings()
 	// Clear the hash buckets. We'll rebuild them as we decide what strings
 	// to keep and which to toss.
 	memset(PoolBuckets, 0xFF, sizeof(PoolBuckets));
+	size_t usedcount = 0, freedcount = 0;
 	for (unsigned int i = 0; i < Pool.Size(); ++i)
 	{
 		PoolEntry *entry = &Pool[i];
 		if (entry->Next != FREE_ENTRY)
 		{
 			if (entry->LockCount == 0)
-			{ // Mark this entry as free.
+			{
+				freedcount++;
+				// Mark this entry as free.
 				entry->Next = FREE_ENTRY;
 				if (i < FirstFreeEntry)
 				{
 					FirstFreeEntry = i;
 				}
+				// And free the string.
+				entry->Str = "";
 			}
 			else
 			{
+				usedcount++;
 				// Rehash this entry.
 				unsigned int h = entry->Hash % NUM_BUCKETS;
 				entry->Next = PoolBuckets[h];
@@ -540,16 +552,17 @@ int ACSStringPool::FindString(const char *str, size_t len, unsigned int h, unsig
 //
 //============================================================================
 
-int ACSStringPool::InsertString(FString &str, unsigned int h, unsigned int bucketnum)
+int ACSStringPool::InsertString(FString &str, unsigned int h, unsigned int bucketnum, const SDWORD *stack, int stackdepth)
 {
-	if (Pool.Size() >= STRPOOL_LIBRARYID)
-	{
-		return -1;
-	}
 	unsigned int index = FirstFreeEntry;
 	if (index >= MIN_GC_SIZE && index == Pool.Max())
 	{ // We will need to grow the array. Try a garbage collection first.
-		P_CollectACSGlobalStrings();
+		P_CollectACSGlobalStrings(stack, stackdepth);
+		index = FirstFreeEntry;
+	}
+	if (FirstFreeEntry >= STRPOOL_LIBRARYID_OR)
+	{ // If we go any higher, we'll collide with the library ID marker.
+		return -1;
 	}
 	if (index == Pool.Size())
 	{ // There were no free entries; make a new one.
@@ -713,8 +726,12 @@ void P_MarkGlobalVarStrings()
 //
 //============================================================================
 
-void P_CollectACSGlobalStrings()
+void P_CollectACSGlobalStrings(const SDWORD *stack, int stackdepth)
 {
+	if (stack != NULL && stackdepth != 0)
+	{
+		GlobalACSStrings.MarkStringArray(stack, stackdepth);
+	}
 	FBehavior::StaticMarkLevelVarStrings();
 	P_MarkWorldVarStrings();
 	P_MarkGlobalVarStrings();
@@ -724,7 +741,7 @@ void P_CollectACSGlobalStrings()
 #ifdef _DEBUG
 CCMD(acsgc)
 {
-	P_CollectACSGlobalStrings();
+	P_CollectACSGlobalStrings(NULL, 0);
 }
 CCMD(globstr)
 {
@@ -1881,7 +1898,11 @@ FBehavior::FBehavior (int lumpnum, FileReader * fr, int len)
 				for (DWORD i = 0; i < chunk[1]/4; ++i)
 				{
 //					MapVarStore[chunk[i+2]] |= LibraryID;
-					MapVarStore[chunk[i+2]] = GlobalACSStrings.AddString(LookupString(MapVarStore[chunk[i+2]]));
+					const char *str = LookupString(MapVarStore[chunk[i+2]]);
+					if (str != NULL)
+					{
+						MapVarStore[chunk[i+2]] = GlobalACSStrings.AddString(str, NULL, 0);
+					}
 				}
 			}
 
@@ -1897,7 +1918,11 @@ FBehavior::FBehavior (int lumpnum, FileReader * fr, int len)
 						for (int j = ArrayStore[arraynum].ArraySize; j > 0; --j, ++elems)
 						{
 //							*elems |= LibraryID;
-							*elems = GlobalACSStrings.AddString(LookupString(*elems));
+							const char *str = LookupString(*elems);
+							if (str != NULL)
+							{
+								*elems = GlobalACSStrings.AddString(str, NULL, 0);
+							}
 						}
 					}
 				}
@@ -1927,7 +1952,11 @@ FBehavior::FBehavior (int lumpnum, FileReader * fr, int len)
 							}
 							else if (*chunkData == 1)
 							{
-								*elems = GlobalACSStrings.AddString(LookupString(*elems));
+								const char *str = LookupString(*elems);
+								if (str != NULL)
+								{
+									*elems = GlobalACSStrings.AddString(str, NULL, 0);
+								}
 							}
 						}
 						i += 4+ArrayStore[arraynum].ArraySize;
@@ -3701,7 +3730,7 @@ void DLevelScript::DoSetActorProperty (AActor *actor, int property, int value)
 	}
 }
 
-int DLevelScript::GetActorProperty (int tid, int property)
+int DLevelScript::GetActorProperty (int tid, int property, const SDWORD *stack, int stackdepth)
 {
 	AActor *actor = SingleActorFromTID (tid, activator);
 
@@ -3768,13 +3797,13 @@ int DLevelScript::GetActorProperty (int tid, int property)
 	case APROP_ReactionTime:return actor->reactiontime;
 	case APROP_MeleeRange:	return actor->meleerange;
 
-	case APROP_SeeSound:	return GlobalACSStrings.AddString(actor->SeeSound);
-	case APROP_AttackSound:	return GlobalACSStrings.AddString(actor->AttackSound);
-	case APROP_PainSound:	return GlobalACSStrings.AddString(actor->PainSound);
-	case APROP_DeathSound:	return GlobalACSStrings.AddString(actor->DeathSound);
-	case APROP_ActiveSound:	return GlobalACSStrings.AddString(actor->ActiveSound);
-	case APROP_Species:		return GlobalACSStrings.AddString(actor->GetSpecies());
-	case APROP_NameTag:		return GlobalACSStrings.AddString(actor->GetTag());
+	case APROP_SeeSound:	return GlobalACSStrings.AddString(actor->SeeSound, stack, stackdepth);
+	case APROP_AttackSound:	return GlobalACSStrings.AddString(actor->AttackSound, stack, stackdepth);
+	case APROP_PainSound:	return GlobalACSStrings.AddString(actor->PainSound, stack, stackdepth);
+	case APROP_DeathSound:	return GlobalACSStrings.AddString(actor->DeathSound, stack, stackdepth);
+	case APROP_ActiveSound:	return GlobalACSStrings.AddString(actor->ActiveSound, stack, stackdepth);
+	case APROP_Species:		return GlobalACSStrings.AddString(actor->GetSpecies(), stack, stackdepth);
+	case APROP_NameTag:		return GlobalACSStrings.AddString(actor->GetTag(), stack, stackdepth);
 
 	default:				return 0;
 	}
@@ -3819,7 +3848,7 @@ int DLevelScript::CheckActorProperty (int tid, int property, int value)
 		case APROP_Radius:
 		case APROP_ReactionTime:
 		case APROP_MeleeRange:
-			return (GetActorProperty(tid, property) == value);
+			return (GetActorProperty(tid, property, NULL, 0) == value);
 
 		// Boolean values need to compare to a binary version of value
 		case APROP_Ambush:
@@ -3831,7 +3860,7 @@ int DLevelScript::CheckActorProperty (int tid, int property, int value)
 		case APROP_Notarget:
 		case APROP_Notrigger:
 		case APROP_Dormant:
-			return (GetActorProperty(tid, property) == (!!value));
+			return (GetActorProperty(tid, property, NULL, 0) == (!!value));
 
 		// Strings are covered by GetActorProperty, but they're fairly
 		// heavy-duty, so make the check here.
@@ -4063,6 +4092,38 @@ int DLevelScript::DoClassifyActor(int tid)
 	return classify;
 }
 
+enum
+{
+	SOUND_See,
+	SOUND_Attack,
+	SOUND_Pain,
+	SOUND_Death,
+	SOUND_Active,
+	SOUND_Use,
+	SOUND_Bounce,
+	SOUND_WallBounce,
+	SOUND_CrushPain,
+	SOUND_Howl,
+};
+
+static FSoundID GetActorSound(const AActor *actor, int soundtype)
+{
+	switch (soundtype)
+	{
+	case SOUND_See:			return actor->SeeSound;
+	case SOUND_Attack:		return actor->AttackSound;
+	case SOUND_Pain:		return actor->PainSound;
+	case SOUND_Death:		return actor->DeathSound;
+	case SOUND_Active:		return actor->ActiveSound;
+	case SOUND_Use:			return actor->UseSound;
+	case SOUND_Bounce:		return actor->BounceSound;
+	case SOUND_WallBounce:	return actor->WallBounceSound;
+	case SOUND_CrushPain:	return actor->CrushPainSound;
+	case SOUND_Howl:		return actor->GetClass()->Meta.GetMetaInt(AMETA_HowlSound);
+	default:				return 0;
+	}
+}
+
 enum EACSFunctions
 {
 	ACSF_GetLineUDMFInt=1,
@@ -4135,6 +4196,9 @@ enum EACSFunctions
 	ACSF_GetActorClass,
 	ACSF_GetWeapon,
 	ACSF_SoundVolume,
+	ACSF_PlayActorSound,
+	ACSF_SpawnDecal,
+	ACSF_CheckFont,
 
 	// ZDaemon
 	ACSF_GetTeamScore = 19620,	// (int team)
@@ -4273,14 +4337,14 @@ static void DoSetCVar(FBaseCVar *cvar, int value, bool is_string, bool force=fal
 }
 
 // Converts floating- to fixed-point as required.
-static int DoGetCVar(FBaseCVar *cvar, bool is_string)
+static int DoGetCVar(FBaseCVar *cvar, bool is_string, const SDWORD *stack, int stackdepth)
 {
 	UCVarValue val;
 
 	if (is_string)
 	{
 		val = cvar->GetGenericRep(CVAR_String);
-		return GlobalACSStrings.AddString(val.String);
+		return GlobalACSStrings.AddString(val.String, stack, stackdepth);
 	}
 	else if (cvar->GetRealType() == CVAR_Float)
 	{
@@ -4294,7 +4358,7 @@ static int DoGetCVar(FBaseCVar *cvar, bool is_string)
 	}
 }
 
-static int GetUserCVar(int playernum, const char *cvarname, bool is_string)
+static int GetUserCVar(int playernum, const char *cvarname, bool is_string, const SDWORD *stack, int stackdepth)
 {
 	if ((unsigned)playernum >= MAXPLAYERS || !playeringame[playernum])
 	{
@@ -4306,10 +4370,10 @@ static int GetUserCVar(int playernum, const char *cvarname, bool is_string)
 	{
 		return 0;
 	}
-	return DoGetCVar(cvar, is_string);
+	return DoGetCVar(cvar, is_string, stack, stackdepth);
 }
 
-static int GetCVar(AActor *activator, const char *cvarname, bool is_string)
+static int GetCVar(AActor *activator, const char *cvarname, bool is_string, const SDWORD *stack, int stackdepth)
 {
 	FBaseCVar *cvar = FindCVar(cvarname, NULL);
 	// Either the cvar doesn't exist, or it's for a mod that isn't loaded, so return 0.
@@ -4326,9 +4390,9 @@ static int GetCVar(AActor *activator, const char *cvarname, bool is_string)
 			{
 				return 0;
 			}
-			return GetUserCVar(int(activator->player - players), cvarname, is_string);
+			return GetUserCVar(int(activator->player - players), cvarname, is_string, stack, stackdepth);
 		}
-		return DoGetCVar(cvar, is_string);
+		return DoGetCVar(cvar, is_string, stack, stackdepth);
 	}
 }
 
@@ -4383,7 +4447,18 @@ static int SetCVar(AActor *activator, const char *cvarname, int value, bool is_s
 	return 1;
 }
 
-int DLevelScript::CallFunction(int argCount, int funcIndex, SDWORD *args)
+static bool DoSpawnDecal(AActor *actor, const FDecalTemplate *tpl, int flags, angle_t angle, fixed_t zofs, fixed_t distance)
+{
+	if (!(flags & SDF_ABSANGLE))
+	{
+		angle += actor->angle;
+	}
+	return NULL != ShootDecal(tpl, actor, actor->Sector, actor->x, actor->y,
+		actor->z + (actor->height>>1) - actor->floorclip + actor->GetBobOffset() + zofs,
+		angle, distance, !!(flags & SDF_PERMANENT));
+}
+
+int DLevelScript::CallFunction(int argCount, int funcIndex, SDWORD *args, const SDWORD *stack, int stackdepth)
 {
 	AActor *actor;
 	switch(funcIndex)
@@ -4659,7 +4734,7 @@ int DLevelScript::CallFunction(int argCount, int funcIndex, SDWORD *args)
 		case ACSF_GetActorClass:
 		{
 			AActor *a = SingleActorFromTID(args[0], activator);
-			return GlobalACSStrings.AddString(a == NULL ? "None" : a->GetClass()->TypeName.GetChars());
+			return GlobalACSStrings.AddString(a == NULL ? "None" : a->GetClass()->TypeName.GetChars(), stack, stackdepth);
 		}
 
 		case ACSF_SoundSequenceOnActor:
@@ -4836,7 +4911,7 @@ int DLevelScript::CallFunction(int argCount, int funcIndex, SDWORD *args)
 		case ACSF_GetCVarString:
 			if (argCount == 1)
 			{
-				return GetCVar(activator, FBehavior::StaticLookupString(args[0]), true);
+				return GetCVar(activator, FBehavior::StaticLookupString(args[0]), true, stack, stackdepth);
 			}
 			break;
 
@@ -4857,14 +4932,14 @@ int DLevelScript::CallFunction(int argCount, int funcIndex, SDWORD *args)
 		case ACSF_GetUserCVar:
 			if (argCount == 2)
 			{
-				return GetUserCVar(args[0], FBehavior::StaticLookupString(args[1]), false);
+				return GetUserCVar(args[0], FBehavior::StaticLookupString(args[1]), false, stack, stackdepth);
 			}
 			break;
 
 		case ACSF_GetUserCVarString:
 			if (argCount == 2)
 			{
-				return GetUserCVar(args[0], FBehavior::StaticLookupString(args[1]), true);
+				return GetUserCVar(args[0], FBehavior::StaticLookupString(args[1]), true, stack, stackdepth);
 			}
 			break;
 
@@ -4890,7 +4965,7 @@ int DLevelScript::CallFunction(int argCount, int funcIndex, SDWORD *args)
 				int	damage			= args[3];
 				FName pufftype		= argCount > 4 && args[4]? FName(FBehavior::StaticLookupString(args[4])) : NAME_BulletPuff;
 				FName damagetype	= argCount > 5 && args[5]? FName(FBehavior::StaticLookupString(args[5])) : NAME_None;
-				fixed_t	range		= argCount > 6 && args[6]? args[6] : 0x7FFFFFFF;
+				fixed_t	range		= argCount > 6 && args[6]? args[6] : MISSILERANGE;
 
 				if (args[0] == 0)
 				{
@@ -4910,15 +4985,24 @@ int DLevelScript::CallFunction(int argCount, int funcIndex, SDWORD *args)
 			break;
 
 		case ACSF_PlaySound:
+		case ACSF_PlayActorSound:
 			// PlaySound(tid, "SoundName", channel, volume, looping, attenuation)
 			{
-				const char *lookup = FBehavior::StaticLookupString(args[1]);
-				if (lookup != NULL)
+				FSoundID sid;
+
+				if (funcIndex == ACSF_PlaySound)
+				{
+					const char *lookup = FBehavior::StaticLookupString(args[1]);
+					if (lookup != NULL)
+					{
+						sid = lookup;
+					}
+				}
+				if (sid != 0 || funcIndex == ACSF_PlayActorSound)
 				{
 					FActorIterator it(args[0]);
 					AActor *spot;
 
-					FSoundID sid(lookup);
 					int chan = argCount > 2 ? args[2] : CHAN_BODY;
 					float vol = argCount > 3 ? FIXED2FLOAT(args[3]) : 1.f;
 					INTBOOL looping = argCount > 4 ? args[4] : false;
@@ -4931,13 +5015,20 @@ int DLevelScript::CallFunction(int argCount, int funcIndex, SDWORD *args)
 					}
 					while ((spot = it.Next()) != NULL)
 					{
-doplaysound:			if (!looping)
+doplaysound:			if (funcIndex == ACSF_PlayActorSound)
 						{
-							S_Sound(spot, chan, sid, vol, atten);
+							sid = GetActorSound(spot, args[1]);
 						}
-						else if (!S_IsActorPlayingSomething(spot, chan, sid))
+						if (sid != 0)
 						{
-							S_Sound(spot, chan | CHAN_LOOP, sid, vol, atten);
+							if (!looping)
+							{
+								S_Sound(spot, chan, sid, vol, atten);
+							}
+							else if (!S_IsActorPlayingSomething(spot, chan, sid))
+							{
+								S_Sound(spot, chan | CHAN_LOOP, sid, vol, atten);
+							}
 						}
 					}
 				}
@@ -5019,7 +5110,7 @@ doplaysound:			if (!looping)
 				const char *oldstr = FBehavior::StaticLookupString(args[0]);
 				if (oldstr == NULL || *oldstr == '\0')
 				{
-					return GlobalACSStrings.AddString("");
+					return GlobalACSStrings.AddString("", stack, stackdepth);
 				}
 				size_t oldlen = strlen(oldstr);
 				size_t newlen = args[1];
@@ -5029,7 +5120,7 @@ doplaysound:			if (!looping)
 					newlen = oldlen;
 				}
 				FString newstr(funcIndex == ACSF_StrLeft ? oldstr : oldstr + oldlen - newlen, newlen);
-				return GlobalACSStrings.AddString(newstr);
+				return GlobalACSStrings.AddString(newstr, stack, stackdepth);
 			}
 			break;
 
@@ -5039,7 +5130,7 @@ doplaysound:			if (!looping)
 				const char *oldstr = FBehavior::StaticLookupString(args[0]);
 				if (oldstr == NULL || *oldstr == '\0')
 				{
-					return GlobalACSStrings.AddString("");
+					return GlobalACSStrings.AddString("", stack, stackdepth);
 				}
 				size_t oldlen = strlen(oldstr);
 				size_t pos = args[1];
@@ -5047,13 +5138,13 @@ doplaysound:			if (!looping)
 
 				if (pos >= oldlen)
 				{
-					return GlobalACSStrings.AddString("");
+					return GlobalACSStrings.AddString("", stack, stackdepth);
 				}
 				if (pos + newlen > oldlen || pos + newlen < pos)
 				{
 					newlen = oldlen - pos;
 				}
-				return GlobalACSStrings.AddString(FString(oldstr + pos, newlen));
+				return GlobalACSStrings.AddString(FString(oldstr + pos, newlen), stack, stackdepth);
 			}
 			break;
 
@@ -5061,12 +5152,51 @@ doplaysound:			if (!looping)
             if (activator == NULL || activator->player == NULL || // Non-players do not have weapons
                 activator->player->ReadyWeapon == NULL)
             {
-                return GlobalACSStrings.AddString("None");
+                return GlobalACSStrings.AddString("None", stack, stackdepth);
             }
             else
             {
-				return GlobalACSStrings.AddString(activator->player->ReadyWeapon->GetClass()->TypeName.GetChars());
+				return GlobalACSStrings.AddString(activator->player->ReadyWeapon->GetClass()->TypeName.GetChars(), stack, stackdepth);
             }
+
+		case ACSF_SpawnDecal:
+			// int SpawnDecal(int tid, str decalname, int flags, fixed angle, int zoffset, int distance)
+			// Returns number of decals spawned (not including spreading)
+			{
+				int count = 0;
+				const FDecalTemplate *tpl = DecalLibrary.GetDecalByName(FBehavior::StaticLookupString(args[1]));
+				if (tpl != NULL)
+				{
+					int flags = (argCount > 2) ? args[2] : 0;
+					angle_t angle = (argCount > 3) ? (args[3] << FRACBITS) : 0;
+					fixed_t zoffset = (argCount > 4) ? (args[4] << FRACBITS) : 0;
+					fixed_t distance = (argCount > 5) ? (args[5] << FRACBITS) : 64*FRACUNIT;
+
+					if (args[0] == 0)
+					{
+						if (activator != NULL)
+						{
+							count += DoSpawnDecal(activator, tpl, flags, angle, zoffset, distance);
+						}
+					}
+					else
+					{
+						FActorIterator it(args[0]);
+						AActor *actor;
+
+						while ((actor = it.Next()) != NULL)
+						{
+							count += DoSpawnDecal(actor, tpl, flags, angle, zoffset, distance);
+						}
+					}
+				}
+				return count;
+			}
+			break;
+
+		case ACSF_CheckFont:
+			// bool CheckFont(str fontname)
+			return V_GetFont(FBehavior::StaticLookupString(args[0])) != NULL;
 
 		default:
 			break;
@@ -5219,7 +5349,7 @@ int DLevelScript::RunScript ()
 
 		case PCD_TAGSTRING:
 			//Stack[sp-1] |= activeBehavior->GetLibraryID();
-			Stack[sp-1] = GlobalACSStrings.AddString(activeBehavior->LookupString(Stack[sp-1]));
+			Stack[sp-1] = GlobalACSStrings.AddString(activeBehavior->LookupString(Stack[sp-1]), Stack, sp);
 			break;
 
 		case PCD_PUSHNUMBER:
@@ -5417,7 +5547,7 @@ int DLevelScript::RunScript ()
 				int argCount = NEXTBYTE;
 				int funcIndex = NEXTSHORT;
 
-				int retval = CallFunction(argCount, funcIndex, &STACK(argCount));
+				int retval = CallFunction(argCount, funcIndex, &STACK(argCount), Stack, sp);
 				sp -= argCount-1;
 				STACK(1) = retval;
 			}
@@ -7853,7 +7983,7 @@ scriptwait:
 			break;
 
 		case PCD_GETACTORPROPERTY:
-			STACK(2) = GetActorProperty (STACK(2), STACK(1));
+			STACK(2) = GetActorProperty (STACK(2), STACK(1), Stack, sp);
 			sp -= 1;
 			break;
 
@@ -7935,7 +8065,7 @@ scriptwait:
 			break;
 
 		case PCD_GETCVAR:
-			STACK(1) = GetCVar(activator, FBehavior::StaticLookupString(STACK(1)), false);
+			STACK(1) = GetCVar(activator, FBehavior::StaticLookupString(STACK(1)), false, Stack, sp);
 			break;
 
 		case PCD_SETHUDSIZE:
@@ -8319,7 +8449,7 @@ scriptwait:
 		case PCD_SAVESTRING:
 			// Saves the string
 			{
-				PushToStack(GlobalACSStrings.AddString(work));
+				PushToStack(GlobalACSStrings.AddString(work, Stack, sp));
 				STRINGBUILDER_FINISH(work);
 			}		
 			break;
