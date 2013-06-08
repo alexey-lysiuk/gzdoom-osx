@@ -61,6 +61,8 @@ EXTERN_CVAR (Bool, idmypos)
 EXTERN_CVAR (Bool, am_showtime)
 EXTERN_CVAR (Bool, am_showtotaltime)
 
+EXTERN_CVAR(Bool, vid_fps)
+
 CVAR(Int,hud_althudscale, 2, CVAR_ARCHIVE)				// Scale the hud to 640x400?
 CVAR(Bool,hud_althud, false, CVAR_ARCHIVE)				// Enable/Disable the alternate HUD
 
@@ -892,10 +894,10 @@ static void DrawTime()
 	const int characterCount = static_cast<int>( sizeof "HH:MM" - 1
 		+ (showSeconds ? sizeof ":SS"  - 1 : 0)
 		+ (showMillis  ? sizeof ".MMM" - 1 : 0) );
-	const int width  = SmallFont->GetCharWidth('0') * characterCount + 2; // small offset from screen's border
-	const int height = SmallFont->GetHeight();
+	const int x = SmallFont->GetCharWidth('0') * characterCount + 2; // small offset from screen's border
+	const int y = SmallFont->GetHeight() + (vid_fps ? ConFont->GetHeight() : 0);
 
-	DrawHudText(SmallFont, hud_timecolor, timeString, hudwidth - width, height, FRACUNIT);
+	DrawHudText(SmallFont, hud_timecolor, timeString, hudwidth - x, y, FRACUNIT);
 }
 
 
