@@ -1,0 +1,36 @@
+
+// This file contains sizes, MD5 checksums and fix tokens for PWADs with compatibility issues
+// or some specific improvements available like episode selection for Master Levels and
+// No Rest for the Living and possibility to play along with regular Doom II maps
+
+// Note about script_scanner_signed_ctype keyword:
+// If one of the matching file is found during loading of PWADs
+// and the automatic script scanner version detection is enabled
+// (script_scanner_version must be set to 0 which is default)
+// the game will automatically switch to the signed character type
+
+
+// Master Levels from PSN Doom Classic Complete
+3479715	   84cb8640f599c4a17c8eb526f90d2b7a    master_levels    // masterlevels.wad
+
+// No Rest for the Living (nerve.wad or nerve_demo.wad)
+3819855    967d5ae23daf45196212ae1b605da3b0    nerve    // XBLA Doom II or Doom 3: BFG Edition for PC
+3786293    4f47bb32bf5fd06bc1cc0b4a2e8e3910    nerve    // Doom 3: BFG Edition for Xbox 360
+
+// Mordeth Episode 1, New WAD Tool (NWT) version 
+// NWT does not use namespace markers to group sprites and flats together;
+// and indeed replacement flats are sprinkled over the sprites which constitute the bulk of MORGRAP0.WAD.
+// The flats are GATE4, GRNLITE1, MFLR8_1, BLOOD1, BLOOD2, BLOOD3, CEIL3_1, GATE2, GATE3, and GATE1,
+// in that order (but with many sprites interspersed). All remaining lumps are sprites.
+// Information from http://doomwiki.org/wiki/Mordeth
+909841    bb63601a03f1f3720cdc6fcd333a16aa    mordeth    // morgrap0.wad
+
+// Knee-Deep in ZDoom version 1.0 and 1.1
+// Decorate/Decorations.txt file contains wrong character with code 0xB4
+// in floating point constant at line 996
+24607213    ca8a08f03444c3b815b2dfd1890efd28    script_scanner_signed_ctype    // kdizd.pk3
+24850946    67d07a7696044873124fe619c63420bc    script_scanner_signed_ctype    // kdizd_11.pk3
+
+// GZDoom model pack from http://www-personal.umich.edu/~jimw/ClassicFPS/index.htm
+// uses 'non-breaking space' character with code 0xA0 in several files
+80294447    9bc8c003857762e72f72db81754ec1f2    script_scanner_signed_ctype    // GZ-Models.pk3

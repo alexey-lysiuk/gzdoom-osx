@@ -940,116 +940,121 @@ void FixMordethNamespace(const int wadIndex)
 	}
 }
 
-void UseOldScriptScanner(const int)
+void UseSignedCTypeScriptScanner(const int)
 {
 	// Use old script parser with signed character type
 	script_scanner_version = 1;
+}
+
+void ParseMD5Checksum(FScanner& sc, WadFix& fix)
+{
+	sc.MustGetString();
+
+	if (32 != strlen(sc.String))
+	{
+		sc.ScriptError("MD5 signature must be exactly 32 characters long");
+	}
+
+	for (size_t i = 0; i < 32; ++i)
+	{
+		int x = 0;
+
+		if (sc.String[i] >= '0' && sc.String[i] <= '9')
+		{
+			x = sc.String[i] - '0';
+		}
+		else
+		{
+			sc.String[i] |= 'a' ^ 'A';
+
+			if (sc.String[i] >= 'a' && sc.String[i] <= 'f')
+			{
+				x = sc.String[i] - 'a' + 10;
+			}
+			else
+			{
+				sc.ScriptError("MD5 signature must be a hexadecimal value");
+			}
+		}
+
+		if (!(i & 1))
+		{
+			fix.checksum.Bytes[i / 2] = x << 4;
+		}
+		else
+		{
+			fix.checksum.Bytes[i / 2] |= x;
+		}
+	}
+}
+
+void ParseFixToken(FScanner& sc, WadFix& fix)
+{
+	sc.MustGetString();
+
+	if (0 == stricmp(sc.String, "master_levels"))
+	{
+		fix.function = RenameMasterLevels;
+	}
+	else if (0 == stricmp(sc.String, "nerve"))
+	{
+		fix.function = RenameNerve;
+	}
+	else if (0 == stricmp(sc.String, "mordeth"))
+	{
+		fix.function = FixMordethNamespace;
+	}
+	else if (0 == stricmp(sc.String, "script_scanner_signed_ctype"))
+	{
+		// Use this fix only if automatic script scanner version detection is on
+
+		fix.function = 0 == script_scanner_version ?
+			UseSignedCTypeScriptScanner
+			: NULL;
+	}
+	else
+	{
+		sc.ScriptError("Unknown fix token found");
+	}
 }
 
 WadFixList PrepareWadFixes()
 {
 	WadFixList result;
 
-	// Master Levels (masterlevels.wad) from PSN Doom Classic Complete
-	const WadFix masterLevelsFix =
+	// Cannot use FWadCollection::GetNumForFullName() here
+	// as it requires lump hashing which is not initialized yet at this point
+
+	int compLump = -1;
+
+	for (int i = 0, ei = Wads.GetNumLumps(); i < ei; ++i)
 	{
-		3479715,
-		{ 0x84, 0xcb, 0x86, 0x40, 0xf5, 0x99, 0xc4, 0xa1,
-		  0x7c, 0x8e, 0xb5, 0x26, 0xf9, 0x0d, 0x2b, 0x7a },
-		RenameMasterLevels
-	};
-	result.Push(masterLevelsFix);
+		FResourceLump* lump = Wads.GetResourceLump(i);
 
-	// No Rest for the Living (nerve.wad) from XBLA Doom II or Doom III BFG Edition
-	const WadFix nerveFix =
-	{
-		3819855,
-		{ 0x96, 0x7d, 0x5a, 0xe2, 0x3d, 0xaf, 0x45, 0x19,
-		  0x62, 0x12, 0xae, 0x1b, 0x60, 0x5d, 0xa3, 0xb0 },
-		RenameNerve
-	};
-	result.Push(nerveFix);
-
-	const WadFix mordethFix =
-	{
-		909841,
-		{ 0xbb, 0x63, 0x60, 0x1a, 0x03, 0xf1, 0xf3, 0x72,
-		  0x0c, 0xdc, 0x6f, 0xcd, 0x33, 0x3a, 0x16, 0xaa },
-		FixMordethNamespace
-	};
-	result.Push(mordethFix);
-
-	if (0 == script_scanner_version)
-	{
-		// Automatic script scanner version detection is on
-
-		// Cannot use FWadCollection::GetNumForFullName() here
-		// as it requires lump hashing which is not initialized yet at this point
-
-		int compLump = -1;
-
-		for (int i = 0, ei = Wads.GetNumLumps(); i < ei; ++i)
+		if (NULL == lump || NULL == lump->FullName)
 		{
-			FResourceLump* lump = Wads.GetResourceLump(i);
-
-			if (NULL == lump || NULL == lump->FullName)
-			{
-				continue;
-			}
-
-			if (0 == stricmp(lump->FullName, "compatibility_script_scanner.txt"))
-			{
-				compLump = i;
-				break;
-			}
+			continue;
 		}
 
-		FScanner sc(compLump);
-
-		while (sc.GetNumber())
+		if (0 == stricmp(lump->FullName, "wadfixes.txt"))
 		{
-			WadFix scriptFix = { sc.Number, {}, UseOldScriptScanner };
+			compLump = i;
+			break;
+		}
+	}
 
-			sc.MustGetString();
+	FScanner sc(compLump);
 
-			if (32 != strlen(sc.String))
-			{
-				sc.ScriptError("MD5 signature must be exactly 32 characters long");
-			}
-			
-			for (size_t i = 0; i < 32; ++i)
-			{
-				int x = 0;
+	while (sc.GetNumber())
+	{
+		WadFix fix = { sc.Number, {}, NULL };
 
-				if (sc.String[i] >= '0' && sc.String[i] <= '9')
-				{
-					x = sc.String[i] - '0';
-				}
-				else
-				{
-					sc.String[i] |= 'a' ^ 'A';
+		ParseMD5Checksum(sc, fix);
+		ParseFixToken(sc, fix);
 
-					if (sc.String[i] >= 'a' && sc.String[i] <= 'f')
-					{
-						x = sc.String[i] - 'a' + 10;
-					}
-					else
-					{
-						sc.ScriptError("MD5 signature must be a hexadecimal value");
-					}
-				}
-				
-				if (!(i & 1))
-				{
-					scriptFix.checksum.Bytes[i / 2] = x << 4;
-				}
-				else
-				{
-					scriptFix.checksum.Bytes[i / 2] |= x;
-				}
-			}
-
-			result.Push(scriptFix);
+		if (NULL != fix.function)
+		{
+			result.Push(fix);
 		}
 	}
 
