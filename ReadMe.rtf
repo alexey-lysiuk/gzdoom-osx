@@ -1,9 +1,9 @@
-{\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf370
+{\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf390
 \cocoascreenfonts1{\fonttbl\f0\froman\fcharset0 Times-Roman;}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue246;}
 {\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid1\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid1}}
 {\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}}
-\paperw11900\paperh16840\margl1440\margr1440\vieww13460\viewh10640\viewkind0
+\paperw11900\paperh16840\margl1440\margr1440\vieww15000\viewh10400\viewkind0
 \deftab720
 \pard\pardeftab720\qc
 
@@ -58,6 +58,23 @@ ZDoom homepage:	{\field{\*\fldinst{HYPERLINK "http://zdoom.org/"}}{\fldrslt \cf2
 \fs28 \
 The following list describes changes done in OS X version only.\
 All recent changes in main GZDoom SVN repository can be seen {\field{\*\fldinst{HYPERLINK "http://mancubus.net/svn/gzdoom/"}}{\fldrslt here}}.\
+\
+\ul 0.2.0\
+\pard\pardeftab720
+\cf0 \ulnone * Updated to GZDoom 1.8.0 and ZDoom 2.7.0\
+\pard\pardeftab720
+\cf0 + Added ability to toggle vertical synchronization state automatically depending on current performance\
++ Added separate menu for vertical synchronization options\
++ Added support for file paths with special characters (quotes, spaces, escape sequences etc) in additional parameters field of IWAD selection window\
++ Added support for old script scanner with signed character type. This improves compatibility with some PWADs like Knee-Deep in ZDoom is playable again\
++ Added 2880x1800 resolution (15-inch MacBook Pro with Retina display) to supported resolutions list\
++ Added alert dialog to notify users about fatal errors.\
++ Added OS X version check\
+* Fixed rare issue on start-up when the game ignores all user input\
+* Fixed incorrect mouse centering when mouse is captured in windowed mode\
+* Fixed user input issue: Control, Option and Shift no longer stick after being pressed together with arrow keys\
+* Fixed user input issue: Special characters no longer appear during text entry when Function, Control, Option or Command keys are hold\
+* Fixed user input issue: Caps Lock no longer generates key press events in menu and console\
 \
 \ul 0.1.9\
 \ulnone + Added support for bots with configuration file from PerfectBots Mod by Doomguy0505. See {\field{\*\fldinst{HYPERLINK "http://zdoom.org/wiki/bots"}}{\fldrslt http://zdoom.org/wiki/bots}}\
