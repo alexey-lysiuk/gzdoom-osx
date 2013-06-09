@@ -49,6 +49,7 @@
 
 #include <AppKit/AppKit.h>
 #include <Carbon/Carbon.h>
+#include <IOKit/pwr_mgt/IOPMLib.h>
 
 #include <SDL.h>
 
@@ -67,6 +68,85 @@
 
 
 #define GZ_UNUSED( VARIABLE ) ( ( void )( VARIABLE ) )
+
+
+// ---------------------------------------------------------------------------
+
+namespace
+{
+
+enum OSXVersion
+{
+	// Unsupported versions
+	OSX_10_5_OR_OLDER = -1,
+
+	// Unknown version
+	OSX_UNKNOWN = 0,
+
+	// Supported versions
+	OSX_10_6 = 1,
+	OSX_10_7,
+	OSX_10_8,
+
+	// Future versions
+	OSX_10_9_OR_NEWER
+};
+
+OSXVersion s_OSXVersion = OSX_UNKNOWN;
+
+void CheckOSXVersion()
+{
+	static const char* const PARAMETER_NAME = "kern.osrelease";
+
+	size_t size = 0;
+
+	if (-1 == sysctlbyname(PARAMETER_NAME, NULL, &size, NULL, 0))
+	{
+		// Cannot detect OS X version but give the application a chance to run
+		return;
+	}
+
+	char* version = static_cast<char* >(alloca(size));
+
+	if (-1 == sysctlbyname(PARAMETER_NAME, version, &size, NULL, 0))
+	{
+		// Cannot detect OS X version but give the application a chance to run
+		return;
+	}
+
+	if (strcmp(version, "10.0") < 0)
+	{
+		s_OSXVersion = OSX_10_5_OR_OLDER;
+	}
+	else if (0 == strncmp(version, "10.", 3))
+	{
+		s_OSXVersion = OSX_10_6;
+	}
+	else if (0 == strncmp(version, "11.", 3))
+	{
+		s_OSXVersion = OSX_10_7;
+	}
+	else if (0 == strncmp(version, "12.", 3))
+	{
+		s_OSXVersion = OSX_10_8;
+	}
+	else if (strcmp(version, "12.") > 3)
+	{
+		s_OSXVersion = OSX_10_9_OR_NEWER;
+	}
+
+	if (s_OSXVersion < OSX_10_6)
+	{
+		CFOptionFlags responseFlags;
+		CFUserNotificationDisplayAlert(0, kCFUserNotificationStopAlertLevel, NULL, NULL, NULL,
+			CFSTR("Unsupported version of OS X"), CFSTR("You need OS X 10.6 or higher running on Intel platform in order to play."),
+			NULL, NULL, NULL, &responseFlags);
+		
+		exit(EXIT_FAILURE);
+	}
+}
+
+} // unnamed namespace
 
 
 // ---------------------------------------------------------------------------
@@ -758,6 +838,8 @@ void ProcessMouseWheelEvent( NSEvent* theEvent )
 	
 	bool m_openGLInitialized;
 	int  m_multisample;
+
+	IOPMAssertionID m_sleepAssertionID;
 }
 
 - (id)init;
@@ -801,6 +883,8 @@ static ApplicationDelegate* s_applicationDelegate;
 	
 	m_openGLInitialized = false;
 	m_multisample       = 0;
+
+	m_sleepAssertionID  = IOPMAssertionID(-1);
 	
 	return self;
 }
@@ -833,14 +917,19 @@ static ApplicationDelegate* s_applicationDelegate;
 	GZ_UNUSED( aNotification );
 	
 	S_SetSoundPaused(1);
+
+	IOPMAssertionCreateWithName(kIOPMAssertionTypeNoDisplaySleep,
+		kIOPMAssertionLevelOn, CFSTR(GAMENAME " is running"), &m_sleepAssertionID);
 }
 
 - (void)applicationWillResignActive:(NSNotification*)aNotification
 {
 	GZ_UNUSED( aNotification );
-	
+
+	IOPMAssertionRelease(m_sleepAssertionID);
+
 	S_SetSoundPaused(0);
-}
+}	
 
 
 - (void)applicationDidFinishLaunching:(NSNotification*)aNotification
@@ -1797,35 +1886,6 @@ int SDL_SetPalette( SDL_Surface* surface, int flags, SDL_Color* colors, int firs
 #undef main
 #endif // main
 
-static void CheckOSVersion()
-{
-	static const char* const PARAMETER_NAME = "kern.osrelease";
-
-	size_t size = 0;
-
-    if (-1 == sysctlbyname(PARAMETER_NAME, NULL, &size, NULL, 0))
-	{
-		return;
-	}
-
-    char* version = static_cast<char* >(alloca(size));
-
-    if (-1 == sysctlbyname(PARAMETER_NAME, version, &size, NULL, 0))
-	{
-		return;
-	}
-
-	if (strcmp(version, "10.0") < 0)
-	{
-		CFOptionFlags responseFlags;
-		CFUserNotificationDisplayAlert(0, kCFUserNotificationStopAlertLevel, NULL, NULL, NULL,
-			CFSTR("Unsupported version of OS X"), CFSTR("You need OS X 10.6 or higher running on Intel platform in order to play."),
-			NULL, NULL, NULL, &responseFlags);
-
-		exit(EXIT_FAILURE);
-	}
-}
-
 int main(int argc, char** argv)
 {
 #if 0
@@ -1833,7 +1893,7 @@ int main(int argc, char** argv)
 	CFUserNotificationDisplayAlert(0, 0, NULL, NULL, NULL, CFSTR("Attach"), NULL, NULL, NULL, NULL, &responseFlags);
 #endif
 
-	CheckOSVersion();
+	CheckOSXVersion();
 
 	gettimeofday(&s_startTicks, NULL);
 
