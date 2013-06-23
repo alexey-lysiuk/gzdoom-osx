@@ -31,29 +31,6 @@
 			name = sc_man_scanner.re;
 			productName = sc_man_scanner.re;
 		};
-		8A6BE7A3142F529D00AFCF10 /* Make Backup */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 8A6BE7B3142F52CC00AFCF10 /* Build configuration list for PBXAggregateTarget "Make Backup" */;
-			buildPhases = (
-				8A6BE7A2142F529D00AFCF10 /* ShellScript */,
-			);
-			dependencies = (
-			);
-			name = "Make Backup";
-			productName = "Make Backup";
-		};
-		8A6BE7A7142F52AA00AFCF10 /* Make Disk Image */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 8A6BE7B4142F52CC00AFCF10 /* Build configuration list for PBXAggregateTarget "Make Disk Image" */;
-			buildPhases = (
-				8A6BE7A6142F52AA00AFCF10 /* ShellScript */,
-			);
-			dependencies = (
-				8A9F52D914BB0E6500F3369B /* PBXTargetDependency */,
-			);
-			name = "Make Disk Image";
-			productName = "Make Disk Image";
-		};
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
@@ -1117,13 +1094,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 8A422107150A0420001D28A0;
 			remoteInfo = hid_utilities;
-		};
-		8A9F52D814BB0E6500F3369B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8D1107260486CEB800E47090;
-			remoteInfo = GZDoom_SDL;
 		};
 		8A9F52EC14BB0F2900F3369B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -4379,8 +4349,6 @@
 				8AF27B241390F5DC0095D9A0 /* dumb */,
 				8AF27C1B1390F7E20095D9A0 /* gdtoa */,
 				8A422107150A0420001D28A0 /* hid_utilities */,
-				8A6BE7A3142F529D00AFCF10 /* Make Backup */,
-				8A6BE7A7142F52AA00AFCF10 /* Make Disk Image */,
 			);
 		};
 /* End PBXProject section */
@@ -4494,32 +4462,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\necho \"Generating sc_man_scanner.h...\"\n\ncd \"${SRCROOT}/src\"\n\"${CONFIGURATION_BUILD_DIR}/re2c\" --no-generation-date -s -o sc_man_scanner.h sc_man_scanner.re\n";
-		};
-		8A6BE7A2142F529D00AFCF10 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "misc/make_backup\n";
-		};
-		8A6BE7A6142F52AA00AFCF10 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "misc/make_image\n";
 		};
 		8A9F548014BB0F2900F3369B /* Run Post-Build Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -5609,11 +5551,6 @@
 			target = 8A422107150A0420001D28A0 /* hid_utilities */;
 			targetProxy = 8A42210E150A0461001D28A0 /* PBXContainerItemProxy */;
 		};
-		8A9F52D914BB0E6500F3369B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8D1107260486CEB800E47090 /* GZDoom_SDL */;
-			targetProxy = 8A9F52D814BB0E6500F3369B /* PBXContainerItemProxy */;
-		};
 		8A9F52EB14BB0F2900F3369B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 49E92B3213991F2900CCEBBC /* sc_man_scanner.re */;
@@ -5700,9 +5637,6 @@
 		49E91DDF1393BF3900CCEBBC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				PRODUCT_NAME = "Compile ";
 			};
 			name = Debug;
@@ -5710,19 +5644,13 @@
 		49E91DE01393BF3900CCEBBC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				PRODUCT_NAME = "Compile ";
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		49E92B3313991F2900CCEBBC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				PRODUCT_NAME = sc_man_scanner.re;
 			};
 			name = Debug;
@@ -5730,20 +5658,15 @@
 		49E92B3413991F2900CCEBBC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				PRODUCT_NAME = sc_man_scanner.re;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		8A422109150A0421001D28A0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = hid_utilities_gzdoom;
@@ -5753,53 +5676,10 @@
 		8A42210A150A0421001D28A0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_MODEL_TUNING = G5;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = hid_utilities_gzdoom;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
-		8A6BE7A4142F529D00AFCF10 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				PRODUCT_NAME = "Make Backup";
-			};
-			name = Debug;
-		};
-		8A6BE7A5142F529D00AFCF10 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				PRODUCT_NAME = "Make Backup";
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
-		8A6BE7A8142F52AA00AFCF10 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				PRODUCT_NAME = "Make Disk Image";
-			};
-			name = Debug;
-		};
-		8A6BE7A9142F52AA00AFCF10 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				PRODUCT_NAME = "Make Disk Image";
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
@@ -5992,7 +5872,6 @@
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)_SDL";
 				CONFIGURATION_TEMP_DIR = "$(PROJECT_TEMP_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)_SDL";
 				INFOPLIST_FILE = "GZDoom-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				PRODUCT_NAME = GZDoom;
 			};
 			name = Debug;
@@ -6004,7 +5883,6 @@
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)_SDL";
 				CONFIGURATION_TEMP_DIR = "$(PROJECT_TEMP_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)_SDL";
 				INFOPLIST_FILE = "GZDoom-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				PRODUCT_NAME = GZDoom;
 			};
 			name = Release;
@@ -6079,24 +5957,6 @@
 			buildConfigurations = (
 				8A422109150A0421001D28A0 /* Debug */,
 				8A42210A150A0421001D28A0 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		8A6BE7B3142F52CC00AFCF10 /* Build configuration list for PBXAggregateTarget "Make Backup" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				8A6BE7A4142F529D00AFCF10 /* Debug */,
-				8A6BE7A5142F529D00AFCF10 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		8A6BE7B4142F52CC00AFCF10 /* Build configuration list for PBXAggregateTarget "Make Disk Image" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				8A6BE7A8142F52AA00AFCF10 /* Debug */,
-				8A6BE7A9142F52AA00AFCF10 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
