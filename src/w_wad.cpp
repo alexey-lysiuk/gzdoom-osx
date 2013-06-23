@@ -86,9 +86,13 @@ static void PrintLastError ();
 
 EXTERN_CVAR(Int, script_scanner_version);
 
+extern bool show_outdated_iwad_warning;
+
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
 FWadCollection Wads;
+
+CVAR(Bool, check_outdated_iwad, true, CVAR_ARCHIVE);
 
 // PRIVATE DATA DEFINITIONS ------------------------------------------------
 
@@ -947,6 +951,11 @@ void UseSignedCTypeScriptScanner(const int)
 	script_scanner_version = 1;
 }
 
+void IssueOutdatedIWADWarning(const int)
+{
+	show_outdated_iwad_warning = true;
+}
+
 void ParseMD5Checksum(FScanner& sc, WadSpecial& special)
 {
 	sc.MustGetString();
@@ -1011,6 +1020,12 @@ void ParseSpecialToken(FScanner& sc, WadSpecial& special)
 
 		special.function = 0 == script_scanner_version ?
 			UseSignedCTypeScriptScanner
+			: NULL;
+	}
+	else if (0 == stricmp(sc.String, "outdated_iwad"))
+	{
+		special.function = check_outdated_iwad ?
+			IssueOutdatedIWADWarning
 			: NULL;
 	}
 	else

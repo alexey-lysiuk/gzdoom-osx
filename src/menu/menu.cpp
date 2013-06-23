@@ -50,6 +50,7 @@
 #include "gi.h"
 #include "v_palette.h"
 #include "i_input.h"
+#include "i_system.h"
 #include "gameconfigfile.h"
 #include "gstrings.h"
 #include "r_utility.h"
@@ -697,6 +698,40 @@ void M_Ticker (void)
 //
 //=============================================================================
 
+bool show_outdated_iwad_warning;
+
+static void DrawOutdatedIWADWarning()
+{
+	static bool needDisplay = true;
+
+	if (!show_outdated_iwad_warning || !needDisplay)
+	{
+		return;
+	}
+
+	const int currentTime = I_MSTime();
+	static int startTime = currentTime;
+
+	static const int DISPLAY_TIME_MS = 10 * 1000;
+
+	if (currentTime - startTime < DISPLAY_TIME_MS)
+	{
+		const EColorRange color = (currentTime % 1000 < 500) ? CR_RED : CR_WHITE;
+		FFont* font = SmallFont;
+
+		const char* const OUTDATED_MESSAGE = GStrings("MNU_OUTDATED_IWAD");
+
+		const int x = (SCREENWIDTH - font->StringWidth(OUTDATED_MESSAGE) * CleanXfac) / 2;
+		const int y = font->GetHeight();
+
+		screen->DrawText(font, color, x, y, OUTDATED_MESSAGE, DTA_CleanNoMove, true, TAG_DONE);
+	}
+	else
+	{
+		needDisplay = false;
+	}
+}
+
 void M_Drawer (void) 
 {
 	player_t *player = &players[consoleplayer];
@@ -718,6 +753,8 @@ void M_Drawer (void)
 		if (DMenu::CurrentMenu->DimAllowed()) screen->Dim(fade);
 		DMenu::CurrentMenu->Drawer();
 	}
+
+	DrawOutdatedIWADWarning();
 }
 
 //=============================================================================

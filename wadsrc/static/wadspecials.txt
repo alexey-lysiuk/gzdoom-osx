@@ -34,3 +34,29 @@
 // GZDoom model pack from http://www-personal.umich.edu/~jimw/ClassicFPS/index.htm
 // uses 'non-breaking space' character with code 0xA0 in several files
 80294447    9bc8c003857762e72f72db81754ec1f2    script_scanner_signed_ctype    // GZ-Models.pk3
+
+// Outdated Doom IWAD(s), see http://doomwiki.org/wiki/DOOM.WAD
+10396254    981b03e6d1dc033301aa3095acc437ce    outdated_iwad    // 1.1
+10399316    792fd1fea023d61210857089a7c1e351    outdated_iwad    // 1.2
+11159840    54978d12de87f162b9bcc011676cb3c0    outdated_iwad    // 1.666
+11159840    11e1cd216801ea2657723abc86ecb01f    outdated_iwad    // 1.8
+// [?] Notify about free update to Ultimate Doom
+//11159840    1cd63c5ddff1bf8ce844237f580e9cf3    outdated_iwad    // 1.9
+
+// Outdated Doom II IWAD(s), see http://doomwiki.org/wiki/DOOM2.WAD
+14824716    d9153ced9fd5b898b36cc5844e35b520    outdated_iwad    // 1.666g
+14943400    30e3c2d0350b67bfbf47271970b74b2f    outdated_iwad    // 1.666
+14612688    ea74a47a791fdef2e9f2ea8b8a9da13b    outdated_iwad    // 1.7
+14612688    d7a07e5d3f4625074312bc299d7ed33f    outdated_iwad    // 1.7a
+14612688    c236745bb01d89bbb866c8fed81b6f8c    outdated_iwad    // 1.8
+
+// Outdated Heretic IWAD(s), see http://doomwiki.org/wiki/HERETIC.WAD
+11096488    3117e399cdb4298eaa3941625f4b2923    outdated_iwad    // 1.0
+// [?] Notify about free update to Shadow of the Serpent Riders
+//11095516    1e4cb4ef075ad344dd63971637307e04    outdated_iwad    // 1.2
+
+// Outdated Hexen IWAD(s), see http://doomwiki.org/wiki/HEXEN.WAD
+20128392    b2543a03521365261d0a0f74d5dd90f0    outdated_iwad    // 1.0
+
+// Outdated Hexen: Deathkings of the Dark Citadel IWAD(s), see http://doomwiki.org/wiki/HEXDD.WAD
+4429700     1077432e2690d390c256ac908b5f4efa    outdated_iwad    // 1.0

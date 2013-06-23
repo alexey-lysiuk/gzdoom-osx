@@ -860,6 +860,7 @@ OptionMenu "MiscOptions"
 		Option "Alt-Enter toggles fullscreen",			"k_allowfullscreentoggle", "OnOff"
 	}
 	Option "Show IWAD selection dialog",			"queryiwad", "OnOff"
+	Option "Show outdated IWAD warning",			"check_outdated_iwad", "OnOff"
 	StaticText " "
 	Option "Enable cheats from all games",			"allcheats", "OnOff"
 	Option "Enable autosaves",						"disableautosave", "Autosave"

@@ -1658,6 +1658,8 @@ MNU_EPISODE			= "Select Episode";
 WI_FINISHED			= "finished";
 WI_ENTERING			= "Now entering:";
 
+MNU_OUTDATED_IWAD	= "You are using an outdated IWAD file!";
+
 // Bloodbath announcer
 
 BBA_BONED = "%k boned %o like a fish";
