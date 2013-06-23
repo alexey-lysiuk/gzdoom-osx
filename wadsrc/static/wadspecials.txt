@@ -1,5 +1,5 @@
 
-// This file contains sizes, MD5 checksums and fix tokens for PWADs with compatibility issues
+// This file contains sizes, MD5 checksums and special tokens for PWADs with compatibility issues
 // or some specific improvements available like episode selection for Master Levels and
 // No Rest for the Living and possibility to play along with regular Doom II maps
 

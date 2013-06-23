@@ -189,7 +189,7 @@ void FWadCollection::InitMultipleFiles (TArray<FString> &filenames)
 		I_FatalError ("W_InitMultipleFiles: no files found");
 	}
 
-	ApplyWadFixes();
+	ApplyWadSpecials();
 	RenameSprites();
 
 	// [RH] Set up hash table
@@ -822,9 +822,10 @@ void FWadCollection::RenameSprites ()
 
 //==========================================================================
 //
-// ApplyWadFixes
+// ApplyWadSpecials
 //
-// Applies various compatibility fixes for several PWAD files
+// Applies various compatibility fixes and other special actions
+// for WAD files
 // Also it adds handling for Master Levels and No Rest for the Living
 // as episodes of Doom II
 //
@@ -832,17 +833,17 @@ void FWadCollection::RenameSprites ()
 
 namespace {
 
-typedef void (*WadFixFunction)(const int wadIndex);
+typedef void (*WadSpecialFunction)(const int wadIndex);
 
-struct WadFix
+struct WadSpecial
 {
 	long size;
 	FMD5Holder checksum;
 
-	WadFixFunction function;
+	WadSpecialFunction function;
 };
 
-typedef TArray<WadFix> WadFixList;
+typedef TArray<WadSpecial> WadSpecialList;
 
 
 void RenameMasterLevels(const int wadIndex)
@@ -946,7 +947,7 @@ void UseSignedCTypeScriptScanner(const int)
 	script_scanner_version = 1;
 }
 
-void ParseMD5Checksum(FScanner& sc, WadFix& fix)
+void ParseMD5Checksum(FScanner& sc, WadSpecial& special)
 {
 	sc.MustGetString();
 
@@ -979,48 +980,48 @@ void ParseMD5Checksum(FScanner& sc, WadFix& fix)
 
 		if (!(i & 1))
 		{
-			fix.checksum.Bytes[i / 2] = x << 4;
+			special.checksum.Bytes[i / 2] = x << 4;
 		}
 		else
 		{
-			fix.checksum.Bytes[i / 2] |= x;
+			special.checksum.Bytes[i / 2] |= x;
 		}
 	}
 }
 
-void ParseFixToken(FScanner& sc, WadFix& fix)
+void ParseSpecialToken(FScanner& sc, WadSpecial& special)
 {
 	sc.MustGetString();
 
 	if (0 == stricmp(sc.String, "master_levels"))
 	{
-		fix.function = RenameMasterLevels;
+		special.function = RenameMasterLevels;
 	}
 	else if (0 == stricmp(sc.String, "nerve"))
 	{
-		fix.function = RenameNerve;
+		special.function = RenameNerve;
 	}
 	else if (0 == stricmp(sc.String, "mordeth"))
 	{
-		fix.function = FixMordethNamespace;
+		special.function = FixMordethNamespace;
 	}
 	else if (0 == stricmp(sc.String, "script_scanner_signed_ctype"))
 	{
 		// Use this fix only if automatic script scanner version detection is on
 
-		fix.function = 0 == script_scanner_version ?
+		special.function = 0 == script_scanner_version ?
 			UseSignedCTypeScriptScanner
 			: NULL;
 	}
 	else
 	{
-		sc.ScriptError("Unknown fix token found");
+		sc.ScriptError("Unknown WAD special token found");
 	}
 }
 
-WadFixList PrepareWadFixes()
+WadSpecialList PrepareWadSpecials()
 {
-	WadFixList result;
+	WadSpecialList result;
 
 	// Cannot use FWadCollection::GetNumForFullName() here
 	// as it requires lump hashing which is not initialized yet at this point
@@ -1036,7 +1037,7 @@ WadFixList PrepareWadFixes()
 			continue;
 		}
 
-		if (0 == stricmp(lump->FullName, "wadfixes.txt"))
+		if (0 == stricmp(lump->FullName, "wadspecials.txt"))
 		{
 			compLump = i;
 			break;
@@ -1047,14 +1048,14 @@ WadFixList PrepareWadFixes()
 
 	while (sc.GetNumber())
 	{
-		WadFix fix = { sc.Number, {}, NULL };
+		WadSpecial special = { sc.Number, {}, NULL };
 
-		ParseMD5Checksum(sc, fix);
-		ParseFixToken(sc, fix);
+		ParseMD5Checksum(sc, special);
+		ParseSpecialToken(sc, special);
 
-		if (NULL != fix.function)
+		if (NULL != special.function)
 		{
-			result.Push(fix);
+			result.Push(special);
 		}
 	}
 
@@ -1063,9 +1064,9 @@ WadFixList PrepareWadFixes()
 
 } // unnamed namespace
 
-void FWadCollection::ApplyWadFixes()
+void FWadCollection::ApplyWadSpecials()
 {
-	const WadFixList fixes = PrepareWadFixes();
+	const WadSpecialList specials = PrepareWadSpecials();
 
 	for (unsigned int wadIndex = 0, wadCount = Files.Size();
 		 wadIndex < wadCount;
@@ -1079,20 +1080,20 @@ void FWadCollection::ApplyWadFixes()
 		}
 
 		const long fileSize = fileFeader->GetLength();
-		const WadFix* fix = NULL;
+		const WadSpecial* special = NULL;
 
-		for (unsigned int fixIndex = 0, fixCount = fixes.Size();
-			 fixIndex < fixCount;
-			 ++fixIndex)
+		for (unsigned int specialIndex = 0, specialCount = specials.Size();
+			 specialIndex < specialCount;
+			 ++specialIndex)
 		{
-			if (fileSize == fixes[fixIndex].size)
+			if (fileSize == specials[specialIndex].size)
 			{
-				fix = &fixes[fixIndex];
+				special = &specials[specialIndex];
 				break;
 			}
 		}
 
-		if (NULL == fix)
+		if (NULL == special)
 		{
 			continue;
 		}
@@ -1105,14 +1106,14 @@ void FWadCollection::ApplyWadFixes()
 		md5.Update(fileFeader, fileFeader->GetLength());
 		md5.Final(fileChecksum);
 
-		const bool isChecksumDifferent = 0 != memcmp(&fix->checksum, fileChecksum, sizeof(fix->checksum));
+		const bool isChecksumDifferent = 0 != memcmp(&special->checksum, fileChecksum, sizeof(special->checksum));
 
 		if (isChecksumDifferent)
 		{
 			continue;
 		}
 
-		fix->function(wadIndex);
+		special->function(wadIndex);
 	}
 }
 

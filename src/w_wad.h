@@ -230,7 +230,7 @@ protected:
 
 private:
 	void RenameSprites();
-	void ApplyWadFixes();
+	void ApplyWadSpecials();
 	int FindWadByChecksum(const long filesize, const BYTE checksum[16]);
 	void DeleteAll();
 };
