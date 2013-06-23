@@ -668,132 +668,35 @@ FResourceFile *CheckWad(const char *filename, FileReader *file, bool quiet)
 //==========================================================================
 
 
-class FEmbeddedWadFile : public FWadFile
+namespace
 {
-public:
-	FEmbeddedWadFile( const char* filename, FileReader* reader, FResourceFile* owner );
-	
-	void CopyLumps( FUncompressedLump* dest );
-
-private:
-	FResourceFile* m_owner;
-	
-	int m_offset;
-};
-
-
-FEmbeddedWadFile::FEmbeddedWadFile( const char* filename, FileReader* reader, FResourceFile* owner )
-: FWadFile( filename, reader )
-, m_owner ( owner )
-, m_offset( static_cast< int >( owner->GetReader()->Tell() ) )
-{
-	
-}
-
-void FEmbeddedWadFile::CopyLumps( FUncompressedLump* dest )
-{
-	if ( NULL == Lumps || NULL == dest )
-	{
-		return;
-	}
-	
-	for ( DWORD i = 0; i < NumLumps; ++i )
-	{
-		uppercopy( dest[i].Name, Lumps[i].Name );
-		dest[i].Name[8]   = 0;
-		dest[i].Owner     = m_owner;
-		dest[i].Position  = Lumps[i].Position + m_offset;
-		dest[i].LumpSize  = Lumps[i].LumpSize;
-		dest[i].Namespace = Lumps[i].Namespace;
-		dest[i].Flags     = Lumps[i].Flags;
-		dest[i].FullName  = Lumps[i].FullName;
-	}
-}
-
-
-//==========================================================================
-
 
 struct DiskEntry
 {
-	char  name[ 64 ];
+	char  name[64];
 	DWORD offset;
 	DWORD size;
 };
 
-typedef TArray< DiskEntry > DiskEntryList;
+typedef TArray<DiskEntry> DiskEntryList;
 
 
-static DWORD GetEntryCount( FileReader* file )
+DWORD GetEntryCount(FileReader* file)
 {
 	DWORD result;
 	
-	file->Seek( 0, SEEK_SET );
-	file->Read( &result, 4 );
+	file->Seek(0, SEEK_SET);
+	file->Read(&result, 4);
 	
-	return BigLong( result );
+	return BigLong(result);
 }
 
-static DWORD GetDataOffset( const DWORD entryCount )
+DWORD GetDataOffset(const DWORD entryCount)
 {
-	return 4 + sizeof( DiskEntry ) * entryCount + 4;
+	return 4 + sizeof(DiskEntry) * entryCount + 4;
 }
 
-
-union LumpName  // from FResourceLump struct
-{
-	char  str[9];
-	QWORD qword;
-};
-
-struct LumpRename
-{
-	LumpName oldName;
-	LumpName newName;
-	
-};
-
-
-static void RenameNerveLumps( FUncompressedLump* lumps, const DWORD count )
-{
-	static const LumpRename RENAME_TABLE[] =
-	{
-		{ "CWILV00", "NRWILV00" },
-		{ "CWILV01", "NRWILV01" },
-		{ "CWILV02", "NRWILV02" },
-		{ "CWILV03", "NRWILV03" },
-		{ "CWILV04", "NRWILV04" },
-		{ "CWILV05", "NRWILV05" },
-		{ "CWILV06", "NRWILV06" },
-		{ "CWILV07", "NRWILV07" },
-		{ "CWILV08", "NRWILV08" },
-		
-		{ "MAP01", "NERVE01" },
-		{ "MAP02", "NERVE02" },
-		{ "MAP03", "NERVE03" },
-		{ "MAP04", "NERVE04" },
-		{ "MAP05", "NERVE05" },
-		{ "MAP06", "NERVE06" },
-		{ "MAP07", "NERVE07" },
-		{ "MAP08", "NERVE08" },
-		{ "MAP09", "NERVE09" }
-	};
-	
-	assert( NULL != lumps );
-	
-	for ( DWORD i = 0; i < count; ++i )
-	{
-		for ( size_t j = 0; j < countof( RENAME_TABLE ); ++j )
-		{
-			if ( lumps[i].qwName == RENAME_TABLE[j].oldName.qword )
-			{
-				lumps[i].qwName = RENAME_TABLE[j].newName.qword;
-				
-				break;
-			}
-		}
-	}
-}
+} // unnamed namespace
 
 
 //==========================================================================
@@ -802,168 +705,72 @@ static void RenameNerveLumps( FUncompressedLump* lumps, const DWORD count )
 class FDiskFile : public FUncompressedFile
 {
 public:
-	FDiskFile( const char* path, FileReader* file );
-	~FDiskFile();
+	FDiskFile(const char* path, FileReader* file);
 	
-	bool Open( bool quiet );
-	
-private:
-	DiskEntryList     m_entries;
-	
-	FEmbeddedWadFile* m_iwad;
-	FileReader*       m_iwadReader;
-	
-	FEmbeddedWadFile* m_pwad;
-	FileReader*       m_pwadReader;
-	
-	void ReadEntries();
-	bool LoadWADs( bool quiet );
-	bool LoadWAD( const char* name, FileReader** reader, FEmbeddedWadFile** wad, bool quiet );
-	bool PrepareLumps();
-	
-	void DumpFiles();
-	
+	bool Open(bool quiet);
+
 };
 
 
-FDiskFile::FDiskFile( const char* path, FileReader* file )
-: FUncompressedFile( path, file )
-, m_iwad      ( NULL )
-, m_iwadReader( NULL )
-, m_pwad      ( NULL )
-, m_pwadReader( NULL )
+FDiskFile::FDiskFile(const char* path, FileReader* file)
+: FUncompressedFile(path, file)
 {
 
 }
 
-FDiskFile::~FDiskFile()
+bool FDiskFile::Open(bool quiet)
 {
-	delete m_pwad;
-	delete m_iwad;
-}
+	const DWORD entryCount = GetEntryCount(Reader);
+	const DWORD dataOffest = GetDataOffset(entryCount);
 
+	DiskEntryList entries;
 
-bool FDiskFile::Open( bool quiet )
-{
-	ReadEntries();
-
-#if 0
-	DumpFiles();
-#endif
-	
-	return LoadWADs( quiet )
-		&& PrepareLumps();
-}
-
-void FDiskFile::ReadEntries()
-{
-	const DWORD entryCount = GetEntryCount( Reader );
-	const DWORD dataOffest = GetDataOffset( entryCount );
-	
-	for ( DWORD i = 0; i < entryCount; ++i )
+	for (DWORD i = 0; i < entryCount; ++i)
 	{
 		DiskEntry entry;
-		Reader->Read( &entry, sizeof( entry ) );
-		
-		entry.offset = BigLong( entry.offset ) + dataOffest;
-		entry.size   = BigLong( entry.size   );
-		
-		m_entries.Push( entry );
-	}	
-}
+		Reader->Read(&entry, sizeof entry);
 
-bool FDiskFile::LoadWADs( bool quiet )
-{
-	return     LoadWAD( "doom.wad",       &m_iwadReader, &m_iwad, quiet )
-		||   ( LoadWAD( "doom2.wad",      &m_iwadReader, &m_iwad, quiet )
-			&& LoadWAD( "nerve_demo.wad", &m_pwadReader, &m_pwad, quiet ) );
-}
+		entry.offset = BigLong(entry.offset) + dataOffest;
+		entry.size   = BigLong(entry.size);
 
-bool FDiskFile::LoadWAD( const char* name, FileReader** reader, FEmbeddedWadFile** wad, bool quiet )
-{
-	const size_t nameLength = strlen( name );
-	
-	for ( DWORD i = 0, count = m_entries.Size(); i < count; ++i )
-	{
-		FString entryName = m_entries[i].name;
-		entryName.ToLower();
-		
-		if ( entryName.Len() - nameLength == entryName.IndexOf( name ) )
+		const char* const extension = strrchr(entry.name, '.');
+
+		if (NULL != extension && 0 == stricmp(extension, ".wad"))
 		{
-			Reader->Seek( m_entries[i].offset, SEEK_SET );
-			
-			*reader = new FileReader( Reader->GetFile(), m_entries[i].size );
-			*wad    = new FEmbeddedWadFile( name, *reader, this );
-			
-			if ( (*wad)->Open( quiet ) )
-			{
-				return true;
-			}
-			
-			delete *wad;
-			*wad = NULL;
+			entries.Push(entry);
 		}
 	}
-	
-	return false;
-}
 
-bool FDiskFile::PrepareLumps()
-{
-	const DWORD iwadLumpCount = NULL == m_iwad ? 0 : m_iwad->LumpCount();
-	const DWORD pwadLumpCount = NULL == m_pwad ? 0 : m_pwad->LumpCount();
-	
-	NumLumps = iwadLumpCount + pwadLumpCount;
-	
-	if ( 0 == NumLumps )
+	NumLumps = entries.Size();
+
+	if (0 == NumLumps)
 	{
 		return false;
 	}
-	
-	Lumps = new FUncompressedLump[ NumLumps ];
-	m_iwad->CopyLumps( Lumps );
-	
-	if ( pwadLumpCount > 0 )
+
+	Lumps = new FUncompressedLump[NumLumps];
+
+	for (DWORD i = 0; i < NumLumps; ++i)
 	{
-		m_pwad->CopyLumps( Lumps + iwadLumpCount );
-		
-		RenameNerveLumps( Lumps + iwadLumpCount, pwadLumpCount );
+		FUncompressedLump& lump = Lumps[i];
+		const DiskEntry& entry = entries[i];
+
+		char* const lumpName = new char[strlen(entry.name) + 1];
+		strcpy(lumpName, entry.name);
+
+		lump.Owner     = this;
+		lump.Position  = entry.offset;
+		lump.LumpSize  = entry.size;
+		lump.Flags     = LUMPF_EMBEDDED;
+		lump.FullName  = lumpName;
 	}
-	
+
+	if (!quiet)
+	{
+		Printf(", %d lumps\n", NumLumps);
+	}
+
 	return true;
-}
-
-
-void FDiskFile::DumpFiles()
-{
-	for ( DWORD i = 0, count = m_entries.Size(); i < count; ++i )
-	{
-		FString name = m_entries[i].name;
-		
-		const long colonIndex = name.IndexOf( ":\\" );
-		if ( -1 != colonIndex )
-		{
-			name = name.Mid( colonIndex + 2 );
-		}
-		
-		FixPathSeperator( name );
-		CreatePath( ExtractFilePath( name ).GetChars() );
-		
-		const DWORD size = m_entries[i].size;
-		
-		TArray< unsigned char> buffer;
-		buffer.Resize( size );
-		
-		Reader->Seek( m_entries[i].offset, SEEK_SET );
-		Reader->Read( &buffer[0], size );
-		
-		FILE* outputFile = fopen( name, "wb" );
-		if ( NULL != outputFile )
-		{
-			fwrite( &buffer[0], size, 1, outputFile );
-			fclose( outputFile );
-		}
-	}
 }
 
 
@@ -991,4 +798,3 @@ FResourceFile* CheckDisk( const char* filename, FileReader* file, bool quiet )
 	
 	return NULL;
 }
-

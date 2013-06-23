@@ -228,7 +228,7 @@ IWad
 	Config = "Doom"
 	Mapinfo = "mapinfo/ultdoom_x360.txt"
 	Compatibility = "Shorttex"
-	MustContain = "E1M9", "E2M9", "E3M9", "E4M9", "DMENUPIC"
+	MustContain = "GAME:\assets\w\DOOM.WAD"
 	BannerColors = "54 54 54", "a8 a8 a8"
 }
 
@@ -319,7 +319,7 @@ IWad
 	Config = "Doom"
 	Mapinfo = "mapinfo/doom2_x360.txt"
 	Compatibility = "Shorttex"
-	MustContain = "MAP01", "MAP33", "CWILV32", "DMENUPIC"
+	MustContain = "GAME:\assets\w\DOOM2.WAD", "GAME:\assets\w\mission1\Nerve_demo.wad"
 	BannerColors = "a8 00 00", "a8 a8 a8"
 }
 
@@ -392,6 +392,6 @@ Names
 	"doom2.disk"
 	"doom_x360.disk"
 	"doom2_x360.disk"
-	"x360_doom.disk"
-	"x360_doom2.disk"
+	"doom_xbla.disk"
+	"doom2_xbla.disk"
 }

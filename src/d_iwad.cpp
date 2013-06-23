@@ -302,6 +302,10 @@ int FIWadManager::ScanIWAD (const char *iwad)
 					FString mapname(lump->FullName+5, strcspn(lump->FullName+5, "."));
 					CheckLumpName(mapname);
 				}
+				else if (0 == strlen(lump->Name) && strlen(lump->FullName) > 8)
+				{
+					CheckLumpName(lump->FullName);
+				}
 			}
 		}
 		delete iwadfile;
