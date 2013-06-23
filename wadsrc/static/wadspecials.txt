@@ -60,3 +60,10 @@
 
 // Outdated Hexen: Deathkings of the Dark Citadel IWAD(s), see http://doomwiki.org/wiki/HEXDD.WAD
 4429700     1077432e2690d390c256ac908b5f4efa    outdated_iwad    // 1.0
+
+// Outdated Strife IWAD(s), see http://doomwiki.org/wiki/STRIFE1.WAD
+28372168    8f2d3a6a289f5d2f2f9c1eec02b47299    outdated_iwad    // 1.0
+
+// Outdated HACX PWAD(s), see http://doomwiki.org/wiki/HACX.WAD
+21951805    1511a7032ebc834a3884cf390d7f186e    outdated_iwad    // 1.0
+22102300    b7fd2f43f3382cf012dc6b097a3cb182    outdated_iwad    // 1.1
