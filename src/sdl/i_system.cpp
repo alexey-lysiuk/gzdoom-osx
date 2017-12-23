@@ -755,11 +755,11 @@ bool I_WriteIniFailed ()
 
 static const char *pattern;
 
-#ifdef __APPLE__
-static int matchfile (struct dirent *ent)
-#else
+//#ifdef __APPLE__
+//static int matchfile (struct dirent *ent)
+//#else
 static int matchfile (const struct dirent *ent)
-#endif
+//#endif
 {
     return fnmatch (pattern, ent->d_name, FNM_NOESCAPE) == 0;
 }

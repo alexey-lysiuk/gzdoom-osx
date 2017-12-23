@@ -6067,7 +6067,6 @@
 				);
 				INFOPLIST_FILE = "GZDoom-Info.plist";
 				PRODUCT_NAME = GZDoom;
-				SDKROOT = macosx10.6;
 			};
 			name = Debug;
 		};
@@ -6091,7 +6090,6 @@
 				);
 				INFOPLIST_FILE = "GZDoom-Info.plist";
 				PRODUCT_NAME = GZDoom;
-				SDKROOT = macosx10.6;
 			};
 			name = Release;
 		};
@@ -6278,7 +6276,6 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx10.5;
 				USE_HEADERMAP = NO;
 				VALID_ARCHS = "i386 x86_64";
 			};
@@ -6299,7 +6296,6 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx10.5;
 				USE_HEADERMAP = NO;
 				VALID_ARCHS = "i386 x86_64";
 			};

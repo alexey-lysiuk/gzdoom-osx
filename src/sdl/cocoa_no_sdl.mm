@@ -700,7 +700,7 @@ void ProcessMouseWheelEvent( NSEvent* theEvent )
 // ---------------------------------------------------------------------------
 
 
-@interface ApplicationDelegate : NSResponder
+@interface ApplicationDelegate : NSResponder<NSApplicationDelegate>
 {
 @private
     FullscreenWindow* m_window;

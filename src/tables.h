@@ -90,15 +90,15 @@ extern fixed_t			finetangent[FINEANGLES/2];
 #define DBITS			(FRACBITS-SLOPEBITS)
 
 typedef uint32			angle_t;
-
+#include <cstdlib>
 // Avoid "ambiguous call to overloaded function" errors
 // Only to be used when you have subtracted two angles.
-#ifndef __GNUC__
+//#ifndef __GNUC__
 inline angle_t abs (angle_t ang)
 {
-	return (angle_t)abs((SDWORD)ang);
+	return (angle_t)std::abs((SDWORD)ang);
 }
-#endif
+//#endif
 
 // Effective size is 2049;
 // The +1 size is to handle the case when x==y

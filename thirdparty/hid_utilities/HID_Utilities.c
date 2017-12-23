@@ -598,6 +598,8 @@ IOHIDElementRef HIDGetPreviousDeviceElement(IOHIDElementRef pElement, HIDElement
 
 #endif
 
+#define verify(a)
+
 // utility routine to dump device info
 void HIDDumpDeviceInfo(IOHIDDeviceRef inIOHIDDeviceRef) {
 	char cstring[256];
