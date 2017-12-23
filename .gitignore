@@ -1,0 +1,15 @@
+syntax: glob
+.DS_Store
+.deploy_image
+build/*
+*.mode1v3
+*.pbxuser
+*.generated
+src/xlat/xlat_parser\.c
+src/xlat/xlat_parser\.h
+src/xlat/xlat_parser\.out
+src/sc_man_scanner\.h
+thirdparty/SDL/lib
+DerivedData/
+xcuserdata/
+*.xcworkspacedata
