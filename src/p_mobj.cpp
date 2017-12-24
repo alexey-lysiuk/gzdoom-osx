@@ -2487,7 +2487,7 @@ void P_NightmareRespawn (AActor *mobj)
 	}
 
 	// If there are 3D floors, we need to find floor/ceiling again.
-	P_FindFloorCeiling(mo, FFCF_SAMESECTOR | FFCF_ONLY3DFLOORS | FFCF_3DRESTRICT);
+	P_FindFloorCeiling(mo, FFCF_SAMESECTOR | FFCF_ONLY3DFLOORS | FFCF_3DMIDTEXRESTRICT);
 
 	if (z == ONFLOORZ)
 	{
@@ -4098,12 +4098,9 @@ APlayerPawn *P_SpawnPlayer (FMapThing *mthing, bool tempplayer)
     mobj->id = playernum;
 
 	// [RH] Set player sprite based on skin
-	if (!(mobj->flags4 & MF4_NOSKIN))
-	{
-		mobj->sprite = skins[p->userinfo.skin].sprite;
-		mobj->scaleX = skins[p->userinfo.skin].ScaleX;
-		mobj->scaleY = skins[p->userinfo.skin].ScaleY;
-	}
+	mobj->sprite = skins[p->userinfo.skin].sprite;
+	mobj->scaleX = skins[p->userinfo.skin].ScaleX;
+	mobj->scaleY = skins[p->userinfo.skin].ScaleY;
 
 	p->DesiredFOV = p->FOV = 90.f;
 	p->camera = p->mo;
@@ -4519,7 +4516,7 @@ AActor *P_SpawnMapThing (FMapThing *mthing, int position)
 	mobj->SpawnPoint[2] = mthing->z;
 	mobj->SpawnAngle = mthing->angle;
 	mobj->SpawnFlags = mthing->flags;
-	P_FindFloorCeiling(mobj, FFCF_SAMESECTOR | FFCF_ONLY3DFLOORS | FFCF_3DRESTRICT);
+	P_FindFloorCeiling(mobj, FFCF_ONLYSPAWNPOS);
 
 	if (!(mobj->flags2 & MF2_ARGSDEFINED))
 	{

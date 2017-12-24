@@ -948,7 +948,6 @@ inline void adjustRelCenter(bool relX, bool relY, const double &x, const double 
 class DSBarInfo : public DBaseStatusBar
 {
 	DECLARE_CLASS(DSBarInfo, DBaseStatusBar)
-	HAS_OBJECT_POINTERS
 public:
 	DSBarInfo (SBarInfo *script=NULL) : DBaseStatusBar(script->height, script->resW, script->resH),
 		ammo1(NULL), ammo2(NULL), ammocount1(0), ammocount2(0), armor(NULL),
@@ -1477,11 +1476,7 @@ private:
 	SBarInfoMainBlock *lastPopup;
 };
 
-IMPLEMENT_POINTY_CLASS(DSBarInfo)
- DECLARE_POINTER(ammo1)
- DECLARE_POINTER(ammo2)
- DECLARE_POINTER(armor)
-END_POINTERS
+IMPLEMENT_CLASS(DSBarInfo);
 
 DBaseStatusBar *CreateCustomStatusBar (int script)
 {
